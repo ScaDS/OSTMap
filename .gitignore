@@ -2,6 +2,7 @@
 *.jar
 .idea/
 .metadata
+.iml
 bin/
 build/
 tmp/
