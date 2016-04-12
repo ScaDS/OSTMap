@@ -7,8 +7,6 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
-import java.util.List;
-
 /**
  * @author Martin Grimmer (martin.grimmer@mgm-tp.com)
  *         <p>
@@ -30,11 +28,10 @@ public class Driver {
      * defines the workflow and executes it
      *
      * @param pathToTwitterProperties1
-     * @param pathToTwitterProperties2
      * @param pathToAccumuloProperties
      * @throws Exception
      */
-    public void run(String pathToTwitterProperties1, String pathToTwitterProperties2, String pathToAccumuloProperties) throws Exception {
+    public void run(String pathToTwitterProperties1, String pathToAccumuloProperties) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
@@ -44,7 +41,7 @@ public class Driver {
         sink.configure(pathToAccumuloProperties, tableName);
 
         geoStream
-                .map(new DateExtraction())
+                .flatMap(new DateExtraction())
                 .map(new CalculateKey())
                 .addSink(sink);
 
@@ -59,14 +56,14 @@ public class Driver {
      */
     public static void main(String[] args) throws Exception {
 
-        if (args.length != 3) {
+        if (args.length != 2) {
             System.out.println("error: wrong arguments");
-            System.out.println("need 3 paths: pathToTwitterProperties1, pathToTwitterProperties2 pathToAccumuloProperties");
+            System.out.println("need 3 paths: pathToTwitterProperties1, pathToAccumuloProperties");
             return;
         }
 
         Driver driver = new Driver();
-        driver.run(args[0], args[1], args[2]);
+        driver.run(args[0], args[1]);
     }
 
 }

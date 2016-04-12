@@ -29,11 +29,13 @@ public class GeoTwitterSource extends TwitterSource {
         this.queue = new LinkedBlockingQueue(this.queueSize);
         StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint(false)
                 //.trackTerms(Arrays.asList("berlin","hamburg", "münchen", "köln", "frannkfurt", "stuttgart", "düsseldorf", "dortmund", "essen", "bremen", "leipzig", "dresden", ))
+
                 .locations(Arrays.asList(new Location(
                         // leipzig:  12.26,51.27,12.51,51.41
                         // deutschland: 6.20,46.93,15.50,74.10
-                        new Location.Coordinate(6.20, 46.93), // south west
-                        new Location.Coordinate(15.50, 74.10)))); // north east
+                        // europa: -32.0 34.0 40.0 75.0
+                        new Location.Coordinate(-32.0, 34.0), // south west
+                        new Location.Coordinate(40.0, 75.0)))); // north east
         endpoint.stallWarnings(false);
         OAuth1 auth = this.authenticate();
         this.initializeClient(endpoint, auth);
