@@ -1,12 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--[if lt IE 7]>      <html lang="en" ng-app="ostMapApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="ostMapApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="ostMapApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="ostMapApp" class="no-js"> <!--<![endif]-->
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>OSTMap</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+
 </head>
 <body>
-GitHub file test.
-<br>
-If you are seeing this, pure HTML can be hosted live by GitHub! YAY!
+<div ng-controller="MainCtrl">
+    <navigation></navigation>
+
+    <div class="container">
+        <div ng-view></div>
+    </div>
+
+    <div>OSTMap app: v1.0</div>
+
+</div>
+
+
+<!-- Bower Scripts -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- OSTMap Scripts -->
+<script src="scripts/app.js"></script>
+<script src="scripts/controllers/controller.main.js"></script>
+<script src="scripts/controllers/controller.map.js"></script>
+<script src="scripts/controllers/controller.list.js"></script>
+<script src="scripts/services/service.navigation.js"></script>
+<script src="scripts/directives/directive.navigation.js"></script>
 </body>
 </html>
