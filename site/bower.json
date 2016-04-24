@@ -1,0 +1,29 @@
+{
+  "name": "ost-map",
+  "homepage": "https://github.com/IIDP2016/OSTMap",
+  "authors": [
+    "Christopher <c.rost@studserv.uni-leipzig.de>",
+    "Kevin <kev_shrestha@hotmail.com>"
+  ],
+  "description": "Open Source Twitter Map",
+  "main": "",
+  "keywords": [
+    "Twitter",
+    "Map"
+  ],
+  "license": "Apache License 2.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.0",
+    "angular-route": "~1.4.0",
+    "jquery": "1.9.1 - 2",
+    "bootstrap": "~3.3.0"
+  }
+}
