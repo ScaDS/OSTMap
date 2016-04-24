@@ -20,12 +20,14 @@
             .when('/list', {
                 templateUrl: 'views/listView.html',
                 controller: 'ListCtrl',
-                name: 'List'
+                name: 'List',
+                glyphicon: 'glyphicon glyphicon-list'
             })
             .when('/map', {
                 templateUrl: 'views/mapView.html',
                 controller: 'MapCtrl',
-                name: 'Map'
+                name: 'Map',
+                glyphicon: 'glyphicon glyphicon-globe'
             })
             .otherwise({redirectTo: '/list'});
     }

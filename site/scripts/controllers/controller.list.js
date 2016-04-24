@@ -17,6 +17,28 @@
     ];
 
     function ListCtrl($scope) {
-        //TODO: insert logic here
+        $scope.search = [];
+        $scope.search.checkBoxes = getSearchFields();
+    }
+
+    function getSearchFields() {
+        return [
+            {
+                fieldname: 'text',
+                checked: true
+            },
+            {
+                fieldname: 'hashtag',
+                checked: true
+            },
+            {
+                fieldname: 'user',
+                checked: false
+            },
+            {
+                fieldname: 'location',
+                checked: false
+            }
+        ]
     }
 })();

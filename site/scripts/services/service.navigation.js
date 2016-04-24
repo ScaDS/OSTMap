@@ -23,7 +23,8 @@
             if (route.name) {
                 routes.push({
                     path: path,
-                    name: route.name
+                    name: route.name,
+                    glyphicon: route.glyphicon
                 });
             }
         });

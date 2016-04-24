@@ -15,7 +15,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li ng-repeat="route in routes" ng-class="{active: activeRoute(route)}">
-                    <a href="#{{ route.path }}">{{ route.name }}</a>
+                    <a href="#{{ route.path }}"><span ng-class="route.glyphicon" aria-hidden="true"></span>&nbsp;{{ route.name }}</a>
                 </li>
             </ul>
 
