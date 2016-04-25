@@ -22,6 +22,6 @@
 
         $scope.app = [];
         $scope.app.name = "OSTMap";
-
-        }
+    
+    }
 })();

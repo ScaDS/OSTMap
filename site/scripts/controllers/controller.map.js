@@ -10,7 +10,7 @@
 
     angular
         .module('ostMapApp')
-        .controller('MapCtrl',MapCtrl);
+        .controller('MapCtrl', MapCtrl);
 
     MapCtrl.$inject = [
         '$scope'
@@ -36,5 +36,6 @@
             .bindPopup('@user: MGM-TP<br>' +
                 '[51.33948, 12.37637]<br>' +
                 'Tweet metadata here!')
+
     }
 })();

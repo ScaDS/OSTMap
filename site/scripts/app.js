@@ -9,7 +9,8 @@
     'use strict';
 
     angular.module('ostMapApp', [
-            'ngRoute'
+            'ngRoute',
+            'ui-leaflet'
         ])
         .config(defineRoutes);
 
