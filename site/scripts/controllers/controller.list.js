@@ -13,13 +13,29 @@
         .controller('ListCtrl', ListCtrl);
 
     ListCtrl.$inject = [
-        '$scope'
+        '$scope',
+        'httpService'
     ];
 
-    function ListCtrl($scope) {
+    function ListCtrl($scope,httpService) {
         $scope.search = [];
+        $scope.data = [];
+
+        $scope.data.tweets = httpService.getTweets();
+
         $scope.search.checkBoxes = getSearchFields();
+        $scope.search.onClick = function (mode) {
+            httpService.getTweetsFromLocal();
+
+            if (mode && mode === 'list') {
+
+            } else if (mode === 'map') {
+
+            }
+        }
     }
+
+
 
     function getSearchFields() {
         return [
