@@ -8,8 +8,8 @@
                 class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><a href="#">Show results as list</a></li>
-            <li><a href="#">Show results as map</a></li>
+            <li ng-click="search.onClick('list')"><a href="#">Show results as list</a></li>
+            <li ng-click="search.onClick('map')"><a href="#">Show results as map</a></li>
         </ul>
     </div>
 
@@ -18,34 +18,18 @@
     <input type="checkbox" id="inlineCheckbox1" value="{{box.fieldname}}" ng-checked="box.checked">{{ box.fieldname }}
 </label>
 <p>&nbsp;</p>
-<div class="panel panel-default">
-    <!-- Default panel contents -->
-    <div class="panel-heading">Results</div>
-
+<div class="panel panel-default" ng-show="data.tweets.length > 0">
     <!-- Table -->
     <table class="table table-hover">
-        <tr>
+        <tr ng-repeat="tweet in data.tweets">
             <td>
-                <img class="twitter-profile-pic-list" src="http://www.outsourcing-pharma.com/var/plain_site/storage/images/galleries/pharmaceutical-science/osp-people-november-7-2013/dan-bradbury-profil-institute/8549866-1-eng-GB/Dan-Bradbury-Profil-Institute_dnm_gallery.jpg">
+                <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">
             </td>
             <td>
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam volu</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <img class="twitter-profile-pic-list" src="http://www.outsourcing-pharma.com/var/plain_site/storage/images/galleries/pharmaceutical-science/osp-people-november-7-2013/dan-bradbury-profil-institute/8549866-1-eng-GB/Dan-Bradbury-Profil-Institute_dnm_gallery.jpg">
+                <p>{{tweet.user.name}}</p>
             </td>
             <td>
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam volu</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <img class="twitter-profile-pic-list" src="http://www.outsourcing-pharma.com/var/plain_site/storage/images/galleries/pharmaceutical-science/osp-people-november-7-2013/dan-bradbury-profil-institute/8549866-1-eng-GB/Dan-Bradbury-Profil-Institute_dnm_gallery.jpg">
-            </td>
-            <td>
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam volu</p>
+                <p style="word-wrap:break-word;">{{tweet.text}}</p>
             </td>
         </tr>
     </table>
