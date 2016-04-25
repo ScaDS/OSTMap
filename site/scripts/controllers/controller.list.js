@@ -3,7 +3,7 @@
  */
 
 /**
- * The controller for the map view.
+ * The controller for the list view.
  */
 (function () {
     'use strict';
