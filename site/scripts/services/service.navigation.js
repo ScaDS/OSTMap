@@ -12,13 +12,28 @@
         .module('ostMapApp')
         .factory('routeNavigation',routeNavigation);
 
+    /**
+     * Inject dependencies for the service
+     * $route to access all defined routes
+     * $location to determine the current url
+     * @type {string[]}
+     */
     routeNavigation.$inject = [
         '$route',
         '$location'
     ];
 
+    /**
+     * Core Service logic
+     * @param $route
+     * @param $location
+     * @returns {{routes: Array, activeRoute: activeRoute}} Returns all named routes and a function to determine if a route is the current root
+     */
     function routeNavigation($route,$location) {
         var routes = [];
+        /**
+         * Iterates over all defined routes. If there is a rout with a name specified, the properties path name and glyphicon will be saved in the array 'routes'
+         */
         angular.forEach($route.routes, function (route, path) {
             if (route.name) {
                 routes.push({

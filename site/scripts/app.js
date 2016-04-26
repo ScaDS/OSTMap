@@ -14,8 +14,19 @@
         ])
         .config(defineRoutes);
 
-    defineRoutes.$inject = ['$routeProvider'];
+    /**
+     * Inject dependencies for the defineRoutes configuration
+     * $routeProvider to set routes
+     * @type {string[]}
+     */
+    defineRoutes.$inject = [
+        '$routeProvider'
+    ];
 
+    /**
+     * Sets the routes
+     * @param $routeProvider
+     */
     function defineRoutes($routeProvider) {
         $routeProvider
             .when('/list', {

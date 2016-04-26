@@ -12,17 +12,29 @@
         .module('ostMapApp')
         .directive('navigation',navigation);
 
+    /**
+     * Inject dependencies for the directive
+     * routeNavigation the service to get active routes
+     * @type {string[]}
+     */
     navigation.$inject = [
         'routeNavigation'
     ];
 
+    /**
+     *
+     * @param routeNavigation the injected service
+     * @returns {{restrict: string, replace: boolean, templateUrl: string, controller: controller}}
+     */
     function navigation(routeNavigation) {
         return {
             restrict: "E",
             replace: true,
             templateUrl: "views/partials/navBar.tpl.html",
             controller: function ($scope) {
+                //Get routes from the service
                 $scope.routes = routeNavigation.routes;
+                //Get the active route from the service to highlight it at the navbar
                 $scope.activeRoute = routeNavigation.activeRoute;
             }
         };

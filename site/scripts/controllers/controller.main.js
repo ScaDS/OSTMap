@@ -13,11 +13,24 @@
         .module('ostMapApp')
         .controller('MainCtrl',MainCtrl);
 
+    /**
+     * Inject dependencies for the controller
+     * $scope to interact with the view
+     * $location (not used yet)
+     * @type {string[]}
+     */
     MainCtrl.$inject = [
         '$scope',
         '$location'
         ];
 
+    /**
+     * The controller logic
+     *
+     * @param $scope
+     * @param $location
+     * @constructor
+     */
     function MainCtrl($scope,$location) {
 
         $scope.app = [];
