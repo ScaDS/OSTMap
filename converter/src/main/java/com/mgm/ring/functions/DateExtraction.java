@@ -7,6 +7,7 @@ import scala.Tuple2;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * class extracting the timestamp of a given tweet
@@ -16,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 public class DateExtraction implements FlatMapFunction<String, Tuple2<Long, String>>, Serializable {
 
     // example time string: "Wed Mar 23 12:01:40 +0000 2016"
-    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss Z yyyy");
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss Z yyyy").withLocale(Locale.ENGLISH);
 
     /**
      * empty constructor for serialization (needed by flink)

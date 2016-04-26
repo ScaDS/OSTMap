@@ -11,20 +11,25 @@ import java.io.IOException;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.accumulo.server.util.ListInstances;
 
 public class MiniCluster {
 
     private static String zoohost = null;
-    private static String zoohostFilePath = System.getProperty("java.io.tmpdir") + File.pathSeparatorChar + "mac.tmp";;
+    private static String zoohostFilePath =  (new File(System.getProperty("java.io.tmpdir"),"mac.tmp")).getAbsolutePath();
+
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
         Logger.getRootLogger().setLevel(Level.WARN);
 
+        System.out.println(zoohostFilePath);
+
         // run in Accumulo MAC
         File tempDir = Files.createTempDir();
         tempDir.deleteOnExit();
         MiniAccumuloCluster accumulo = new MiniAccumuloCluster(tempDir, "password");
+
         accumulo.start();
 
 
@@ -34,6 +39,9 @@ public class MiniCluster {
         File instFile = new File(zoohostFilePath);
         instFile.deleteOnExit();
         System.out.println("cluster running with instance name " + accumulo.getInstanceName() + " and zookeepers " + accumulo.getZooKeepers());
+        //String s[] = {"--print-all"};
+        //ListInstances.main(s);
+        //accumulo.
 
         try {
             FileWriter writer = new FileWriter(instFile);

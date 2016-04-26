@@ -1,15 +1,18 @@
 package com.mgm.ring.sinks;
 
+import com.google.common.io.Files;
 import com.mgm.ring.types.CustomKey;
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.client.admin.TableOperations;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.security.Authorizations;
+import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.log4j.Logger;
 import scala.Tuple2;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -32,6 +35,7 @@ public class AccumuloSink extends RichSinkFunction<Tuple2<CustomKey, String>> {
     private String accumuloPassword;
     public static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
     private String accumuloZookeeper;
+    private static String zoohostFilePath =  (new File(System.getProperty("java.io.tmpdir"),"mac.tmp")).getAbsolutePath();
 
     private String table;
 
@@ -82,6 +86,7 @@ public class AccumuloSink extends RichSinkFunction<Tuple2<CustomKey, String>> {
         bwConfig.setDurability(Durability.SYNC);
 
         // build the accumulo connector connector
+        System.out.println(accumuloInstanceName + " "+accumuloZookeeper + "aaabbb");
         Instance inst = new ZooKeeperInstance(accumuloInstanceName, accumuloZookeeper);
         Connector conn = inst.getConnector(accumuloUser, new PasswordToken(accumuloPassword));
         Authorizations auths = new Authorizations("standard");
@@ -107,10 +112,24 @@ public class AccumuloSink extends RichSinkFunction<Tuple2<CustomKey, String>> {
      * @throws AccumuloException
      * @throws TableNotFoundException
      */
-    public void configure(String configFile, String table) throws IOException, AccumuloSecurityException, AccumuloException, TableNotFoundException, TableExistsException {
-        log.info("configuring accumulo sink with " + configFile + " for " + table);
+    public void configure(String configFile, String table) throws IOException, InterruptedException,AccumuloSecurityException, AccumuloException, TableNotFoundException, TableExistsException {
+        File tempDir = Files.createTempDir();
+        tempDir.deleteOnExit();
+        MiniAccumuloCluster accumulo = new MiniAccumuloCluster(tempDir, "password");
+
+
+        accumulo.start();
+        Instance instance = new ZooKeeperInstance(accumulo.getInstanceName(), accumulo.getZooKeepers());
+        Thread.sleep(3000);
+
+        accumuloInstanceName = accumulo.getInstanceName();
+        accumuloUser = "root";
+        accumuloPassword = "password";
+        accumuloZookeeper = accumulo.getZooKeepers();
+
+        //log.info("configuring accumulo sink with " + configFile + " for " + table);
         // read config file
-        readConfig(configFile);
+        //readConfig(configFile);
         this.table = table;
     }
 
