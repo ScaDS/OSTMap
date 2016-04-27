@@ -2,7 +2,7 @@ package com.mgm.ring;
 
 import com.mgm.ring.functions.CalculateKey;
 import com.mgm.ring.functions.DateExtraction;
-import com.mgm.ring.sinks.AccumuloSink;
+//import com.mgm.ring.sinks.AccumuloSink;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -36,7 +36,7 @@ public class Driver {
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         DataStream<String> geoStream = env.addSource(new GeoTwitterSource(pathToTwitterProperties1));
-
+/*
         AccumuloSink sink = new AccumuloSink();
         sink.configure(pathToAccumuloProperties, tableName);
 
@@ -45,7 +45,7 @@ public class Driver {
                 .map(new CalculateKey())
                 .addSink(sink);
 
-        env.execute("twitter stream");
+        env.execute("twitter stream");*/
     }
 
 

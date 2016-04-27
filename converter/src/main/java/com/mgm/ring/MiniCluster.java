@@ -1,6 +1,7 @@
+/*
 package com.mgm.ring; /**
  * Created by mrblati on 25.04.16.
- */
+
 import com.google.common.io.Files;
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,7 +30,7 @@ public class MiniCluster {
         File tempDir = Files.createTempDir();
         tempDir.deleteOnExit();
         MiniAccumuloCluster accumulo = new MiniAccumuloCluster(tempDir, "password");
-
+        http://th3me.com/forum/thread/how-to-import-gradle-project-into-eclipse/
         accumulo.start();
 
 
@@ -70,3 +71,4 @@ public class MiniCluster {
         return zoohost;
     }
 }
+ */
