@@ -1,6 +1,6 @@
 <p>&nbsp;</p>
 <div class="input-group">
-    <input type="text" class="form-control" placeholder="Search for...">
+    <input ng-model="search.inputValue" type="text" class="form-control" placeholder="Search for...">
     <div class="input-group-btn">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
@@ -9,7 +9,7 @@
         </button>
         <ul class="dropdown-menu">
             <li ng-click="search.onClick('list')"><a href="#">Show results as list</a></li>
-            <li ng-click="search.onClick('map')"><a href="#">Show results as map</a></li>
+            <li ng-click="search.onClick('map')"><a href="#/map">Show results as map</a></li>
         </ul>
     </div>
 

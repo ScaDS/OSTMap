@@ -33,7 +33,8 @@
             templateUrl: "views/partials/navBar.tpl.html",
             controller: function ($scope) {
                 //Get routes from the service
-                $scope.routes = routeNavigation.routes;
+                $scope.routesRight = routeNavigation.routesRight;
+                $scope.routesLeft = routeNavigation.routesLeft;
                 //Get the active route from the service to highlight it at the navbar
                 $scope.activeRoute = routeNavigation.activeRoute;
             }

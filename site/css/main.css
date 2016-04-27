@@ -20,3 +20,8 @@
 .indent-1 section {
     float: left;
 }
+
+.bottom-bar{
+    margin-top: 10px;
+    margin-left: 20px;
+}

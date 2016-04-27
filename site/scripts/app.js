@@ -26,6 +26,7 @@
 
     /**
      * Sets the routes
+     * align: 'left' or 'right'
      * @param $routeProvider
      */
     function defineRoutes($routeProvider) {
@@ -34,13 +35,22 @@
                 templateUrl: 'views/listView.html',
                 controller: 'ListCtrl',
                 name: 'List',
+                align: 'left',
                 glyphicon: 'glyphicon glyphicon-list'
             })
             .when('/map', {
                 templateUrl: 'views/mapView.html',
                 controller: 'MapCtrl',
                 name: 'Map',
+                align: 'left',
                 glyphicon: 'glyphicon glyphicon-globe'
+            })
+            .when('/about', {
+                templateUrl: 'views/aboutView.html',
+                controller: 'AboutCtrl',
+                name: 'About',
+                align: 'right',
+                glyphicon: 'glyphicon glyphicon-info-sign'
             })
             .otherwise({redirectTo: '/list'});
     }

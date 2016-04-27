@@ -1,8 +1,4 @@
 /**
- * Created by Christopher on 24.04.2016.
- */
-
-/**
  * The controller for the list view.
  */
 (function () {
@@ -20,6 +16,7 @@
      */
     ListCtrl.$inject = [
         '$scope',
+        '$location',
         'httpService'
     ];
 
@@ -27,11 +24,13 @@
      * The controller logic
      *
      * @param $scope
+     * @param $location
      * @param httpService
      * @constructor
      */
-    function ListCtrl($scope,httpService) {
+    function ListCtrl($scope,$location,httpService) {
         $scope.search = [];
+        $scope.search.inputValue = '';
         $scope.data = [];
 
         /**
@@ -53,8 +52,8 @@
 
             if (mode && mode === 'list') {
 
-            } else if (mode === 'map') {
-
+            } else if (mode && mode === 'map') {
+                //TODO: Call Service to load Data for the Map view
             }
         }
     }
@@ -70,15 +69,7 @@
                 checked: true
             },
             {
-                fieldname: 'hashtag',
-                checked: true
-            },
-            {
                 fieldname: 'user',
-                checked: false
-            },
-            {
-                fieldname: 'location',
                 checked: false
             }
         ]
