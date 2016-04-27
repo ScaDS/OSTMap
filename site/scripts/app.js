@@ -10,7 +10,8 @@
 
     angular.module('ostMapApp', [
             'ngRoute',
-            'ui-leaflet'
+            'ui-leaflet',
+            'ui.layout'
         ])
         .config(defineRoutes);
 

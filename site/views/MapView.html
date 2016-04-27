@@ -9,45 +9,32 @@
 </div>
 
 
+<br>
+<section class="indent-1">
+    <section>
+        <!--2. Simple leaflet.js Map-->
+        <div id="map" class="map"></div>
+    </section>
+
+    <section>
+        <div class="top10 panel panel-default">
+            <!-- Table -->
+            <table class="table table-hover">
+                <caption>Top 10 Hashtags</caption>
+                <tr ng-repeat="tweet in data.tweets|limitTo:10">
+                    <td>
+                        <p>#{{tweet.user.name}}</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+</section>
 
 <br>
-
-<div ui-layout class="layout-map">
-    <ui-layout options="{ flow : 'column' }">
-        <sidebar class="east-back">
-
-            <!--1. Angular-UI: ui-leaflet Map-->
-            <!--<leaflet height="480px"></leaflet>-->
-            <!--<br>-->
-
-
-            <!--2. Simple leaflet.js Map-->
-            <div id="map" style="height: 500px; width: 50%"></div>
-
-        </sidebar>
-        <sidebar class="west-back">
-
-            <div style="height: 500px; width: 50%">
-                <!-- Table -->
-                <table class="table table-hover">
-                    <caption>Top 10 Hashtags</caption>
-                    <tr ng-repeat="tweet in data.tweets|limitTo:10">
-                        <td>
-                            <p>#{{tweet.user.name}}</p>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-        </sidebar>
-    </ui-layout>
-
-
-</div>
-
 <br>
 
-<div class="panel panel-default">
+<div class="">
     <!-- Table -->
     <table class="table table-hover">
         <caption>{{data.tweets.length}} Tweets</caption>

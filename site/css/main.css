@@ -3,18 +3,20 @@
     height: 50px;
 }
 
-.layout-map *:not(.ui-splitbar){
-    background : #eee no-repeat center;
+.map{
+    height: 520px;
+    width: 600px;
 }
 
+.top10{
+    margin-left: 30px;
+    width: 300px;
 
-.layout-map .center-back{
 }
-.layout-map .north-back{
+
+.indent-1 {
+    float: left;
 }
-.layout-map .south-back{
-}
-.layout-map .east-back{
-}
-.layout-map .west-back{
+.indent-1 section {
+    float: left;
 }
