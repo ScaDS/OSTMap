@@ -113,11 +113,12 @@ public class AccumuloSink extends RichSinkFunction<Tuple2<CustomKey, String>> {
      * @throws TableNotFoundException
      */
     public void configure(String configFile, String table) throws IOException, InterruptedException,AccumuloSecurityException, AccumuloException, TableNotFoundException, TableExistsException {
+
+
+        /**
         File tempDir = Files.createTempDir();
         tempDir.deleteOnExit();
         MiniAccumuloCluster accumulo = new MiniAccumuloCluster(tempDir, "password");
-
-
         accumulo.start();
         Instance instance = new ZooKeeperInstance(accumulo.getInstanceName(), accumulo.getZooKeepers());
         Thread.sleep(3000);
@@ -126,10 +127,10 @@ public class AccumuloSink extends RichSinkFunction<Tuple2<CustomKey, String>> {
         accumuloUser = "root";
         accumuloPassword = "password";
         accumuloZookeeper = accumulo.getZooKeepers();
-
-        //log.info("configuring accumulo sink with " + configFile + " for " + table);
-        // read config file
-        //readConfig(configFile);
+        **/
+        log.info("configuring accumulo sink with " + configFile + " for " + table);
+        //read config file
+        readConfig(configFile);
         this.table = table;
     }
 
