@@ -2,3 +2,19 @@
     width: 50px;
     height: 50px;
 }
+
+.layout-map *:not(.ui-splitbar){
+    background : #eee no-repeat center;
+}
+
+
+.layout-map .center-back{
+}
+.layout-map .north-back{
+}
+.layout-map .south-back{
+}
+.layout-map .east-back{
+}
+.layout-map .west-back{
+}

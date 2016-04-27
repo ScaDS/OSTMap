@@ -1,6 +1,67 @@
-<!--<leaflet width="100%" height="500px"></leaflet>-->
-1. Angular-UI: ui-leaflet Map
-<leaflet height="480px"></leaflet>
+<div>
+    <div class="btn-group">
+        <label class="btn btn-success" ng-model="radioModelDate" uib-btn-radio="'1h'">1h</label>
+        <label class="btn btn-success" ng-model="radioModelDate" uib-btn-radio="'2h'">2h</label>
+        <label class="btn btn-success" ng-model="radioModelDate" uib-btn-radio="'3h'">4h</label>
+        <label class="btn btn-success" ng-model="radioModelDate" uib-btn-radio="'1d'">1d</label>
+    </div>
+    <button class="btn btn-primary" ng-click="search.onClick()">Refresh</button>
+</div>
+
+
+
 <br>
-2. Simple leaflet.js Map
-<div id="map" style="height: 400px;"></div>
+
+<div ui-layout class="layout-map">
+    <ui-layout options="{ flow : 'column' }">
+        <sidebar class="east-back">
+
+            <!--1. Angular-UI: ui-leaflet Map-->
+            <!--<leaflet height="480px"></leaflet>-->
+            <!--<br>-->
+
+
+            <!--2. Simple leaflet.js Map-->
+            <div id="map" style="height: 500px; width: 50%"></div>
+
+        </sidebar>
+        <sidebar class="west-back">
+
+            <div style="height: 500px; width: 50%">
+                <!-- Table -->
+                <table class="table table-hover">
+                    <caption>Top 10 Hashtags</caption>
+                    <tr ng-repeat="tweet in data.tweets|limitTo:10">
+                        <td>
+                            <p>#{{tweet.user.name}}</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </sidebar>
+    </ui-layout>
+
+
+</div>
+
+<br>
+
+<div class="panel panel-default">
+    <!-- Table -->
+    <table class="table table-hover">
+        <caption>{{data.tweets.length}} Tweets</caption>
+        <tr ng-repeat="tweet in data.tweets|limitTo:10">
+            <td>
+                <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">
+            </td>
+            <td>
+                <p>{{tweet.user.name}}</p>
+            </td>
+            <td>
+                <p style="word-wrap:break-word;">{{tweet.text}}</p>
+            </td>
+        </tr>
+    </table>
+    <uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true"></uib-pagination>
+</div>

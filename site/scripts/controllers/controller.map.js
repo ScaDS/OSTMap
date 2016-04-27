@@ -13,10 +13,14 @@
         .controller('MapCtrl', MapCtrl);
 
     MapCtrl.$inject = [
-        '$scope'
+        '$scope',
+        'httpService',
+        '$log'
     ];
 
-    function MapCtrl($scope) {
+    function MapCtrl($scope, httpService, $log) {
+        $scope.radioModelDate = '1h';
+
         // initialize the map
         var map = L.map('map').setView([51.33843, 12.37866], 17);
 
@@ -37,5 +41,29 @@
                 '[51.33948, 12.37637]<br>' +
                 'Tweet metadata here!')
 
+        $scope.search = [];
+        $scope.data = [];
+
+        $scope.data.tweets = httpService.getTweets();
+
+        $scope.search.onClick = function () {
+            httpService.getTweetsFromLocal();
+
+        }
+
+        $scope.totalItems = 64;
+        $scope.currentPage = 4;
+
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+
+        $scope.pageChanged = function() {
+            $log.log('Page changed to: ' + $scope.currentPage);
+        };
+
+        $scope.maxSize = 5;
+        $scope.bigTotalItems = 175;
+        $scope.bigCurrentPage = 1;
     }
 })();
