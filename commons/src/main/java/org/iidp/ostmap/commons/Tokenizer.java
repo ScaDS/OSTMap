@@ -34,7 +34,7 @@ public class Tokenizer {
      * @param inputString String to be tokenized
      * @return List of Tokens
      */
-    private List tokenizeString(String inputString) {
+    public List<String> tokenizeString(String inputString) {
 
         List<String> tokenList = new ArrayList<String>();
 
