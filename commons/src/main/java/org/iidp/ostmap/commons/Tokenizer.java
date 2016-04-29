@@ -1,5 +1,6 @@
 package org.iidp.ostmap.commons;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -8,7 +9,7 @@ import java.util.StringTokenizer;
 /**
  * Created by CSchott on 23.04.16.
  */
-public class Tokenizer {
+public class Tokenizer implements Serializable {
 
     private List<String> separator = new ArrayList<String>();
     private List<String> doubleList = new ArrayList<String>();

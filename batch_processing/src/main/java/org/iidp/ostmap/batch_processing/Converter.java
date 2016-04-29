@@ -10,11 +10,13 @@ import org.codehaus.jettison.json.JSONException;
 import org.iidp.ostmap.commons.Tokenizer;
 import org.codehaus.jettison.json.JSONObject;
 
+import java.io.Serializable;
+
 
 /**
  * Converts RawTwitterData rows to TermIndex rows
  */
-public class Converter implements FlatMapFunction<Tuple2<Key, Value>, Tuple2<Key, Value>> {
+public class Converter implements FlatMapFunction<Tuple2<Key, Value>, Tuple2<Key, Value>>, Serializable {
 
     private Tokenizer tokenizer;
 

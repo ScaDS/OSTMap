@@ -1,24 +1,20 @@
 package org.iidp.ostmap.batch_processing;
 
 import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
 import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
-import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
-import org.apache.flink.api.java.io.TextOutputFormat;
+import org.apache.flink.api.java.hadoop.mapreduce.HadoopOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.core.fs.FileSystem;
-import org.apache.flink.core.fs.Path;
-import org.apache.flink.util.Collector;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
-import org.codehaus.jettison.json.JSONObject;
 import org.iidp.ostmap.commons.Tokenizer;
 
 import java.io.FileInputStream;
@@ -38,7 +34,9 @@ public class Driver {
     private String accumuloPassword;
     public static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
     private String accumuloZookeeper;
-    private String table = "RawTwitterData";
+    private String inTable = "RawTwitterData";
+    private String outTable = "TermIndex";
+    private Job job;
 
 
     public void run(String path) throws Exception {
@@ -47,6 +45,7 @@ public class Driver {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
+
         DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
 
 
@@ -54,8 +53,8 @@ public class Driver {
         DataSet<Tuple2<Key,Value>> termIndexRows = rawTwitterDataRows
                 .flatMap(new Converter(new Tokenizer()));
 
-
-        //TODO: export
+        HadoopOutputFormat hof = getHadoopOF();
+        termIndexRows.output(hof);
 
         env.execute("TermIndexConverter");
 /*
@@ -101,15 +100,30 @@ public class Driver {
     }
 
     private DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
-        Job job = Job.getInstance(new Configuration(), "getDataSet");
+        job = Job.getInstance(new Configuration(), "converterJob");
         AccumuloInputFormat.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword.getBytes()));
         AccumuloInputFormat.setScanAuthorizations(job, new Authorizations("standard"));
         ClientConfiguration clientConfig = new ClientConfiguration();
         clientConfig.withInstance(accumuloInstanceName);
         clientConfig.withZkHosts(accumuloZookeeper);
         AccumuloInputFormat.setZooKeeperInstance(job, clientConfig);
-        AccumuloInputFormat.setInputTableName(job, table);
-        return env.createHadoopInput(new AccumuloInputFormat(),Key.class,Value.class,job);
+        AccumuloInputFormat.setInputTableName(job, inTable);
+        return env.createHadoopInput(new AccumuloInputFormat(),Key.class,Value.class, job);
+    }
+
+    private HadoopOutputFormat getHadoopOF() throws AccumuloSecurityException {
+
+        AccumuloOutputFormat aof = new AccumuloOutputFormat();
+        aof.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword.getBytes()));
+        ClientConfiguration clientConfig = new ClientConfiguration();
+        clientConfig.withInstance(accumuloInstanceName);
+        clientConfig.withZkHosts(accumuloZookeeper);
+        aof.setZooKeeperInstance(job, clientConfig);
+        aof.setDefaultTableName(job, outTable);
+        // Set up the Hadoop TextOutputFormat.
+        HadoopOutputFormat<Text, Mutation> hadoopOF =
+                new HadoopOutputFormat<Text, Mutation>(aof , job);
+        return hadoopOF;
     }
 
 
