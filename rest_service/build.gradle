@@ -11,6 +11,8 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin:'application'
+
 
 jar {
     baseName = 'gs-spring-boot'
@@ -21,8 +23,9 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+mainClassName = "org.iidp.ostmap.rest_service.MainController"
 
 dependencies {
     // tag::jetty[]
