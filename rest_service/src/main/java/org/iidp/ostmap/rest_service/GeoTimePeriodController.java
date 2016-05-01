@@ -1,7 +1,9 @@
 package org.iidp.ostmap.rest_service;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,7 +18,11 @@ public class GeoTimePeriodController {
             _paramStartTime,
             _paramEndTime ;
 
-    @RequestMapping("/geotemporalsearch")
+    @RequestMapping(
+            value = "/geotemporalsearch",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
     @ResponseBody
     String getTweetsByGeoAndTime(
             @RequestParam(name = "bbnorth") String paramNorthCoordinate,
