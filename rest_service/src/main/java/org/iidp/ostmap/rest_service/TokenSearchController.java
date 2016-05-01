@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Objects;
 
 @Controller
+@RequestMapping("/api")
 public class TokenSearchController {
 
     private String _paramCommaSeparatedFieldList,

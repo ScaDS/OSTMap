@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Objects;
 
 @Controller
+@RequestMapping("/api")
 public class GeoTimePeriodController {
     private String _paramNorthCoordinate,
             _paramEastCoordinate,

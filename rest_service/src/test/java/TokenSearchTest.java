@@ -14,7 +14,7 @@ public class TokenSearchTest {
 
     @Test
     public void testRequest() throws Exception {
-        ResponseEntity responseEntity = template.getForEntity("http://localhost:8080/tokensearch?field=user,text&token=yolo", String.class);
+        ResponseEntity responseEntity = template.getForEntity("http://localhost:8080/api/tokensearch?field=user,text&token=yolo", String.class);
         HttpStatus status = responseEntity.getStatusCode();
         HttpHeaders httpHeaders = responseEntity.getHeaders();
 
