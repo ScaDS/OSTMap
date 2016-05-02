@@ -2,7 +2,6 @@ package org.iidp.ostmap.stream_processing.functions;
 
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import org.apache.commons.lang.StringUtils;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.util.Collector;
 import org.iidp.ostmap.stream_processing.types.CustomKey;
