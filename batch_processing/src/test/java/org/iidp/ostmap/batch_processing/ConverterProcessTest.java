@@ -1,14 +1,10 @@
-package org.iidp.ostmap.commons;
-/**
- * Created by hans on 29.04.16.
- */
+package org.iidp.ostmap.batch_processing;
+
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
-import org.iidp.ostmap.batch_processing.Converter;
-import org.iidp.ostmap.batch_processing.Driver;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
@@ -18,13 +14,17 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class DriverTest {
+/**
+ * test for ConverterProcess with example entry in Mini Accumulo Cluster
+ */
+public class ConverterProcessTest {
+
     @ClassRule
     public static TemporaryFolder tmpDir = new TemporaryFolder();
     public static TemporaryFolder tmpSettingsDir = new TemporaryFolder();
     public static AmcHelper amc = new AmcHelper();
 
-    public DriverTest() throws IOException {
+    public ConverterProcessTest() throws IOException {
     }
 
     @BeforeClass
@@ -40,7 +40,7 @@ public class DriverTest {
     }
 
     @Test
-    public void testDriver() throws Exception {
+    public void testConverterProcess() throws Exception {
         tmpSettingsDir.create();
         File settings = tmpSettingsDir.newFile("settings");
 
@@ -51,11 +51,10 @@ public class DriverTest {
         conn.tableOperations().create("TermIndex");
 
 
+        //write example entry to RawTwitterData
         Mutation m1 = new Mutation("row1");
-
-
         m1.put("CF", "CQ", "{\n" +
-                "      \"text\": \"RT @PostGradProblem: In preparation for the NFL lockout, I will be spending twice as much time analyzing my fantasy baseball team during ...\", \n\"user\": {\n" +
+                "      \"text\": \"RT @PostGradProblem: In preparation for for for the NFL lockout, I will be spending twice as much time analyzing my fantasy baseball team during ...\", \n\"user\": {\n" +
                 "            \"notifications\": null, \n" +
                 "            \"profile_use_background_image\": true, \n" +
                 "            \"statuses_count\": 351, \n" +
@@ -97,11 +96,9 @@ public class DriverTest {
         bw.addMutation(m1);
         bw.close();
 
-
-
+        //create settings file with data of Mini Accumulo Cluster
         FileOutputStream fos = new FileOutputStream(settings, false);
         BufferedWriter br = new BufferedWriter(new OutputStreamWriter(fos));
-
         String parameters = "accumulo.instance=" + conn.getInstance().getInstanceName() + "\n"+
                 "accumulo.user=" + conn.whoami() +"\n"+
                 "accumulo.password=password\n"+
@@ -114,28 +111,62 @@ public class DriverTest {
         fos.flush();
         fos.close();
 
-        Driver d = new Driver();
+        //run converter
+        ConverterProcess d = new ConverterProcess();
+        System.out.println("settings file path: "+settings.getAbsolutePath());
         d.run(settings.getAbsolutePath());
 
+        //output result after conversion
         System.out.println("RawTwitterData: -----------------------------------------------------");
-
         Scanner s = conn.createScanner("RawTwitterData", new Authorizations("a"));
         for(Map.Entry<Key, Value> entry: s){
             System.out.println(entry.getKey() + " | " +entry.getValue());
             //assertEquals(entry.getValue().toString(), testString);
         }
-
         s.close();
 
         System.out.println("TermIndex: -----------------------------------------------------");
-         s = conn.createScanner("TermIndex", new Authorizations("a"));
+        s = conn.createScanner("TermIndex", new Authorizations("a"));
+        int i = 0;
+        for(Map.Entry<Key, Value> entry: s){
+            System.out.println(entry.getKey() + " | " + entry.getValue());
+            i++;
+            if(entry.getKey().getRow().toString().equals("for")){
+                //token "for" should appear 3 times
+                assertEquals(entry.getValue().toString(),"3");
+            }
+        }
+        s.close();
+
+
+        System.out.println("TermIndex has "+i+" entrys");
+        //assertEquals(i, 22);
+
+        d = new ConverterProcess();
+        System.out.println("settings file path: "+settings.getAbsolutePath());
+        d.run(settings.getAbsolutePath());
+
+        //output result after conversion
+        System.out.println("RawTwitterData: -----------------------------------------------------");
+        s = conn.createScanner("RawTwitterData", new Authorizations("a"));
         for(Map.Entry<Key, Value> entry: s){
             System.out.println(entry.getKey() + " | " +entry.getValue());
             //assertEquals(entry.getValue().toString(), testString);
         }
-
         s.close();
 
+        System.out.println("TermIndex: -----------------------------------------------------");
+        s = conn.createScanner("TermIndex", new Authorizations("a"));
+        i = 0;
+        for(Map.Entry<Key, Value> entry: s){
+            System.out.println(entry.getKey() + " | " + entry.getValue());
+            i++;
+            if(entry.getKey().getRow().toString().equals("for")){
+                //token "for" should appear 3 times
+                assertEquals(entry.getValue().toString(),"3");
+            }
+        }
+        s.close();
 
     }
 
