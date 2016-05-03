@@ -23,7 +23,7 @@
         <!--<div id="map" class="map"></div>-->
 
         <!--1. UI-Leaflet Map-->
-        <leaflet id="map" class="map" lf-center="center" maxBounds="maxBounds" markers="markers" event-broadcast="events"></leaflet>
+        <leaflet id="map" class="map" lf-center="center" bounds="bounds" maxBounds="maxBounds" markers="markers" event-broadcast="events"></leaflet>
         <code>
             [DEBUG]
             <br>
@@ -35,8 +35,9 @@
             <p>Zoom : <input type="number" step="any" ng-model="center.zoom" /></p>
 
             Current Bounds:
-            <p class="result">NE(lat: {{currentBounds._northEast.lat}}, lng: {{currentBounds._northEast.lng}}) SW(lat: {{currentBounds._southWest.lat}}, lng: {{currentBounds._southWest.lng}})</p>
-            <button class="btn btn-primary" ng-visible=true ng-click="getBounds()">getBounds</button>
+            <p class="result">NE(lat: {{bounds.northEast.lat}}, lng: {{bounds.northEast.lng}}) SW(lat: {{bounds.southWest.lat}}, lng: {{bounds.southWest.lng}})</p>
+            <!--<p class="result">NE(lat: {{currentBounds._northEast.lat}}, lng: {{currentBounds._northEast.lng}}) SW(lat: {{currentBounds._southWest.lat}}, lng: {{currentBounds._southWest.lng}})</p>-->
+            <!--<button class="btn btn-primary" ng-visible=true ng-click="getBounds()">getBounds</button>-->
             <br>
         </code>
     </section>

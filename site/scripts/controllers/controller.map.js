@@ -82,11 +82,13 @@
              * Update current map boundaries
              */
             $scope.getBounds();
+
             /**
              * Update the filter display
+             * Check for null values, replace with Default
+             *
              * @type {string}
              */
-
             // var searchFilter = "None";
             // var timeFilter = "None";
             // if ($scope.search.searchFilter != null) {
@@ -207,11 +209,12 @@
          * Direct access to Leaflet Map Object to pull current map bounds
          */
         $scope.getBounds = function () {
-            leafletData.getMap().then(
-                function(map) {
-                    $scope.currentBounds = map.getBounds();
-                }
-            );
+            // leafletData.getMap().then(
+            //     function(map) {
+            //         $scope.currentBounds = map.getBounds();
+            //     }
+            // );
+            $scope.currentBounds = $scope.bounds;
         }
 
         $scope.search.updateFilters();
@@ -263,6 +266,7 @@
             }
         }
         $scope.maxBounds = $scope.regions.europe
+        $scope.bounds = null
 
         /**
          * Marker icon definition
