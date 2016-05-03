@@ -11,6 +11,7 @@
     angular.module('ostMapApp', [
             'ngRoute',
             'ui-leaflet',
+            'nemLogging',
             'ui.layout'
         ])
         .config(defineRoutes);
