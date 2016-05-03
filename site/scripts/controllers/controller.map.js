@@ -185,20 +185,17 @@
             // That's the correct forEach loop in angular
             angular.forEach($scope.data.tweets, function(value, key) {
                 var tweet = value;
-                // console.dir(tweet)
                 // Check if tweet has the property 'coordinates' ... if not, leave the forEach function
-                if(!tweet.hasOwnProperty('coordinates')){
-                    return;
-                }
-                console.dir(tweet.coordinates.coordinates)
+                // if(!tweet.hasOwnProperty('coordinates')){
+                //     return;
+                // }
 
-                if(typeof tweet.coordinates != undefined) {
+                if(tweet.coordinates != null) {
                     /**
                      * DEBUG
                      */
-                    console.log("Coords = ")
-                    console.log(tweet.geo.coordinates)
-                    console.log(tweet.coordinates.coordinates)
+                    console.log(tweet.id + " = " + tweet.geo.coordinates)
+                    console.log(tweet.id + " = " + tweet.coordinates.coordinates)
 
                     /**
                      * Create new marker then add to marker array
@@ -206,12 +203,12 @@
                      */
                     var newMarker = {
                         id: tweet.id,
-                        lat: tweet.coordinates.coordinates[0],
-                        lng: tweet.coordinates.coordinates[1],
+                        lat: tweet.coordinates.coordinates[1],
+                        lng: tweet.coordinates.coordinates[0],
                         focus: false,
                         draggable: false,
                         message: tweet.text,
-                        icon: icons.smallerDefault
+                        icon: $scope.icons.smallerDefault
                     }
                     $scope.markers.push(newMarker)
                 }
@@ -286,7 +283,7 @@
          * Marker icon definition
          * @type {{blue: {type: string, iconSize: number[], className: string, iconAnchor: number[]}, red: {type: string, iconSize: number[], className: string, iconAnchor: number[]}}}
          */
-        var icons = {
+        $scope.icons = {
             blue: {
                 type: 'div',
                 iconSize: [10, 10],
@@ -322,7 +319,7 @@
                 focus: true,
                 draggable: false,
                 message: "Test Marker 1",
-                icon: icons.smallerDefault
+                icon: $scope.icons.smallerDefault
             },
             {
                 id: 2,
@@ -331,7 +328,7 @@
                 focus: false,
                 draggable: false,
                 message: "Test Marker 2",
-                icon: icons.blue
+                icon: $scope.icons.blue
             }
         ];
 
