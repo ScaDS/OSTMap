@@ -12,7 +12,8 @@
             'ngRoute',
             'ui-leaflet',
             'nemLogging',
-            'ui.layout'
+            'ui.layout',
+            'ui.bootstrap'
         ])
         .config(defineRoutes);
 
