@@ -10,8 +10,9 @@
         <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'1d'">1d</label>
         <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'All'">All</label>
     </div>
-    <button class="btn btn-primary" ng-click="search.clearFilter()">Clear Filter</button>
-    <button class="btn btn-primary" ng-disabled=true ng-click="search.updateFilters()">Refresh [Auto Refresh Enabled]</button>
+    <button class="btn btn-primary" ng-click="search.clearFilters()">Clear Filters</button>
+    <button class="btn btn-primary" ng-disabled=false ng-click="search.updateFilters()">[DEBUG] Refresh</button>
+    <button class="btn btn-primary" ng-disabled=false ng-click="populateMarkers()">[DEBUG] Populate Markers</button>
 </div>
 
 
@@ -22,12 +23,22 @@
         <!--<div id="map" class="map"></div>-->
 
         <!--1. UI-Leaflet Map-->
-        <leaflet id="map" class="map" lf-center="center" maxBounds="maxBounds"></leaflet>
-        <p ng-show="maxBounds.northEast" class="result">[DEBUG] Maxbounds: NE(lat: {{maxBounds.northEast.lat}}, lng: {{maxBounds.northEast.lng}}) SW(lat: {{maxBounds.southWest.lat}}, lng: {{maxBounds.southWest.lng}})</p>
-        <p ng-show="maxBounds.northEast" class="result">Current Bounds: <br> NE(lat: {{currentBounds._northEast.lat}}, lng: {{currentBounds._northEast.lng}}) <br> SW(lat: {{currentBounds._southWest.lat}}, lng: {{currentBounds._southWest.lng}})</p>
-        <button class="btn btn-primary" ng-visible=true ng-click="getBounds()">getBounds</button>
-        <br>
-        <br>
+        <leaflet id="map" class="map" lf-center="center" maxBounds="maxBounds" markers="markers" event-broadcast="events"></leaflet>
+        <code>
+            [DEBUG]
+            <br>
+            Maxbounds:
+            <p ng-show="maxBounds.northEast" class="result">NE(lat: {{maxBounds.northEast.lat}}, lng: {{maxBounds.northEast.lng}}) SW(lat: {{maxBounds.southWest.lat}}, lng: {{maxBounds.southWest.lng}})</p>
+
+            Current Center:
+            <p>Latitude : <input type="number" step="any" ng-model="center.lat" /> Longitude : <input type="number" step="any" ng-model="center.lng" /></p>
+            <p>Zoom : <input type="number" step="any" ng-model="center.zoom" /></p>
+
+            Current Bounds:
+            <p class="result">NE(lat: {{currentBounds._northEast.lat}}, lng: {{currentBounds._northEast.lng}}) SW(lat: {{currentBounds._southWest.lat}}, lng: {{currentBounds._southWest.lng}})</p>
+            <button class="btn btn-primary" ng-visible=true ng-click="getBounds()">getBounds</button>
+            <br>
+        </code>
     </section>
 
     <section>
@@ -61,6 +72,7 @@
             </td>
             <td>
                 <p style="word-wrap:break-word;">{{tweet.text}}</p>
+                <p style="word-wrap:break-word;">{{tweet.geo.coordinates}}</p>
             </td>
         </tr>
     </table>

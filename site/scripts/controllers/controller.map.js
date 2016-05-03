@@ -21,15 +21,23 @@
     ];
 
     function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData) {
+        mapInit($scope);
+
         $scope.currentFilters = "";
         $scope.timeFilter = '1h';
         $scope.search = [];
         $scope.search.hashtagFilter = "#";
         $scope.search.searchFilter = "[PLACEHOLDER: Search Filter]";
 
-        $scope.search.clearFilter = function () {
+        $scope.search.clearFilters = function () {
             $scope.search.timeFilter = "None";
             $scope.search.hashtagFilter = "#";
+            $scope.center ={
+                lat: 50,
+                lng: 12,
+                zoom: 4
+            }
+
             $scope.search.updateFilters();
         }
         $scope.search.setHashtagFilter = function (hashtag) {
@@ -38,10 +46,13 @@
         }
         $scope.search.updateFilters = function () {
             httpService.getTweetsFromLocal();
+            // $scope.populateMarkers();
+            $scope.getBounds();
 
             $scope.currentFilters = $scope.timeFilter + " | " +
                 $scope.search.hashtagFilter + " | " +
-                $scope.search.searchFilter;
+                $scope.search.searchFilter + " | " +
+                $scope.center.lat + "/" + $scope.center.lng + "/" + $scope.center.zoom;
         }
 
         //Slider with ticks and values and tooltip
@@ -72,29 +83,38 @@
         $scope.bigTotalItems = 175;
         $scope.bigCurrentPage = 1;
 
+        $scope.populateMarkers = function () {
+            console.log("Test Object:")
+                var test = httpService.getTweets();
+                console.log(test[1])
 
-        $scope.search.updateFilters();
-        mapInit($scope);
+            var tweet;
+            console.log("Tweets:")
+            for(tweet in $scope.data.tweets) {
+                // console.dir(tweet)
+                console.dir(tweet.coordinates.coordinates)
+
+                if(typeof tweet.coordinates != 'undefined') {
+                    console.log("Coords = ")
+                    console.log(tweet.geo.coordinates)
+                    console.log(tweet.coordinates.coordinates)
+
+                    $scope.markers.add(tweet.coordinates.coordinates)
+                }
+            }
+        }
 
         $scope.currentBounds = null;
-        leafletData.getMap().then(
-            function(map) {
-                $scope.currentBounds = map.getBounds();
-
-                console.log("map.getBounds()");
-                console.log(map.getBounds());
-            }
-        );
         $scope.getBounds = function () {
             leafletData.getMap().then(
                 function(map) {
                     $scope.currentBounds = map.getBounds();
-
-                    console.log("map.getBounds()");
-                    console.log(map.getBounds());
+                    console.dir($scope.currentBounds);
                 }
             );
         }
+
+        $scope.search.updateFilters();
     }
 
     function mapInit($scope) {
@@ -116,6 +136,28 @@
             }
         }
         $scope.maxBounds = $scope.regions.europe
+
+        $scope.markers = [
+            {
+                lat: 51.33843,
+                lng: 12.37866,
+                focus: true,
+                draggable: false,
+                message: "Test Marker",
+                icon: {}
+            }
+        ];
+
+        $scope.events = {
+            map: {
+                enable: ['moveend', 'popupopen'],
+                    logic: 'emit'
+            },
+            marker: {
+                enable: [],
+                    logic: 'emit'
+            }
+        }
 
 
         /*
