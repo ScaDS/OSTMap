@@ -171,6 +171,11 @@
          */
         $scope.populateMarkers = function () {
             /**
+             * Reset all markers
+             */
+            // $scope.markers = {}
+
+            /**
              * Iterate through tweets
              * Filter bad data
              * Add coordinate pairs to marker array
@@ -217,7 +222,26 @@
             $scope.currentBounds = $scope.bounds;
         }
 
-        $scope.search.updateFilters();
+        /**
+         * Update the filters when the bounds are changed
+         */
+        $scope.onBounds = function () {
+            leafletData.getMap().then(function(map) {
+                map.on('moveend', function(e) {
+                    $scope.search.updateFilters();
+                });
+            });
+        }
+
+
+        /**
+         * Run when page is loaded
+         */
+        $scope.$on('$viewContentLoaded', function() {
+            console.log("Page Loaded")
+            $scope.search.updateFilters();
+            $scope.onBounds()
+        });
 
         /**
          * Pagination

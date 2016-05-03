@@ -11,8 +11,9 @@
         <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'All'">All</label>
     </div>
     <button class="btn btn-primary" ng-click="search.clearFilters()">Clear Filters</button>
-    <button class="btn btn-primary" ng-disabled=false ng-click="search.updateFilters()">[DEBUG] Refresh</button>
-    <button class="btn btn-primary" ng-disabled=false ng-click="populateMarkers()">[DEBUG] Populate Markers</button>
+    <!--<button class="btn btn-primary" ng-disabled=false ng-click="search.updateFilters()">[DEBUG] Refresh</button>-->
+    <button class="btn btn-primary" ng-disabled="clickOnce" ng-click="onBounds(); clickOnce = true">[DEBUG] Start bounds event handler</button>
+    <!--<button class="btn btn-primary" ng-disabled=false ng-click="populateMarkers()">[DEBUG] Populate Markers</button>-->
 </div>
 
 
@@ -35,7 +36,7 @@
             <p>Zoom : <input type="number" step="any" ng-model="center.zoom" /></p>
 
             Current Bounds:
-            <p class="result">NE(lat: {{bounds.northEast.lat}}, lng: {{bounds.northEast.lng}}) SW(lat: {{bounds.southWest.lat}}, lng: {{bounds.southWest.lng}})</p>
+            <p class="result">NE(lat: {{bounds.northEast.lat}}, lng: {{bounds.northEast.lng}}) <br> SW(lat: {{bounds.southWest.lat}}, lng: {{bounds.southWest.lng}})</p>
             <!--<p class="result">NE(lat: {{currentBounds._northEast.lat}}, lng: {{currentBounds._northEast.lng}}) SW(lat: {{currentBounds._southWest.lat}}, lng: {{currentBounds._southWest.lng}})</p>-->
             <!--<button class="btn btn-primary" ng-visible=true ng-click="getBounds()">getBounds</button>-->
             <br>
