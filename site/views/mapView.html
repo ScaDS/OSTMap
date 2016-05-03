@@ -24,7 +24,7 @@
         <!--1. UI-Leaflet Map-->
         <leaflet id="map" class="map" lf-center="center" maxBounds="maxBounds"></leaflet>
         <p ng-show="maxBounds.northEast" class="result">[DEBUG] Maxbounds: NE(lat: {{maxBounds.northEast.lat}}, lng: {{maxBounds.northEast.lng}}) SW(lat: {{maxBounds.southWest.lat}}, lng: {{maxBounds.southWest.lng}})</p>
-        <p ng-show="maxBounds.northEast" class="result">Current Bounds: NE(lat: {{currentBounds.northEast.lat}}, lng: {{currentBounds.northEast.lng}}) SW(lat: {{currentBounds.southWest.lat}}, lng: {{currentBounds.southWest.lng}})</p>
+        <p ng-show="maxBounds.northEast" class="result">Current Bounds: <br> NE(lat: {{currentBounds._northEast.lat}}, lng: {{currentBounds._northEast.lng}}) <br> SW(lat: {{currentBounds._southWest.lat}}, lng: {{currentBounds._southWest.lng}})</p>
         <button class="btn btn-primary" ng-visible=true ng-click="getBounds()">getBounds</button>
         <br>
         <br>

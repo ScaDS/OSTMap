@@ -20,7 +20,7 @@
         'leafletData'
     ];
 
-    function MapCtrl($scope, httpService, $log, leafletData) {
+    function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData) {
         $scope.currentFilters = "";
         $scope.timeFilter = '1h';
         $scope.search = [];
@@ -77,8 +77,14 @@
         mapInit($scope);
 
         $scope.currentBounds = null;
-        console.log("leafletData ");
-        console.log(leafletData);
+        leafletData.getMap().then(
+            function(map) {
+                $scope.currentBounds = map.getBounds();
+
+                console.log("map.getBounds()");
+                console.log(map.getBounds());
+            }
+        );
         $scope.getBounds = function () {
             leafletData.getMap().then(
                 function(map) {
