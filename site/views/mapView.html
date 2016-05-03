@@ -63,7 +63,7 @@
     <!-- Table -->
     <table class="table table-hover">
         <caption>{{data.tweets.length}} Tweets</caption>
-        <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.goToTweet(tweet.id, tweet.coordinates.coordinates[0], tweet.coordinates.coordinates[1])">
+        <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.goToTweet(tweet.id, tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0], tweet.text)">
             <td>
                 <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">
             </td>

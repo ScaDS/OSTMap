@@ -93,7 +93,7 @@
          *
          * @param id
          */
-        $scope.search.goToTweet = function (id, lat, lng) {
+        $scope.search.goToTweet = function (id, lat, lng, text) {
             console.log("selected tweet id: " + id + ", [" + lat + "," + lng + "]")
 
             /**
@@ -127,12 +127,11 @@
                     lng: lng,
                     focus: true,
                     draggable: false,
-                    message: "test",
+                    message: text,
                     icon: {}
                 }
                 console.log(newMarker)
-                // $scope.markers.push(newMarker)
-                // $scope.markers = [newMarker]
+                $scope.markers.push(newMarker)
             }
         }
 
