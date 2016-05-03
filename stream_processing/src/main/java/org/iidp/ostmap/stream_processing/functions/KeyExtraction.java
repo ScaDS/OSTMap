@@ -6,9 +6,7 @@ import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.util.Collector;
 import org.iidp.ostmap.stream_processing.types.CustomKey;
 import org.apache.commons.codec.Charsets;
-import scala.Tuple2;
 import scala.Tuple3;
-import scala.Tuple4;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -18,15 +16,18 @@ import java.util.Collections;
 /**
  * class calculating the custom key (for accumulo) for a given tweet with timestamp
  *
- * @author Martin Grimmer (martin.grimmer@mgm-tp.com)
- *
- *
  */
 public class KeyExtraction implements FlatMapFunction<Tuple3<Long, String, String>, Tuple3<CustomKey, Integer, String>>, Serializable {
 
     // hash function to use (murmurhash) see https://github.com/google/guava/wiki/HashingExplained
     private static HashFunction hash = Hashing.murmur3_32();
 
+    /**
+     * Extracting key and collecting for all tokens
+     * @param inTuple
+     * @param out for each token and user one Tuple of CustomKey, occurence-count of token and tweet-string
+     * @throws Exception
+     */
     @Override
     public void flatMap(Tuple3<Long, String, String> inTuple, Collector<Tuple3<CustomKey, Integer, String>> out) throws Exception {
         int hash = getHash(inTuple._2());
@@ -63,6 +64,11 @@ public class KeyExtraction implements FlatMapFunction<Tuple3<Long, String, Strin
         return hash.hashBytes(bb.array()).asInt();
     }
 
+    /**
+     * Creating substring containing only the tweet's text
+     * @param tweetJson whole tweet-json
+     * @return tweet's text
+     */
     public String getText(String tweetJson)
     {
         int pos1 = tweetJson.indexOf("\"text\":\"");

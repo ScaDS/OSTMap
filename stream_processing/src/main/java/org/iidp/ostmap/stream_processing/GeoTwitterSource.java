@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * @author Martin Grimmer (martin.grimmer@mgm-tp.com)
+ * Source for the twitter-data
  */
 public class GeoTwitterSource extends TwitterSource {
     private static final Logger LOG = LoggerFactory.getLogger(GeoTwitterSource.class);

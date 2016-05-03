@@ -5,10 +5,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 /**
- * key representing a tweet in accumulo
- * consists of: 8 byte timestamp of the tweet and 4 byte hash of the tweet
- *
- * @author Martin Grimmer (martin.grimmer@mgm-tp.com)
+ * key representing a token in accumulo
  */
 public class CustomKey implements Serializable {
 

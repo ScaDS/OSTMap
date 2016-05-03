@@ -4,24 +4,17 @@ import org.iidp.ostmap.stream_processing.functions.KeyExtraction;
 import org.iidp.ostmap.stream_processing.functions.DateExtraction;
 import org.iidp.ostmap.stream_processing.functions.UserExtraction;
 import org.iidp.ostmap.stream_processing.sinks.AccumuloSink;
-import org.apache.commons.io.IOUtils;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-
 /**
- * @author Martin Grimmer (martin.grimmer@mgm-tp.com)
- *         <p>
  *         Entry point of the twitter stream persist.
  *         Connects to twitter stream and gets "all" tweets with geotag in the bounding box of germany.
  */
 public class Driver {
 
-    // name of the target accumulo table
-    //public static final String tableName = "RawTwitterData";
+    // names of the target accumulo tables
     public static final String tableNameTerms = "TermIndex";
     public static final String tableNameRawData = "RawTwitterData";
     public static  String accumuloInstanceName;
@@ -87,7 +80,7 @@ public class Driver {
 
         if (args.length != 2) {
             System.out.println("error: wrong arguments");
-            System.out.println("need 3 paths: pathToTwitterProperties1, pathToAccumuloProperties");
+            System.out.println("need 2 paths: pathToTwitterProperties1, pathToAccumuloProperties");
             return;
         }
 

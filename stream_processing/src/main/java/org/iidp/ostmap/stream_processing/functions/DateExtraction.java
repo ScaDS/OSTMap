@@ -11,8 +11,6 @@ import java.util.Locale;
 
 /**
  * class extracting the timestamp of a given tweet
- *
- * @author Martin Grimmer (martin.grimmer@mgm-tp.com)
  */
 public class DateExtraction implements FlatMapFunction<String, Tuple2<Long, String>>, Serializable {
 
@@ -25,6 +23,12 @@ public class DateExtraction implements FlatMapFunction<String, Tuple2<Long, Stri
     public DateExtraction() {
     }
 
+    /**
+     *
+     * @param tweetJson tweet as json-string
+     * @param out Tuple of timestamp and tweet
+     * @throws Exception
+     */
     @Override
     public void flatMap(String tweetJson, Collector<Tuple2<Long, String>> out) throws Exception {
 

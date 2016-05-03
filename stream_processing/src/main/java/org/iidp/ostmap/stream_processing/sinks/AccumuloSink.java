@@ -8,12 +8,10 @@ import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.log4j.Logger;
-import scala.Tuple2;
 import scala.Tuple3;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -21,8 +19,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * This class is a sink for Apache Flink Stream API writing to Apache Accumulo.
  * It needs a config file with following content: accumulo.instance, accumulo.user, accumulo.password, accumulo.zookeeper.
- *
- * @author Martin Grimmer (martin.grimmer@mgm-tp.com)
  */
 public class AccumuloSink extends RichSinkFunction<Tuple3<CustomKey, Integer, String>> {
 
@@ -88,7 +84,7 @@ public class AccumuloSink extends RichSinkFunction<Tuple3<CustomKey, Integer, St
         // ensure persistance
         bwConfig.setDurability(Durability.SYNC);
 
-        // build the accumulo connector connector
+        // build the accumulo connector
         Instance inst = new ZooKeeperInstance(accumuloInstanceName, accumuloZookeeper);
         conn = inst.getConnector(accumuloUser, new PasswordToken(accumuloPassword));
         Authorizations auths = new Authorizations("standard");
@@ -148,6 +144,7 @@ public class AccumuloSink extends RichSinkFunction<Tuple3<CustomKey, Integer, St
     @Override
     /**
      * this is called for each token in tweet
+     * writes rawTwitterData and TermData into the two tables
      */
     public void invoke(Tuple3<CustomKey, Integer, String> value) throws Exception {
         // if the writers arent already instantiated, do it now
@@ -158,13 +155,13 @@ public class AccumuloSink extends RichSinkFunction<Tuple3<CustomKey, Integer, St
             writerForRawData = createBatchWriter(tableRawData);
         }
 
-        // build a mutation from the input/user/...
+        // get bytes of relevant data
         byte[] dataType = value._1().type.getBytes();   //defines the type of data (text/user)
         byte[] oldKey = value._1().foreignKeyBytes;  // foreign key to the row in the original table
         byte[] token = value._1().row.getBytes();  // the token for the row
         byte[] tweet = value._3().getBytes();  // the tweet
 
-
+        //Write raw data once per tweet
         if(lastWrittenKey==null || !Arrays.equals(lastWrittenKey, oldKey)) {
             Mutation mutationRawData = new Mutation(oldKey);
             if (value._2().intValue() == 0 || value._2().intValue() == 1) {
@@ -174,7 +171,7 @@ public class AccumuloSink extends RichSinkFunction<Tuple3<CustomKey, Integer, St
             lastWrittenKey = oldKey;
         }
 
-
+        //Write termData once per token/user
         Mutation mutationTerms = new Mutation(token);
         if(value._2().intValue()==0 || value._2().intValue()==1)
         {

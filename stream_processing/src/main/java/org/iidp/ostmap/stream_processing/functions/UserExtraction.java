@@ -11,14 +11,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
- * class extracting the timestamp of a given tweet
- *
- * @author Martin Grimmer (martin.grimmer@mgm-tp.com)
+ * class extracting the user of a given tweet
  */
 public class UserExtraction implements FlatMapFunction<Tuple2<Long, String>, Tuple3<Long, String, String>>, Serializable {
-
-    // example time string: "Wed Mar 23 12:01:40 +0000 2016"  'Thu Apr 28 09:17:52 +0000 2016'
-    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss Z yyyy").withLocale(Locale.ENGLISH);
 
     /**
      * empty constructor for serialization (needed by flink)
@@ -26,6 +21,12 @@ public class UserExtraction implements FlatMapFunction<Tuple2<Long, String>, Tup
     public UserExtraction() {
     }
 
+    /**
+     * Extract user for each tweet
+     * @param input Tuple of timestamp and tweet-json
+     * @param out Tuple of timestamp, tweet-json and user
+     * @throws Exception
+     */
     @Override
     public void flatMap(Tuple2<Long, String> input, Collector<Tuple3<Long, String, String>> out) throws Exception {
 
