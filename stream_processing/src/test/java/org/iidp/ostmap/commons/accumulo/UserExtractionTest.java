@@ -41,7 +41,7 @@ public class UserExtractionTest {
             public void collect(Tuple3<Long, String, String> record) {
                 assertTrue(record._1()==input._1);
                 assertEquals(input._2, record._2());
-                assertEquals("Peter Tosh", record._3());
+                assertEquals("peter tosh", record._3());
             }
 
             @Override

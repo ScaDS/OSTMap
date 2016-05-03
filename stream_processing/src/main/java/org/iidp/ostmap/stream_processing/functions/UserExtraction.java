@@ -36,7 +36,7 @@ public class UserExtraction implements FlatMapFunction<Tuple2<Long, String>, Tup
         int pos3 = input._2().indexOf("\",\"", pos2);
         if (posUserArea != -1 && pos1 != -1 && pos2 != -1) {
             String user = input._2().substring(pos2, pos3);
-            out.collect(new Tuple3(input._1(), input._2(), user));
+            out.collect(new Tuple3(input._1(), input._2(), user.toLowerCase()));
         }
     }
 }
