@@ -180,10 +180,16 @@
              * Filter bad data
              * Add coordinate pairs to marker array
              */
-            var tweet;
+
             console.log("Tweets:")
-            for(tweet in $scope.data.tweets) {
+            // That's the correct forEach loop in angular
+            angular.forEach($scope.data.tweets, function(value, key) {
+                var tweet = value;
                 // console.dir(tweet)
+                // Check if tweet has the property 'coordinates' ... if not, leave the forEach function
+                if(!tweet.hasOwnProperty('coordinates')){
+                    return;
+                }
                 console.dir(tweet.coordinates.coordinates)
 
                 if(typeof tweet.coordinates != undefined) {
@@ -209,7 +215,7 @@
                     }
                     $scope.markers.push(newMarker)
                 }
-            }
+            });
         }
 
 
