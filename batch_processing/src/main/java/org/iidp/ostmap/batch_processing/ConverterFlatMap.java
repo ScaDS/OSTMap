@@ -33,13 +33,15 @@ public class ConverterFlatMap implements FlatMapFunction<Tuple2<Key, Value>, Tup
     public void flatMap(Tuple2<Key, Value> in, Collector<Tuple2<Text, Mutation>> out) {
 
         JSONObject obj = null;
-        String user = "";
+        String userName = "";
+        String userScreenName = "";
         String text = "";
 
         try {
             obj = new JSONObject(in.f1.toString());
             text = obj.getString("text");
-            user = obj.getJSONObject("user").getString("screen_name");
+            userScreenName = obj.getJSONObject("user").getString("screen_name");
+            userName = obj.getJSONObject("user").getString("name");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -68,9 +70,13 @@ public class ConverterFlatMap implements FlatMapFunction<Tuple2<Key, Value>, Tup
         }
 
 
-        //create mutations for username
-        Mutation m = new Mutation(user);
-        m.put("user", in.f0.getRow().toString(), "1");
+        //create mutations for username and screen name
+        Mutation m = new Mutation(userName);
+        m.put("name", in.f0.getRow().toString(), "1");
+        out.collect(new Tuple2<>(new Text(outputTableName), m));
+
+        m = new Mutation(userScreenName);
+        m.put("screen_name", in.f0.getRow().toString(), "1");
         out.collect(new Tuple2<>(new Text(outputTableName), m));
 
     }
