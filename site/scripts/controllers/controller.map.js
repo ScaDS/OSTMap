@@ -114,12 +114,15 @@
             console.log("selected tweet id: " + id + ", [" + lat + "," + lng + "]")
 
             /**
-             * Check if latitude and longitude are available then
-             * Move map center to the tweet
+             * Check if latitude and longitude are available
              */
             if (lat == undefined || lng == undefined) {
                 alert("Missing Coordinates!")
             } else {
+                /**
+                 * Move map center to the tweet
+                 * @type {{lat: *, lng: *, zoom: number}}
+                 */
                 $scope.center ={
                     lat: lat,
                     lng: lng,
@@ -132,9 +135,14 @@
                 document.getElementById("map").scrollIntoView();
 
                 /**
+                 * Un-selects the old marker
+                 * Update currentMarkerID
                  * Give focus to selected tweet
                  * Makes the text label visible
                  */
+                $scope.markers[$scope.currentMarkerID].focus = false;
+                $scope.currentMarkerID = id;
+
                 if ($scope.markers[id] != null) {
                     $scope.markers[id].focus = true;
                 }
@@ -196,7 +204,7 @@
                         id: tweet.id,
                         lat: tweet.coordinates.coordinates[1],
                         lng: tweet.coordinates.coordinates[0],
-                        // focus: false,
+                        focus: false,
                         draggable: false,
                         message: tweet.text,
                         icon: $scope.icons.smallerDefault
@@ -364,6 +372,7 @@
                 icon: $scope.icons.blue
             }
         };
+        $scope.currentMarkerID = 1
 
         /**
          * Map event functions for future extensibility (Marker Clustering)

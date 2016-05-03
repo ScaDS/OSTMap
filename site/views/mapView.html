@@ -12,7 +12,7 @@
     </div>
     <button class="btn btn-primary" ng-click="search.clearFilters()">Clear Filters</button>
     <!--<button class="btn btn-primary" ng-disabled=false ng-click="search.updateFilters()">[DEBUG] Refresh</button>-->
-    <button class="btn btn-primary" ng-disabled="clickOnce" ng-click="onBounds(); clickOnce = true">[DEBUG] Start bounds event handler</button>
+    <button class="btn btn-primary" ng-disabled="clickOnce" ng-click="onBounds(); clickOnce = true; search.clearFilters()">[DEBUG] Start bounds event handler</button>
     <!--<button class="btn btn-primary" ng-disabled=false ng-click="populateMarkers()">[DEBUG] Populate Markers</button>-->
 </div>
 
