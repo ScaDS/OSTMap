@@ -20,12 +20,12 @@
         'leafletData'
     ];
 
-    function MapCtrl($scope, httpService, $log) {
+    function MapCtrl($scope, httpService, $log, leafletData) {
         $scope.currentFilters = "";
         $scope.timeFilter = '1h';
         $scope.search = [];
         $scope.search.hashtagFilter = "#";
-        $scope.search.searchFilter = "";
+        $scope.search.searchFilter = "[PLACEHOLDER: Search Filter]";
 
         $scope.search.clearFilter = function () {
             $scope.search.timeFilter = "None";
@@ -41,9 +41,21 @@
 
             $scope.currentFilters = $scope.timeFilter + " | " +
                 $scope.search.hashtagFilter + " | " +
-                $scope.search.searchFilter + "[PLACEHOLDER: Text Filter]";
+                $scope.search.searchFilter;
         }
 
+        //Slider with ticks and values and tooltip
+        $scope.slider_ticks_values_tooltip = {
+            value: 1,
+            options: {
+                ceil: 5,
+                floor: 1,
+                showTicksValues: true,
+                ticksValuesTooltip: function (v) {
+                    return 'Tooltip for ' + v;
+                }
+            }
+        };
 
         $scope.data = [];
         $scope.data.tweets = httpService.getTweets();
@@ -60,16 +72,45 @@
         $scope.bigTotalItems = 175;
         $scope.bigCurrentPage = 1;
 
+
         $scope.search.updateFilters();
         mapInit($scope);
+
+        $scope.currentBounds = null;
+        console.log("leafletData ");
+        console.log(leafletData);
+        $scope.getBounds = function () {
+            leafletData.getMap().then(
+                function(map) {
+                    $scope.currentBounds = map.getBounds();
+
+                    console.log("map.getBounds()");
+                    console.log(map.getBounds());
+                }
+            );
+        }
     }
 
     function mapInit($scope) {
-        $scope.europe = {
+        $scope.center ={
             lat: 50,
             lng: 12,
             zoom: 4
         }
+        $scope.regions = {
+            europe: {
+                northEast: {
+                    lat: 70,
+                    lng: 40
+                },
+                southWest: {
+                    lat: 35,
+                    lng: -25
+                }
+            }
+        }
+        $scope.maxBounds = $scope.regions.europe
+
 
         /*
          //Leaflet Init
