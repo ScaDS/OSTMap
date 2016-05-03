@@ -93,7 +93,7 @@
          *
          * @param id
          */
-        $scope.search.goToTweet = function (id, lat, lng, text) {
+        $scope.search.goToTweet = function (id, lat, lng) {
             console.log("selected tweet id: " + id + ", [" + lat + "," + lng + "]")
 
             /**
@@ -113,25 +113,14 @@
                  * Scroll document to the map element
                  */
                 document.getElementById("map").scrollIntoView();
-
+                
                 /**
-                 * DEBUG-DEBUG-DEBUG-DEBUG-DEBUG
-                 * add marker for test purposes
-                 * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
+                 * Give focus to selected tweet
+                 * Makes the text label visible
                  */
-                // var newLatLng = new L.LatLng(lat, lng);
-                // $scope.markers.setLatLng(newLatLng);
-                var newMarker = {
-                    id: id,
-                    lat: lat,
-                    lng: lng,
-                    focus: true,
-                    draggable: false,
-                    message: text,
-                    icon: {}
+                if ($scope.markers[id] != null) {
+                    $scope.markers[id].focus = true;
                 }
-                console.log(newMarker)
-                $scope.markers.push(newMarker)
             }
         }
 
@@ -162,9 +151,6 @@
         /**
          * Populate the map with markers using coordinates from each tweet
          * Ignore tweets without coordinates
-         *
-         * CURRENTLY BUGGY
-         *
          */
         $scope.populateMarkers = function () {
             /**
@@ -180,24 +166,15 @@
              * Filter bad data
              * Add coordinate pairs to marker array
              */
-
-            console.log("Tweets:")
-            // That's the correct forEach loop in angular
             angular.forEach($scope.data.tweets, function(value, key) {
                 var tweet = value;
                 // Check if tweet has the property 'coordinates' ... if not, leave the forEach function
-                // if(!tweet.hasOwnProperty('coordinates')){
-                //     return;
-                // }
+                if(!tweet.hasOwnProperty('coordinates')){
+                    return;
+                }
 
                 if(tweet.coordinates != null) {
-                    /**
-                     * DEBUG
-                     */
-                    console.log(tweet.id + " = " + tweet.geo.coordinates)
-                    console.log(tweet.id + " = " + tweet.coordinates.coordinates)
-
-                    /**
+                   /**
                      * Create new marker then add to marker array
                      * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
@@ -210,7 +187,9 @@
                         message: tweet.text,
                         icon: $scope.icons.smallerDefault
                     }
-                    $scope.markers.push(newMarker)
+                    // $scope.markers.push(newMarker)
+                    // $scope.markers.push(tweet.id + ": " +  newMarker)
+                    $scope.markers[tweet.id] = newMarker
                 }
             });
         }
@@ -311,8 +290,28 @@
          * Test markers
          * @type {*[]}
          */
-        $scope.markers = [
-            {
+        // $scope.markers = [
+        //     {
+        //         id: 1,
+        //         lat: 51.33843,
+        //         lng: 12.37866,
+        //         focus: true,
+        //         draggable: false,
+        //         message: "Test Marker 1",
+        //         icon: $scope.icons.smallerDefault
+        //     },
+        //     {
+        //         id: 2,
+        //         lat: 51.33948,
+        //         lng: 12.37637,
+        //         focus: false,
+        //         draggable: false,
+        //         message: "Test Marker 2",
+        //         icon: $scope.icons.blue
+        //     }
+        // ];
+        $scope.markers = {
+            1: {
                 id: 1,
                 lat: 51.33843,
                 lng: 12.37866,
@@ -321,7 +320,7 @@
                 message: "Test Marker 1",
                 icon: $scope.icons.smallerDefault
             },
-            {
+            2: {
                 id: 2,
                 lat: 51.33948,
                 lng: 12.37637,
@@ -330,7 +329,7 @@
                 message: "Test Marker 2",
                 icon: $scope.icons.blue
             }
-        ];
+        };
 
         /**
          * Map event functions for future extensibility (Marker Clustering)
