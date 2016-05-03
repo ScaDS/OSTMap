@@ -16,6 +16,12 @@ public class TokenSearchController {
     private String _paramCommaSeparatedFieldList,
         _paramToken;
 
+    /**
+     * Mapping method for path /tokensearch
+     * @param paramCommaSeparatedFieldList
+     * @param paramToken
+     * @return the result as json
+     */
     @RequestMapping(
             value = "/tokensearch",
             method = RequestMethod.GET,

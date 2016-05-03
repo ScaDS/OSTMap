@@ -19,6 +19,16 @@ public class GeoTimePeriodController {
             _paramStartTime,
             _paramEndTime ;
 
+    /**
+     * Mapping method for path /geotemporalsearch
+     * @param paramNorthCoordinate
+     * @param paramEastCoordinate
+     * @param paramSouthCoordinate
+     * @param paramWestCoordinate
+     * @param paramStartTime
+     * @param paramEndTime
+     * @return a json response
+     */
     @RequestMapping(
             value = "/geotemporalsearch",
             method = RequestMethod.GET,
@@ -88,6 +98,11 @@ public class GeoTimePeriodController {
         return consistent;
     }
 
+    /**
+     * Checks if the given string is a float
+     * @param checkString the string to check
+     * @return true = float, false = others
+     */
     private boolean isFloat(String checkString){
         boolean isFloat = false;
         try {
