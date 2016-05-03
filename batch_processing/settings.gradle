@@ -1,3 +1,0 @@
-rootProject.name = 'batch_processing '
-include ":commons"
-project(":commons").projectDir = file("../commons")

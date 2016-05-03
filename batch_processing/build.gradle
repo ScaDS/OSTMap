@@ -1,27 +1,16 @@
 plugins {
-    id "java"
-    id "idea"
-    //id "com.github.johnrengelman.shadow" version "1.2.3"
+    id "com.github.johnrengelman.shadow" version "1.2.3"
 }
 
-group 'org.iidp.ostmap'
-version '0.1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
 
-repositories {
-    mavenCentral()
-    maven {
-        url "http://repo.hortonworks.com/content/groups/public"
-    }
-    maven {
-        url "http://repo.hortonworks.com/content/repositories/releases/"
-    }
-}
 
 dependencies {
+    compile project(':commons')
+
     testCompile 'junit:junit:4.11'
     testCompile 'org.apache.accumulo:accumulo-minicluster:1.7.0.2.4.0.0-169'
+
     compile('org.apache.accumulo:accumulo-core:1.7.0.2.4.0.0-169') {
         exclude group: 'org.mortbay.jetty', module: 'jetty' //by both name and group
     }
@@ -37,19 +26,18 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.4.3'
     compile 'org.slf4j:slf4j-log4j12:1.4.3'
 
-    compile project(":commons")
 }
 
 
 
 jar {
     manifest {
-        attributes("Main-Class": "org.iidp.ostmap.Driver")
+        attributes("Main-Class": "org.iidp.ostmap.batch_processing.ConverterProcess")
     }
 }
 
-/*shadowJar {
+shadowJar {
     mergeServiceFiles() {
         exclude 'org.mortbay.jetty:jetty:6.1.26.hwx'
     }
-}*/
+}
