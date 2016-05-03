@@ -44,7 +44,7 @@
          * Reset all filter values to default or null
          */
         $scope.search.clearFilters = function () {
-            $scope.search.timeFilter = "None";
+            $scope.timeFilter = "None";
             $scope.search.hashtagFilter = "#";
             $scope.center ={
                 lat: 50,
@@ -140,12 +140,28 @@
                 // console.dir(tweet)
                 console.dir(tweet.coordinates.coordinates)
 
-                if(typeof tweet.coordinates != 'undefined') {
+                if(typeof tweet.coordinates != undefined) {
+                    /**
+                     * DEBUG
+                     */
                     console.log("Coords = ")
                     console.log(tweet.geo.coordinates)
                     console.log(tweet.coordinates.coordinates)
 
-                    $scope.markers.add(tweet.coordinates.coordinates)
+                    /**
+                     * Create new marker then add to marker array
+                     * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
+                     */
+                    var newMarker = {
+                        id: tweet.id,
+                        lat: tweet.coordinates.coordinates[0],
+                        lng: tweet.coordinates.coordinates[1],
+                        focus: false,
+                        draggable: false,
+                        message: tweet.text,
+                        icon: {}
+                    }
+                    $scope.markers.add(newMarker)
                 }
             }
         }
@@ -214,8 +230,13 @@
         }
         $scope.maxBounds = $scope.regions.europe
 
+        /**
+         * Default marker
+         * @type {*[]}
+         */
         $scope.markers = [
             {
+                id: 1,
                 lat: 51.33843,
                 lng: 12.37866,
                 focus: true,
@@ -225,6 +246,10 @@
             }
         ];
 
+        /**
+         * Map event functions for future extensibility (Marker Clustering)
+         * @type {{map: {enable: string[], logic: string}, marker: {enable: Array, logic: string}}}
+         */
         $scope.events = {
             map: {
                 enable: ['moveend', 'popupopen'],
