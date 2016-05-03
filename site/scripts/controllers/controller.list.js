@@ -30,21 +30,23 @@
      */
     function ListCtrl($scope,$location,httpService) {
         $scope.search = [];
-        $scope.search.inputValue = '';
         $scope.data = [];
+
+        $scope.search.inputValue = httpService.getSearchToken();
+        $scope.search.searchFields = httpService.getSearchFields();
+        console.log();
+
 
         /**
          * Get the tweets array from the httpService
          */
         $scope.data.tweets = httpService.getTweets();
 
-        /**
-         * Get all checkboxes to set the search area
-         */
-        $scope.search.checkBoxes = getSearchFields();
-
-
         $scope.search.onClick = function (mode) {
+
+            httpService.setSearchToken($scope.search.inputValue);
+            httpService.setSearchFields($scope.search.searchFields);
+
             /**
              * Get the tweets from the json file
              */
@@ -56,22 +58,5 @@
                 //TODO: Call Service to load Data for the Map view
             }
         }
-    }
-
-    /**
-     * A definition of all checkboxes
-     * @returns {*[]}
-     */
-    function getSearchFields() {
-        return [
-            {
-                fieldname: 'text',
-                checked: true
-            },
-            {
-                fieldname: 'user',
-                checked: false
-            }
-        ]
     }
 })();
