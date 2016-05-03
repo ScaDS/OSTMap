@@ -38,13 +38,16 @@
         $scope.timeFilter = '1h';
         $scope.search = [];
         $scope.search.hashtagFilter = "#";
-        $scope.search.searchFilter = "[PLACEHOLDER: Search Filter]";
+        $scope.search.searchFilter = "Default Search Filter";
 
         /**
          * Reset all filter values to default or null
          */
         $scope.search.clearFilters = function () {
-            $scope.timeFilter = "None";
+            // $scope.search.searchFilter = null;
+            $scope.search.searchFilter = "Default Search Filter";
+            // $scope.timeFilter = null;
+            $scope.timeFilter = "All";
             $scope.search.hashtagFilter = "#";
             $scope.center ={
                 lat: 50,
@@ -70,11 +73,11 @@
              * Get the tweets from the JSON file
              */
             httpService.getTweetsFromLocal();
-            // $scope.data.tweets = httpService.getTweets()
+            $scope.data.tweets = httpService.getTweets()
             /**
              * Call marker population function
              */
-            // $scope.populateMarkers();
+            $scope.populateMarkers();
             /**
              * Update current map boundaries
              */
@@ -83,10 +86,22 @@
              * Update the filter display
              * @type {string}
              */
-            $scope.currentFilters = $scope.timeFilter + " | " +
+
+            // var searchFilter = "None";
+            // var timeFilter = "None";
+            // if ($scope.search.searchFilter != null) {
+            //     searchFilter = $scope.search.searchFilter;
+            // }
+            // if ($scope.timeFilter != null) {
+            //     timeFilter = $scope.timeFilter;
+            // }
+
+            $scope.currentFilters = $scope.search.searchFilter + " | " +
                 $scope.search.hashtagFilter + " | " +
-                $scope.search.searchFilter + " | " +
-                $scope.center.lat + "/" + $scope.center.lng + "/" + $scope.center.zoom;
+                $scope.timeFilter + " | " +
+                "[" + $scope.center.lat + ", " + $scope.center.lng + ", " + $scope.center.zoom + "]";
+
+            console.log("Filters updated: " + $scope.currentFilters + " | " + $scope.currentBounds)
         }
         /**
          * Move the map center to the coordinates of the clicked tweet
@@ -154,14 +169,6 @@
          */
         $scope.populateMarkers = function () {
             /**
-             * Test object for debugging.
-             * Use browser console to save as local variable then manipulate as you see fit
-             */
-            console.log("Test Object:")
-                var test = httpService.getTweets();
-                console.log(test[1])
-
-            /**
              * Iterate through tweets
              * Filter bad data
              * Add coordinate pairs to marker array
@@ -203,7 +210,6 @@
             leafletData.getMap().then(
                 function(map) {
                     $scope.currentBounds = map.getBounds();
-                    console.dir($scope.currentBounds);
                 }
             );
         }
