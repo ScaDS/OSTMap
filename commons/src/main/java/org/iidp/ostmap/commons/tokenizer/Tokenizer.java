@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 
 /**
@@ -23,7 +24,19 @@ public class Tokenizer implements Serializable{
         separator.add("?");
         separator.add("\"");
         separator.add(";");
-        separator.add(":");
+        separator.add(Pattern.quote("[(]"));
+        separator.add(Pattern.quote("[)]"));
+        separator.add("[");
+        separator.add("]");
+        separator.add("{");
+        separator.add("}");
+        separator.add("/");
+        separator.add("+");
+        separator.add("*");
+        separator.add(">");
+        separator.add("<");
+
+
 
         doubleList.add("#");
         doubleList.add("@");
@@ -44,8 +57,12 @@ public class Tokenizer implements Serializable{
             String currentToken = st.nextToken();
             currentToken = currentToken.toLowerCase();
 
+
+
             for (String i : separator) {
+
                 if (currentToken.contains(i)) {
+                    
                     currentToken = currentToken.replaceAll(i, "");
                 }
             }
