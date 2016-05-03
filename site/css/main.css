@@ -25,3 +25,15 @@
     margin-top: 10px;
     margin-left: 20px;
 }
+
+.red {
+    border-radius: 120px;
+    opacity: .75;
+    background-color: #FF0000;
+}
+
+.blue {
+    border-radius: 120px;
+    opacity: .75;
+    background-color: #0000FF;
+}

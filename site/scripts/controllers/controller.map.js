@@ -205,7 +205,7 @@
                         focus: false,
                         draggable: false,
                         message: tweet.text,
-                        icon: {}
+                        icon: icons.smallerDefault
                     }
                     $scope.markers.push(newMarker)
                 }
@@ -277,6 +277,34 @@
         $scope.maxBounds = $scope.regions.europe
 
         /**
+         * Marker icon definition
+         * @type {{blue: {type: string, iconSize: number[], className: string, iconAnchor: number[]}, red: {type: string, iconSize: number[], className: string, iconAnchor: number[]}}}
+         */
+        var icons = {
+            blue: {
+                type: 'div',
+                iconSize: [10, 10],
+                className: 'blue',
+                iconAnchor:  [5, 5]
+            },
+            red: {
+                type: 'div',
+                iconSize: [10, 10],
+                className: 'red',
+                iconAnchor:  [5, 5]
+            },
+            smallerDefault: {
+                iconUrl: 'bower_components/leaflet/dist/images/marker-icon.png',
+                // shadowUrl: 'bower_components/leaflet/dist/images/marker-shadow.png',
+                iconSize:     [12, 20], // size of the icon
+                // shadowSize:   [25, 41], // size of the shadow
+                iconAnchor:   [6, 20], // point of the icon which will correspond to marker's location
+                // shadowAnchor: [4, 62],  // the same for the shadow
+                popupAnchor:  [0, -18] // point from which the popup should open relative to the iconAnchor
+            }
+        }
+
+        /**
          * Test markers
          * @type {*[]}
          */
@@ -288,7 +316,7 @@
                 focus: true,
                 draggable: false,
                 message: "Test Marker 1",
-                icon: {}
+                icon: icons.smallerDefault
             },
             {
                 id: 2,
@@ -297,7 +325,7 @@
                 focus: false,
                 draggable: false,
                 message: "Test Marker 2",
-                icon: {}
+                icon: icons.blue
             }
         ];
 
