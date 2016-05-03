@@ -56,5 +56,4 @@
             })
             .otherwise({redirectTo: '/list'});
     }
-
 })();

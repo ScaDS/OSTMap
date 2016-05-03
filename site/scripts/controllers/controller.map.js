@@ -25,22 +25,25 @@
         $scope.timeFilter = '1h';
         $scope.search = [];
         $scope.search.hashtagFilter = "#";
+        $scope.search.searchFilter = "";
 
         $scope.search.clearFilter = function () {
-            $scope.radioModelDate = "None";
+            $scope.search.timeFilter = "None";
             $scope.search.hashtagFilter = "#";
+            $scope.search.updateFilters();
+        }
+        $scope.search.setHashtagFilter = function (hashtag) {
+            $scope.search.hashtagFilter = "#" + hashtag;
             $scope.search.updateFilters();
         }
         $scope.search.updateFilters = function () {
             httpService.getTweetsFromLocal();
 
-            $scope.currentFilters = $scope.radioModelDate + " + " +
-                $scope.search.hashtagFilter + " + " +
-                "[PLACEHOLDER: Text Filter]";
+            $scope.currentFilters = $scope.timeFilter + " | " +
+                $scope.search.hashtagFilter + " | " +
+                $scope.search.searchFilter + "[PLACEHOLDER: Text Filter]";
         }
-        $scope.search.refresh = function () {
-            $scope.search.updateFilters();
-        }
+
 
         $scope.data = [];
         $scope.data.tweets = httpService.getTweets();
@@ -56,8 +59,6 @@
         $scope.maxSize = 5;
         $scope.bigTotalItems = 175;
         $scope.bigCurrentPage = 1;
-
-
 
         $scope.search.updateFilters();
         mapInit($scope);

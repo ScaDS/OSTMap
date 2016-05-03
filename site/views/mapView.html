@@ -2,14 +2,14 @@
 
 <div>
     <div class="btn-group">
-        <label class="btn btn-success" ng-click="search.refresh()" ng-model="timeFilter" uib-btn-radio="'1h'">1h</label>
-        <label class="btn btn-success" ng-click="search.refresh()" ng-model="timeFilter" uib-btn-radio="'2h'">2h</label>
-        <label class="btn btn-success" ng-click="search.refresh()" ng-model="timeFilter" uib-btn-radio="'3h'">4h</label>
-        <label class="btn btn-success" ng-click="search.refresh()" ng-model="timeFilter" uib-btn-radio="'1d'">1d</label>
-        <label class="btn btn-success" ng-click="search.refresh()" ng-model="timeFilter" uib-btn-radio="'All'">All</label>
+        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'1h'">1h</label>
+        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'2h'">2h</label>
+        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'3h'">4h</label>
+        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'1d'">1d</label>
+        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'All'">All</label>
     </div>
     <button class="btn btn-primary" ng-click="search.clearFilter()">Clear Filter</button>
-    <button class="btn btn-primary" ng-disabled=true ng-click="search.refresh()">Refresh [Auto Refresh Enabled]</button>
+    <button class="btn btn-primary" ng-disabled=true ng-click="search.updateFilters()">Refresh [Auto Refresh Enabled]</button>
 </div>
 
 
@@ -30,7 +30,7 @@
                 <caption>Top 10 Hashtags</caption>
                 <tr ng-repeat="tweet in data.tweets|limitTo:10">
                     <td>
-                        <p>#{{tweet.user.name}}</p>
+                        <p ng-click="search.setHashtagFilter(tweet.user.name)">#{{tweet.user.name}}</p>
                     </td>
                 </tr>
             </table>
@@ -57,5 +57,5 @@
             </td>
         </tr>
     </table>
-    <uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true"></uib-pagination>
+    <!--<uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true"></uib-pagination>-->
 </div>
