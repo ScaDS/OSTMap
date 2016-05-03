@@ -8,7 +8,7 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.hadoop.io.Text;
-import org.iidp.ostmap.commons.Tokenizer;
+import org.iidp.ostmap.commons.tokenizer.Tokenizer;
 import org.junit.Test;
 
 

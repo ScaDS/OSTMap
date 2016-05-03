@@ -8,7 +8,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
 import org.apache.hadoop.io.Text;
 import org.codehaus.jettison.json.JSONException;
-import org.iidp.ostmap.commons.Tokenizer;
+import org.iidp.ostmap.commons.tokenizer.Tokenizer;
 import org.codehaus.jettison.json.JSONObject;
 
 import java.io.Serializable;

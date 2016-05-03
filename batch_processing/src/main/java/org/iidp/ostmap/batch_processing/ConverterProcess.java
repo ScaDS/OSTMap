@@ -17,7 +17,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
-import org.iidp.ostmap.commons.Tokenizer;
+import org.iidp.ostmap.commons.tokenizer.Tokenizer;
 
 import java.io.FileInputStream;
 import java.io.IOException;

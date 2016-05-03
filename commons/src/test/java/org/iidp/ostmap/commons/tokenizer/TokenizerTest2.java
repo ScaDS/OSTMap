@@ -1,4 +1,4 @@
-package org.iidp.ostmap.commons;
+package org.iidp.ostmap.commons.tokenizer;
 
 import org.junit.Test;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import static junit.framework.TestCase.fail;
 
 
-public class TokenizerTest {
+public class TokenizerTest2 {
 
     @Test
     public void testTokenizer(){

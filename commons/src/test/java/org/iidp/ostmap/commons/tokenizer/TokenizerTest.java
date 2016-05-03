@@ -3,7 +3,6 @@ package org.iidp.ostmap.commons.tokenizer;
 /**
  * Created by schotti on 28.04.16.
  */
-import org.iidp.ostmap.commons.Tokenizer;
 import org.junit.Assert;
 import org.junit.Test;
 
