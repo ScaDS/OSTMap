@@ -1,6 +1,6 @@
 <p>&nbsp;</p>
 <div class="input-group">
-    <input ng-model="search.inputValue" type="text" class="form-control" placeholder="Search for...">
+    <input ng-model="search.inputValue" ng-model-options="{ getterSetter: true }" type="text" class="form-control" placeholder="Search for...">
     <div class="input-group-btn">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
@@ -14,8 +14,8 @@
     </div>
 
 </div><!-- /input-group -->
-<label class="checkbox-inline" ng-repeat="box in search.checkBoxes">
-    <input type="checkbox" id="inlineCheckbox1" value="{{box.fieldname}}" ng-checked="box.checked">{{ box.fieldname }}
+<label class="checkbox-inline" ng-repeat="(boxKey, boxValue) in search.searchFields">
+    <input type="checkbox" id="inlineCheckbox1" ng-model="boxValue.checked" ng-checked="boxValue.checked">{{ boxKey }}
 </label>
 <p>&nbsp;</p>
 <div class="panel panel-default" ng-show="data.tweets.length > 0">
