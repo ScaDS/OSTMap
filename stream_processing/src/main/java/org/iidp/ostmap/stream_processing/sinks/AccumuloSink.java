@@ -9,10 +9,12 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.log4j.Logger;
 import scala.Tuple2;
+import scala.Tuple3;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -22,9 +24,10 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Martin Grimmer (martin.grimmer@mgm-tp.com)
  */
-public class AccumuloSink extends RichSinkFunction<Tuple2<CustomKey, Integer>> {
+public class AccumuloSink extends RichSinkFunction<Tuple3<CustomKey, Integer, String>> {
 
-    private BatchWriter writer = null;
+    private BatchWriter writerForRawData = null;
+    private BatchWriter writerForTerms = null;
     public static final String PROPERTY_INSTANCE = "accumulo.instance";
     private String accumuloInstanceName;
     public static final String PROPERTY_USER = "accumulo.user";
@@ -34,11 +37,13 @@ public class AccumuloSink extends RichSinkFunction<Tuple2<CustomKey, Integer>> {
     public static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
     private String accumuloZookeeper;
 
-    private String table;
+    private String tableRawData;
+    private String tableTerms;
     private Connector conn;
 
-    private static final byte[] COLUMN_FAMILY = "t".getBytes();
     private static final byte[] EMPTY_BYTES = new byte[0];
+    private static final byte[] T_BYTES = "t".getBytes();
+    private static byte[] lastWrittenKey;
 
     private static Logger log = Logger.getLogger(AccumuloSink.class);
 
@@ -103,68 +108,84 @@ public class AccumuloSink extends RichSinkFunction<Tuple2<CustomKey, Integer>> {
      * configures this instance of AccumuloSink
      *
      * @param configFile file with information needed for accumulo connection
-     * @param table      table name to write the data to
+     * @param tableRawData      table name to write the data to
+     * @param tableTerms      table name to write the data to
      * @throws IOException
      * @throws AccumuloSecurityException
      * @throws AccumuloException
      * @throws TableNotFoundException
      */
-    public void configure(String configFile, String table) throws IOException, AccumuloSecurityException, AccumuloException, TableNotFoundException, TableExistsException {
-        log.info("configuring accumulo sink with " + configFile + " for " + table);
+    public void configure(String configFile, String tableTerms, String tableRawData) throws IOException, AccumuloSecurityException, AccumuloException, TableNotFoundException, TableExistsException {
+        log.info("configuring accumulo sink with " + configFile + " for " + tableTerms + " and " + tableRawData );
         // read config file
         readConfig(configFile);
-        this.table = table;
+        this.tableRawData = tableRawData;
+        this.tableTerms = tableTerms;
 
     }
 
     /**
      * configures this instance of AccumuloSink
      *
-     * @param table      table name to write the data to
+     * @param tableRawData      table name to write the data to
+     * @param tableTerms      table name to write the data to
      * @throws IOException
      * @throws AccumuloSecurityException
      * @throws AccumuloException
      * @throws TableNotFoundException
      */
-    public void configure(String table, String accumuloInstanceName, String accumuloZookeeper) throws IOException, AccumuloSecurityException, AccumuloException, TableNotFoundException, TableExistsException {
-        log.info("configuring accumulo sink for miniCluster for table: " + table);
+    public void configure(String tableTerms, String tableRawData, String accumuloInstanceName, String accumuloZookeeper) throws IOException, AccumuloSecurityException, AccumuloException, TableNotFoundException, TableExistsException {
+        log.info("configuring accumulo sink for tables " + tableTerms + " and " + tableRawData );
         this.accumuloInstanceName = accumuloInstanceName;
         accumuloUser = "root";
         accumuloPassword = "password";
         this.accumuloZookeeper = accumuloZookeeper;
 
-        this.table = table;
+        this.tableRawData = tableRawData;
+        this.tableTerms = tableTerms;
     }
 
     @Override
     /**
-     * this is called for each tweet
+     * this is called for each token in tweet
      */
-    public void invoke(Tuple2<CustomKey, Integer> value) throws Exception {
-        // if the writer isnt already instantiated, do it now
-        if (writer == null) {
-            writer = createBatchWriter(table);
+    public void invoke(Tuple3<CustomKey, Integer, String> value) throws Exception {
+        // if the writers arent already instantiated, do it now
+        if (writerForTerms == null) {
+            writerForTerms = createBatchWriter(tableTerms);
+        }
+        if (writerForRawData == null) {
+            writerForRawData = createBatchWriter(tableRawData);
         }
 
         // build a mutation from the input/user/...
-        byte[] colFam = value._1().type.getBytes();   //defines the type of data (text/user)
-        byte[] colQual = value._1().foreignKeyBytes;  // foreign key to the row in the original table
-        byte[] row = value._1().row.getBytes();  // the token for the row
+        byte[] dataType = value._1().type.getBytes();   //defines the type of data (text/user)
+        byte[] oldKey = value._1().foreignKeyBytes;  // foreign key to the row in the original table
+        byte[] token = value._1().row.getBytes();  // the token for the row
+        byte[] tweet = value._3().getBytes();  // the tweet
 
-        Mutation mutation = new Mutation(row);
 
+        if(lastWrittenKey==null || !Arrays.equals(lastWrittenKey, oldKey)) {
+            Mutation mutationRawData = new Mutation(oldKey);
+            if (value._2().intValue() == 0 || value._2().intValue() == 1) {
+                mutationRawData.put(T_BYTES, EMPTY_BYTES, tweet); // column family, column qualifier and tweet as string
+            }
+            writerForRawData.addMutation(mutationRawData);
+            lastWrittenKey = oldKey;
+        }
+
+
+        Mutation mutationTerms = new Mutation(token);
         if(value._2().intValue()==0 || value._2().intValue()==1)
         {
             //put without value
-            mutation.put(colFam, colQual, EMPTY_BYTES); // column family, column qualifier without value
+            mutationTerms.put(dataType, oldKey, EMPTY_BYTES); // column family, column qualifier without value
         }
         else
         {
             //put with number of occurrences
-            mutation.put(colFam, colQual, (""+value._2().intValue()).getBytes()); // column family, column qualifier and value to write
-
+            mutationTerms.put(dataType, oldKey, (""+value._2().intValue()).getBytes()); // column family, column qualifier and value to write
         }
-
-        writer.addMutation(mutation);
+        writerForTerms.addMutation(mutationTerms);
     }
 }

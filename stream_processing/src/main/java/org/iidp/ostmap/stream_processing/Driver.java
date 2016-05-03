@@ -22,7 +22,8 @@ public class Driver {
 
     // name of the target accumulo table
     //public static final String tableName = "RawTwitterData";
-    public static final String tableName = "TestData";
+    public static final String tableNameTerms = "TermIndex";
+    public static final String tableNameRawData = "RawTwitterData";
     public static  String accumuloInstanceName;
     public static  String accumuloZookeeper;
 
@@ -58,15 +59,14 @@ public class Driver {
         }
 
         AccumuloSink sink = new AccumuloSink();
-        sink.configure(pathToAccumuloProperties, tableName);
+        sink.configure(pathToAccumuloProperties, tableNameTerms, tableNameRawData);
+        sink.configure(tableNameTerms, tableNameRawData, accumuloInstanceName, accumuloZookeeper);
 
-        sink.configure(tableName, accumuloInstanceName, accumuloZookeeper);
         geoStream
                 .flatMap(new DateExtraction())
                 .flatMap(new UserExtraction())
                 .flatMap(new KeyExtraction())
                 .addSink(sink);
-
 
         env.execute("twitter stream");
     }

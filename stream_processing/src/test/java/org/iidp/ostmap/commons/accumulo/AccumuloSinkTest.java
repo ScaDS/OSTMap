@@ -36,7 +36,6 @@ public class AccumuloSinkTest {
     private String twProp = "/your/path/to/configFiles/twitter.properties";
     private String accProp = "/your/path/to/configFiles/accumulo.properties";
 
-
     @ClassRule
     public static TemporaryFolder tmpDir = new TemporaryFolder();
     private static MiniAccumuloCluster accumulo;
@@ -71,7 +70,7 @@ public class AccumuloSinkTest {
         conn.securityOperations().changeUserAuthorizations("root", auth);
 
         //Test for user
-        Scanner s1 = conn.createScanner("TestData", new Authorizations("standard"));
+        Scanner s1 = conn.createScanner("TermIndex", new Authorizations("standard"));
         s1.setRange(new Range("Peter Tosh", true, "Peter Tosh", true));
         for(Map.Entry<Key, Value> entry: s1){
             assertEquals(entry.getKey().getColumnFamily().toString(), "user");
@@ -80,7 +79,7 @@ public class AccumuloSinkTest {
 
 
         //Test for token-count
-        Scanner s2 = conn.createScanner("TestData", new Authorizations("standard"));
+        Scanner s2 = conn.createScanner("TermIndex", new Authorizations("standard"));
         s2.setRange(new Range("das", true, "das", true));
         for(Map.Entry<Key, Value> entry: s2){
             int countDas = Integer.parseInt(entry.getValue().toString());
@@ -91,7 +90,7 @@ public class AccumuloSinkTest {
         //Test for tokens
         String text = "Das sage ich dir gleich, das funktioniert doch nie! #haselnuss";
         Tokenizer t = new Tokenizer();
-        Scanner s3 = conn.createScanner("TestData", new Authorizations("standard"));
+        Scanner s3 = conn.createScanner("TermIndex", new Authorizations("standard"));
         ArrayList<String> list = new ArrayList<String>();
         for(Map.Entry<Key, Value> entry: s3){
             list.add(entry.getKey().getRow().toString());
@@ -102,7 +101,6 @@ public class AccumuloSinkTest {
             assertTrue(list.contains(token));
         }
         s3.close();
-
 
 
     }

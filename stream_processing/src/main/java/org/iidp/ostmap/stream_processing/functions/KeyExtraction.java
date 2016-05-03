@@ -8,6 +8,7 @@ import org.iidp.ostmap.stream_processing.types.CustomKey;
 import org.apache.commons.codec.Charsets;
 import scala.Tuple2;
 import scala.Tuple3;
+import scala.Tuple4;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -21,20 +22,20 @@ import java.util.Collections;
  *
  *
  */
-public class KeyExtraction implements FlatMapFunction<Tuple3<Long, String, String>, Tuple2<CustomKey, Integer>>, Serializable {
+public class KeyExtraction implements FlatMapFunction<Tuple3<Long, String, String>, Tuple3<CustomKey, Integer, String>>, Serializable {
 
     // hash function to use (murmurhash) see https://github.com/google/guava/wiki/HashingExplained
     private static HashFunction hash = Hashing.murmur3_32();
 
     @Override
-    public void flatMap(Tuple3<Long, String, String> inTuple, Collector<Tuple2<CustomKey, Integer>> out) throws Exception {
+    public void flatMap(Tuple3<Long, String, String> inTuple, Collector<Tuple3<CustomKey, Integer, String>> out) throws Exception {
         int hash = getHash(inTuple._2());
         CustomKey key = CustomKey.buildCustomKey(inTuple._1(), hash, inTuple._2());
 
         //Collect user-entry
         key.type = CustomKey.TYPE_USER;
         key.row = inTuple._3();
-        out.collect(new Tuple2<>(key, 0));
+        out.collect(new Tuple3<>(key, 0, inTuple._2()));
 
         //Collect all text-entries
         String text = getText(inTuple._2());
@@ -45,7 +46,7 @@ public class KeyExtraction implements FlatMapFunction<Tuple3<Long, String, Strin
             {
                 key.row = s;
                 int count = Collections.frequency(list, s);
-                out.collect(new Tuple2<>(key, count));
+                out.collect(new Tuple3<>(key, count, inTuple._2()));
             }
     }
 
