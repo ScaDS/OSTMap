@@ -130,7 +130,7 @@
                  * Scroll document to the map element
                  */
                 document.getElementById("map").scrollIntoView();
-                
+
                 /**
                  * Give focus to selected tweet
                  * Makes the text label visible
@@ -182,12 +182,12 @@
              */
             angular.forEach($scope.data.tweets, function(value, key) {
                 var tweet = value;
-                // Check if tweet has the property 'coordinates' ... if not, leave the forEach function
-                if(!tweet.hasOwnProperty('coordinates')){
+                // Check if tweet has the property 'coordinates' and 'id'... if not, leave the forEach function
+                if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id')){
                     return;
                 }
 
-                if(tweet.coordinates != null) {
+                if($scope.markers[tweet.id] == undefined && tweet.coordinates != null) {
                    /**
                      * Create new marker then add to marker array
                      * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
@@ -196,7 +196,7 @@
                         id: tweet.id,
                         lat: tweet.coordinates.coordinates[1],
                         lng: tweet.coordinates.coordinates[0],
-                        focus: false,
+                        // focus: false,
                         draggable: false,
                         message: tweet.text,
                         icon: $scope.icons.smallerDefault
