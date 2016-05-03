@@ -1,54 +1,10 @@
-<div>
-    <div class="btn-group">
-        <label class="btn btn-success" ng-model="radioModelDate" uib-btn-radio="'1h'">1h</label>
-        <label class="btn btn-success" ng-model="radioModelDate" uib-btn-radio="'2h'">2h</label>
-        <label class="btn btn-success" ng-model="radioModelDate" uib-btn-radio="'3h'">4h</label>
-        <label class="btn btn-success" ng-model="radioModelDate" uib-btn-radio="'1d'">1d</label>
-    </div>
-    <button class="btn btn-primary" ng-click="search.onClick()">Refresh</button>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
 
-
-<br>
-<section class="indent-1">
-    <section>
-        <!--2. Simple leaflet.js Map-->
-        <div id="map" class="map"></div>
-    </section>
-
-    <section>
-        <div class="top10 panel panel-default">
-            <!-- Table -->
-            <table class="table table-hover">
-                <caption>Top 10 Hashtags</caption>
-                <tr ng-repeat="tweet in data.tweets|limitTo:10">
-                    <td>
-                        <p>#{{tweet.user.name}}</p>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </section>
-</section>
-
-<br>
-<br>
-
-<div class="">
-    <!-- Table -->
-    <table class="table table-hover">
-        <caption>{{data.tweets.length}} Tweets</caption>
-        <tr ng-repeat="tweet in data.tweets|limitTo:10">
-            <td>
-                <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">
-            </td>
-            <td>
-                <p>{{tweet.user.name}}</p>
-            </td>
-            <td>
-                <p style="word-wrap:break-word;">{{tweet.text}}</p>
-            </td>
-        </tr>
-    </table>
-    <uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true"></uib-pagination>
-</div>
+</body>
+</html>

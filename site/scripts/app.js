@@ -11,7 +11,10 @@
     angular.module('ostMapApp', [
             'ngRoute',
             'ui-leaflet',
-            'ui.layout'
+            'nemLogging',
+            'ui.layout',
+            'ui.bootstrap',
+            'rzModule'
         ])
         .config(defineRoutes);
 
@@ -54,5 +57,4 @@
             })
             .otherwise({redirectTo: '/list'});
     }
-
 })();
