@@ -88,6 +88,53 @@
                 $scope.search.searchFilter + " | " +
                 $scope.center.lat + "/" + $scope.center.lng + "/" + $scope.center.zoom;
         }
+        /**
+         * Move the map center to the coordinates of the clicked tweet
+         *
+         * @param id
+         */
+        $scope.search.goToTweet = function (id, lat, lng) {
+            console.log("selected tweet id: " + id + ", [" + lat + "," + lng + "]")
+
+            /**
+             * Check if latitude and longitude are available then
+             * Move map center to the tweet
+             */
+            if (lat == undefined || lng == undefined) {
+                alert("Missing Coordinates!")
+            } else {
+                $scope.center ={
+                    lat: lat,
+                    lng: lng,
+                    zoom: 6
+                }
+
+                /**
+                 * Scroll document to the map element
+                 */
+                document.getElementById("map").scrollIntoView();
+
+                /**
+                 * DEBUG-DEBUG-DEBUG-DEBUG-DEBUG
+                 * add marker for test purposes
+                 * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
+                 */
+                // var newLatLng = new L.LatLng(lat, lng);
+                // $scope.markers.setLatLng(newLatLng);
+                var newMarker = {
+                    id: id,
+                    lat: lat,
+                    lng: lng,
+                    focus: true,
+                    draggable: false,
+                    message: "test",
+                    icon: {}
+                }
+                console.log(newMarker)
+                // $scope.markers.push(newMarker)
+                // $scope.markers = [newMarker]
+            }
+        }
 
         /**
          * Slider
@@ -161,7 +208,7 @@
                         message: tweet.text,
                         icon: {}
                     }
-                    $scope.markers.add(newMarker)
+                    $scope.markers.push(newMarker)
                 }
             }
         }
@@ -231,7 +278,7 @@
         $scope.maxBounds = $scope.regions.europe
 
         /**
-         * Default marker
+         * Test markers
          * @type {*[]}
          */
         $scope.markers = [
@@ -241,13 +288,25 @@
                 lng: 12.37866,
                 focus: true,
                 draggable: false,
-                message: "Test Marker",
+                message: "Test Marker 1",
+                icon: {}
+            },
+            {
+                id: 2,
+                lat: 51.33948,
+                lng: 12.37637,
+                focus: false,
+                draggable: false,
+                message: "Test Marker 2",
                 icon: {}
             }
         ];
 
         /**
          * Map event functions for future extensibility (Marker Clustering)
+         * https://asmaloney.com/2015/06/code/clustering-markers-on-leaflet-maps/
+         * http://leafletjs.com/2012/08/20/guest-post-markerclusterer-0-1-released.html
+         *
          * @type {{map: {enable: string[], logic: string}, marker: {enable: Array, logic: string}}}
          */
         $scope.events = {
