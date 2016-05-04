@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TokenizerTest {
 
-    private static final String INPUT_TEXT1 = "this is some text\n and +i love (it) #truelove @test.....!+<>!!! " ;
+    private static final String INPUT_TEXT1 = "this is some text\n and +i love (it) #truelove @test''...../''!+<>!!! " ;
     private static final String INPUT_TEXT2 = "Hello Example ...";
     private static final String[] TOKENS1 = new String[] { "this" ,"is", "some", "text", "and" , "love", "it", "#truelove", "truelove","@test", "test"};
     private static final String[] TOKENS2 = new String[] { "hello"  ,"example" };
