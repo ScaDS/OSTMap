@@ -118,7 +118,7 @@ public class ConverterProcessTest {
 
         //output result after conversion
         System.out.println("RawTwitterData: -----------------------------------------------------");
-        Scanner s = conn.createScanner("RawTwitterData", new Authorizations("a"));
+        Scanner s = conn.createScanner("RawTwitterData", new Authorizations("standard"));
         for(Map.Entry<Key, Value> entry: s){
             System.out.println(entry.getKey() + " | " +entry.getValue());
             //assertEquals(entry.getValue().toString(), testString);
@@ -126,7 +126,7 @@ public class ConverterProcessTest {
         s.close();
 
         System.out.println("TermIndex: -----------------------------------------------------");
-        s = conn.createScanner("TermIndex", new Authorizations("a"));
+        s = conn.createScanner("TermIndex", new Authorizations("standard"));
         int i = 0;
         for(Map.Entry<Key, Value> entry: s){
             System.out.println(entry.getKey() + " | " + entry.getValue());
@@ -148,7 +148,7 @@ public class ConverterProcessTest {
 
         //output result after conversion
         System.out.println("RawTwitterData: -----------------------------------------------------");
-        s = conn.createScanner("RawTwitterData", new Authorizations("a"));
+        s = conn.createScanner("RawTwitterData", new Authorizations("standard"));
         for(Map.Entry<Key, Value> entry: s){
             System.out.println(entry.getKey() + " | " +entry.getValue());
             //assertEquals(entry.getValue().toString(), testString);
@@ -156,7 +156,7 @@ public class ConverterProcessTest {
         s.close();
 
         System.out.println("TermIndex: -----------------------------------------------------");
-        s = conn.createScanner("TermIndex", new Authorizations("a"));
+        s = conn.createScanner("TermIndex", new Authorizations("standard"));
         i = 0;
         for(Map.Entry<Key, Value> entry: s){
             System.out.println(entry.getKey() + " | " + entry.getValue());
