@@ -1,12 +1,17 @@
 package org.iidp.ostmap.stream_processing;
 
-import org.iidp.ostmap.stream_processing.functions.KeyExtraction;
+import org.iidp.ostmap.stream_processing.functions.CalculateRawTwitterDataKey;
 import org.iidp.ostmap.stream_processing.functions.DateExtraction;
+import org.iidp.ostmap.stream_processing.functions.TermExtraction;
 import org.iidp.ostmap.stream_processing.functions.UserExtraction;
-import org.iidp.ostmap.stream_processing.sinks.AccumuloSink;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.iidp.ostmap.stream_processing.sinks.RawTwitterDataSink;
+import org.iidp.ostmap.stream_processing.sinks.TermIndexSink;
+import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
+import org.iidp.ostmap.stream_processing.types.SinkConfiguration;
+import scala.Tuple2;
 
 /**
  *         Entry point of the twitter stream persist.
@@ -15,10 +20,13 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 public class Driver {
 
     // names of the target accumulo tables
-    public static final String tableNameTerms = "TermIndex";
-    public static final String tableNameRawData = "RawTwitterData";
-    public static  String accumuloInstanceName;
-    public static  String accumuloZookeeper;
+    private final String tableNameTerms = "TermIndex";
+    private final String tableNameRawData = "RawTwitterData";
+    // configuration values for accumulo
+    private String accumuloInstanceName;
+    private String accumuloZookeeper;
+    // flag for usage of accumulo mini cluster
+    private boolean runOnMAC = false;
 
     /**
      * empty constructor
@@ -42,33 +50,54 @@ public class Driver {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
+        // decide which stream source should be used
         DataStream<String> geoStream;
         if(tweet==null) {
             geoStream = env.addSource(new GeoTwitterSource(pathToTwitterProperties));
         }
-        else
-        {
+        else {
             geoStream = env.fromElements ( tweet );
         }
 
-        AccumuloSink sink = new AccumuloSink();
-        sink.configure(pathToAccumuloProperties, tableNameTerms, tableNameRawData);
-        sink.configure(tableNameTerms, tableNameRawData, accumuloInstanceName, accumuloZookeeper);
+        // decide which configuration should be used
+        RawTwitterDataSink rtdSink = new RawTwitterDataSink();
+        TermIndexSink tiSink = new TermIndexSink();
+        SinkConfiguration sc;
+        if(runOnMAC) {
+            sc = SinkConfiguration.createConfigForMinicluster(accumuloInstanceName, accumuloZookeeper);
+        }
+        else {
+            sc = SinkConfiguration.createConfigFromFile(pathToAccumuloProperties);
+        }
+        rtdSink.configure(sc, tableNameRawData);
+        tiSink.configure(sc, tableNameTerms);
 
-        geoStream
-                .flatMap(new DateExtraction())
+        // stream of tuples containing RawTwitterDataKey and tweet's json-String
+        DataStream<Tuple2<RawTwitterDataKey, String>> rtdStream = geoStream
+                                                                    .flatMap(new DateExtraction())
+                                                                    .flatMap(new CalculateRawTwitterDataKey());
+
+        // write into rawTwitterData-table
+        rtdStream.addSink(rtdSink);
+
+        // processing for user
+        rtdStream
                 .flatMap(new UserExtraction())
-                .flatMap(new KeyExtraction())
-                .addSink(sink);
+                .addSink(tiSink);
+        // processing for terms
+        rtdStream
+                .flatMap(new TermExtraction())
+                .addSink(tiSink);
 
         env.execute("twitter stream");
     }
 
 
-    public void addMACdata(String accInstanceName, String accumuloZK)
+    public void addMACdata(String accInstanceName, String accZookeeper)
     {
+        runOnMAC = true;
         accumuloInstanceName = accInstanceName;
-        accumuloZookeeper =  accumuloZK;
+        accumuloZookeeper =  accZookeeper;
     }
 
     /**
@@ -80,7 +109,7 @@ public class Driver {
 
         if (args.length != 2) {
             System.out.println("error: wrong arguments");
-            System.out.println("need 2 paths: pathToTwitterProperties1, pathToAccumuloProperties");
+            System.out.println("need 2 paths: pathToTwitterProperties, pathToAccumuloProperties");
             return;
         }
 

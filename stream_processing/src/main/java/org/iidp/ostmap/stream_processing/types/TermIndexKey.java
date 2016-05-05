@@ -1,7 +1,5 @@
 package org.iidp.ostmap.stream_processing.types;
 
-import java.nio.ByteBuffer;
-
 /**
  * Contains data for one key of the termIndex-table
  */
@@ -25,12 +23,13 @@ public class TermIndexKey {
 
     /**
      * builds a termIndexKey for the given parameter
+     *
      * @param term      token or username
      * @param source    source-type which defines if user or token
      * @param rtdKey    the RawTwitterDataKey
      * @return          the new termIndex object
      */
-    public static TermIndexKey buildRawTwitterDataKey(String term, String source, RawTwitterDataKey rtdKey) {
+    public static TermIndexKey buildTermIndexKey(String term, String source, RawTwitterDataKey rtdKey) {
         TermIndexKey key = new TermIndexKey();
         key.term = term;
         key.source = source;
@@ -46,4 +45,7 @@ public class TermIndexKey {
         return source.getBytes();
     }
 
+    public void setTerm(String term) {
+        this.term = term;
+    }
 }

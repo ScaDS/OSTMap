@@ -38,8 +38,8 @@ public class DateExtraction implements FlatMapFunction<String, Tuple2<Long, Stri
         if (pos1 != -1 && pos2 != -1) {
             String rawTime = tweetJson.substring(pos2, pos3);
             ZonedDateTime time = ZonedDateTime.parse(rawTime, formatter);
-            long key = time.toEpochSecond();
-            out.collect(new Tuple2(key, tweetJson));
+            long ts = time.toEpochSecond();
+            out.collect(new Tuple2(ts, tweetJson));
         }
     }
 }
