@@ -22,7 +22,7 @@ public class ConverterFlatMapTest {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         DataSet<Tuple2<Key,Value>> input = env.fromElements(
                 new Tuple2<>(new Key("row1","t",""), new Value(("{\"text\":\"example tweet\"," +
-                        "\"user\":{\"screen_name\":\"user1\"}} ").getBytes())));
+                        "\"user\":{\"screen_name\":\"user1\", \"name\":\"u1name\"}} ").getBytes())));
 
         DataSet<Tuple2<Text,Mutation>> output = input.flatMap(
                 new ConverterFlatMap(new Tokenizer(),"table"));
@@ -30,7 +30,7 @@ public class ConverterFlatMapTest {
 
 
         output.print();
-        assertEquals(output.count(), 3);
+        assertEquals(output.count(), 4);
 
     }
 }
