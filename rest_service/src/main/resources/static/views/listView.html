@@ -1,0 +1,36 @@
+<p>&nbsp;</p>
+<div class="input-group">
+    <input ng-model="search.inputValue" ng-model-options="{ getterSetter: true }" type="text" class="form-control" placeholder="Search for...">
+    <div class="input-group-btn">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;Search&nbsp;<span
+                class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li ng-click="search.onClick('list')"><a href="#">Show results as list</a></li>
+            <li ng-click="search.onClick('map')"><a href="#/map">Show results as map</a></li>
+        </ul>
+    </div>
+
+</div><!-- /input-group -->
+<label class="checkbox-inline" ng-repeat="(boxKey, boxValue) in search.searchFields">
+    <input type="checkbox" id="inlineCheckbox1" ng-model="boxValue.checked" ng-checked="boxValue.checked">{{ boxKey }}
+</label>
+<p>&nbsp;</p>
+<div class="panel panel-default" ng-show="data.tweets.length > 0">
+    <!-- Table -->
+    <table class="table table-hover">
+        <tr ng-repeat="tweet in data.tweets">
+            <td>
+                <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">
+            </td>
+            <td>
+                <p>{{tweet.user.name}}</p>
+            </td>
+            <td>
+                <p style="word-wrap:break-word;">{{tweet.text}}</p>
+            </td>
+        </tr>
+    </table>
+</div>

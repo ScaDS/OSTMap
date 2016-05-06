@@ -44,7 +44,7 @@ public class AmcHelper {
             e.printStackTrace();
         }
 
-        Authorizations auth = new Authorizations("a");
+        Authorizations auth = new Authorizations("standard");
 
         try {
             conn.securityOperations().changeUserAuthorizations("root", auth);

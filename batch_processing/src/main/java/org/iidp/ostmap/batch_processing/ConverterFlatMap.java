@@ -65,18 +65,23 @@ public class ConverterFlatMap implements FlatMapFunction<Tuple2<Key, Value>, Tup
         //create mutations for tokens
         for(Map.Entry<String, Integer> kv: tokenCount.entrySet()){
             Mutation m = new Mutation(kv.getKey());
-            m.put("text", in.f0.getRow().toString(), kv.getValue().toString());
+            if(kv.getValue() > 1){
+
+                m.put("text", in.f0.getRow().toString(), kv.getValue().toString());
+            }else{
+                m.put("text", in.f0.getRow().toString(), new Value());
+            }
             out.collect(new Tuple2<>(new Text(outputTableName), m));
         }
 
 
         //create mutations for username and screen name
-        Mutation m = new Mutation(userName);
-        m.put("name", in.f0.getRow().toString(), "1");
+        Mutation m = new Mutation(userName.toLowerCase());
+        m.put("user", in.f0.getRow().toString(), new Value());
         out.collect(new Tuple2<>(new Text(outputTableName), m));
 
-        m = new Mutation(userScreenName);
-        m.put("screen_name", in.f0.getRow().toString(), "1");
+        m = new Mutation(userScreenName.toLowerCase());
+        m.put("user", in.f0.getRow().toString(), new Value());
         out.collect(new Tuple2<>(new Text(outputTableName), m));
 
     }
