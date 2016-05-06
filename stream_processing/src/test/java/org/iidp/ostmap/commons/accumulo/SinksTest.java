@@ -8,7 +8,7 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.iidp.ostmap.stream_processing.Driver;
-import org.iidp.ostmap.stream_processing.functions.Tokenizer;
+import org.iidp.ostmap.commons.tokenizer.*;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
