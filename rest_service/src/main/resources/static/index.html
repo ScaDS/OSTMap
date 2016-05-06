@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="ostMapApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="ostMapApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="ostMapApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="ostMapApp" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>OSTMap</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="bower_components/angular-ui-layout/src/ui-layout.css"/>
+    <link rel="stylesheet" href="bower_components/angularjs-slider/dist/rzslider.css"/>
+
+</head>
+<body>
+<div ng-controller="MainCtrl">
+    <navigation></navigation>
+
+    <div class="container">
+        <div ng-view></div>
+    </div>
+
+    <div class="bottom-bar navbar-default navbar-fixed-bottom" >
+        OSTMap app: v1.0
+    </div>
+</div>
+
+
+<!-- Bower Scripts -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/leaflet/dist/leaflet.js"></script>
+<script src="bower_components/ui-leaflet/dist/ui-leaflet.js"></script>
+<script src="bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
+<script src="bower_components/angular-ui-layout/src/ui-layout.js"></script>
+<script src="bower_components/angularjs-slider/dist/rzslider.js"></script>
+
+<!-- OSTMap Scripts -->
+<script src="scripts/app.js"></script>
+<script src="scripts/controllers/controller.main.js"></script>
+<script src="scripts/controllers/controller.map.js"></script>
+<script src="scripts/controllers/controller.list.js"></script>
+<script src="scripts/controllers/controller.about.js"></script>
+<script src="scripts/services/service.navigation.js"></script>
+<script src="scripts/services/service.http.js"></script>
+<script src="scripts/directives/directive.navigation.js"></script>
+</body>
+</html>
