@@ -92,7 +92,7 @@ public class ConverterProcess {
     private DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
         job = Job.getInstance(new Configuration(), "converterJob");
         AccumuloInputFormat.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword));
-        AccumuloInputFormat.setScanAuthorizations(job, new Authorizations("a"));
+        AccumuloInputFormat.setScanAuthorizations(job, new Authorizations("standard"));
         ClientConfiguration clientConfig = new ClientConfiguration();
         clientConfig.withInstance(accumuloInstanceName);
         clientConfig.withZkHosts(accumuloZookeeper);

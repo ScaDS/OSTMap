@@ -49,7 +49,7 @@ public class AmcHelperTest {
         bw.addMutation(m1);
         bw.close();
 
-        Scanner s = conn.createScanner("TestTable", new Authorizations("a"));
+        Scanner s = conn.createScanner("TestTable", new Authorizations("standard"));
         for(Map.Entry<Key, Value> entry: s){
             System.out.println(entry.getKey());
             System.out.println(entry.getValue());
