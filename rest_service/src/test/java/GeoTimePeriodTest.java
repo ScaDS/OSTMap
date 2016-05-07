@@ -13,7 +13,7 @@ public class GeoTimePeriodTest {
 
     @Test
     public void testRequest() throws Exception {
-        ResponseEntity responseEntity = template.getForEntity("http://localhost:8080/api/geotemporalsearch?bbnorth=10.123&bbsouth=-10.456&bbeast=-30.789&bbwest=30.123&tstart=1461942000000&tend=1461967200000", String.class);
+        ResponseEntity responseEntity = template.getForEntity("http://localhost:8080/api/geotemporalsearch?bbnorth=10.123&bbsouth=-10.456&bbeast=-30.789&bbwest=30.123&tstart=1462020290&tend=1462020291", String.class);
         HttpStatus status = responseEntity.getStatusCode();
         HttpHeaders httpHeaders = responseEntity.getHeaders();
 
