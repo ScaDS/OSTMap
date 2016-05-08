@@ -45,30 +45,7 @@ public class TokenSearchController {
         String resultList = "";
         if(validateQueryParams())
         {
-            AccumuloService accumuloService = new AccumuloService();
-            String[] fieldArray = _paramCommaSeparatedFieldList.split(",");
-            try {
-                accumuloService.readConfig(MainController.configFilePath);
-                for(String field:fieldArray){
-                    Scanner termIndexScanner = accumuloService.getTermIdexScanner(_paramToken,field);
-                    for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
-                        String rawTwitterRowIndex = termIndexEntry.getKey().getColumnQualifierData().toString();
-                        Scanner rawDataScanner = accumuloService.getRawDataScanner(rawTwitterRowIndex);
-                        for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
-                            String json = rawDataEntry.getValue().toString();
-                            resultList += json;
-                        }
-                    }
-                }
-            } catch (IOException ioe){
-                ioe.printStackTrace();
-            } catch (AccumuloSecurityException e) {
-                e.printStackTrace();
-            } catch (TableNotFoundException e) {
-                e.printStackTrace();
-            } catch (AccumuloException e) {
-                e.printStackTrace();
-            }
+            resultList = getResultsFromAccumulo();
         }else{
             throw new IllegalArgumentException();
         }
@@ -100,6 +77,35 @@ public class TokenSearchController {
         }
 
         return consistent;
+    }
+
+    public String getResultsFromAccumulo(){
+        String result = "";
+        AccumuloService accumuloService = new AccumuloService();
+        String[] fieldArray = _paramCommaSeparatedFieldList.split(",");
+        try {
+            accumuloService.readConfig(MainController.configFilePath);
+            for(String field:fieldArray){
+                Scanner termIndexScanner = accumuloService.getTermIdexScanner(_paramToken,field);
+                for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
+                    String rawTwitterRowIndex = termIndexEntry.getKey().getColumnQualifierData().toString();
+                    Scanner rawDataScanner = accumuloService.getRawDataScanner(rawTwitterRowIndex);
+                    for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
+                        String json = rawDataEntry.getValue().toString();
+                        result += json;
+                    }
+                }
+            }
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        } catch (AccumuloSecurityException e) {
+            e.printStackTrace();
+        } catch (TableNotFoundException e) {
+            e.printStackTrace();
+        } catch (AccumuloException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @ExceptionHandler
