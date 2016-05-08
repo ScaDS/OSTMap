@@ -3,7 +3,7 @@ package org.iidp.ostmap.commons.tokenizer;
 /**
  * Created by schotti on 28.04.16.
  */
-import org.jcp.xml.dsig.internal.SignerOutputStream;
+//import org.jcp.xml.dsig.internal.SignerOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
