@@ -25,7 +25,7 @@ repositories {
         url "http://repo.spring.io/release"
     }
     maven {
-        url "http://repo.hortonworks.com/content/groups/public"
+        url "http://repo.hortonworks.com/content/groups/public/"
     }
     maven {
         url "http://repo.hortonworks.com/content/repositories/releases/"
@@ -38,6 +38,7 @@ sourceCompatibility = 1.7
 mainClassName = "org.iidp.ostmap.rest_service.MainController"
 
 dependencies {
+    compile project(':commons')
     // tag::jetty[]
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
@@ -48,7 +49,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile 'org.apache.accumulo:accumulo-minicluster:1.7.0.2.4.0.0-169'
     compile('org.apache.accumulo:accumulo-core:1.7.0.2.4.0.0-169') {
         exclude group: 'org.mortbay.jetty', module: 'jetty'
         exclude group: 'org.slf4j', module: 'slf4j-log4j12'
