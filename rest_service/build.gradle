@@ -21,10 +21,15 @@ jar {
 
 repositories {
     mavenCentral()
+    maven { url "http://repo.spring.io/release" }
+    maven { url "http://repo.hortonworks.com/content/groups/public" }
+    maven { url "http://repo.hortonworks.com/content/repositories/releases/" }
 }
 
+group 'org.iidp.ostmap'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
+
 mainClassName = "org.iidp.ostmap.rest_service.MainController"
 
 dependencies {
@@ -38,8 +43,18 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]
     testCompile("junit:junit")
+    compile('org.apache.accumulo:accumulo-core:1.7.0.2.4.0.0-169') {
+        exclude group: 'org.mortbay.jetty', module: 'jetty'
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    }
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
+}
+
+bootRun {
+    if ( project.hasProperty('args') ) {
+        args project.args.split('\\s+')
+    }
 }

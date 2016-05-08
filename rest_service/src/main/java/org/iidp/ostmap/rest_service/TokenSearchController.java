@@ -1,13 +1,20 @@
 package org.iidp.ostmap.rest_service;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api")
@@ -38,7 +45,30 @@ public class TokenSearchController {
         String resultList = "";
         if(validateQueryParams())
         {
-            resultList = MainController.getTestTweets();
+            AccumuloService accumuloService = new AccumuloService();
+            String[] fieldArray = _paramCommaSeparatedFieldList.split(",");
+            try {
+                accumuloService.readConfig(MainController.configFilePath);
+                for(String field:fieldArray){
+                    Scanner termIndexScanner = accumuloService.getTermIdexScanner(_paramToken,field);
+                    for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
+                        String rawTwitterRowIndex = termIndexEntry.getKey().getColumnQualifierData().toString();
+                        Scanner rawDataScanner = accumuloService.getRawDataScanner(rawTwitterRowIndex);
+                        for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
+                            String json = rawDataEntry.getValue().toString();
+                            resultList += json;
+                        }
+                    }
+                }
+            } catch (IOException ioe){
+                ioe.printStackTrace();
+            } catch (AccumuloSecurityException e) {
+                e.printStackTrace();
+            } catch (TableNotFoundException e) {
+                e.printStackTrace();
+            } catch (AccumuloException e) {
+                e.printStackTrace();
+            }
         }else{
             throw new IllegalArgumentException();
         }

@@ -1,5 +1,9 @@
 package org.iidp.ostmap.rest_service;
 
+import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.accumulo.core.security.Authorizations;
+import org.apache.log4j.Logger;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.json.BasicJsonParser;
@@ -13,17 +17,26 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 @SpringBootApplication
 public class MainController {
+    private static Logger log = Logger.getLogger(MainController.class);
+    public static String configFilePath;
 
     /**
      * Main method to run the spring boot application.
-     * @param args
+     * @param args PAth to config file
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
+        if(args != null && args.length > 0 && args[0] != ""){
+            System.out.println("Use config file: " + args[0]);
+            configFilePath = args[0];
+        }else {
+            System.out.println("Path to accumulo config file is necessary as parameter.");
+        }
         SpringApplication.run(MainController.class, args);
     }
 
@@ -65,4 +78,6 @@ public class MainController {
 
         return result;
     }
+
+
 }
