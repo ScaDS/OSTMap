@@ -1,0 +1,4160 @@
+[
+  {
+    "created_at": "Wed Mar 30 15:07:38 +0000 2016",
+    "id": 715193777833582592,
+    "id_str": "715193777833582592",
+    "text": "\u00d6mr\u00fcm hastanelerde ge\u00e7iyor (@ \u00d6zel Sancaktepe B\u00f6lge Hastanesi in \u0130stanbul, T\u00fcrkiye) https:\/\/t.co\/iEwG92qFuc",
+    "source": "\u003ca href=\"http:\/\/foursquare.com\" rel=\"nofollow\"\u003eFoursquare\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2243967693,
+      "id_str": "2243967693",
+      "name": "Yunus Ya\u015fin",
+      "screen_name": "uayunus72",
+      "location": "\u0130stanbul, T\u00fcrkiye",
+      "url": "http:\/\/instagram.com\/yunusyasn",
+      "description": "Okan \u00dcniversitesi-Odyometri                              \n\nIstanbul \u00dcniversitesi(C.T.F) -Odyoloji",
+      "protected": false,
+      "verified": false,
+      "followers_count": 215,
+      "friends_count": 138,
+      "listed_count": 0,
+      "favourites_count": 569,
+      "statuses_count": 1585,
+      "created_at": "Wed Dec 25 23:25:22 +0000 2013",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "0084B4",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714201735351431169\/oIExWNfE_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714201735351431169\/oIExWNfE_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2243967693\/1433458026",
+      "default_profile": true,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": {
+      "type": "Point",
+      "coordinates": [
+        41.00870620,
+        29.21240342
+      ]
+    },
+    "coordinates": {
+      "type": "Point",
+      "coordinates": [
+        29.21240342,
+        41.00870620
+      ]
+    },
+    "place": {
+      "id": "5e02a0f0d91c76d2",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/5e02a0f0d91c76d2.json",
+      "place_type": "city",
+      "name": "\u0130stanbul",
+      "full_name": "\u0130stanbul, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              28.632104,
+              40.802734
+            ],
+            [
+              28.632104,
+              41.239907
+            ],
+            [
+              29.378341,
+              41.239907
+            ],
+            [
+              29.378341,
+              40.802734
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/iEwG92qFuc",
+          "expanded_url": "https:\/\/www.swarmapp.com\/c\/d0LwAoRxhul",
+          "display_url": "swarmapp.com\/c\/d0LwAoRxhul",
+          "indices": [
+            84,
+            107
+          ]
+        }
+      ],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459350458950"
+  },
+  {
+    "created_at": "Wed Mar 30 15:09:10 +0000 2016",
+    "id": 715194162648387584,
+    "id_str": "715194162648387584",
+    "text": "\ud83c\udf88\ud83c\udf88 @ The Music Cafe https:\/\/t.co\/OfO1dGNKEy",
+    "source": "\u003ca href=\"http:\/\/instagram.com\" rel=\"nofollow\"\u003eInstagram\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 949540494,
+      "id_str": "949540494",
+      "name": "Bestetot.",
+      "screen_name": "bestetot",
+      "location": null,
+      "url": null,
+      "description": "rak\u0131 deyince istemsiz g\u00fcl\u00fcms\u00fcyorum, oluyo \u00f6yle. EU\/Biyoloji ~",
+      "protected": false,
+      "verified": false,
+      "followers_count": 482,
+      "friends_count": 308,
+      "listed_count": 1,
+      "favourites_count": 2568,
+      "statuses_count": 6355,
+      "created_at": "Thu Nov 15 11:22:35 +0000 2012",
+      "utc_offset": 10800,
+      "time_zone": "Athens",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "131516",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+      "profile_background_tile": true,
+      "profile_link_color": "470099",
+      "profile_sidebar_border_color": "FFFFFF",
+      "profile_sidebar_fill_color": "EFEFEF",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/697241339348590592\/UNUhMfEJ_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/697241339348590592\/UNUhMfEJ_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/949540494\/1455069855",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": {
+      "type": "Point",
+      "coordinates": [
+        38.4614716,
+        27.2147884
+      ]
+    },
+    "coordinates": {
+      "type": "Point",
+      "coordinates": [
+        27.2147884,
+        38.4614716
+      ]
+    },
+    "place": {
+      "id": "0184147101a98fcf",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/0184147101a98fcf.json",
+      "place_type": "city",
+      "name": "\u0130zmir",
+      "full_name": "\u0130zmir, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              26.723167,
+              38.283203
+            ],
+            [
+              26.723167,
+              38.532658
+            ],
+            [
+              27.289855,
+              38.532658
+            ],
+            [
+              27.289855,
+              38.283203
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/OfO1dGNKEy",
+          "expanded_url": "https:\/\/www.instagram.com\/p\/BDlOg90hrvS1Wu2th4tXM0ifAPhytlwFmq2nnU0\/",
+          "display_url": "instagram.com\/p\/BDlOg90hrvS1\u2026",
+          "indices": [
+            20,
+            43
+          ]
+        }
+      ],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "en",
+    "timestamp_ms": "1459350550697"
+  },
+  {
+    "created_at": "Wed Mar 30 15:11:50 +0000 2016",
+    "id": 715194831379759104,
+    "id_str": "715194831379759104",
+    "text": "jyuushimatsu is agender",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2590265922,
+      "id_str": "2590265922",
+      "name": "the big gay",
+      "screen_name": "yakisabo",
+      "location": "austria",
+      "url": "http:\/\/miyukki.flavors.me",
+      "description": "Cass\/23\/genderfluid. @0nematsu is my battery partner \u2764\ufe0f \/ @kylosolos is my bestest friend \u2764\ufe0f \/ I love @yolozuyaaa very much \u2764\ufe0f \/ @cham3l3ons is my qpprincess \u2764\ufe0f",
+      "protected": false,
+      "verified": false,
+      "followers_count": 171,
+      "friends_count": 370,
+      "listed_count": 0,
+      "favourites_count": 48346,
+      "statuses_count": 76210,
+      "created_at": "Thu Jun 26 21:22:55 +0000 2014",
+      "utc_offset": -25200,
+      "time_zone": "Pacific Time (US & Canada)",
+      "geo_enabled": true,
+      "lang": "en",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "EEEE00",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2590265922\/1459138490",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "9f659d51e5c5deae",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/9f659d51e5c5deae.json",
+      "place_type": "city",
+      "name": "Vienna",
+      "full_name": "Vienna, Austria",
+      "country_code": "AT",
+      "country": "\u00d6sterreich",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              16.182180,
+              48.117666
+            ],
+            [
+              16.182180,
+              48.322574
+            ],
+            [
+              16.577511,
+              48.322574
+            ],
+            [
+              16.577511,
+              48.117666
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "in",
+    "timestamp_ms": "1459350710135"
+  },
+  {
+    "created_at": "Wed Mar 30 15:15:11 +0000 2016",
+    "id": 715195677874253832,
+    "id_str": "715195677874253832",
+    "text": "2-Yal\u0131nayakl\u0131 yurtsever milletimiz; devletle\u015fmeyi ve  h\u00fcr bir millet olmak istiyor...!",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 1857588078,
+      "id_str": "1857588078",
+      "name": "KADIR AMAC",
+      "screen_name": "KADIRAMAC",
+      "location": null,
+      "url": null,
+      "description": "yazar\/ sosyolog",
+      "protected": false,
+      "verified": false,
+      "followers_count": 3078,
+      "friends_count": 364,
+      "listed_count": 9,
+      "favourites_count": 45,
+      "statuses_count": 16508,
+      "created_at": "Thu Sep 12 14:55:32 +0000 2013",
+      "utc_offset": 10800,
+      "time_zone": "Athens",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "0084B4",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714033217402249216\/r3SqUsjN_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714033217402249216\/r3SqUsjN_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/1857588078\/1456778275",
+      "default_profile": true,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "2a8a74486cd0d519",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/2a8a74486cd0d519.json",
+      "place_type": "city",
+      "name": "Antwerpen",
+      "full_name": "Antwerpen, Belgi\u00eb",
+      "country_code": "BE",
+      "country": "Belgi\u00eb",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              4.218084,
+              51.143464
+            ],
+            [
+              4.218084,
+              51.377649
+            ],
+            [
+              4.498296,
+              51.377649
+            ],
+            [
+              4.498296,
+              51.143464
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459350911955"
+  },
+  {
+    "created_at": "Wed Mar 30 15:15:15 +0000 2016",
+    "id": 715195692688531457,
+    "id_str": "715195692688531457",
+    "text": "PERO QUE COJONES THROW",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2321344886,
+      "id_str": "2321344886",
+      "name": "Blastinho",
+      "screen_name": "BlastinhoCSGO",
+      "location": "Dust 2",
+      "url": "http:\/\/www.twitch.tv\/blastinhos",
+      "description": "Jugando para @teamx6tence 19yolo M\u00e1s de coraz\u00f3n que de cartera",
+      "protected": false,
+      "verified": false,
+      "followers_count": 3177,
+      "friends_count": 108,
+      "listed_count": 9,
+      "favourites_count": 4560,
+      "statuses_count": 3328,
+      "created_at": "Fri Jan 31 20:55:10 +0000 2014",
+      "utc_offset": 7200,
+      "time_zone": "Madrid",
+      "geo_enabled": true,
+      "lang": "es",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "000000",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+      "profile_background_tile": false,
+      "profile_link_color": "3B94D9",
+      "profile_sidebar_border_color": "000000",
+      "profile_sidebar_fill_color": "000000",
+      "profile_text_color": "000000",
+      "profile_use_background_image": false,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714581407763406849\/mNYyqGNg_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714581407763406849\/mNYyqGNg_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2321344886\/1458404840",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "429521da4824fe07",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/429521da4824fe07.json",
+      "place_type": "city",
+      "name": "Granollers",
+      "full_name": "Granollers, Espa\u00f1a",
+      "country_code": "ES",
+      "country": "Espa\u00f1a",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              2.256497,
+              41.564021
+            ],
+            [
+              2.256497,
+              41.622566
+            ],
+            [
+              2.303840,
+              41.622566
+            ],
+            [
+              2.303840,
+              41.564021
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "es",
+    "timestamp_ms": "1459350915487"
+  },
+  {
+    "created_at": "Wed Mar 30 15:15:20 +0000 2016",
+    "id": 715195714796724224,
+    "id_str": "715195714796724224",
+    "text": "3-\u0130kincisi; yakl\u0131nayakl\u0131 yurtsever milletimiz d\u00fcnyan\u0131n en demokratik,   d\u00fcnyan\u0131n  en uygar ve d\u00fcnyan\u0131n  en zengin  \u00fclkeleri aras\u0131nda",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 1857588078,
+      "id_str": "1857588078",
+      "name": "KADIR AMAC",
+      "screen_name": "KADIRAMAC",
+      "location": null,
+      "url": null,
+      "description": "yazar\/ sosyolog",
+      "protected": false,
+      "verified": false,
+      "followers_count": 3078,
+      "friends_count": 364,
+      "listed_count": 9,
+      "favourites_count": 45,
+      "statuses_count": 16509,
+      "created_at": "Thu Sep 12 14:55:32 +0000 2013",
+      "utc_offset": 10800,
+      "time_zone": "Athens",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "0084B4",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714033217402249216\/r3SqUsjN_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714033217402249216\/r3SqUsjN_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/1857588078\/1456778275",
+      "default_profile": true,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "2a8a74486cd0d519",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/2a8a74486cd0d519.json",
+      "place_type": "city",
+      "name": "Antwerpen",
+      "full_name": "Antwerpen, Belgi\u00eb",
+      "country_code": "BE",
+      "country": "Belgi\u00eb",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              4.218084,
+              51.143464
+            ],
+            [
+              4.218084,
+              51.377649
+            ],
+            [
+              4.498296,
+              51.377649
+            ],
+            [
+              4.498296,
+              51.143464
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459350920758"
+  },
+  {
+    "created_at": "Wed Mar 30 15:15:28 +0000 2016",
+    "id": 715195746996322311,
+    "id_str": "715195746996322311",
+    "text": "4-yerini   almak istiyor...!",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 1857588078,
+      "id_str": "1857588078",
+      "name": "KADIR AMAC",
+      "screen_name": "KADIRAMAC",
+      "location": null,
+      "url": null,
+      "description": "yazar\/ sosyolog",
+      "protected": false,
+      "verified": false,
+      "followers_count": 3078,
+      "friends_count": 364,
+      "listed_count": 9,
+      "favourites_count": 45,
+      "statuses_count": 16510,
+      "created_at": "Thu Sep 12 14:55:32 +0000 2013",
+      "utc_offset": 10800,
+      "time_zone": "Athens",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "0084B4",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714033217402249216\/r3SqUsjN_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714033217402249216\/r3SqUsjN_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/1857588078\/1456778275",
+      "default_profile": true,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "2a8a74486cd0d519",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/2a8a74486cd0d519.json",
+      "place_type": "city",
+      "name": "Antwerpen",
+      "full_name": "Antwerpen, Belgi\u00eb",
+      "country_code": "BE",
+      "country": "Belgi\u00eb",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              4.218084,
+              51.143464
+            ],
+            [
+              4.218084,
+              51.377649
+            ],
+            [
+              4.498296,
+              51.377649
+            ],
+            [
+              4.498296,
+              51.143464
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459350928435"
+  },
+  {
+    "created_at": "Wed Mar 30 15:15:56 +0000 2016",
+    "id": 715195864080363520,
+    "id_str": "715195864080363520",
+    "text": "I'm at Biyolojik Bilimler B\u00f6l\u00fcm\u00fc in \u00c7ankaya w\/ @obiwansuavi https:\/\/t.co\/7qb4q6iKxV",
+    "source": "\u003ca href=\"http:\/\/foursquare.com\" rel=\"nofollow\"\u003eFoursquare\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 710510228,
+      "id_str": "710510228",
+      "name": "handelicious.",
+      "screen_name": "aaonekiney",
+      "location": "Antalya\/Ankara",
+      "url": "http:\/\/Instagram.com\/aaonekiney",
+      "description": "cute but psycho. lol. METU\/International Relations",
+      "protected": false,
+      "verified": false,
+      "followers_count": 1297,
+      "friends_count": 365,
+      "listed_count": 3,
+      "favourites_count": 13826,
+      "statuses_count": 8118,
+      "created_at": "Sun Jul 22 10:52:55 +0000 2012",
+      "utc_offset": -25200,
+      "time_zone": "Pacific Time (US & Canada)",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "131516",
+      "profile_background_image_url": "http:\/\/pbs.twimg.com\/profile_background_images\/682247398148718593\/OPGXOxEA.jpg",
+      "profile_background_image_url_https": "https:\/\/pbs.twimg.com\/profile_background_images\/682247398148718593\/OPGXOxEA.jpg",
+      "profile_background_tile": true,
+      "profile_link_color": "ABB8C2",
+      "profile_sidebar_border_color": "FFFFFF",
+      "profile_sidebar_fill_color": "EFEFEF",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714082782075609089\/Q3DU50r9_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714082782075609089\/Q3DU50r9_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/710510228\/1459085873",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": {
+      "type": "Point",
+      "coordinates": [
+        39.89560125,
+        32.78038722
+      ]
+    },
+    "coordinates": {
+      "type": "Point",
+      "coordinates": [
+        32.78038722,
+        39.89560125
+      ]
+    },
+    "place": {
+      "id": "2ef834ae5c30563f",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/2ef834ae5c30563f.json",
+      "place_type": "neighborhood",
+      "name": "Ortado\u011fu",
+      "full_name": "Ortado\u011fu, Etimesgut",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              32.692242,
+              39.810232
+            ],
+            [
+              32.692242,
+              39.908547
+            ],
+            [
+              32.853833,
+              39.908547
+            ],
+            [
+              32.853833,
+              39.810232
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/7qb4q6iKxV",
+          "expanded_url": "https:\/\/www.swarmapp.com\/c\/9cGy3J3HqE7",
+          "display_url": "swarmapp.com\/c\/9cGy3J3HqE7",
+          "indices": [
+            60,
+            83
+          ]
+        }
+      ],
+      "user_mentions": [
+        {
+          "screen_name": "obiwansuavi",
+          "name": "F\u0131rat Cihan",
+          "id": 743736620,
+          "id_str": "743736620",
+          "indices": [
+            47,
+            59
+          ]
+        }
+      ],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459350956350"
+  },
+  {
+    "created_at": "Wed Mar 30 15:16:58 +0000 2016",
+    "id": 715196124571779072,
+    "id_str": "715196124571779072",
+    "text": "Bakteriler diyorum ve susuyorum",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003eTwitter for Android\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 3381123592,
+      "id_str": "3381123592",
+      "name": "Melek",
+      "screen_name": "Melek_Coven",
+      "location": "Kocaeli, T\u00fcrkiye",
+      "url": null,
+      "description": "K7A\u00dc ~ Molek\u00fcler Biyoloji ve Genetik",
+      "protected": false,
+      "verified": false,
+      "followers_count": 576,
+      "friends_count": 339,
+      "listed_count": 0,
+      "favourites_count": 296,
+      "statuses_count": 1553,
+      "created_at": "Sat Jul 18 00:24:09 +0000 2015",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "0084B4",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714460776426291200\/rKTF8lSS_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714460776426291200\/rKTF8lSS_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/3381123592\/1459175737",
+      "default_profile": true,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "01c1bdb07ffe19eb",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/01c1bdb07ffe19eb.json",
+      "place_type": "city",
+      "name": "Kilis",
+      "full_name": "Kilis, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              37.085183,
+              36.702411
+            ],
+            [
+              37.085183,
+              36.747819
+            ],
+            [
+              37.159541,
+              36.747819
+            ],
+            [
+              37.159541,
+              36.702411
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351018456"
+  },
+  {
+    "created_at": "Wed Mar 30 15:17:01 +0000 2016",
+    "id": 715196137590956032,
+    "id_str": "715196137590956032",
+    "text": "I'm at Fen Edebiyat Fak\u00fcltesi Kantini in Sakarya w\/ @denizmaviiiii https:\/\/t.co\/kL18h1aQuM",
+    "source": "\u003ca href=\"http:\/\/foursquare.com\" rel=\"nofollow\"\u003eFoursquare\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 1048705524,
+      "id_str": "1048705524",
+      "name": "P\u0130REMSES",
+      "screen_name": "senoss9",
+      "location": null,
+      "url": "http:\/\/instagram.com\/senoss9",
+      "description": "Hepinizin ci\u011ferini biliyorum arkada\u015flar \u00e7\u00fcnk\u00fc sosyolog olmak be like.|snapchat:morumssu.9| -MOR-",
+      "protected": false,
+      "verified": false,
+      "followers_count": 514,
+      "friends_count": 203,
+      "listed_count": 0,
+      "favourites_count": 885,
+      "statuses_count": 680,
+      "created_at": "Sun Dec 30 20:07:52 +0000 2012",
+      "utc_offset": 10800,
+      "time_zone": "Baghdad",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "EBC1D7",
+      "profile_background_image_url": "http:\/\/pbs.twimg.com\/profile_background_images\/441148172014870528\/dkqUVU-W.jpeg",
+      "profile_background_image_url_https": "https:\/\/pbs.twimg.com\/profile_background_images\/441148172014870528\/dkqUVU-W.jpeg",
+      "profile_background_tile": true,
+      "profile_link_color": "7700B3",
+      "profile_sidebar_border_color": "FFFFFF",
+      "profile_sidebar_fill_color": "E5507E",
+      "profile_text_color": "362720",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/709372156317138944\/Zolx05EL_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/709372156317138944\/Zolx05EL_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/1048705524\/1455273881",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": {
+      "type": "Point",
+      "coordinates": [
+        40.74345807,
+        30.33404369
+      ]
+    },
+    "coordinates": {
+      "type": "Point",
+      "coordinates": [
+        30.33404369,
+        40.74345807
+      ]
+    },
+    "place": {
+      "id": "48abf56f6357c376",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/48abf56f6357c376.json",
+      "place_type": "neighborhood",
+      "name": "Esentepe",
+      "full_name": "Esentepe, Sakarya",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              30.291807,
+              40.733280
+            ],
+            [
+              30.291807,
+              40.762362
+            ],
+            [
+              30.339302,
+              40.762362
+            ],
+            [
+              30.339302,
+              40.733280
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/kL18h1aQuM",
+          "expanded_url": "https:\/\/www.swarmapp.com\/c\/7OcNIq4ZaiQ",
+          "display_url": "swarmapp.com\/c\/7OcNIq4ZaiQ",
+          "indices": [
+            67,
+            90
+          ]
+        }
+      ],
+      "user_mentions": [
+        {
+          "screen_name": "DenizMaviiiii",
+          "name": "Deniz Merve MAV\u0130",
+          "id": 495135131,
+          "id_str": "495135131",
+          "indices": [
+            52,
+            66
+          ]
+        }
+      ],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351021560"
+  },
+  {
+    "created_at": "Wed Mar 30 15:17:07 +0000 2016",
+    "id": 715196162345664512,
+    "id_str": "715196162345664512",
+    "text": "@Cenk_Coruh Saz sanat\u00e7\u0131lar\u0131n\u0131n tek tip giyinmesi de onun fikri,sahne ve kost\u00fcm tasar\u0131m\u0131 yetene\u011fi de vard\u0131 rahmetlinin",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/iphone\" rel=\"nofollow\"\u003eTwitter for iPhone\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": 715195147647107072,
+    "in_reply_to_status_id_str": "715195147647107072",
+    "in_reply_to_user_id": 552471518,
+    "in_reply_to_user_id_str": "552471518",
+    "in_reply_to_screen_name": "Cenk_Coruh",
+    "user": {
+      "id": 70912626,
+      "id_str": "70912626",
+      "name": "hakan",
+      "screen_name": "hakanbebek",
+      "location": null,
+      "url": null,
+      "description": "M\u00fchendis,Kamu Y\u00f6netimi, Sosyoloji,Ekonomi ve Siyaseti izliyor, ki\u015fisel yorumlard\u0131r, yat\u0131r\u0131m ve y\u00f6netim tavsiyesi de\u011fildir.",
+      "protected": false,
+      "verified": false,
+      "followers_count": 1262,
+      "friends_count": 374,
+      "listed_count": 21,
+      "favourites_count": 6316,
+      "statuses_count": 393,
+      "created_at": "Wed Sep 02 08:05:31 +0000 2009",
+      "utc_offset": 10800,
+      "time_zone": "Istanbul",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "BADFCD",
+      "profile_background_image_url": "http:\/\/pbs.twimg.com\/profile_background_images\/624146514017845248\/r824IziS.jpg",
+      "profile_background_image_url_https": "https:\/\/pbs.twimg.com\/profile_background_images\/624146514017845248\/r824IziS.jpg",
+      "profile_background_tile": false,
+      "profile_link_color": "FF0000",
+      "profile_sidebar_border_color": "F2E195",
+      "profile_sidebar_fill_color": "FFF7CC",
+      "profile_text_color": "0C3E53",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/676643723309129728\/xTgr4766_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/676643723309129728\/xTgr4766_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/70912626\/1385068558",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "3166615088e5d058",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/3166615088e5d058.json",
+      "place_type": "city",
+      "name": "Nil\u00fcfer",
+      "full_name": "Nil\u00fcfer, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              28.895920,
+              40.176966
+            ],
+            [
+              28.895920,
+              40.275460
+            ],
+            [
+              29.012762,
+              40.275460
+            ],
+            [
+              29.012762,
+              40.176966
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [
+        {
+          "screen_name": "Cenk_Coruh",
+          "name": "Cenk \u00c7oruh",
+          "id": 552471518,
+          "id_str": "552471518",
+          "indices": [
+            0,
+            11
+          ]
+        }
+      ],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351027462"
+  },
+  {
+    "created_at": "Wed Mar 30 15:18:34 +0000 2016",
+    "id": 715196528781078528,
+    "id_str": "715196528781078528",
+    "text": "Why would you want to ask him??  https:\/\/t.co\/yeoc1Cipam",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003eTwitter for Android\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 159202497,
+      "id_str": "159202497",
+      "name": "D U C H E S S",
+      "screen_name": "KimTRILLY",
+      "location": "Wish a bitch woods",
+      "url": null,
+      "description": "I do what I want",
+      "protected": false,
+      "verified": false,
+      "followers_count": 1561,
+      "friends_count": 910,
+      "listed_count": 11,
+      "favourites_count": 28820,
+      "statuses_count": 77401,
+      "created_at": "Thu Jun 24 19:01:08 +0000 2010",
+      "utc_offset": 3600,
+      "time_zone": "London",
+      "geo_enabled": true,
+      "lang": "en",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/pbs.twimg.com\/profile_background_images\/138642052\/20091221_vmagazine1.jpg",
+      "profile_background_image_url_https": "https:\/\/pbs.twimg.com\/profile_background_images\/138642052\/20091221_vmagazine1.jpg",
+      "profile_background_tile": true,
+      "profile_link_color": "0084B4",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/713713586712002560\/XAQzDAlG_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/713713586712002560\/XAQzDAlG_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/159202497\/1458589538",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "53b67b1d1cc81a51",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/53b67b1d1cc81a51.json",
+      "place_type": "city",
+      "name": "Birmingham",
+      "full_name": "Birmingham, England",
+      "country_code": "GB",
+      "country": "United Kingdom",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -2.033651,
+              52.381063
+            ],
+            [
+              -2.033651,
+              52.606870
+            ],
+            [
+              -1.747630,
+              52.606870
+            ],
+            [
+              -1.747630,
+              52.381063
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "quoted_status_id": 714979838050836480,
+    "quoted_status_id_str": "714979838050836480",
+    "quoted_status": {
+      "created_at": "Wed Mar 30 00:57:31 +0000 2016",
+      "id": 714979838050836480,
+      "id_str": "714979838050836480",
+      "text": "Question. Is it wrong to ask the guy you've had unprotected sex with to give you money for the morning after pill? (I had this debate once)",
+      "source": "\u003ca href=\"http:\/\/twitter.com\/download\/iphone\" rel=\"nofollow\"\u003eTwitter for iPhone\u003c\/a\u003e",
+      "truncated": false,
+      "in_reply_to_status_id": null,
+      "in_reply_to_status_id_str": null,
+      "in_reply_to_user_id": null,
+      "in_reply_to_user_id_str": null,
+      "in_reply_to_screen_name": null,
+      "user": {
+        "id": 17588956,
+        "id_str": "17588956",
+        "name": "Oloni",
+        "screen_name": "Oloni",
+        "location": "London",
+        "url": "http:\/\/simplyoloni.com\/intros",
+        "description": "Winner of #CosmoBlogAwards Best Sex & Relationships Blog 2015. Check out @SimplyOloni Metro UK Blogger | enquiries only simplyoloni@gmail.com",
+        "protected": false,
+        "verified": false,
+        "followers_count": 11436,
+        "friends_count": 3849,
+        "listed_count": 114,
+        "favourites_count": 18307,
+        "statuses_count": 287293,
+        "created_at": "Mon Nov 24 09:16:33 +0000 2008",
+        "utc_offset": 7200,
+        "time_zone": "Amsterdam",
+        "geo_enabled": true,
+        "lang": "en",
+        "contributors_enabled": false,
+        "is_translator": false,
+        "profile_background_color": "131516",
+        "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+        "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+        "profile_background_tile": true,
+        "profile_link_color": "009999",
+        "profile_sidebar_border_color": "EEEEEE",
+        "profile_sidebar_fill_color": "EFEFEF",
+        "profile_text_color": "333333",
+        "profile_use_background_image": true,
+        "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/713575419602157568\/VDm-jBfa_normal.jpg",
+        "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/713575419602157568\/VDm-jBfa_normal.jpg",
+        "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/17588956\/1457227171",
+        "default_profile": false,
+        "default_profile_image": false,
+        "following": null,
+        "follow_request_sent": null,
+        "notifications": null
+      },
+      "geo": null,
+      "coordinates": null,
+      "place": null,
+      "contributors": null,
+      "is_quote_status": false,
+      "retweet_count": 0,
+      "favorite_count": 0,
+      "entities": {
+        "hashtags": [],
+        "urls": [],
+        "user_mentions": [],
+        "symbols": []
+      },
+      "favorited": false,
+      "retweeted": false,
+      "filter_level": "low",
+      "lang": "en"
+    },
+    "is_quote_status": true,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/yeoc1Cipam",
+          "expanded_url": "https:\/\/twitter.com\/Oloni\/status\/714979838050836480",
+          "display_url": "twitter.com\/Oloni\/status\/7\u2026",
+          "indices": [
+            33,
+            56
+          ]
+        }
+      ],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "en",
+    "timestamp_ms": "1459351114827"
+  },
+  {
+    "created_at": "Wed Mar 30 15:18:46 +0000 2016",
+    "id": 715196576868790273,
+    "id_str": "715196576868790273",
+    "text": "San\u0131r\u0131m benim g\u00f6zlerimin feri solmam\u0131\u015f, \u00f6lm\u00fc\u015f \ud83d\udc40 \ud83d\udc40",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003eTwitter for Android\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 3381123592,
+      "id_str": "3381123592",
+      "name": "Melek",
+      "screen_name": "Melek_Coven",
+      "location": "Kocaeli, T\u00fcrkiye",
+      "url": null,
+      "description": "K7A\u00dc ~ Molek\u00fcler Biyoloji ve Genetik",
+      "protected": false,
+      "verified": false,
+      "followers_count": 576,
+      "friends_count": 339,
+      "listed_count": 0,
+      "favourites_count": 296,
+      "statuses_count": 1554,
+      "created_at": "Sat Jul 18 00:24:09 +0000 2015",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "0084B4",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714460776426291200\/rKTF8lSS_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714460776426291200\/rKTF8lSS_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/3381123592\/1459175737",
+      "default_profile": true,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "01c1bdb07ffe19eb",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/01c1bdb07ffe19eb.json",
+      "place_type": "city",
+      "name": "Kilis",
+      "full_name": "Kilis, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              37.085183,
+              36.702411
+            ],
+            [
+              37.085183,
+              36.747819
+            ],
+            [
+              37.159541,
+              36.747819
+            ],
+            [
+              37.159541,
+              36.702411
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351126292"
+  },
+  {
+    "created_at": "Wed Mar 30 15:18:58 +0000 2016",
+    "id": 715196627137466368,
+    "id_str": "715196627137466368",
+    "text": "Baz\u0131 h\u00fcl\u00e2salar bitip t\u00fckenmez. K\u0131r\u0131lm\u0131\u015fl\u0131klar mis\u00e2l .. Kel\u00e2m edilmiyor diye, \u00f6yle varsay\u0131lmaz.",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/iphone\" rel=\"nofollow\"\u003eTwitter for iPhone\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2869191258,
+      "id_str": "2869191258",
+      "name": "mezeci",
+      "screen_name": "melzeyci",
+      "location": "\u0130stanbuliyy\u00fcn",
+      "url": "https:\/\/instagram.com\/melzeyci\/",
+      "description": "Asl\u0131nda .. Sen nas\u0131l g\u00f6r\u00fcyorsan, ben onun ta kendisiyim. \/ Ki\u015fili\u011fim, ki\u015fili\u011fine ba\u011fl\u0131. \/ \u0130\u015fine gelirse. \/ FSMV\u00dc-Tarih \/ EA\u00dc-Sosyoloji \/ #Dirili\u015fErtu\u011frul",
+      "protected": false,
+      "verified": false,
+      "followers_count": 358,
+      "friends_count": 189,
+      "listed_count": 0,
+      "favourites_count": 22861,
+      "statuses_count": 7112,
+      "created_at": "Tue Oct 21 18:56:20 +0000 2014",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "ACDED6",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme18\/bg.gif",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme18\/bg.gif",
+      "profile_background_tile": false,
+      "profile_link_color": "038543",
+      "profile_sidebar_border_color": "EEEEEE",
+      "profile_sidebar_fill_color": "F6F6F6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/705518479504515073\/CCZ2yyPa_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/705518479504515073\/CCZ2yyPa_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2869191258\/1459287967",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "5e02a0f0d91c76d2",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/5e02a0f0d91c76d2.json",
+      "place_type": "city",
+      "name": "\u0130stanbul",
+      "full_name": "\u0130stanbul, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              28.632104,
+              40.802734
+            ],
+            [
+              28.632104,
+              41.239907
+            ],
+            [
+              29.378341,
+              41.239907
+            ],
+            [
+              29.378341,
+              40.802734
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351138277"
+  },
+  {
+    "created_at": "Wed Mar 30 15:20:06 +0000 2016",
+    "id": 715196914321518592,
+    "id_str": "715196914321518592",
+    "text": "I'm at Yanar D\u00f6ner w\/ @tuba_karateke_ @bspor1995 @ffemoo https:\/\/t.co\/7Dx5qO4gEE",
+    "source": "\u003ca href=\"http:\/\/foursquare.com\" rel=\"nofollow\"\u003eFoursquare\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 3313760465,
+      "id_str": "3313760465",
+      "name": "Esmaaaaaa ",
+      "screen_name": "onceresma",
+      "location": null,
+      "url": null,
+      "description": "Sel\u00e7uk \u00dcniversitesi\n\n\nSosyolog olmaya aday \u270b\nBursa-Konya\n5.02.95-?",
+      "protected": false,
+      "verified": false,
+      "followers_count": 1092,
+      "friends_count": 1142,
+      "listed_count": 0,
+      "favourites_count": 2960,
+      "statuses_count": 1223,
+      "created_at": "Mon Jun 08 19:25:06 +0000 2015",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "000000",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "DD2E44",
+      "profile_sidebar_border_color": "000000",
+      "profile_sidebar_fill_color": "000000",
+      "profile_text_color": "000000",
+      "profile_use_background_image": false,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/712002994821275648\/rgod--Bq_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/712002994821275648\/rgod--Bq_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/3313760465\/1458382546",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": {
+      "type": "Point",
+      "coordinates": [
+        38.02205355,
+        32.51380125
+      ]
+    },
+    "coordinates": {
+      "type": "Point",
+      "coordinates": [
+        32.51380125,
+        38.02205355
+      ]
+    },
+    "place": {
+      "id": "0758e784387570d6",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/0758e784387570d6.json",
+      "place_type": "city",
+      "name": "Sel\u00e7uklu",
+      "full_name": "Sel\u00e7uklu, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              32.411426,
+              37.870289
+            ],
+            [
+              32.411426,
+              38.040321
+            ],
+            [
+              32.588732,
+              38.040321
+            ],
+            [
+              32.588732,
+              37.870289
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/7Dx5qO4gEE",
+          "expanded_url": "https:\/\/www.swarmapp.com\/c\/jms01keQ0Ba",
+          "display_url": "swarmapp.com\/c\/jms01keQ0Ba",
+          "indices": [
+            57,
+            80
+          ]
+        }
+      ],
+      "user_mentions": [
+        {
+          "screen_name": "tuba_karateke_",
+          "name": "Tu\u011fba Karateke",
+          "id": 616394059,
+          "id_str": "616394059",
+          "indices": [
+            22,
+            37
+          ]
+        },
+        {
+          "screen_name": "Bspor1995",
+          "name": "\u0130smail can",
+          "id": 1260247746,
+          "id_str": "1260247746",
+          "indices": [
+            38,
+            48
+          ]
+        },
+        {
+          "screen_name": "ffemoo",
+          "name": "Fehmiye G\u00fcm\u00fc\u015f",
+          "id": 3251016375,
+          "id_str": "3251016375",
+          "indices": [
+            49,
+            56
+          ]
+        }
+      ],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351206747"
+  },
+  {
+    "created_at": "Wed Mar 30 15:21:45 +0000 2016",
+    "id": 715197327703728128,
+    "id_str": "715197327703728128",
+    "text": "Ben belki ba\u015fkayd\u0131m \nSen ba\u015fka bir a\u015fktayd\u0131n",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003eTwitter for Android\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 3381123592,
+      "id_str": "3381123592",
+      "name": "Melek",
+      "screen_name": "Melek_Coven",
+      "location": "Kocaeli, T\u00fcrkiye",
+      "url": null,
+      "description": "K7A\u00dc ~ Molek\u00fcler Biyoloji ve Genetik",
+      "protected": false,
+      "verified": false,
+      "followers_count": 576,
+      "friends_count": 339,
+      "listed_count": 0,
+      "favourites_count": 296,
+      "statuses_count": 1555,
+      "created_at": "Sat Jul 18 00:24:09 +0000 2015",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "0084B4",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714460776426291200\/rKTF8lSS_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714460776426291200\/rKTF8lSS_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/3381123592\/1459175737",
+      "default_profile": true,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "01c1bdb07ffe19eb",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/01c1bdb07ffe19eb.json",
+      "place_type": "city",
+      "name": "Kilis",
+      "full_name": "Kilis, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              37.085183,
+              36.702411
+            ],
+            [
+              37.085183,
+              36.747819
+            ],
+            [
+              37.159541,
+              36.747819
+            ],
+            [
+              37.159541,
+              36.702411
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351305305"
+  },
+  {
+    "created_at": "Wed Mar 30 15:22:44 +0000 2016",
+    "id": 715197575830376448,
+    "id_str": "715197575830376448",
+    "text": "Biri beni izmite \u0131\u015f\u0131nlasa diyorum \nS\u0131k\u0131ld\u0131m bunald\u0131m falan filan \nBu bakterileri de sevmedim \nBanane banane banane",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003eTwitter for Android\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 3381123592,
+      "id_str": "3381123592",
+      "name": "Melek",
+      "screen_name": "Melek_Coven",
+      "location": "Kocaeli, T\u00fcrkiye",
+      "url": null,
+      "description": "K7A\u00dc ~ Molek\u00fcler Biyoloji ve Genetik",
+      "protected": false,
+      "verified": false,
+      "followers_count": 576,
+      "friends_count": 339,
+      "listed_count": 0,
+      "favourites_count": 296,
+      "statuses_count": 1556,
+      "created_at": "Sat Jul 18 00:24:09 +0000 2015",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "0084B4",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714460776426291200\/rKTF8lSS_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714460776426291200\/rKTF8lSS_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/3381123592\/1459175737",
+      "default_profile": true,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "01c1bdb07ffe19eb",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/01c1bdb07ffe19eb.json",
+      "place_type": "city",
+      "name": "Kilis",
+      "full_name": "Kilis, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              37.085183,
+              36.702411
+            ],
+            [
+              37.085183,
+              36.747819
+            ],
+            [
+              37.159541,
+              36.747819
+            ],
+            [
+              37.159541,
+              36.702411
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351364463"
+  },
+  {
+    "created_at": "Wed Mar 30 15:23:02 +0000 2016",
+    "id": 715197650438602754,
+    "id_str": "715197650438602754",
+    "text": "Karasu Kardiyolo\u011funa Kavu\u015ftu https:\/\/t.co\/X1d0WuHI2v @karasubelediye",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 1614750252,
+      "id_str": "1614750252",
+      "name": "MedyaRota",
+      "screen_name": "MedyaRotaCom",
+      "location": null,
+      "url": null,
+      "description": "http:\/\/www.medyarota.com",
+      "protected": false,
+      "verified": false,
+      "followers_count": 1734,
+      "friends_count": 2,
+      "listed_count": 6,
+      "favourites_count": 250,
+      "statuses_count": 59150,
+      "created_at": "Tue Jul 23 08:41:33 +0000 2013",
+      "utc_offset": 10800,
+      "time_zone": "Athens",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/pbs.twimg.com\/profile_background_images\/378800000109741461\/7200c0ba121190ec444cf6c2a9750b61.jpeg",
+      "profile_background_image_url_https": "https:\/\/pbs.twimg.com\/profile_background_images\/378800000109741461\/7200c0ba121190ec444cf6c2a9750b61.jpeg",
+      "profile_background_tile": false,
+      "profile_link_color": "DD2E44",
+      "profile_sidebar_border_color": "FFFFFF",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/642687180012285952\/55ddLLNC_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/642687180012285952\/55ddLLNC_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/1614750252\/1454686651",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "50dbef341351ea10",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/50dbef341351ea10.json",
+      "place_type": "city",
+      "name": "Sakarya",
+      "full_name": "Sakarya, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              30.327677,
+              40.686847
+            ],
+            [
+              30.327677,
+              40.831652
+            ],
+            [
+              30.435329,
+              40.831652
+            ],
+            [
+              30.435329,
+              40.686847
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/X1d0WuHI2v",
+          "expanded_url": "http:\/\/www.medyarota.com\/yerel\/karasu-kardiyologuna-kavustu\/21819#.VvvvRatX3oM.twitter",
+          "display_url": "medyarota.com\/yerel\/karasu-k\u2026",
+          "indices": [
+            29,
+            52
+          ]
+        }
+      ],
+      "user_mentions": [
+        {
+          "screen_name": "karasubelediye",
+          "name": "Karasu Belediyesi",
+          "id": 389463094,
+          "id_str": "389463094",
+          "indices": [
+            53,
+            68
+          ]
+        }
+      ],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351382251"
+  },
+  {
+    "created_at": "Wed Mar 30 15:23:19 +0000 2016",
+    "id": 715197721158819840,
+    "id_str": "715197721158819840",
+    "text": "and ichimatsu well i have too many mutuals who id with ichi so i wont set a gender there lmao",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2590265922,
+      "id_str": "2590265922",
+      "name": "the big gay",
+      "screen_name": "yakisabo",
+      "location": "austria",
+      "url": "http:\/\/miyukki.flavors.me",
+      "description": "Cass\/23\/genderfluid. @0nematsu is my battery partner \u2764\ufe0f \/ @kylosolos is my bestest friend \u2764\ufe0f \/ I love @yolozuyaaa very much \u2764\ufe0f \/ @cham3l3ons is my qpprincess \u2764\ufe0f",
+      "protected": false,
+      "verified": false,
+      "followers_count": 171,
+      "friends_count": 370,
+      "listed_count": 0,
+      "favourites_count": 48346,
+      "statuses_count": 76212,
+      "created_at": "Thu Jun 26 21:22:55 +0000 2014",
+      "utc_offset": -25200,
+      "time_zone": "Pacific Time (US & Canada)",
+      "geo_enabled": true,
+      "lang": "en",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "EEEE00",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2590265922\/1459138490",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "9f659d51e5c5deae",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/9f659d51e5c5deae.json",
+      "place_type": "city",
+      "name": "Vienna",
+      "full_name": "Vienna, Austria",
+      "country_code": "AT",
+      "country": "\u00d6sterreich",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              16.182180,
+              48.117666
+            ],
+            [
+              16.182180,
+              48.322574
+            ],
+            [
+              16.577511,
+              48.322574
+            ],
+            [
+              16.577511,
+              48.117666
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "en",
+    "timestamp_ms": "1459351399112"
+  },
+  {
+    "created_at": "Wed Mar 30 15:25:32 +0000 2016",
+    "id": 715198279231873025,
+    "id_str": "715198279231873025",
+    "text": "\ud83d\udc38\u2615\ufe0f https:\/\/t.co\/9NWPo3xAc0",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/iphone\" rel=\"nofollow\"\u003eTwitter for iPhone\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 1616047940,
+      "id_str": "1616047940",
+      "name": "Kev #Bump 02\/04\/2016",
+      "screen_name": "keviib",
+      "location": "United Kingdom",
+      "url": null,
+      "description": "Event Promoter for @bumpmanc & @messymondaysmcr , message me (07494657707) for Tables & Guestlist \/ Instagram @_keviib \/ Snap @kevikeva3 \/ Bootyologist",
+      "protected": false,
+      "verified": false,
+      "followers_count": 503,
+      "friends_count": 461,
+      "listed_count": 4,
+      "favourites_count": 5719,
+      "statuses_count": 1714,
+      "created_at": "Tue Jul 23 20:27:40 +0000 2013",
+      "utc_offset": 7200,
+      "time_zone": "Amsterdam",
+      "geo_enabled": true,
+      "lang": "en",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "000000",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "FFCC4D",
+      "profile_sidebar_border_color": "000000",
+      "profile_sidebar_fill_color": "000000",
+      "profile_text_color": "000000",
+      "profile_use_background_image": false,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/713743536190054400\/OmjrluEe_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/713743536190054400\/OmjrluEe_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/1616047940\/1459004694",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "74790dfe0c08c72f",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/74790dfe0c08c72f.json",
+      "place_type": "city",
+      "name": "Sale",
+      "full_name": "Sale, England",
+      "country_code": "GB",
+      "country": "United Kingdom",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -2.379808,
+              53.358611
+            ],
+            [
+              -2.379808,
+              53.441788
+            ],
+            [
+              -2.273741,
+              53.441788
+            ],
+            [
+              -2.273741,
+              53.358611
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": [],
+      "media": [
+        {
+          "id": 715198254506450945,
+          "id_str": "715198254506450945",
+          "indices": [
+            4,
+            27
+          ],
+          "media_url": "http:\/\/pbs.twimg.com\/media\/CezlBe_WIAENnzb.jpg",
+          "media_url_https": "https:\/\/pbs.twimg.com\/media\/CezlBe_WIAENnzb.jpg",
+          "url": "https:\/\/t.co\/9NWPo3xAc0",
+          "display_url": "pic.twitter.com\/9NWPo3xAc0",
+          "expanded_url": "http:\/\/twitter.com\/keviib\/status\/715198279231873025\/photo\/1",
+          "type": "photo",
+          "sizes": {
+            "small": {
+              "w": 340,
+              "h": 346,
+              "resize": "fit"
+            },
+            "medium": {
+              "w": 600,
+              "h": 610,
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": 150,
+              "h": 150,
+              "resize": "crop"
+            },
+            "large": {
+              "w": 749,
+              "h": 762,
+              "resize": "fit"
+            }
+          }
+        }
+      ]
+    },
+    "extended_entities": {
+      "media": [
+        {
+          "id": 715198254506450945,
+          "id_str": "715198254506450945",
+          "indices": [
+            4,
+            27
+          ],
+          "media_url": "http:\/\/pbs.twimg.com\/media\/CezlBe_WIAENnzb.jpg",
+          "media_url_https": "https:\/\/pbs.twimg.com\/media\/CezlBe_WIAENnzb.jpg",
+          "url": "https:\/\/t.co\/9NWPo3xAc0",
+          "display_url": "pic.twitter.com\/9NWPo3xAc0",
+          "expanded_url": "http:\/\/twitter.com\/keviib\/status\/715198279231873025\/photo\/1",
+          "type": "photo",
+          "sizes": {
+            "small": {
+              "w": 340,
+              "h": 346,
+              "resize": "fit"
+            },
+            "medium": {
+              "w": 600,
+              "h": 610,
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": 150,
+              "h": 150,
+              "resize": "crop"
+            },
+            "large": {
+              "w": 749,
+              "h": 762,
+              "resize": "fit"
+            }
+          }
+        }
+      ]
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "und",
+    "timestamp_ms": "1459351532167"
+  },
+  {
+    "created_at": "Wed Mar 30 15:26:14 +0000 2016",
+    "id": 715198455287775233,
+    "id_str": "715198455287775233",
+    "text": "Allah \u00e7irkin \u015fans\u0131 versin\ud83d\ude23",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003eTwitter for Android\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 4875910325,
+      "id_str": "4875910325",
+      "name": "Fethiye U\u011fuz",
+      "screen_name": "UguzFethiye",
+      "location": "ISTANBULA\u015eK",
+      "url": null,
+      "description": "Dumlup\u0131nar \u00dcniversitesi\nSosyoloji",
+      "protected": false,
+      "verified": false,
+      "followers_count": 28,
+      "friends_count": 33,
+      "listed_count": 0,
+      "favourites_count": 96,
+      "statuses_count": 32,
+      "created_at": "Thu Feb 04 09:03:20 +0000 2016",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "F5F8FA",
+      "profile_background_image_url": "",
+      "profile_background_image_url_https": "",
+      "profile_background_tile": false,
+      "profile_link_color": "2B7BB9",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/704267281103200256\/fX6p3yZu_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/704267281103200256\/fX6p3yZu_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/4875910325\/1456745466",
+      "default_profile": true,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "1b1a2b83f10e7a4a",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/1b1a2b83f10e7a4a.json",
+      "place_type": "admin",
+      "name": "K\u00fctahya Merkez",
+      "full_name": "K\u00fctahya Merkez, K\u00fctahya",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              29.732017,
+              39.116423
+            ],
+            [
+              29.732017,
+              39.716518
+            ],
+            [
+              30.432635,
+              39.716518
+            ],
+            [
+              30.432635,
+              39.116423
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351574142"
+  },
+  {
+    "created_at": "Wed Mar 30 15:26:44 +0000 2016",
+    "id": 715198581309714432,
+    "id_str": "715198581309714432",
+    "text": "Bahar gelmi\u015f \ud83c\udf80 #bahar #sa\u00fc #fef #biyoloji #Be\u015fikta\u015f #1903\u2026 https:\/\/t.co\/uOlvJ9clCd",
+    "source": "\u003ca href=\"http:\/\/instagram.com\" rel=\"nofollow\"\u003eInstagram\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 202625062,
+      "id_str": "202625062",
+      "name": "Hamide \u00c7ilo\u011flu",
+      "screen_name": "hamideciloglu",
+      "location": "\u0130stanbul \/ Kayseri \/ Sakarya",
+      "url": "http:\/\/siirseviniz.tumblr.com\/",
+      "description": "Babamdan Kalan Miras De\u011fil O\u011fluma Olan Borcumsun BE\u015e\u0130KTA\u015e , Sakarya \u00dcniversitesi \/ Biyoloji . instagram , snapchat: hamideciloglu",
+      "protected": false,
+      "verified": false,
+      "followers_count": 1531,
+      "friends_count": 1113,
+      "listed_count": 5,
+      "favourites_count": 7225,
+      "statuses_count": 20138,
+      "created_at": "Thu Oct 14 13:26:13 +0000 2010",
+      "utc_offset": 10800,
+      "time_zone": "Istanbul",
+      "geo_enabled": true,
+      "lang": "en",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "F7A92D",
+      "profile_background_image_url": "http:\/\/pbs.twimg.com\/profile_background_images\/498840148943970305\/nN0n1Z_4.png",
+      "profile_background_image_url_https": "https:\/\/pbs.twimg.com\/profile_background_images\/498840148943970305\/nN0n1Z_4.png",
+      "profile_background_tile": true,
+      "profile_link_color": "F0A52B",
+      "profile_sidebar_border_color": "000000",
+      "profile_sidebar_fill_color": "F7E6CF",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/694982748885409792\/bP2aFBwa_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/694982748885409792\/bP2aFBwa_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/202625062\/1439728421",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": {
+      "type": "Point",
+      "coordinates": [
+        40.7408,
+        30.3333
+      ]
+    },
+    "coordinates": {
+      "type": "Point",
+      "coordinates": [
+        30.3333,
+        40.7408
+      ]
+    },
+    "place": {
+      "id": "48abf56f6357c376",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/48abf56f6357c376.json",
+      "place_type": "neighborhood",
+      "name": "Esentepe",
+      "full_name": "Esentepe, Sakarya",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              30.291807,
+              40.733280
+            ],
+            [
+              30.291807,
+              40.762362
+            ],
+            [
+              30.339302,
+              40.762362
+            ],
+            [
+              30.339302,
+              40.733280
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [
+        {
+          "text": "bahar",
+          "indices": [
+            15,
+            21
+          ]
+        },
+        {
+          "text": "sa\u00fc",
+          "indices": [
+            22,
+            26
+          ]
+        },
+        {
+          "text": "fef",
+          "indices": [
+            27,
+            31
+          ]
+        },
+        {
+          "text": "biyoloji",
+          "indices": [
+            32,
+            41
+          ]
+        },
+        {
+          "text": "Be\u015fikta\u015f",
+          "indices": [
+            42,
+            51
+          ]
+        }
+      ],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/uOlvJ9clCd",
+          "expanded_url": "https:\/\/www.instagram.com\/p\/BDlQhSCDF-fZhXexWbHvsXWuBGJt9UWUdgWNlQ0\/",
+          "display_url": "instagram.com\/p\/BDlQhSCDF-fZ\u2026",
+          "indices": [
+            59,
+            82
+          ]
+        }
+      ],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351604188"
+  },
+  {
+    "created_at": "Wed Mar 30 15:27:46 +0000 2016",
+    "id": 715198841335717889,
+    "id_str": "715198841335717889",
+    "text": "@gambicchiaemma @anabrendac recuerdo cuando lo hicieron aqui en espa\u00f1a fue magico yo no pude ir a verlo pero es increible.",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": 715123690460094464,
+    "in_reply_to_status_id_str": "715123690460094464",
+    "in_reply_to_user_id": 3034492858,
+    "in_reply_to_user_id_str": "3034492858",
+    "in_reply_to_screen_name": "gambicchiaemma",
+    "user": {
+      "id": 147901537,
+      "id_str": "147901537",
+      "name": "marirojasanzbrecosan",
+      "screen_name": "marirojasanzera",
+      "location": "madrid",
+      "url": "http:\/\/cuentacuentosparaiso.blogspot.com",
+      "description": "sanzera, rojita @hectorrojo   fan  dos grandes actores  @ivansanchezz  y @anabrendac, bisbal , busta diego martin  y daviddemaria, fan del teatro y del cine",
+      "protected": false,
+      "verified": false,
+      "followers_count": 1256,
+      "friends_count": 2236,
+      "listed_count": 10,
+      "favourites_count": 7419,
+      "statuses_count": 58968,
+      "created_at": "Tue May 25 10:03:29 +0000 2010",
+      "utc_offset": 7200,
+      "time_zone": "Madrid",
+      "geo_enabled": true,
+      "lang": "es",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/pbs.twimg.com\/profile_background_images\/677346732\/b7080014c9a16cfc54afd00b6b683536.jpeg",
+      "profile_background_image_url_https": "https:\/\/pbs.twimg.com\/profile_background_images\/677346732\/b7080014c9a16cfc54afd00b6b683536.jpeg",
+      "profile_background_tile": true,
+      "profile_link_color": "9266CC",
+      "profile_sidebar_border_color": "FFFFFF",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/715128964428275712\/Ix3DqNZT_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/715128964428275712\/Ix3DqNZT_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/147901537\/1458310483",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "ea520f3528c9b3e4",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/ea520f3528c9b3e4.json",
+      "place_type": "admin",
+      "name": "Madrid",
+      "full_name": "Madrid, Comunidad de Madrid",
+      "country_code": "ES",
+      "country": "Espa\u00f1a",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.579175,
+              39.884537
+            ],
+            [
+              -4.579175,
+              41.164911
+            ],
+            [
+              -3.053132,
+              41.164911
+            ],
+            [
+              -3.053132,
+              39.884537
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [
+        {
+          "screen_name": "gambicchiaemma",
+          "name": "Emma yolosabia AyI\u2764\ufe0f",
+          "id": 3034492858,
+          "id_str": "3034492858",
+          "indices": [
+            0,
+            15
+          ]
+        },
+        {
+          "screen_name": "anabrendac",
+          "name": "Ana Brenda",
+          "id": 30913899,
+          "id_str": "30913899",
+          "indices": [
+            16,
+            27
+          ]
+        }
+      ],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "es",
+    "timestamp_ms": "1459351666183"
+  },
+  {
+    "created_at": "Wed Mar 30 15:27:49 +0000 2016",
+    "id": 715198854195519488,
+    "id_str": "715198854195519488",
+    "text": "I'm at Sporland Body Building Center in Bal\u0131kesir, T\u00fcrkiye https:\/\/t.co\/Hd8znu3szu",
+    "source": "\u003ca href=\"http:\/\/foursquare.com\" rel=\"nofollow\"\u003eFoursquare\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2944069583,
+      "id_str": "2944069583",
+      "name": "Samet Y\u0131lmaz",
+      "screen_name": "sameettylmaz",
+      "location": null,
+      "url": null,
+      "description": "Radyoloji\r\nAsml\r\nBalikesir",
+      "protected": false,
+      "verified": false,
+      "followers_count": 138,
+      "friends_count": 162,
+      "listed_count": 1,
+      "favourites_count": 274,
+      "statuses_count": 388,
+      "created_at": "Sat Dec 27 16:52:29 +0000 2014",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "000000",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "3B94D9",
+      "profile_sidebar_border_color": "000000",
+      "profile_sidebar_fill_color": "000000",
+      "profile_text_color": "000000",
+      "profile_use_background_image": false,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/654033975632072704\/zTbAziOw_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/654033975632072704\/zTbAziOw_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2944069583\/1444768824",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": {
+      "type": "Point",
+      "coordinates": [
+        39.64970813,
+        27.87810480
+      ]
+    },
+    "coordinates": {
+      "type": "Point",
+      "coordinates": [
+        27.87810480,
+        39.64970813
+      ]
+    },
+    "place": {
+      "id": "43d1ebf31e6883cf",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/43d1ebf31e6883cf.json",
+      "place_type": "city",
+      "name": "Bal\u0131kesir",
+      "full_name": "Bal\u0131kesir, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              27.839245,
+              39.612565
+            ],
+            [
+              27.839245,
+              39.686799
+            ],
+            [
+              27.952799,
+              39.686799
+            ],
+            [
+              27.952799,
+              39.612565
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/Hd8znu3szu",
+          "expanded_url": "https:\/\/www.swarmapp.com\/c\/9vFfZK8EmMl",
+          "display_url": "swarmapp.com\/c\/9vFfZK8EmMl",
+          "indices": [
+            59,
+            82
+          ]
+        }
+      ],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351669249"
+  },
+  {
+    "created_at": "Wed Mar 30 15:30:42 +0000 2016",
+    "id": 715199580305039360,
+    "id_str": "715199580305039360",
+    "text": "Bir \u015fairle tan\u0131\u015fmak harika bir duygu \ud83d\ude0a",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003eTwitter for Android\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 1140811562,
+      "id_str": "1140811562",
+      "name": "ReYnA DYN",
+      "screen_name": "ReynaDyn",
+      "location": "Kayseri, T\u00fcrkiye",
+      "url": null,
+      "description": "Bu \u00e7arp\u0131k sistem ve s\u0131n\u0131f ayr\u0131m\u0131 olan d\u00fcnyada umudumuz;\nkaplumba\u011falar\u0131 g\u00f6ky\u00fcz\u00fcnde g\u00f6rmek kadar.\n\n\nErciyes defteri yava\u015f yava\u015f kapan\u0131yor.\n\u00c7erkes\/Sosyolog",
+      "protected": false,
+      "verified": false,
+      "followers_count": 370,
+      "friends_count": 828,
+      "listed_count": 1,
+      "favourites_count": 824,
+      "statuses_count": 1821,
+      "created_at": "Fri Feb 01 21:51:48 +0000 2013",
+      "utc_offset": 10800,
+      "time_zone": "Athens",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "642D8B",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme10\/bg.gif",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme10\/bg.gif",
+      "profile_background_tile": true,
+      "profile_link_color": "FF0000",
+      "profile_sidebar_border_color": "65B0DA",
+      "profile_sidebar_fill_color": "7AC3EE",
+      "profile_text_color": "3D1957",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/708747863363158016\/k_VxCr-M_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/708747863363158016\/k_VxCr-M_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/1140811562\/1457814065",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "13f3c7d1d46d6220",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/13f3c7d1d46d6220.json",
+      "place_type": "city",
+      "name": "Kayseri",
+      "full_name": "Kayseri, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.313136,
+              38.670677
+            ],
+            [
+              35.313136,
+              38.787858
+            ],
+            [
+              35.603761,
+              38.787858
+            ],
+            [
+              35.603761,
+              38.670677
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459351842367"
+  },
+  {
+    "created_at": "Wed Mar 30 15:31:12 +0000 2016",
+    "id": 715199704934531076,
+    "id_str": "715199704934531076",
+    "text": "demisexual grey-aro todomatsu",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2590265922,
+      "id_str": "2590265922",
+      "name": "the big gay",
+      "screen_name": "yakisabo",
+      "location": "austria",
+      "url": "http:\/\/miyukki.flavors.me",
+      "description": "Cass\/23\/genderfluid. @0nematsu is my battery partner \u2764\ufe0f \/ @kylosolos is my bestest friend \u2764\ufe0f \/ I love @yolozuyaaa very much \u2764\ufe0f \/ @cham3l3ons is my qpprincess \u2764\ufe0f",
+      "protected": false,
+      "verified": false,
+      "followers_count": 171,
+      "friends_count": 370,
+      "listed_count": 0,
+      "favourites_count": 48346,
+      "statuses_count": 76216,
+      "created_at": "Thu Jun 26 21:22:55 +0000 2014",
+      "utc_offset": -25200,
+      "time_zone": "Pacific Time (US & Canada)",
+      "geo_enabled": true,
+      "lang": "en",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "EEEE00",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2590265922\/1459138490",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "9f659d51e5c5deae",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/9f659d51e5c5deae.json",
+      "place_type": "city",
+      "name": "Vienna",
+      "full_name": "Vienna, Austria",
+      "country_code": "AT",
+      "country": "\u00d6sterreich",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              16.182180,
+              48.117666
+            ],
+            [
+              16.182180,
+              48.322574
+            ],
+            [
+              16.577511,
+              48.322574
+            ],
+            [
+              16.577511,
+              48.117666
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "es",
+    "timestamp_ms": "1459351872081"
+  },
+  {
+    "created_at": "Wed Mar 30 15:32:14 +0000 2016",
+    "id": 715199965388226560,
+    "id_str": "715199965388226560",
+    "text": "shit i want to make everyone asexual again bye i rly need to wash the",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2590265922,
+      "id_str": "2590265922",
+      "name": "the big gay",
+      "screen_name": "yakisabo",
+      "location": "austria",
+      "url": "http:\/\/miyukki.flavors.me",
+      "description": "Cass\/23\/genderfluid. @0nematsu is my battery partner \u2764\ufe0f \/ @kylosolos is my bestest friend \u2764\ufe0f \/ I love @yolozuyaaa very much \u2764\ufe0f \/ @cham3l3ons is my qpprincess \u2764\ufe0f",
+      "protected": false,
+      "verified": false,
+      "followers_count": 171,
+      "friends_count": 370,
+      "listed_count": 0,
+      "favourites_count": 48346,
+      "statuses_count": 76218,
+      "created_at": "Thu Jun 26 21:22:55 +0000 2014",
+      "utc_offset": -25200,
+      "time_zone": "Pacific Time (US & Canada)",
+      "geo_enabled": true,
+      "lang": "en",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "EEEE00",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2590265922\/1459138490",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "9f659d51e5c5deae",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/9f659d51e5c5deae.json",
+      "place_type": "city",
+      "name": "Vienna",
+      "full_name": "Vienna, Austria",
+      "country_code": "AT",
+      "country": "\u00d6sterreich",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              16.182180,
+              48.117666
+            ],
+            [
+              16.182180,
+              48.322574
+            ],
+            [
+              16.577511,
+              48.322574
+            ],
+            [
+              16.577511,
+              48.117666
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "en",
+    "timestamp_ms": "1459351934178"
+  },
+  {
+    "created_at": "Wed Mar 30 15:33:03 +0000 2016",
+    "id": 715200172037435392,
+    "id_str": "715200172037435392",
+    "text": "que suerte tiene mouz",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2321344886,
+      "id_str": "2321344886",
+      "name": "Blastinho",
+      "screen_name": "BlastinhoCSGO",
+      "location": "Dust 2",
+      "url": "http:\/\/www.twitch.tv\/blastinhos",
+      "description": "Jugando para @teamx6tence 19yolo M\u00e1s de coraz\u00f3n que de cartera",
+      "protected": false,
+      "verified": false,
+      "followers_count": 3177,
+      "friends_count": 108,
+      "listed_count": 9,
+      "favourites_count": 4564,
+      "statuses_count": 3330,
+      "created_at": "Fri Jan 31 20:55:10 +0000 2014",
+      "utc_offset": 7200,
+      "time_zone": "Madrid",
+      "geo_enabled": true,
+      "lang": "es",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "000000",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+      "profile_background_tile": false,
+      "profile_link_color": "3B94D9",
+      "profile_sidebar_border_color": "000000",
+      "profile_sidebar_fill_color": "000000",
+      "profile_text_color": "000000",
+      "profile_use_background_image": false,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714581407763406849\/mNYyqGNg_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714581407763406849\/mNYyqGNg_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2321344886\/1458404840",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "429521da4824fe07",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/429521da4824fe07.json",
+      "place_type": "city",
+      "name": "Granollers",
+      "full_name": "Granollers, Espa\u00f1a",
+      "country_code": "ES",
+      "country": "Espa\u00f1a",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              2.256497,
+              41.564021
+            ],
+            [
+              2.256497,
+              41.622566
+            ],
+            [
+              2.303840,
+              41.622566
+            ],
+            [
+              2.303840,
+              41.564021
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "es",
+    "timestamp_ms": "1459351983447"
+  },
+  {
+    "created_at": "Wed Mar 30 15:34:02 +0000 2016",
+    "id": 715200417735577600,
+    "id_str": "715200417735577600",
+    "text": "I'm at Dumlup\u0131nar \u00dcniversitesi Merkez Kamp\u00fcs\u00fc https:\/\/t.co\/sZFcUfdLq7",
+    "source": "\u003ca href=\"http:\/\/foursquare.com\" rel=\"nofollow\"\u003eFoursquare\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 739011991,
+      "id_str": "739011991",
+      "name": "\u015e\u00fcheda Arslan",
+      "screen_name": "suhedarslan",
+      "location": null,
+      "url": null,
+      "description": "Sakarya\/Adige\/Dp\u00fc\/Sosyoloji\/",
+      "protected": false,
+      "verified": false,
+      "followers_count": 467,
+      "friends_count": 180,
+      "listed_count": 1,
+      "favourites_count": 704,
+      "statuses_count": 2472,
+      "created_at": "Sun Aug 05 18:24:02 +0000 2012",
+      "utc_offset": 10800,
+      "time_zone": "Baghdad",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "131516",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+      "profile_background_tile": true,
+      "profile_link_color": "0CA2C7",
+      "profile_sidebar_border_color": "FFFFFF",
+      "profile_sidebar_fill_color": "F6FFD1",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/696833151033872384\/8uSulygd_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/696833151033872384\/8uSulygd_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/739011991\/1422233055",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": {
+      "type": "Point",
+      "coordinates": [
+        39.46005577,
+        29.92963867
+      ]
+    },
+    "coordinates": {
+      "type": "Point",
+      "coordinates": [
+        29.92963867,
+        39.46005577
+      ]
+    },
+    "place": {
+      "id": "1b1a2b83f10e7a4a",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/1b1a2b83f10e7a4a.json",
+      "place_type": "admin",
+      "name": "K\u00fctahya Merkez",
+      "full_name": "K\u00fctahya Merkez, K\u00fctahya",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              29.732017,
+              39.116423
+            ],
+            [
+              29.732017,
+              39.716518
+            ],
+            [
+              30.432635,
+              39.716518
+            ],
+            [
+              30.432635,
+              39.116423
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/sZFcUfdLq7",
+          "expanded_url": "https:\/\/www.swarmapp.com\/c\/i5XsTdawr8W",
+          "display_url": "swarmapp.com\/c\/i5XsTdawr8W",
+          "indices": [
+            46,
+            69
+          ]
+        }
+      ],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": true,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459352042026"
+  },
+  {
+    "created_at": "Wed Mar 30 15:34:07 +0000 2016",
+    "id": 715200440003141632,
+    "id_str": "715200440003141632",
+    "text": "@Bahareyn \u00e7ekinme buyur \ud83d\ude03",
+    "source": "\u003ca href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003eTwitter for Android\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": 715199836983791616,
+    "in_reply_to_status_id_str": "715199836983791616",
+    "in_reply_to_user_id": 253058642,
+    "in_reply_to_user_id_str": "253058642",
+    "in_reply_to_screen_name": "Bahareyn",
+    "user": {
+      "id": 1140811562,
+      "id_str": "1140811562",
+      "name": "ReYnA DYN",
+      "screen_name": "ReynaDyn",
+      "location": "Kayseri, T\u00fcrkiye",
+      "url": null,
+      "description": "Bu \u00e7arp\u0131k sistem ve s\u0131n\u0131f ayr\u0131m\u0131 olan d\u00fcnyada umudumuz;\nkaplumba\u011falar\u0131 g\u00f6ky\u00fcz\u00fcnde g\u00f6rmek kadar.\n\n\nErciyes defteri yava\u015f yava\u015f kapan\u0131yor.\n\u00c7erkes\/Sosyolog",
+      "protected": false,
+      "verified": false,
+      "followers_count": 370,
+      "friends_count": 828,
+      "listed_count": 1,
+      "favourites_count": 824,
+      "statuses_count": 1822,
+      "created_at": "Fri Feb 01 21:51:48 +0000 2013",
+      "utc_offset": 10800,
+      "time_zone": "Athens",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "642D8B",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme10\/bg.gif",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme10\/bg.gif",
+      "profile_background_tile": true,
+      "profile_link_color": "FF0000",
+      "profile_sidebar_border_color": "65B0DA",
+      "profile_sidebar_fill_color": "7AC3EE",
+      "profile_text_color": "3D1957",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/708747863363158016\/k_VxCr-M_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/708747863363158016\/k_VxCr-M_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/1140811562\/1457814065",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "13f3c7d1d46d6220",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/13f3c7d1d46d6220.json",
+      "place_type": "city",
+      "name": "Kayseri",
+      "full_name": "Kayseri, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35.313136,
+              38.670677
+            ],
+            [
+              35.313136,
+              38.787858
+            ],
+            [
+              35.603761,
+              38.787858
+            ],
+            [
+              35.603761,
+              38.670677
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [
+        {
+          "screen_name": "Bahareyn",
+          "name": "Baharat",
+          "id": 253058642,
+          "id_str": "253058642",
+          "indices": [
+            0,
+            9
+          ]
+        }
+      ],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459352047335"
+  },
+  {
+    "created_at": "Wed Mar 30 15:34:54 +0000 2016",
+    "id": 715200637336731648,
+    "id_str": "715200637336731648",
+    "text": "Biz hala okulda.. \ud83d\ude10 (@ Fen Edebiyat Fak\u00fcltesi - @balikesiruni in Bal\u0131kesir w\/ @__aytan @sosyolog_aisha) https:\/\/t.co\/7gx0WzX3u9",
+    "source": "\u003ca href=\"http:\/\/foursquare.com\" rel=\"nofollow\"\u003eFoursquare\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2573707425,
+      "id_str": "2573707425",
+      "name": "Deniz Ecem",
+      "screen_name": "DenizEcemK",
+      "location": null,
+      "url": "http:\/\/instagram.com\/denizecem.karataser",
+      "description": "Ba\u00fc - Sosyoloji",
+      "protected": false,
+      "verified": false,
+      "followers_count": 218,
+      "friends_count": 138,
+      "listed_count": 0,
+      "favourites_count": 1400,
+      "statuses_count": 1507,
+      "created_at": "Sat May 31 11:21:50 +0000 2014",
+      "utc_offset": null,
+      "time_zone": null,
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "DD2E44",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/675464326254346240\/oRP7pDmj_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/675464326254346240\/oRP7pDmj_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2573707425\/1419383567",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": {
+      "type": "Point",
+      "coordinates": [
+        39.53711177,
+        28.01196143
+      ]
+    },
+    "coordinates": {
+      "type": "Point",
+      "coordinates": [
+        28.01196143,
+        39.53711177
+      ]
+    },
+    "place": {
+      "id": "492390efd83ec706",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/492390efd83ec706.json",
+      "place_type": "admin",
+      "name": "Bal\u0131kesir Merkez",
+      "full_name": "Bal\u0131kesir Merkez, Bal\u0131kesir",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              27.577596,
+              39.324982
+            ],
+            [
+              27.577596,
+              39.943420
+            ],
+            [
+              28.117876,
+              39.943420
+            ],
+            [
+              28.117876,
+              39.324982
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/7gx0WzX3u9",
+          "expanded_url": "https:\/\/www.swarmapp.com\/c\/5nQTNzVSdHV",
+          "display_url": "swarmapp.com\/c\/5nQTNzVSdHV",
+          "indices": [
+            104,
+            127
+          ]
+        }
+      ],
+      "user_mentions": [
+        {
+          "screen_name": "balikesiruni",
+          "name": "BAUN",
+          "id": 132571456,
+          "id_str": "132571456",
+          "indices": [
+            48,
+            61
+          ]
+        },
+        {
+          "screen_name": "__aytan",
+          "name": "Gizem",
+          "id": 579989279,
+          "id_str": "579989279",
+          "indices": [
+            78,
+            86
+          ]
+        },
+        {
+          "screen_name": "sosyolog_aisha",
+          "name": "Ay\u015fe Durmaz",
+          "id": 2955006442,
+          "id_str": "2955006442",
+          "indices": [
+            87,
+            102
+          ]
+        }
+      ],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459352094383"
+  },
+  {
+    "created_at": "Wed Mar 30 15:34:58 +0000 2016",
+    "id": 715200653140889600,
+    "id_str": "715200653140889600",
+    "text": "\"do you know where chocolate comes from\"\ndude yea chocolate bars obviously grow on bushes https:\/\/t.co\/G4GvR82QO5",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2590265922,
+      "id_str": "2590265922",
+      "name": "the big gay",
+      "screen_name": "yakisabo",
+      "location": "austria",
+      "url": "http:\/\/miyukki.flavors.me",
+      "description": "Cass\/23\/genderfluid. @0nematsu is my battery partner \u2764\ufe0f \/ @kylosolos is my bestest friend \u2764\ufe0f \/ I love @yolozuyaaa very much \u2764\ufe0f \/ @cham3l3ons is my qpprincess \u2764\ufe0f",
+      "protected": false,
+      "verified": false,
+      "followers_count": 171,
+      "friends_count": 370,
+      "listed_count": 0,
+      "favourites_count": 48346,
+      "statuses_count": 76219,
+      "created_at": "Thu Jun 26 21:22:55 +0000 2014",
+      "utc_offset": -25200,
+      "time_zone": "Pacific Time (US & Canada)",
+      "geo_enabled": true,
+      "lang": "en",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "C0DEED",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile": false,
+      "profile_link_color": "EEEE00",
+      "profile_sidebar_border_color": "C0DEED",
+      "profile_sidebar_fill_color": "DDEEF6",
+      "profile_text_color": "333333",
+      "profile_use_background_image": true,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2590265922\/1459138490",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "9f659d51e5c5deae",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/9f659d51e5c5deae.json",
+      "place_type": "city",
+      "name": "Vienna",
+      "full_name": "Vienna, Austria",
+      "country_code": "AT",
+      "country": "\u00d6sterreich",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              16.182180,
+              48.117666
+            ],
+            [
+              16.182180,
+              48.322574
+            ],
+            [
+              16.577511,
+              48.322574
+            ],
+            [
+              16.577511,
+              48.117666
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": [],
+      "media": [
+        {
+          "id": 715200652125847552,
+          "id_str": "715200652125847552",
+          "indices": [
+            90,
+            113
+          ],
+          "media_url": "http:\/\/pbs.twimg.com\/media\/CeznNC0WwAAVldS.jpg",
+          "media_url_https": "https:\/\/pbs.twimg.com\/media\/CeznNC0WwAAVldS.jpg",
+          "url": "https:\/\/t.co\/G4GvR82QO5",
+          "display_url": "pic.twitter.com\/G4GvR82QO5",
+          "expanded_url": "http:\/\/twitter.com\/yakisabo\/status\/715200653140889600\/photo\/1",
+          "type": "photo",
+          "sizes": {
+            "large": {
+              "w": 111,
+              "h": 252,
+              "resize": "fit"
+            },
+            "small": {
+              "w": 111,
+              "h": 252,
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": 111,
+              "h": 111,
+              "resize": "crop"
+            },
+            "medium": {
+              "w": 111,
+              "h": 252,
+              "resize": "fit"
+            }
+          }
+        }
+      ]
+    },
+    "extended_entities": {
+      "media": [
+        {
+          "id": 715200652125847552,
+          "id_str": "715200652125847552",
+          "indices": [
+            90,
+            113
+          ],
+          "media_url": "http:\/\/pbs.twimg.com\/media\/CeznNC0WwAAVldS.jpg",
+          "media_url_https": "https:\/\/pbs.twimg.com\/media\/CeznNC0WwAAVldS.jpg",
+          "url": "https:\/\/t.co\/G4GvR82QO5",
+          "display_url": "pic.twitter.com\/G4GvR82QO5",
+          "expanded_url": "http:\/\/twitter.com\/yakisabo\/status\/715200653140889600\/photo\/1",
+          "type": "photo",
+          "sizes": {
+            "large": {
+              "w": 111,
+              "h": 252,
+              "resize": "fit"
+            },
+            "small": {
+              "w": 111,
+              "h": 252,
+              "resize": "fit"
+            },
+            "thumb": {
+              "w": 111,
+              "h": 111,
+              "resize": "crop"
+            },
+            "medium": {
+              "w": 111,
+              "h": 252,
+              "resize": "fit"
+            }
+          }
+        }
+      ]
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "en",
+    "timestamp_ms": "1459352098151"
+  },
+  {
+    "created_at": "Wed Mar 30 15:34:59 +0000 2016",
+    "id": 715200660023676928,
+    "id_str": "715200660023676928",
+    "text": "resuelve kevin durant",
+    "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 2321344886,
+      "id_str": "2321344886",
+      "name": "Blastinho",
+      "screen_name": "BlastinhoCSGO",
+      "location": "Dust 2",
+      "url": "http:\/\/www.twitch.tv\/blastinhos",
+      "description": "Jugando para @teamx6tence 19yolo M\u00e1s de coraz\u00f3n que de cartera",
+      "protected": false,
+      "verified": false,
+      "followers_count": 3177,
+      "friends_count": 108,
+      "listed_count": 9,
+      "favourites_count": 4565,
+      "statuses_count": 3332,
+      "created_at": "Fri Jan 31 20:55:10 +0000 2014",
+      "utc_offset": 7200,
+      "time_zone": "Madrid",
+      "geo_enabled": true,
+      "lang": "es",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "000000",
+      "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+      "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme14\/bg.gif",
+      "profile_background_tile": false,
+      "profile_link_color": "3B94D9",
+      "profile_sidebar_border_color": "000000",
+      "profile_sidebar_fill_color": "000000",
+      "profile_text_color": "000000",
+      "profile_use_background_image": false,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714581407763406849\/mNYyqGNg_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714581407763406849\/mNYyqGNg_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2321344886\/1458404840",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": null,
+    "coordinates": null,
+    "place": {
+      "id": "429521da4824fe07",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/429521da4824fe07.json",
+      "place_type": "city",
+      "name": "Granollers",
+      "full_name": "Granollers, Espa\u00f1a",
+      "country_code": "ES",
+      "country": "Espa\u00f1a",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              2.256497,
+              41.564021
+            ],
+            [
+              2.256497,
+              41.622566
+            ],
+            [
+              2.303840,
+              41.622566
+            ],
+            [
+              2.303840,
+              41.564021
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "filter_level": "low",
+    "lang": "en",
+    "timestamp_ms": "1459352099792"
+  },
+  {
+    "created_at": "Wed Mar 30 15:36:02 +0000 2016",
+    "id": 715200921618108417,
+    "id_str": "715200921618108417",
+    "text": "Ne kadar da mesut bir aile \ud83d\ude02 @ Bilecik https:\/\/t.co\/C0IjgPM3LD",
+    "source": "\u003ca href=\"http:\/\/instagram.com\" rel=\"nofollow\"\u003eInstagram\u003c\/a\u003e",
+    "truncated": false,
+    "in_reply_to_status_id": null,
+    "in_reply_to_status_id_str": null,
+    "in_reply_to_user_id": null,
+    "in_reply_to_user_id_str": null,
+    "in_reply_to_screen_name": null,
+    "user": {
+      "id": 1596695599,
+      "id_str": "1596695599",
+      "name": "Derya",
+      "screen_name": "deryasgrc",
+      "location": "\u00dcsk\u00fcdar\u0130stanbul|Bilecik|Elaz\u0131\u011f",
+      "url": null,
+      "description": "*B\u015eE\u00dc - Molek\u00fcler Biyoloji & Genetik '16\nfenerbah\u00e7e",
+      "protected": false,
+      "verified": false,
+      "followers_count": 287,
+      "friends_count": 288,
+      "listed_count": 2,
+      "favourites_count": 2536,
+      "statuses_count": 2865,
+      "created_at": "Mon Jul 15 20:18:38 +0000 2013",
+      "utc_offset": 10800,
+      "time_zone": "Istanbul",
+      "geo_enabled": true,
+      "lang": "tr",
+      "contributors_enabled": false,
+      "is_translator": false,
+      "profile_background_color": "4A913C",
+      "profile_background_image_url": "http:\/\/pbs.twimg.com\/profile_background_images\/516283796438523904\/g1ip66tc.jpeg",
+      "profile_background_image_url_https": "https:\/\/pbs.twimg.com\/profile_background_images\/516283796438523904\/g1ip66tc.jpeg",
+      "profile_background_tile": true,
+      "profile_link_color": "FA743E",
+      "profile_sidebar_border_color": "FFFFFF",
+      "profile_sidebar_fill_color": "EFEFEF",
+      "profile_text_color": "333333",
+      "profile_use_background_image": false,
+      "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/714076120958771200\/9E8bWHbQ_normal.jpg",
+      "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/714076120958771200\/9E8bWHbQ_normal.jpg",
+      "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/1596695599\/1437038096",
+      "default_profile": false,
+      "default_profile_image": false,
+      "following": null,
+      "follow_request_sent": null,
+      "notifications": null
+    },
+    "geo": {
+      "type": "Point",
+      "coordinates": [
+        40.14305556,
+        29.97916667
+      ]
+    },
+    "coordinates": {
+      "type": "Point",
+      "coordinates": [
+        29.97916667,
+        40.14305556
+      ]
+    },
+    "place": {
+      "id": "070f2ac6b0c39763",
+      "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/070f2ac6b0c39763.json",
+      "place_type": "city",
+      "name": "Bilecik",
+      "full_name": "Bilecik, T\u00fcrkiye",
+      "country_code": "TR",
+      "country": "T\u00fcrkiye",
+      "bounding_box": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              29.955876,
+              40.105992
+            ],
+            [
+              29.955876,
+              40.201205
+            ],
+            [
+              30.005349,
+              40.201205
+            ],
+            [
+              30.005349,
+              40.105992
+            ]
+          ]
+        ]
+      },
+      "attributes": {}
+    },
+    "contributors": null,
+    "is_quote_status": false,
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "entities": {
+      "hashtags": [],
+      "urls": [
+        {
+          "url": "https:\/\/t.co\/C0IjgPM3LD",
+          "expanded_url": "https:\/\/www.instagram.com\/p\/BDlRlK2MW3SuWQoUBsjMyYzrZowfikuKoxzkTg0\/",
+          "display_url": "instagram.com\/p\/BDlRlK2MW3Su\u2026",
+          "indices": [
+            39,
+            62
+          ]
+        }
+      ],
+      "user_mentions": [],
+      "symbols": []
+    },
+    "favorited": false,
+    "retweeted": false,
+    "possibly_sensitive": false,
+    "filter_level": "low",
+    "lang": "tr",
+    "timestamp_ms": "1459352162161"
+  }
+]
