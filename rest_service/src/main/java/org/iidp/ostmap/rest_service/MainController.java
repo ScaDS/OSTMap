@@ -47,16 +47,14 @@ public class MainController {
      */
     public static String getTestTweets()
     {
-        String result = "[\n";
+        String result = "";
 
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 
         try(BufferedReader br = new BufferedReader(new InputStreamReader(classloader.getResourceAsStream("example-response.json")))) {
             for(String line; (line = br.readLine()) != null; ) {
-                result += line + ','+'\n';
+                result += line;
             }
-            result = result.substring(0, result.length()-2);
-            result += "\n]";
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -1,3 +1,5 @@
 //rootProject.name = 'OSTMap'
 include ':commons'
 include ':batch_processing'
+include ':stream_processing'
+include ':rest_service'
