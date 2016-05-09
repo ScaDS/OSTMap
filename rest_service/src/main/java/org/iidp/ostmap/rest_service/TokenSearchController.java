@@ -89,7 +89,7 @@ public class TokenSearchController {
                 Scanner termIndexScanner = accumuloService.getTermIdexScanner(_paramToken,field);
                 for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
                     String rawTwitterRowIndex = termIndexEntry.getKey().getColumnQualifierData().toString();
-                    Scanner rawDataScanner = accumuloService.getRawDataScanner(rawTwitterRowIndex);
+                    Scanner rawDataScanner = accumuloService.getRawDataScannerByRow(rawTwitterRowIndex);
                     for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
                         String json = rawDataEntry.getValue().toString();
                         result += json;

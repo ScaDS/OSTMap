@@ -3,7 +3,10 @@ package org.iidp.ostmap.rest_service;
 import org.apache.accumulo.core.client.BatchWriter;
 import org.apache.accumulo.core.client.BatchWriterConfig;
 import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
+import org.apache.accumulo.core.data.Value;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -18,17 +21,18 @@ import java.io.OutputStreamWriter;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class AccumuloServiceTest {
 
     @ClassRule
     public static TemporaryFolder tmpDir = new TemporaryFolder();
     public static TemporaryFolder tmpSettingsDir = new TemporaryFolder();
-    public static AmcHelper amc = new AmcHelper();
+    public static AmcHelper amc;
 
     @BeforeClass
     public static void setUpCluster() {
-
+        amc = new AmcHelper();
         amc.startMiniCluster(tmpDir.getRoot().getAbsolutePath());
     }
 
@@ -39,21 +43,28 @@ public class AccumuloServiceTest {
     }
 
     @Test
-    public void testAccumuloService() throws Exception {
+    public void testAccumuloServiceTokenSearch() throws Exception {
         tmpSettingsDir.create();
         File settings = tmpSettingsDir.newFile("settings");
 
         Connector conn = amc.getConnector();
         System.out.println("I am connected as: " + conn.whoami());
 
-        conn.tableOperations().create("RawTwitterData");
-        conn.tableOperations().create("TermIndex");
+        if(!conn.tableOperations().exists("RawTwitterData")){
+            conn.tableOperations().create("RawTwitterData");
+        }
+        if(!conn.tableOperations().exists("TermIndex")){
+            conn.tableOperations().create("TermIndex");
+        }
 
         //write example entry to RawTwitterData
+        String tweetHund = "Vollstaendiger Tweet hund";
+        String tweetKatze = "Vollstaendiger Tweet katze";
+
         Mutation m1 = new Mutation("12345");
-        m1.put("t", "", "Vollstaendiger Tweet hund");
+        m1.put("t", "", tweetHund);
         Mutation m2 = new Mutation("67891");
-        m2.put("t", "", "Vollstaendiger Tweet katze");
+        m2.put("t", "", tweetKatze);
 
         BatchWriter bw = conn.createBatchWriter("RawTwitterData", new BatchWriterConfig());
         bw.addMutation(m1);
@@ -61,14 +72,26 @@ public class AccumuloServiceTest {
         bw.close();
 
         //write example data to TermIndex
-        Mutation m3 = new Mutation("hund");
+        Mutation m3 = new Mutation("Vollstaendiger");
         m3.put("text","12345","2");
-        Mutation m4 = new Mutation("katze");
-        m4.put("text","67891","2");
+        Mutation m4 = new Mutation("Tweet");
+        m4.put("text","12345","2");
+        Mutation m5 = new Mutation("hund");
+        m5.put("text","12345","2");
+        Mutation m6 = new Mutation("Vollstaendiger");
+        m6.put("text","67891","2");
+        Mutation m7 = new Mutation("Tweet");
+        m7.put("text","67891","2");
+        Mutation m8 = new Mutation("katze");
+        m8.put("text","67891","2");
 
         BatchWriter bwti = conn.createBatchWriter("TermIndex", new BatchWriterConfig());
         bwti.addMutation(m3);
         bwti.addMutation(m4);
+        bwti.addMutation(m5);
+        bwti.addMutation(m6);
+        bwti.addMutation(m7);
+        bwti.addMutation(m8);
         bwti.close();
 
         //create settings file with data of Mini Accumulo Cluster
@@ -86,10 +109,90 @@ public class AccumuloServiceTest {
         fos.flush();
         fos.close();
 
-        //run converter
+        //run Token Search
         AccumuloService accumuloService = new AccumuloService();
         System.out.println("settings file path: " + settings.getAbsolutePath());
         accumuloService.readConfig(settings.getAbsolutePath());
+
+        String[] fieldArray = {"user","text"};
+        String searchToken = "katze";
+        String result = "";
+
+        for(String field:fieldArray){
+            Scanner termIndexScanner = accumuloService.getTermIdexScanner(searchToken,field);
+            for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
+                String rawTwitterRowIndex = termIndexEntry.getKey().getColumnQualifierData().toString();
+                Scanner rawDataScanner = accumuloService.getRawDataScannerByRow(rawTwitterRowIndex);
+                for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
+                    String json = rawDataEntry.getValue().toString();
+                    result += json;
+                }
+            }
+        }
+
+        System.out.println(result + " <-> " + tweetKatze);
+        assertEquals(tweetKatze,result);
+    }
+
+    @Test
+    public void testAccumuloServiceTimeGeoSearch() throws Exception {
+        tmpSettingsDir.create();
+        File settings = tmpSettingsDir.newFile("settings");
+
+        Connector conn = amc.getConnector();
+        System.out.println("I am connected as: " + conn.whoami());
+
+
+        if(!conn.tableOperations().exists("RawTwitterData")){
+            conn.tableOperations().create("RawTwitterData");
+        }
+
+        //write example entry to RawTwitterData
+        String tweetHund = "Vollstaendiger Tweet hund";
+        String tweetKatze = "Vollstaendiger Tweet katze";
+
+        Mutation m1 = new Mutation("1462787131_AFC");
+        m1.put("t", "", tweetHund);
+        Mutation m2 = new Mutation("1462787132_AFC");
+        m2.put("t", "", tweetKatze);
+
+        BatchWriter bw = conn.createBatchWriter("RawTwitterData", new BatchWriterConfig());
+        bw.addMutation(m1);
+        bw.addMutation(m2);
+        bw.close();
+
+        //create settings file with data of Mini Accumulo Cluster
+        FileOutputStream fos = new FileOutputStream(settings, false);
+        BufferedWriter br = new BufferedWriter(new OutputStreamWriter(fos));
+        String parameters = "accumulo.instance=" + conn.getInstance().getInstanceName() + "\n"+
+                "accumulo.user=" + conn.whoami() +"\n"+
+                "accumulo.password=password\n"+
+                "accumulo.zookeeper=" + conn.getInstance().getZooKeepers();
+
+        System.out.println(parameters);
+        br.write(parameters);
+        br.flush();
+        br.close();
+        fos.flush();
+        fos.close();
+
+        //run Token Search
+        AccumuloService accumuloService = new AccumuloService();
+        System.out.println("settings file path: " + settings.getAbsolutePath());
+        accumuloService.readConfig(settings.getAbsolutePath());
+
+
+        String result = "";
+        String startTime = "14627871";
+        String endTime = "14627871";
+
+        Scanner rawDataScanner = accumuloService.getRawDataScannerByRange(startTime,endTime);
+        for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
+            String json = rawDataEntry.getValue().toString();
+            result += json;
+        }
+
+        System.out.println("Result: " + result);
 
     }
 }

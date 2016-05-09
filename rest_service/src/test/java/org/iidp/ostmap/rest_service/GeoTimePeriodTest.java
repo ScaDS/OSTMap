@@ -1,4 +1,5 @@
 package org.iidp.ostmap.rest_service;
+/*
 import org.iidp.ostmap.rest_service.MainController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,12 +23,10 @@ import static org.junit.Assert.*;
 public class GeoTimePeriodTest {
     RestTemplate template = new TestRestTemplate();
 
-    /**
-     * Get the random chosen port number.
-     */
+
     @Value("${local.server.port}")
     int port;
-    /*
+
     @Test
     public void testRequest() throws Exception {
         String url = "http://localhost:" + port + "/api/geotemporalsearch?bbnorth=10.123&bbsouth=-10.456&bbeast=-30.789&bbwest=30.123&tstart=1462020290&tend=1462020291";
@@ -38,6 +37,7 @@ public class GeoTimePeriodTest {
         assertEquals(MediaType.APPLICATION_JSON_UTF8,httpHeaders.getContentType());
         assertEquals(true,status.is2xxSuccessful());
     }
-    */
+
 
 }
+*/

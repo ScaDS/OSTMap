@@ -1,5 +1,5 @@
 package org.iidp.ostmap.rest_service;
-
+/*
 import org.iidp.ostmap.rest_service.MainController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,13 +22,10 @@ import static org.junit.Assert.assertEquals;
 public class TokenSearchTest {
     RestTemplate template = new TestRestTemplate();
 
-    /**
-     * Get the random chosen port number.
-     */
     @Value("${local.server.port}")
     int port;
 
-    /*
+
     @Test
     public void testRequest() throws Exception {
         String url = "http://localhost:" + port + "/api/tokensearch?field=user,text&token=yolo";
@@ -39,7 +36,8 @@ public class TokenSearchTest {
         assertEquals(MediaType.APPLICATION_JSON_UTF8,httpHeaders.getContentType());
         assertEquals(true,status.is2xxSuccessful());
     }
-    */
+
 
 
 }
+*/

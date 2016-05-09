@@ -1,5 +1,11 @@
 package org.iidp.ostmap.rest_service;
 
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -7,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -54,13 +61,39 @@ public class GeoTimePeriodController {
 
         if(validateQueryParams())
         {
-            resultList = MainController.getTestTweets();
+            resultList = getResultsFromAccumulo();
         }else{
             throw new IllegalArgumentException();
         }
 
         return resultList;
     }
+
+    public String getResultsFromAccumulo(){
+        String result = "";
+        AccumuloService accumuloService = new AccumuloService();
+
+        try {
+            accumuloService.readConfig(MainController.configFilePath);
+
+            Scanner rawDataScanner = accumuloService.getRawDataScannerByRange(_paramStartTime,_paramEndTime);
+            for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
+                String json = rawDataEntry.getValue().toString();
+                result += json;
+            }
+
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        } catch (AccumuloSecurityException e) {
+            e.printStackTrace();
+        } catch (TableNotFoundException e) {
+            e.printStackTrace();
+        } catch (AccumuloException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     /**
      * Validates the Query parameters. Returns true, if parameters are valid, false if not.
      * @return true, if parameters are valid, false if not

@@ -72,7 +72,7 @@ class AccumuloService {
         scan.fetchColumnFamily(new Text(field.getBytes()));
         scan.setRange(new Range(token));
         IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
-        //GrepIterator.setTerm(grepIterSetting, text);
+        GrepIterator.setTerm(grepIterSetting, token);
         scan.addScanIterator(grepIterSetting);
         return scan;
     }
@@ -86,15 +86,27 @@ class AccumuloService {
      * @throws AccumuloException
      * @throws TableNotFoundException
      */
-    Scanner getRawDataScanner(String row) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+    Scanner getRawDataScannerByRow(String row) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
         Authorizations auths = new Authorizations("standard");
         Scanner scan = conn.createScanner(rawTwitterDataTableName, auths);
         scan.fetchColumnFamily(new Text(RAW_DATA_CF));
         scan.setRange(new Range(row));
         IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
-        //GrepIterator.setTerm(grepIterSetting, text);
+        GrepIterator.setTerm(grepIterSetting, row);
         scan.addScanIterator(grepIterSetting);
+        return scan;
+    }
+
+    Scanner getRawDataScannerByRange(String startRowPrefix, String endRowPrefix) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+        Connector conn = getConnector();
+        Authorizations auths = new Authorizations("standard");
+        Scanner scan = conn.createScanner(rawTwitterDataTableName, auths);
+        scan.fetchColumnFamily(new Text(RAW_DATA_CF));
+        scan.setRange(new Range(startRowPrefix,endRowPrefix));
+        //IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
+        //GrepIterator.setTerm(grepIterSetting, row);
+        //scan.addScanIterator(grepIterSetting);
         return scan;
     }
 }

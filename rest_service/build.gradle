@@ -8,7 +8,6 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin:'application'
@@ -33,7 +32,7 @@ repositories {
 }
 
 group 'org.iidp.ostmap'
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 mainClassName = "org.iidp.ostmap.rest_service.MainController"
 
@@ -48,7 +47,12 @@ dependencies {
     // tag::actuator[]
     compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+    testCompile 'junit:junit'
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: 'org.slf4j'
+    }
+
     compile('org.apache.accumulo:accumulo-core:1.7.0.2.4.0.0-169') {
         exclude group: 'org.mortbay.jetty', module: 'jetty'
         exclude group: 'org.slf4j', module: 'slf4j-log4j12'
