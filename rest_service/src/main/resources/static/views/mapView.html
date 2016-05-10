@@ -1,14 +1,14 @@
 <h4>Current Filters: {{currentFilters}}</h4>
 
 <div>
-    <rzslider ng_disabled=true rz-slider-model="slider_ticks_values_tooltip.value" rz-slider-options="slider_ticks_values_tooltip.options"></rzslider>
+    <!--<rzslider ng_disabled=true rz-slider-model="slider_ticks_values_tooltip.value" rz-slider-options="slider_ticks_values_tooltip.options"></rzslider>-->
 
     <div class="btn-group">
-        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'1h'">1h</label>
-        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'2h'">2h</label>
-        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'3h'">4h</label>
-        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'1d'">1d</label>
-        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'All'">All</label>
+        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'1'">1h</label>
+        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'2'">2h</label>
+        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'3'">4h</label>
+        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'24'">1d</label>
+        <label class="btn btn-success" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'0'">All</label>
     </div>
     <button class="btn btn-primary" ng-click="search.clearFilters()">Clear Filters</button>
     <!--<button class="btn btn-primary" ng-disabled=false ng-click="search.updateFilters()">[DEBUG] Refresh</button>-->
