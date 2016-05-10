@@ -1,9 +1,8 @@
 package org.iidp.ostmap.rest_service;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Scanner;
-import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.data.Range;
+import org.apache.hadoop.io.Text;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -13,6 +12,8 @@ import org.apache.accumulo.core.data.Value;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Map;
 
@@ -85,16 +86,22 @@ public class TokenSearchController {
         String[] fieldArray = _paramCommaSeparatedFieldList.split(",");
         try {
             accumuloService.readConfig(MainController.configFilePath);
+
+            List<Range> rawKeys = new ArrayList<>();
             for(String field:fieldArray){
+                // get all results from tokenIndex to the list
                 Scanner termIndexScanner = accumuloService.getTermIdexScanner(_paramToken,field);
                 for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
-                    String rawTwitterRowIndex = termIndexEntry.getKey().getColumnQualifierData().toString();
-                    Scanner rawDataScanner = accumuloService.getRawDataScannerByRow(rawTwitterRowIndex);
-                    for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
-                        String json = rawDataEntry.getValue().toString();
-                        result += json;
-                    }
+
+                    rawKeys.add(new Range(termIndexEntry.getKey().getColumnQualifier()));
                 }
+            }
+
+            BatchScanner bs = accumuloService.getRawDataBatchScanner(rawKeys);
+            for (Map.Entry<Key, Value> rawDataEntry : bs) {
+
+                String json = rawDataEntry.getValue().toString();
+                result += json;
             }
         } catch (IOException ioe){
             ioe.printStackTrace();

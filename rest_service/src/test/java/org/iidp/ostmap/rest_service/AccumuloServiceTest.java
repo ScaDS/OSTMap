@@ -1,11 +1,10 @@
 package org.iidp.ostmap.rest_service;
 
-import org.apache.accumulo.core.client.BatchWriter;
-import org.apache.accumulo.core.client.BatchWriterConfig;
-import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
+import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
 import org.junit.AfterClass;
@@ -19,9 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -65,9 +62,15 @@ public class AccumuloServiceTest {
         String tweetHund = "Vollstaendiger Tweet hund";
         String tweetKatze = "Vollstaendiger Tweet katze";
 
-        Mutation m1 = new Mutation("12345");
+        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES + Integer.BYTES);
+        bb.putLong(12345).putInt(123);
+
+        Mutation m1 = new Mutation(bb.array()); //TODO: mit byte[] key testen
         m1.put("t", "", tweetHund);
-        Mutation m2 = new Mutation("67891");
+
+        ByteBuffer bb2 = ByteBuffer.allocate(Long.BYTES + Integer.BYTES);
+        bb2.putLong(67891).putInt(678);
+        Mutation m2 = new Mutation(bb2.array());
         m2.put("t", "", tweetKatze);
 
         BatchWriter bw = conn.createBatchWriter("RawTwitterData", new BatchWriterConfig());
@@ -77,17 +80,19 @@ public class AccumuloServiceTest {
 
         //write example data to TermIndex
         Mutation m3 = new Mutation("Vollstaendiger");
-        m3.put("text","12345","2");
+        m3.put("text".getBytes(),bb.array(),"2".getBytes());
         Mutation m4 = new Mutation("Tweet");
-        m4.put("text","12345","2");
+        m4.put("text".getBytes(),bb.array(),"2".getBytes());
         Mutation m5 = new Mutation("hund");
-        m5.put("text","12345","2");
+        m5.put("text".getBytes(),bb.array(),"2".getBytes());
         Mutation m6 = new Mutation("Vollstaendiger");
-        m6.put("text","67891","2");
+        m6.put("text".getBytes(),bb2.array(),"2".getBytes());
         Mutation m7 = new Mutation("Tweet");
-        m7.put("text","67891","2");
+        m7.put("text".getBytes(),bb2.array(),"2".getBytes());
         Mutation m8 = new Mutation("katze");
-        m8.put("text","67891","2");
+        m8.put("text".getBytes(),bb2.array(),"2".getBytes());
+
+        System.out.println(Arrays.toString("text".getBytes()));
 
         BatchWriter bwti = conn.createBatchWriter("TermIndex", new BatchWriterConfig());
         bwti.addMutation(m3);
@@ -122,17 +127,42 @@ public class AccumuloServiceTest {
         String searchToken = "katze";
         String result = "";
 
+
+        List<Range> rawKeys = new ArrayList<>();
+        for(String field:fieldArray){
+            // get all results from tokenIndex to the list
+            Scanner termIndexScanner = accumuloService.getTermIdexScanner(searchToken,field);
+            for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
+
+                rawKeys.add(new Range(termIndexEntry.getKey().getColumnQualifier()));
+            }
+        }
+
+        BatchScanner bs = accumuloService.getRawDataBatchScanner(rawKeys);
+        for (Map.Entry<Key, Value> rawDataEntry : bs) {
+
+            String json = rawDataEntry.getValue().toString();
+            result += json;
+        }
+
+
+        /*
         for(String field:fieldArray){
             Scanner termIndexScanner = accumuloService.getTermIdexScanner(searchToken,field);
             for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
-                String rawTwitterRowIndex = termIndexEntry.getKey().getColumnQualifierData().toString();
+
+
+                Text rawTwitterRowIndex = termIndexEntry.getKey().getColumnQualifier();
+                System.out.println(rawTwitterRowIndex);
                 Scanner rawDataScanner = accumuloService.getRawDataScannerByRow(rawTwitterRowIndex);
                 for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
+
+                    System.out.println("aaaaaaaaaaa");
                     String json = rawDataEntry.getValue().toString();
                     result += json;
                 }
             }
-        }
+        }*/
 
         System.out.println(result + " <-> " + tweetKatze);
         assertEquals(tweetKatze,result);

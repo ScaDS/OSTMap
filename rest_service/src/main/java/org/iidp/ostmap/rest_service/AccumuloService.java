@@ -10,6 +10,7 @@ import org.apache.hadoop.io.Text;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.Properties;
 
 class AccumuloService {
@@ -87,18 +88,19 @@ class AccumuloService {
      * @throws AccumuloException
      * @throws TableNotFoundException
      */
-    Scanner getRawDataScannerByRow(String row) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+    Scanner getRawDataScannerByRow(Text row) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
         Authorizations auths = new Authorizations("standard");
         Scanner scan = conn.createScanner(rawTwitterDataTableName, auths);
         scan.fetchColumnFamily(new Text(RAW_DATA_CF));
         scan.setRange(new Range(row));
         IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
-        GrepIterator.setTerm(grepIterSetting, row);
+        GrepIterator.setTerm(grepIterSetting, row.toString());
         scan.addScanIterator(grepIterSetting);
         return scan;
     }
 
+    //TODO: this. prefix?
     Scanner getRawDataScannerByRange(String startRowPrefix, String endRowPrefix) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
         Authorizations auths = new Authorizations("standard");
@@ -109,6 +111,14 @@ class AccumuloService {
         //IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
         //GrepIterator.setTerm(grepIterSetting, row);
         //scan.addScanIterator(grepIterSetting);
+        return scan;
+    }
+
+    BatchScanner getRawDataBatchScanner(List<Range> rangeFilter) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+        Connector conn = getConnector();
+        Authorizations auths = new Authorizations("standard");
+        BatchScanner scan = conn.createBatchScanner(rawTwitterDataTableName, auths,5);
+        scan.setRanges(rangeFilter);
         return scan;
     }
 
