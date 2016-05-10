@@ -35,19 +35,20 @@
         mapInit($scope);
 
         $scope.currentFilters = "";
-        $scope.timeFilter = '1h';
+        $scope.timeFilter = '1';
         $scope.search = [];
-        $scope.search.hashtagFilter = "#";
+        $scope.search.hashtagFilter = "yolo";
         $scope.search.searchFilter = "Default Search Filter";
+        $scope.search.searchFilter = httpService.getSearchToken();
 
         /**
          * Reset all filter values to default or null
          */
         $scope.search.clearFilters = function () {
             // $scope.search.searchFilter = null;
-            $scope.search.searchFilter = "Default Search Filter";
+            $scope.search.searchFilter = "DefaultSearchFilter";
             // $scope.timeFilter = null;
-            $scope.timeFilter = "All";
+            $scope.timeFilter = "0";
             $scope.search.hashtagFilter = "#";
             $scope.center ={
                 lat: 50,
@@ -70,10 +71,25 @@
          */
         $scope.search.updateFilters = function () {
             /**
+             * Pass the filters to the httpService
+             */
+            httpService.setSearchToken($scope.search.searchFilter)
+            httpService.setSearchToken($scope.search.hashtagFilter)
+            httpService.setSearchToken("yolo")
+            httpService.setTimeWindow(parseTimeFilter())
+            httpService.setBoundingBox($scope.getBounds())
+            /**
+             * get the tweets from the REST interface
+             */
+            httpService.getTweetsFromServerByGeoTime()
+            // httpService.getTweetsFromServerByToken()
+            $scope.data.tweets = httpService.getTweets()
+
+            /**
              * Get the tweets from the JSON file
              */
-            httpService.getTweetsFromLocal();
-            $scope.data.tweets = httpService.getTweets()
+            // httpService.getTweetsFromLocal();
+            // $scope.data.tweets = httpService.getTweets()
             /**
              * Call marker population function
              */
@@ -100,7 +116,7 @@
 
             $scope.currentFilters = $scope.search.searchFilter + " | " +
                 $scope.search.hashtagFilter + " | " +
-                $scope.timeFilter + " | " +
+                $scope.timeFilter + "h | " +
                 "[" + $scope.center.lat + ", " + $scope.center.lng + ", " + $scope.center.zoom + "]";
 
             console.log("Filters updated: " + $scope.currentFilters + " | " + $scope.currentBounds)
@@ -196,7 +212,7 @@
                 }
 
                 if($scope.markers[tweet.id] == undefined && tweet.coordinates != null) {
-                   /**
+                    /**
                      * Create new marker then add to marker array
                      * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
@@ -228,6 +244,15 @@
             //     }
             // );
             $scope.currentBounds = $scope.bounds;
+
+            var bounds = {
+                bbnorth: $scope.bounds.northEast.lat,
+                bbwest: $scope.bounds.southWest.lng,
+                bbsouth: $scope.bounds.southWest.lat,
+                bbeast: $scope.bounds.northEast.lng
+            };
+
+            return bounds;
         }
 
         /**
@@ -241,13 +266,27 @@
             });
         }
 
+        /**
+         * Interpret the time filter and return a time window
+         * @returns {number[]}
+         */
+        function parseTimeFilter(){
+            var times = [0, 0]
+            var d = new Date();
+            var n = d.getTime()/1000;
+
+            times[0] = n - (60*60*$scope.timeFilter)
+            times[1] = n
+
+            return times
+        }
 
         /**
          * Run when page is loaded
          */
         $scope.$on('$viewContentLoaded', function() {
             console.log("Page Loaded")
-            $scope.search.updateFilters();
+            // $scope.search.updateFilters();
             $scope.onBounds()
         });
 
@@ -384,11 +423,11 @@
         $scope.events = {
             map: {
                 enable: ['moveend', 'popupopen'],
-                    logic: 'emit'
+                logic: 'emit'
             },
             marker: {
                 enable: [],
-                    logic: 'emit'
+                logic: 'emit'
             }
         }
 
@@ -398,24 +437,24 @@
          * DEPRECATED (for reference only)
          * REPLACED BY ui-leaflet
          */
-         // // initialize the map
-         // var map = L.map('map').setView([51.33843, 12.37866], 17);
-         //
-         // // load a tile layer
-         // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-         // attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-         // }).addTo(map);
-         //
-         // // add markers
-         // L.marker([51.33843, 12.37866]).addTo(map)
-         // .bindPopup('@user: Universität Leipzig! <3<br>' +
-         // '[51.33843, 12.37866]<br>' +
-         // 'Tweet metadata here!')
-         // .openPopup();
-         //
-         // L.marker([51.33948, 12.37637]).addTo(map)
-         // .bindPopup('@user: MGM-TP<br>' +
-         // '[51.33948, 12.37637]<br>' +
-         // 'Tweet metadata here!')
+        // // initialize the map
+        // var map = L.map('map').setView([51.33843, 12.37866], 17);
+        //
+        // // load a tile layer
+        // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        // attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        // }).addTo(map);
+        //
+        // // add markers
+        // L.marker([51.33843, 12.37866]).addTo(map)
+        // .bindPopup('@user: Universität Leipzig! <3<br>' +
+        // '[51.33843, 12.37866]<br>' +
+        // 'Tweet metadata here!')
+        // .openPopup();
+        //
+        // L.marker([51.33948, 12.37637]).addTo(map)
+        // .bindPopup('@user: MGM-TP<br>' +
+        // '[51.33948, 12.37637]<br>' +
+        // 'Tweet metadata here!')
     }
 })();
