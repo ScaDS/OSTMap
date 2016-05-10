@@ -10,6 +10,7 @@ import org.apache.hadoop.io.Text;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -49,7 +50,7 @@ class AccumuloService {
      * @throws AccumuloSecurityException
      * @throws AccumuloException
      */
-    private Connector getConnector() throws AccumuloSecurityException, AccumuloException {
+    Connector getConnector() throws AccumuloSecurityException, AccumuloException {
         // build the accumulo connector
         Instance inst = new ZooKeeperInstance(accumuloInstanceName, accumuloZookeeper);
         Connector conn = inst.getConnector(accumuloUser, new PasswordToken(accumuloPassword));
@@ -81,17 +82,24 @@ class AccumuloService {
 
 
 
-    //TODO: this. prefix?
-    Scanner getRawDataScannerByRange(String startRowPrefix, String endRowPrefix) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+    BatchScanner getRawDataScannerByRange(String startRowPrefix, String endRowPrefix) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
         Authorizations auths = new Authorizations("standard");
-        Scanner scan = conn.createScanner(rawTwitterDataTableName, auths);
-        scan.fetchColumnFamily(new Text(RAW_DATA_CF));
-        //startRowPrefix and endRowpr ... has to convert to byte[]
-        scan.setRange(new Range(startRowPrefix,endRowPrefix));
-        //IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
-        //GrepIterator.setTerm(grepIterSetting, row);
-        //scan.addScanIterator(grepIterSetting);
+        BatchScanner scan = conn.createBatchScanner(rawTwitterDataTableName, auths,5);
+
+        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES );
+        bb.putLong(Long.parseLong(startRowPrefix));
+
+        ByteBuffer bb2 = ByteBuffer.allocate(Long.BYTES); //TODO: make end inclusive again
+        bb2.putLong(Long.parseLong(endRowPrefix));
+
+
+        List<Range> rangeList = new ArrayList<>();
+        Range r = new Range(new Text(bb.array()), new Text(bb2.array()));
+        rangeList.add(r);
+        //System.out.println(r);
+        scan.setRanges(rangeList);
+
         return scan;
     }
 

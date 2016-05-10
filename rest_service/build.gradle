@@ -52,6 +52,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]
 
+    compile 'org.codehaus.jettison:jettison:1.1'
+
     testCompile 'junit:junit'
     testCompile("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'org.slf4j'

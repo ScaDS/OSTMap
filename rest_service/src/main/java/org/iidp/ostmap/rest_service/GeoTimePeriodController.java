@@ -1,15 +1,15 @@
 package org.iidp.ostmap.rest_service;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Scanner;
-import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.codehaus.jettison.json.JSONObject;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -77,21 +77,63 @@ public class GeoTimePeriodController {
         try {
             accumuloService.readConfig(MainController.configFilePath);
 
-            Scanner rawDataScanner = accumuloService.getRawDataScannerByRange(_paramStartTime,_paramEndTime);
-            for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
-                String json = rawDataEntry.getValue().toString();
-                result += json;
-            }
+            result = getResult(accumuloService,_paramStartTime,_paramEndTime,
+                    Double.parseDouble(_paramNorthCoordinate),
+                    Double.parseDouble(_paramEastCoordinate),
+                    Double.parseDouble(_paramSouthCoordinate),
+                    Double.parseDouble(_paramWestCoordinate));
 
         } catch (IOException ioe){
             ioe.printStackTrace();
+        }
+        return result;
+    }
+
+    protected String getResult(AccumuloService accumuloService, String startTime,String endTime,
+                               double north, double east, double south, double west)  {
+        String result = "";
+        BatchScanner rawDataScanner = null;
+        try {
+            rawDataScanner = accumuloService.getRawDataScannerByRange(startTime,endTime);
         } catch (AccumuloSecurityException e) {
-            e.printStackTrace();
-        } catch (TableNotFoundException e) {
             e.printStackTrace();
         } catch (AccumuloException e) {
             e.printStackTrace();
+        } catch (TableNotFoundException e) {
+            e.printStackTrace();
         }
+        for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
+            String json = rawDataEntry.getValue().toString();
+
+            //check if tweet is in box
+            JSONObject obj = null;
+            try {
+                obj = new JSONObject(json);
+                JSONArray coords = obj.getJSONObject("coordinates").getJSONArray("coordinates");
+
+                Double longitude = coords.getDouble(0);
+                Double latitude = coords.getDouble(1);
+
+                //TODO: does this work across meridians?
+                if(west < longitude && longitude < east &&
+                        south < latitude && latitude < north){
+                    result += json;
+                }else{
+                   /* System.out.println("This is should be wrong:");
+                    System.out.println(west + " < " + longitude + " < "+east);
+                    System.out.println(south + " < " + latitude + " < "+north);*/
+                }
+
+
+
+            }catch (JSONException e){
+
+                //e.printStackTrace();
+                //do nothing if tweet has no geotag
+            }
+
+        }
+
         return result;
     }
 
