@@ -1,8 +1,19 @@
 package org.iidp.ostmap.commons.areacalc;
 
 
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.ClientConfiguration;
+import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.security.Authorizations;
+import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
-import org.iidp.ostmap.commons.enums.TableIdentifiers;
+import org.iidp.ostmap.commons.enums.TableIdentifier;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,7 +31,7 @@ public class Calculator {
     private String accumuloPassword;
     public static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
     private String accumuloZookeeper;
-    public static final String inTable = TableIdentifiers.RAW_TWITTER_TABLE.toString();
+    public static final String inTable = TableIdentifier.RAW_TWITTER_TABLE.get();
     private Job job;
 
 
@@ -42,6 +53,23 @@ public class Calculator {
         accumuloZookeeper = props.getProperty(PROPERTY_ZOOKEEPER);
     }
 
-
+    /**
+     * makes accumulo input accessible by flink DataSet api
+     * @param env
+     * @return
+     * @throws IOException
+     * @throws AccumuloSecurityException
+     */
+    private DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
+        job = Job.getInstance(new Configuration(), "converterJob");
+        AccumuloInputFormat.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword));
+        AccumuloInputFormat.setScanAuthorizations(job, new Authorizations("standard"));
+        ClientConfiguration clientConfig = new ClientConfiguration();
+        clientConfig.withInstance(accumuloInstanceName);
+        clientConfig.withZkHosts(accumuloZookeeper);
+        AccumuloInputFormat.setZooKeeperInstance(job, clientConfig);
+        AccumuloInputFormat.setInputTableName(job, inTable);
+        return env.createHadoopInput(new AccumuloInputFormat(),Key.class,Value.class, job);
+    }
 
 }
