@@ -81,28 +81,14 @@ public class TokenSearchController {
     }
 
     public String getResultsFromAccumulo(){
-        String result = "";
         AccumuloService accumuloService = new AccumuloService();
+        String result = null;
         String[] fieldArray = _paramCommaSeparatedFieldList.split(",");
         try {
             accumuloService.readConfig(MainController.configFilePath);
 
-            List<Range> rawKeys = new ArrayList<>();
-            for(String field:fieldArray){
-                // get all results from tokenIndex to the list
-                Scanner termIndexScanner = accumuloService.getTermIdexScanner(_paramToken,field);
-                for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
+            result = getResult(accumuloService, fieldArray,_paramToken);
 
-                    rawKeys.add(new Range(termIndexEntry.getKey().getColumnQualifier()));
-                }
-            }
-
-            BatchScanner bs = accumuloService.getRawDataBatchScanner(rawKeys);
-            for (Map.Entry<Key, Value> rawDataEntry : bs) {
-
-                String json = rawDataEntry.getValue().toString();
-                result += json;
-            }
         } catch (IOException ioe){
             ioe.printStackTrace();
         } catch (AccumuloSecurityException e) {
@@ -112,6 +98,28 @@ public class TokenSearchController {
         } catch (AccumuloException e) {
             e.printStackTrace();
         }
+        return result;
+    }
+
+    protected String getResult(AccumuloService accumuloService, String[] fieldArray, String token) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+        String result = "";
+        List<Range> rawKeys = new ArrayList<>();
+        for(String field:fieldArray){
+            // get all results from tokenIndex to the list
+            Scanner termIndexScanner = accumuloService.getTermIdexScanner(token,field);
+            for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
+
+                rawKeys.add(new Range(termIndexEntry.getKey().getColumnQualifier()));
+            }
+        }
+
+        BatchScanner bs = accumuloService.getRawDataBatchScanner(rawKeys);
+        for (Map.Entry<Key, Value> rawDataEntry : bs) {
+
+            String json = rawDataEntry.getValue().toString();
+            result += json;
+        }
+
         return result;
     }
 

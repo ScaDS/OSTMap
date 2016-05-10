@@ -125,44 +125,11 @@ public class AccumuloServiceTest {
 
         String[] fieldArray = {"user","text"};
         String searchToken = "katze";
-        String result = "";
 
+        TokenSearchController tsc = new TokenSearchController();
 
-        List<Range> rawKeys = new ArrayList<>();
-        for(String field:fieldArray){
-            // get all results from tokenIndex to the list
-            Scanner termIndexScanner = accumuloService.getTermIdexScanner(searchToken,field);
-            for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
+        String result = tsc.getResult(accumuloService, fieldArray,searchToken);
 
-                rawKeys.add(new Range(termIndexEntry.getKey().getColumnQualifier()));
-            }
-        }
-
-        BatchScanner bs = accumuloService.getRawDataBatchScanner(rawKeys);
-        for (Map.Entry<Key, Value> rawDataEntry : bs) {
-
-            String json = rawDataEntry.getValue().toString();
-            result += json;
-        }
-
-
-        /*
-        for(String field:fieldArray){
-            Scanner termIndexScanner = accumuloService.getTermIdexScanner(searchToken,field);
-            for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
-
-
-                Text rawTwitterRowIndex = termIndexEntry.getKey().getColumnQualifier();
-                System.out.println(rawTwitterRowIndex);
-                Scanner rawDataScanner = accumuloService.getRawDataScannerByRow(rawTwitterRowIndex);
-                for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
-
-                    System.out.println("aaaaaaaaaaa");
-                    String json = rawDataEntry.getValue().toString();
-                    result += json;
-                }
-            }
-        }*/
 
         System.out.println(result + " <-> " + tweetKatze);
         assertEquals(tweetKatze,result);

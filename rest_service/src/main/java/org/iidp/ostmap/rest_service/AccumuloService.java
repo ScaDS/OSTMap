@@ -79,26 +79,7 @@ class AccumuloService {
         return scan;
     }
 
-    /**
-     * Creates a scanner for the accumulo term index table.
-     *
-     * @param row the key to search for (12 byte: 8 byte timestamp (seconds since 1970) and 4 byte murmur2_32 hash of tweet)
-     * @return a scanner instance
-     * @throws AccumuloSecurityException
-     * @throws AccumuloException
-     * @throws TableNotFoundException
-     */
-    Scanner getRawDataScannerByRow(Text row) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
-        Connector conn = getConnector();
-        Authorizations auths = new Authorizations("standard");
-        Scanner scan = conn.createScanner(rawTwitterDataTableName, auths);
-        scan.fetchColumnFamily(new Text(RAW_DATA_CF));
-        scan.setRange(new Range(row));
-        IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
-        GrepIterator.setTerm(grepIterSetting, row.toString());
-        scan.addScanIterator(grepIterSetting);
-        return scan;
-    }
+
 
     //TODO: this. prefix?
     Scanner getRawDataScannerByRange(String startRowPrefix, String endRowPrefix) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
