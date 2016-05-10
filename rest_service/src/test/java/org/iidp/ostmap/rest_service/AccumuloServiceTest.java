@@ -19,11 +19,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class AccumuloServiceTest {
 
@@ -145,7 +147,9 @@ public class AccumuloServiceTest {
         ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
         bb.putLong(longTime);
 
-        assertEquals(bb.array(),result);
+        System.out.println("testBuildPrefixFromLong");
+        //assertEquals(bb.array(),result);
+        assertTrue(Arrays.equals(bb.array(),result));
     }
 
     @Test
@@ -158,7 +162,9 @@ public class AccumuloServiceTest {
         ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
         bb.putLong(longTime);
 
-        assertEquals(bb.array(),result);
+        System.out.println("testBuildPrefixFromString");
+        //assertEquals(bb.array(),result);
+        assertTrue(Arrays.equals(bb.array(),result));
     }
 
 
@@ -184,7 +190,7 @@ public class AccumuloServiceTest {
         Mutation m2 = new Mutation("1462787141_AFC");
         m2.put("t", "", tweetKatze);
         Mutation m3 = new Mutation("1462787151_AFC");
-        m2.put("t", "", tweetKatze + tweetHund);
+        m3.put("t", "", tweetKatze + tweetHund);
 
         BatchWriter bw = conn.createBatchWriter("RawTwitterData", new BatchWriterConfig());
         bw.addMutation(m1);
