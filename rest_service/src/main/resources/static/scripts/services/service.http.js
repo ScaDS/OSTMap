@@ -26,13 +26,6 @@
     var _tweets = [];
 
     /**
-     * The URI of the webservice
-     * @type {string}
-     * @private
-     */
-    var _serverUrl = "http://localhost:8080/api";
-
-    /**
      * The bounding box to search in
      * * @param bbnorth the northern latitude for the bounding box to search, e.g. 10.123
      * @param bbwest the western longitude for the bounding box to search, e.g. 30.123
@@ -177,7 +170,7 @@
          */
         function getTokenSearchUrl()
         {
-            return _serverUrl + "/tokensearch?field=" + buildFieldString() + "&token=" + _searchToken;
+            return "/api/tokensearch?field=" + buildFieldString() + "&token=" + _searchToken;
         }
 
         /**
@@ -186,7 +179,7 @@
          */
         function getGeoTemporalSearchUrl()
         {
-            return _serverUrl + "/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth
+            return "/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth
                 + "&bbsouth=" +  _boundingBox.bbsouth
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest

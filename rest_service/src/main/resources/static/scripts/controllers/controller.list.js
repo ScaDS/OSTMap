@@ -47,10 +47,7 @@
             httpService.setSearchToken($scope.search.inputValue);
             httpService.setSearchFields($scope.search.searchFields);
 
-            /**
-             * Get the tweets from the json file
-             */
-            httpService.getTweetsFromLocal();
+            httpService.getTweetsFromServerByToken();
 
             if (mode && mode === 'list') {
 

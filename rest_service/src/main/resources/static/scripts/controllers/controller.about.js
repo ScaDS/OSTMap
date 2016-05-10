@@ -24,7 +24,8 @@
      * @constructor
      */
     function AboutCtrl($scope) {
-        //Nothing to do here ... maybe later
+        $scope.github = [];
+        $scope.github.url = "http://github.com/IIDP/OSTMap"
     }
 
 })();
