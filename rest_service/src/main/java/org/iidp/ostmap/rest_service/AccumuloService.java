@@ -9,6 +9,7 @@ import org.apache.hadoop.io.Text;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Properties;
 
 class AccumuloService {
@@ -103,10 +104,26 @@ class AccumuloService {
         Authorizations auths = new Authorizations("standard");
         Scanner scan = conn.createScanner(rawTwitterDataTableName, auths);
         scan.fetchColumnFamily(new Text(RAW_DATA_CF));
+        //startRowPrefix and endRowpr ... has to convert to byte[]
         scan.setRange(new Range(startRowPrefix,endRowPrefix));
         //IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
         //GrepIterator.setTerm(grepIterSetting, row);
         //scan.addScanIterator(grepIterSetting);
         return scan;
+    }
+
+    static byte[] buildPrefix(String timestamp)
+    {
+        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+        long time = Long.valueOf(timestamp).longValue();
+        bb.putLong(time);
+        return bb.array();
+    }
+
+    static byte[] buildPrefix(long timestamp)
+    {
+        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+        bb.putLong(timestamp);
+        return bb.array();
     }
 }

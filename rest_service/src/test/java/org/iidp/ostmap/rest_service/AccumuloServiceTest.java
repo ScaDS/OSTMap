@@ -18,6 +18,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -135,6 +137,32 @@ public class AccumuloServiceTest {
     }
 
     @Test
+    public void testBuildPrefixFromLong() throws Exception{
+        Date date = new Date();
+        long longTime = date.getTime();
+        byte[] result = AccumuloService.buildPrefix(longTime);
+
+        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+        bb.putLong(longTime);
+
+        assertEquals(bb.array(),result);
+    }
+
+    @Test
+    public void testBuildPrefixFromString() throws Exception{
+        Date date = new Date();
+        long longTime = date.getTime();
+        String longString = Long.toString(longTime);
+        byte[] result = AccumuloService.buildPrefix(longString);
+
+        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+        bb.putLong(longTime);
+
+        assertEquals(bb.array(),result);
+    }
+
+
+    @Test
     public void testAccumuloServiceTimeGeoSearch() throws Exception {
         tmpSettingsDir.create();
         File settings = tmpSettingsDir.newFile("settings");
@@ -153,12 +181,15 @@ public class AccumuloServiceTest {
 
         Mutation m1 = new Mutation("1462787131_AFC");
         m1.put("t", "", tweetHund);
-        Mutation m2 = new Mutation("1462787132_AFC");
+        Mutation m2 = new Mutation("1462787141_AFC");
         m2.put("t", "", tweetKatze);
+        Mutation m3 = new Mutation("1462787151_AFC");
+        m2.put("t", "", tweetKatze + tweetHund);
 
         BatchWriter bw = conn.createBatchWriter("RawTwitterData", new BatchWriterConfig());
         bw.addMutation(m1);
         bw.addMutation(m2);
+        bw.addMutation(m3);
         bw.close();
 
         //create settings file with data of Mini Accumulo Cluster
@@ -176,11 +207,10 @@ public class AccumuloServiceTest {
         fos.flush();
         fos.close();
 
-        //run Token Search
+        //run Timestamp Search
         AccumuloService accumuloService = new AccumuloService();
         System.out.println("settings file path: " + settings.getAbsolutePath());
         accumuloService.readConfig(settings.getAbsolutePath());
-
 
         String result = "";
         String startTime = "14627871";
@@ -195,4 +225,6 @@ public class AccumuloServiceTest {
         System.out.println("Result: " + result);
 
     }
+
+
 }

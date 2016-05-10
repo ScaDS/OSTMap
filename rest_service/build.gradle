@@ -12,6 +12,9 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin:'application'
 
+configurations {
+    all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+}
 
 jar {
     baseName = 'gs-spring-boot'
@@ -36,6 +39,7 @@ sourceCompatibility = 1.8
 
 mainClassName = "org.iidp.ostmap.rest_service.MainController"
 
+
 dependencies {
     compile project(':commons')
     // tag::jetty[]
@@ -57,8 +61,4 @@ dependencies {
         exclude group: 'org.mortbay.jetty', module: 'jetty'
         exclude group: 'org.slf4j', module: 'slf4j-log4j12'
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
 }
