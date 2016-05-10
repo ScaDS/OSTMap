@@ -53,7 +53,7 @@ public class MainController {
 
         try(BufferedReader br = new BufferedReader(new InputStreamReader(classloader.getResourceAsStream("example-response.json")))) {
             for(String line; (line = br.readLine()) != null; ) {
-                result += line ;
+                result += line;
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
