@@ -223,7 +223,7 @@
                         focus: false,
                         draggable: false,
                         message: tweet.text,
-                        icon: $scope.icons.smallerDefault
+                        icon: $scope.icons.red
                     }
                     // $scope.markers.push(newMarker)
                     // $scope.markers.push(tweet.id + ": " +  newMarker)
@@ -275,8 +275,8 @@
             var d = new Date();
             var n = d.getTime()/1000;
 
-            times[0] = n - (60*60*$scope.timeFilter)
-            times[1] = n
+            times[0] = Math.round(n - (60*60*$scope.timeFilter))
+            times[1] = Math.round(n)
 
             return times
         }
