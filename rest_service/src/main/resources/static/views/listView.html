@@ -17,7 +17,8 @@
 </div>
 
 <div class="input-group">
-    <input ng-model="search.inputValue" ng-model-options="{ getterSetter: true }" type="text" class="form-control" placeholder="Search for...">
+    <input ng-model="search.inputValue" ng-model-options="{ getterSetter: true }" type="text" class="form-control" placeholder="Search for..."
+           ng-keyup="$event.keyCode == 13 && (search.searchFields.text.checked || search.searchFields.user.checked) && search.onClick('list')">
     <div class="input-group-btn">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false" ng-disabled="!search.searchFields.text.checked && !search.searchFields.user.checked">
