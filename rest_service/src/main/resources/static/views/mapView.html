@@ -10,10 +10,12 @@
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'24'">1d</label>
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'0'">All</label>
         </div>
-        <button class="btn btn-primary btn-lg" ng-click="search.clearFilters()">Reset</button>
-        <!--<button class="btn btn-primary btn-lg" ng-disabled=false ng-click="search.updateFilters()">[DEBUG] Refresh</button>-->
+        <button class="btn btn-primary btn-lg" ng-click="search.clearFilters()" >Reset</button>
         <!--<button class="btn btn-primary btn-lg" ng-disabled="clickOnce" ng-click="onBounds(); clickOnce = true; search.clearFilters()">[DEBUG] Start bounds event handler</button>-->
-        <!--<button class="btn btn-primary btn-lg" ng-disabled=false ng-click="populateMarkers()">[DEBUG] Populate Markers</button>-->
+        <div class="btn-group ">
+            <label class="btn btn-danger btn-lg" ng-model="autoUpdateDisabled" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false>Disable AutoUpdate</label>
+            <label class="btn btn-danger btn-lg" ng-disabled="!autoUpdateDisabled" ng-click="search.updateFilters()">Manual Update</label>
+        </div>
 
         <label class="" style="margin-left: 10px">Current Filters: {{currentFilters}}</label>
     </div>
@@ -41,11 +43,12 @@
         </div>
     </div>
 
-    <div class="row alert alert-danger" uib-collapse="clickOnce" role="alert">
+    <div class="row alert alert-danger" uib-collapse="clickOnce=false" role="alert">
         <strong>[DEBUG]</strong>
         <button class="btn btn-danger btn-sm" ng-click="clickOnce = true;">Hide</button>
         <br>
         <code>
+            autoUpdateDisable: {{autoUpdateDisabled}}<br>
             TweetID: {{currentMarkerID}}<br>
             {{currentBounds}}<br>
             Maxbounds:

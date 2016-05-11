@@ -34,6 +34,8 @@
     function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData) {
         mapInit($scope);
 
+        $scope.autoUpdateDisabled = true;
+
         $scope.currentFilters = "";
         $scope.timeFilter = 1;
         $scope.search = [];
@@ -81,9 +83,9 @@
             /**
              * get the tweets from the REST interface
              */
-            httpService.getTweetsFromServerByGeoTime();  //Get by GeoTime
+            // httpService.getTweetsFromServerByGeoTime();  //Get by GeoTime
             // httpService.getTweetsFromServerTest();       //Get using test REST API
-            // httpService.getTweetsFromLocal();            //Get from local (debug)
+            httpService.getTweetsFromLocal();            //Get from local (debug)
 
             // httpService.getTweetsFromServerByToken();    //Get by Token
 
@@ -227,7 +229,6 @@
             });
         };
 
-
         $scope.currentBounds = null;
         $scope.runOnce = false;
 
@@ -296,7 +297,12 @@
             leafletData.getMap("map").then(function(map) {
                 map.on('moveend', function() {
                     $scope.currentBounds = map.getBounds();
-                    $scope.search.updateFilters();
+                    if($scope.autoUpdateDisabled) {
+                        console.log("Data watcher triggered, autoUpdateDisabled: no action taken");
+                    } else {
+                        console.log("Data watcher triggered, populating markers");
+                        $scope.search.updateFilters();
+                    }
                 });
                 console.log("Mapbounds watcher started");
 
@@ -415,26 +421,6 @@
          * Test markers
          * @type {*[]}
          */
-        // $scope.markers = [
-        //     {
-        //         id: 1,
-        //         lat: 51.33843,
-        //         lng: 12.37866,
-        //         focus: true,
-        //         draggable: false,
-        //         message: "Test Marker 1",
-        //         icon: $scope.icons.smallerDefault
-        //     },
-        //     {
-        //         id: 2,
-        //         lat: 51.33948,
-        //         lng: 12.37637,
-        //         focus: false,
-        //         draggable: false,
-        //         message: "Test Marker 2",
-        //         icon: $scope.icons.blue
-        //     }
-        // ];
         $scope.markers = {
             // 1: {
             //     id: 1,
@@ -455,6 +441,10 @@
             //     icon: $scope.icons.blue
             // }
         };
+        /**
+         * Variable used to track the selected marker
+         * @type {number}
+         */
         $scope.currentMarkerID = 0;
 
         /**
