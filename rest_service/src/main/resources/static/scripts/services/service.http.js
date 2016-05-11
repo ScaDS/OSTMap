@@ -255,7 +255,7 @@
         function _setTimeWindow(times){
             _timePeriod = {
                 tstart: times[0],
-                tend: times[0]
+                tend: times[1]
             };
         }
     }

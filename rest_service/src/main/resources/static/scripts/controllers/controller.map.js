@@ -35,7 +35,7 @@
         mapInit($scope);
 
         $scope.currentFilters = "";
-        $scope.timeFilter = '1';
+        $scope.timeFilter = 1;
         $scope.search = [];
         $scope.search.hashtagFilter = "#";
         // $scope.search.searchFilter = "Default Search Filter";
@@ -314,10 +314,13 @@
             var d = new Date();
             var n = d.getTime()/1000; //milliseconds to seconds
 
+            var hours = $scope.timeFilter;
+            var offset = 60*60*hours;
+
             if ($scope.timeFilter == 0) {
                 times[0] = 0;
             } else {
-                times[0] = Math.round(n - (60*60*$scope.timeFilter));
+                times[0] = Math.round(n - offset);
             }
             times[1] = Math.round(n);
 
