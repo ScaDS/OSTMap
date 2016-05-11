@@ -175,7 +175,8 @@
          */
         function getTokenSearchUrl()
         {
-            return "/api/tokensearch?field=" + buildFieldString() + "&token=" + _searchToken;
+            var url = "/api/tokensearch?field=" + buildFieldString() + "&token=" + _searchToken;
+            return encodeURI(url);
         }
 
         /**
@@ -184,13 +185,13 @@
          */
         function getGeoTemporalSearchUrl()
         {
-            return "/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth
-            // return "http://localhost:8080/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth  //for debugging
+            var url = "/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth
                 + "&bbsouth=" +  _boundingBox.bbsouth
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
                 + "&tstart=" + _timePeriod.tstart
                 + "&tend=" + _timePeriod.tend;
+            return encodeURI(url);
         }
 
         /**
@@ -255,7 +256,7 @@
         function _setTimeWindow(times){
             _timePeriod = {
                 tstart: times[0],
-                tend: times[0]
+                tend: times[1]
             };
         }
     }

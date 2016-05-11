@@ -12,6 +12,8 @@ import org.apache.accumulo.core.data.Value;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,8 +42,13 @@ public class TokenSearchController {
             @RequestParam(name = "field") String paramCommaSeparatedFieldList,
             @RequestParam(name = "token") String paramToken
             ) {
-        _paramCommaSeparatedFieldList = paramCommaSeparatedFieldList;
-        _paramToken = paramToken;
+        try {
+            _paramCommaSeparatedFieldList = URLDecoder.decode(paramCommaSeparatedFieldList, "UTF-8");
+            _paramToken = URLDecoder.decode(paramToken, "UTF-8").toLowerCase();
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException();
+        }
+
 
         String resultList = "";
         if(validateQueryParams())
@@ -102,7 +109,7 @@ public class TokenSearchController {
     }
 
     protected String getResult(AccumuloService accumuloService, String[] fieldArray, String token) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
-        String result = "";
+        String result = "[";
         List<Range> rawKeys = new ArrayList<>();
         for(String field:fieldArray){
             // get all results from tokenIndex to the list
@@ -113,14 +120,22 @@ public class TokenSearchController {
             }
         }
 
+        boolean isFirst = true;
         BatchScanner bs = accumuloService.getRawDataBatchScanner(rawKeys);
         for (Map.Entry<Key, Value> rawDataEntry : bs) {
 
+            if(!isFirst){
+                result += ",";
+            }else{
+
+                isFirst=false;
+            }
             String json = rawDataEntry.getValue().toString();
             result += json;
+
         }
 
-        return result;
+        return result + "]";
     }
 
     @ExceptionHandler

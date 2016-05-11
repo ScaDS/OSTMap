@@ -35,7 +35,7 @@
         mapInit($scope);
 
         $scope.currentFilters = "";
-        $scope.timeFilter = '1';
+        $scope.timeFilter = 1;
         $scope.search = [];
         $scope.search.hashtagFilter = "#";
         // $scope.search.searchFilter = "Default Search Filter";
@@ -292,7 +292,7 @@
             else {west = $scope.currentBounds._southWest.lng}
 
             if ($scope.currentBounds._southWest.lat < -90) {south = -90}
-            else {south = $scope.currentBounds._northEast.lat}
+            else {south = $scope.currentBounds._southWest.lat}
 
             if ($scope.currentBounds._northEast.lng > 180) {east = 180}
             else {east = $scope.currentBounds._northEast.lng}
@@ -314,7 +314,14 @@
             var d = new Date();
             var n = d.getTime()/1000; //milliseconds to seconds
 
-            times[0] = Math.round(n - (60*60*$scope.timeFilter));
+            var hours = $scope.timeFilter;
+            var offset = 60*60*hours;
+
+            if ($scope.timeFilter == 0) {
+                times[0] = 0;
+            } else {
+                times[0] = Math.round(n - offset);
+            }
             times[1] = Math.round(n);
 
             return times;
