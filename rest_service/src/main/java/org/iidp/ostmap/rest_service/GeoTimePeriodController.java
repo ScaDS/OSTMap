@@ -70,6 +70,49 @@ public class GeoTimePeriodController {
         return resultList;
     }
 
+    /**
+     * Mapping method for path /testgeo
+     * @param paramNorthCoordinate
+     * @param paramEastCoordinate
+     * @param paramSouthCoordinate
+     * @param paramWestCoordinate
+     * @param paramStartTime
+     * @param paramEndTime
+     * @return a json response
+     */
+    @RequestMapping(
+            value = "/testgeo",
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
+    )
+    @ResponseBody
+    String getTweetsByGeoAndTimeToTest(
+            @RequestParam(name = "bbnorth") String paramNorthCoordinate,
+            @RequestParam(name = "bbeast")  String paramEastCoordinate,
+            @RequestParam(name = "bbsouth") String paramSouthCoordinate,
+            @RequestParam(name = "bbwest")  String paramWestCoordinate,
+            @RequestParam(name = "tstart")  String paramStartTime,
+            @RequestParam(name = "tend")    String paramEndTime
+    ) {
+        _paramNorthCoordinate = paramNorthCoordinate;
+        _paramEastCoordinate = paramEastCoordinate;
+        _paramSouthCoordinate = paramSouthCoordinate;
+        _paramWestCoordinate = paramWestCoordinate;
+        _paramStartTime = paramStartTime;
+        _paramEndTime = paramEndTime;
+
+        String resultList = "";
+
+        if(validateQueryParams())
+        {
+            resultList = MainController.getTestTweets();
+        }else{
+            throw new IllegalArgumentException();
+        }
+
+        return resultList;
+    }
+
     public String getResultsFromAccumulo(){
         String result = "";
         AccumuloService accumuloService = new AccumuloService();
