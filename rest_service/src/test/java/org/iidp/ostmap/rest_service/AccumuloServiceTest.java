@@ -162,8 +162,8 @@ public class AccumuloServiceTest {
         String result = tsc.getResult(accumuloService, fieldArray,searchToken);
 
 
-        System.out.println(result + " <-> " + tweetKatze);
-        assertEquals(tweetKatze,result);
+        System.out.println(result + " <-> " + "["+tweetKatze+"]");
+        assertEquals("["+tweetKatze+"]",result);
     }
 
     @Test
@@ -207,19 +207,19 @@ public class AccumuloServiceTest {
          String result = gtpc.getResult(accumuloService,(new Long(12300).toString()),(new Long(12399).toString()),42,30,28,28);
          System.out.println("GeoTimeResult: " + result);
          System.out.println("------");
-         assertTrue(result.length() > 0);
+         assertTrue(result.length() > 2);
 
          //should not be in time range
          result = gtpc.getResult(accumuloService,(new Long(12399).toString()),(new Long(12400).toString()),42,30,28,28);
          System.out.println("GeoTimeResult: " + result);
          System.out.println("------");
-         assertTrue(result.length() == 0);
+         assertTrue(result.length() == 2);
 
          //should not be in window
          result = gtpc.getResult(accumuloService,(new Long(12300).toString()),(new Long(12399).toString()),30,45,29,44);
          System.out.println("GeoTimeResult: " + result);
          System.out.println("------");
-         assertTrue(result.length() == 0);
+         assertTrue(result.length() == 2);
 
 /*
          String result = gtpc.getResult(accumuloService,(new Long(12300).toString()),(new Long(12399).toString()));

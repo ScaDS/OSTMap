@@ -91,7 +91,7 @@ public class GeoTimePeriodController {
 
     protected String getResult(AccumuloService accumuloService, String startTime,String endTime,
                                double north, double east, double south, double west)  {
-        String result = "";
+        String result = "[";
         BatchScanner rawDataScanner = null;
         try {
             rawDataScanner = accumuloService.getRawDataScannerByRange(startTime,endTime);
@@ -102,6 +102,9 @@ public class GeoTimePeriodController {
         } catch (TableNotFoundException e) {
             e.printStackTrace();
         }
+
+        boolean isFirst = true;
+
         for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
             String json = rawDataEntry.getValue().toString();
 
@@ -117,7 +120,17 @@ public class GeoTimePeriodController {
                 //TODO: does this work across meridians?
                 if(west < longitude && longitude < east &&
                         south < latitude && latitude < north){
+
+                    if(!isFirst){
+                        result += ",";
+                    }else{
+
+                        isFirst=false;
+                    }
+
                     result += json;
+
+
                 }else{
                    /* System.out.println("This is should be wrong:");
                     System.out.println(west + " < " + longitude + " < "+east);
@@ -134,7 +147,7 @@ public class GeoTimePeriodController {
 
         }
 
-        return result;
+        return result + "]";
     }
 
     /**
