@@ -119,6 +119,7 @@ public class TokenSearchController {
 
             if(!isFirst){
                 result += ",";
+                isFirst=false;
             }
             String json = rawDataEntry.getValue().toString();
             result += json;
