@@ -53,7 +53,7 @@
 
     /**
      * The possible search fields as array
-     * @type {*[]}
+     * @type {{text: {checked: boolean}, user: {checked: boolean}}}
      * @private
      */
     var _searchFields =
@@ -87,6 +87,7 @@
             setBoundingBox: _setBoundingBox,
             getTimeWindow: _getTimeWindow,
             setTimeWindow: _setTimeWindow,
+            getTweetsFromServerTest: _getTweetsFromServerTest
         };
 
         function _getTweetsFromServerByToken() {
@@ -101,6 +102,23 @@
 
         function _getTweetsFromServerByGeoTime() {
             var url = getGeoTemporalSearchUrl();
+            $http.get(url).success(function (data, status, headers, config) {
+                //Copy result data to the private array
+                angular.copy(data,_tweets);
+                console.log("HTTP response received")
+            }).error(function (data, status, headers, config) {
+                //TODO: Log the errors
+            });
+        }
+        
+        function _getTweetsFromServerTest() {
+            var url = "http://localhost:8080/api/testgeo?bbnorth=" + _boundingBox.bbnorth  //for debugging
+                + "&bbsouth=" +  _boundingBox.bbsouth
+                + "&bbeast=" +  _boundingBox.bbeast
+                + "&bbwest=" +  _boundingBox.bbwest
+                + "&tstart=" + _timePeriod.tstart
+                + "&tend=" + _timePeriod.tend;
+            
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
@@ -220,11 +238,8 @@
 
         /**
          * Setter for _boundingBox
-         * @param north
-         * @param west
-         * @param south
-         * @param east
          * @private
+         * @param bounds
          */
         // function _setBoundingBox(north, west, south, east){
         //     _boundingBox = {
@@ -249,9 +264,8 @@
 
         /**
          * Setter for _timePeriod
-         * @param start
-         * @param end
          * @private
+         * @param times
          */
         function _setTimeWindow(times){
             _timePeriod = {

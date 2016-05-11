@@ -67,6 +67,7 @@
         <!-- Table -->
         <table class="table table-hover tabled-striped table-condensed table-responsive">
             <caption>{{data.tweets.length}} Tweets</caption>
+            <uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true"></uib-pagination>
             <tr ng-repeat="tweet in data.tweets" ng-click="search.goToTweet(tweet.id, tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0])">
                 <td>
                     <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">
@@ -80,6 +81,5 @@
                 </td>
             </tr>
         </table>
-        <!--<uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true"></uib-pagination>-->
     </div>
 </div>
