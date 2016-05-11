@@ -292,7 +292,7 @@
             else {west = $scope.currentBounds._southWest.lng}
 
             if ($scope.currentBounds._southWest.lat < -90) {south = -90}
-            else {south = $scope.currentBounds._northEast.lat}
+            else {south = $scope.currentBounds._southWest.lat}
 
             if ($scope.currentBounds._northEast.lng > 180) {east = 180}
             else {east = $scope.currentBounds._northEast.lng}
