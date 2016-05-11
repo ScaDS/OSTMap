@@ -28,11 +28,14 @@
                 <li role="menuitem" ng-click="dataSource = 'static'"><a>Static Test Data (example.json)</a></li>
             </ul>
         </div>
-
         <label class="" style="margin-left: 10px">Current Filters: {{currentFilters}}</label>
     </div>
 
-    <br>
+    <div id="loading">
+        <uib-alert class="row alert" type="danger" role="alert">
+            Status: Loading
+        </uib-alert>
+    </div>
 
     <div class="row">
         <div class="col-xs-12 col-md-8">
@@ -45,9 +48,9 @@
                 <!-- Table -->
                 <table class="table table-hover tabled-striped">
                     <caption>Top 10 Hashtags</caption>
-                    <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.setHashtagFilter(tweet.user.name)">
+                    <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.setHashtagFilter(tweet.user.screen_name)">
                         <td>
-                            <p>#{{tweet.user.name}}</p>
+                            <p>#{{tweet.user.screen_name}}</p>
                         </td>
                     </tr>
                 </table>
@@ -98,6 +101,5 @@
                 </td>
             </tr>
         </table>
-        <!--<uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true"></uib-pagination>-->
     </div>
 </div>

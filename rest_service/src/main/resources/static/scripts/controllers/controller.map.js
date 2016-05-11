@@ -34,9 +34,10 @@
     function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData) {
         mapInit($scope);
 
+        document.getElementById("loading").style.visibility = "hidden";
+
         $scope.autoUpdateDisabled = true;
         $scope.dataSource = "accumulo";
-
 
         $scope.currentFilters = "";
         $scope.timeFilter = 0.25;
@@ -62,14 +63,17 @@
 
             $scope.search.updateFilters();
         };
+
         /**
          * Set the hashtag filter by clicking on a top10 hashtag then call a filter update
          * @param hashtag
          */
         $scope.search.setHashtagFilter = function (hashtag) {
             $scope.search.hashtagFilter = "#" + hashtag;
+            $scope.search.searchFilter = hashtag;
             $scope.search.updateFilters();
         };
+
         /**
          * Update filters
          */
@@ -78,7 +82,6 @@
              * Pass the filters to the httpService
              */
             httpService.setSearchToken($scope.search.searchFilter);
-            // httpService.setSearchToken($scope.search.hashtagFilter);
             // httpService.setSearchToken("yolo");
             httpService.setTimeWindow(parseTimeFilter());
             httpService.setBoundingBox($scope.getBounds());
@@ -96,14 +99,6 @@
             }
 
             /**
-             * Call marker population function
-             */
-            // $scope.populateMarkers();
-            /**
-             * Update current map boundaries
-             */
-            // $scope.getBounds();
-            /**
              * Update the filter display
              * Check for null values, replace with Default
              *
@@ -118,7 +113,9 @@
                 ", " + httpService.getBoundingBox().bbeast.toFixed(2) + "]";
 
             console.log("Filters updated: " + $scope.currentFilters + " | " + $scope.bounds);
+
         };
+
         /**
          * Move the map center to the coordinates of the clicked tweet
          *
@@ -200,7 +197,7 @@
             /**
              * Reset all markers
              */
-            // $scope.markers = {}
+            $scope.markers = {}
 
             /**
              * Iterate through tweets
@@ -225,7 +222,7 @@
                         lng: tweet.coordinates.coordinates[0],
                         focus: false,
                         draggable: false,
-                        message: tweet.text,
+                        message: "@" + tweet.user.screen_name + ": " + tweet.text,
                         icon: $scope.icons.red
                     };
                     // $scope.markers.push(newMarker)
@@ -236,7 +233,6 @@
         };
 
         $scope.currentBounds = null;
-        $scope.runOnce = false;
 
         /**
          * Return bounds as object.
@@ -285,7 +281,6 @@
             }
             times[1] = Math.round(currentTime);
 
-            console.log(times)
             return times;
         }
 
@@ -430,7 +425,7 @@
          */
         $scope.markers = {
             // 1: {
-            //     id: 1,
+            //     id: 0,
             //     lat: 51.33843,
             //     lng: 12.37866,
             //     focus: true,
@@ -439,7 +434,7 @@
             //     icon: $scope.icons.smallerDefault
             // },
             // 2: {
-            //     id: 2,
+            //     id: 1,
             //     lat: 51.33948,
             //     lng: 12.37637,
             //     focus: false,
@@ -471,31 +466,5 @@
                 logic: 'emit'
             }
         };
-
-        /**
-         * Initialization for leaflet.js
-         *
-         * DEPRECATED (for reference only)
-         * REPLACED BY ui-leaflet
-         */
-        // // initialize the map
-        // var map = L.map('map').setView([51.33843, 12.37866], 17);
-        //
-        // // load a tile layer
-        // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        // attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        // }).addTo(map);
-        //
-        // // add markers
-        // L.marker([51.33843, 12.37866]).addTo(map)
-        // .bindPopup('@user: Universität Leipzig! <3<br>' +
-        // '[51.33843, 12.37866]<br>' +
-        // 'Tweet metadata here!')
-        // .openPopup();
-        //
-        // L.marker([51.33948, 12.37637]).addTo(map)
-        // .bindPopup('@user: MGM-TP<br>' +
-        // '[51.33948, 12.37637]<br>' +
-        // 'Tweet metadata here!')
     }
 })();
