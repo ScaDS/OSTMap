@@ -314,7 +314,11 @@
             var d = new Date();
             var n = d.getTime()/1000; //milliseconds to seconds
 
-            times[0] = Math.round(n - (60*60*$scope.timeFilter));
+            if ($scope.timeFilter == 0) {
+                times[0] = 0;
+            } else {
+                times[0] = Math.round(n - (60*60*$scope.timeFilter));
+            }
             times[1] = Math.round(n);
 
             return times;
