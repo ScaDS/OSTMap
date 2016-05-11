@@ -116,7 +116,7 @@
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
                 + "&tstart=" + _timePeriod.tstart
-                + "&tend=" + _timePeriod.tend;;
+                + "&tend=" + _timePeriod.tend;
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
@@ -258,7 +258,7 @@
         function _setTimeWindow(times){
             _timePeriod = {
                 tstart: times[0],
-                tend: times[0]
+                tend: times[1]
             };
         }
     }
