@@ -36,6 +36,8 @@
         $scope.search.searchFields = httpService.getSearchFields();
         console.log();
 
+        $scope.dataSource = "accumulo";
+        document.getElementById("loading").style.visibility = "hidden";
 
         /**
          * Get the tweets array from the httpService
@@ -47,7 +49,17 @@
             httpService.setSearchToken($scope.search.inputValue);
             httpService.setSearchFields($scope.search.searchFields);
 
-            httpService.getTweetsFromServerByToken();
+
+            if ($scope.dataSource == "accumulo") {
+                httpService.getTweetsFromServerByToken();    //Get by Token
+            } else if ($scope.dataSource == "restTest") {
+                httpService.getTweetsFromServerTest();       //Get using test REST API
+            } else if ($scope.dataSource == "static") {
+                httpService.getTweetsFromLocal();            //Get from local (debug)
+            } else {
+                httpService.getTweetsFromServerByToken();    //Get by Token
+            }
+            // httpService.getTweetsFromServerByToken();
 
             if (mode && mode === 'list') {
 

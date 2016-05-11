@@ -8,11 +8,12 @@
     width: 100%;
 }
 
-.indent-1 {
-    float: left;
-}
-.indent-1 section {
-    float: left;
+.loading{
+    position: relative;
+    width: 90%;
+    z-index: 1000;
+    margin-top: -30px;
+    margin-bottom: -30px;
 }
 
 .bottom-bar{

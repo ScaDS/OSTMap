@@ -28,11 +28,15 @@
                 <li role="menuitem" ng-click="dataSource = 'static'"><a>Static Test Data (example.json)</a></li>
             </ul>
         </div>
+        <br>
+        <br>
         <label class="" style="margin-left: 10px">Current Filters: {{currentFilters}}</label>
+        <br>
+        <br>
     </div>
 
-    <div id="loading">
-        <uib-alert class="row alert" type="danger" role="alert">
+    <div class="loading" id="loading">
+        <uib-alert class="alert" type="danger" role="alert">
             Status: Loading
         </uib-alert>
     </div>
