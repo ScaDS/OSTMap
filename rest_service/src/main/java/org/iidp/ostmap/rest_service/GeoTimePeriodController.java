@@ -139,7 +139,7 @@ public class GeoTimePeriodController {
 
             }catch (JSONException e){
 
-                e.printStackTrace();
+                //e.printStackTrace();
                 //do nothing if tweet has no geotag
             }
         }
