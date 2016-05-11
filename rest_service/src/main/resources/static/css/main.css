@@ -5,13 +5,7 @@
 
 .map{
     height: 520px;
-    width: 600px;
-}
-
-.top10{
-    margin-left: 30px;
-    width: 300px;
-
+    width: 100%;
 }
 
 .indent-1 {
@@ -28,12 +22,12 @@
 
 .red {
     border-radius: 120px;
-    opacity: .75;
+    opacity: .50;
     background-color: #FF0000;
 }
 
 .blue {
     border-radius: 120px;
-    opacity: .75;
+    opacity: .50;
     background-color: #0000FF;
 }
