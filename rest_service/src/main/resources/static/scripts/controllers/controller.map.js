@@ -35,7 +35,7 @@
         mapInit($scope);
 
         $scope.currentFilters = "";
-        $scope.timeFilter = '1';
+        $scope.timeFilter = 1;
         $scope.search = [];
         $scope.search.hashtagFilter = "#";
         // $scope.search.searchFilter = "Default Search Filter";
@@ -78,50 +78,29 @@
             // httpService.setSearchToken("yolo");
             httpService.setTimeWindow(parseTimeFilter());
             httpService.setBoundingBox($scope.getBounds());
-            // $scope.getBounds().then(function(bounds) {
-            //     httpService.setBoundingBox(bounds);
-            // });
             /**
              * get the tweets from the REST interface
              */
-            // httpService.getTweetsFromServerByGeoTime().then(function(result) {
-            //     $scope.populateMarkers();
-            //     console.log(new Date().getTime() + ": Response: " + result);
-            // });
-            httpService.getTweetsFromServerByGeoTime();
-            // httpService.getTweetsFromServerByToken();
-            // $scope.data.tweets = httpService.getTweets();
+            httpService.getTweetsFromServerByGeoTime();  //Get by GeoTime
+            // httpService.getTweetsFromServerTest();       //Get using test REST API
+            // httpService.getTweetsFromLocal();            //Get from local (debug)
 
-            /**
-             * Get the tweets from the JSON file
-             */
-            // httpService.getTweetsFromLocal();
-            // $scope.data.tweets = httpService.getTweets();
+            // httpService.getTweetsFromServerByToken();    //Get by Token
+
             /**
              * Call marker population function
              */
             // $scope.populateMarkers();
-
             /**
              * Update current map boundaries
              */
             // $scope.getBounds();
-
             /**
              * Update the filter display
              * Check for null values, replace with Default
              *
              * @type {string}
              */
-            // var searchFilter = "None";
-            // var timeFilter = "None";
-            // if ($scope.search.searchFilter != null) {
-            //     searchFilter = $scope.search.searchFilter;
-            // }
-            // if ($scope.timeFilter != null) {
-            //     timeFilter = $scope.timeFilter;
-            // }
-
             $scope.currentFilters = $scope.search.searchFilter + " | " +
                 $scope.search.hashtagFilter + " | " +
                 $scope.timeFilter + "h | " +
@@ -170,7 +149,9 @@
                  * Give focus to selected tweet
                  * Makes the text label visible
                  */
-                $scope.markers[$scope.currentMarkerID].focus = false;
+                if ($scope.currentMarkerID != 0) {
+                    $scope.markers[$scope.currentMarkerID].focus = false;
+                }
                 $scope.currentMarkerID = id;
 
                 if ($scope.markers[id] != null) {
@@ -256,33 +237,6 @@
          * @returns {{bbnorth: *, bbwest: *, bbsouth: *, bbeast: *}}
          */
         $scope.getBounds = function () {
-            // leafletData.getMap("map").then(
-            //     function(map) {
-            //         $scope.currentBounds = map.getBounds();
-            //
-            //         var bounds = {
-            //             bbnorth: $scope.currentBounds._northEast.lat,
-            //             bbwest: $scope.currentBounds._southWest.lng,
-            //             bbsouth: $scope.currentBounds._southWest.lat,
-            //             bbeast: $scope.currentBounds._northEast.lng
-            //         };
-            //         return bounds;
-            //         console.log("using leafletdata")
-            //         $scope.runOnce = true;
-            //     }
-            // );
-
-            // if (!runOnce) {
-            //     var bounds = {
-            //         bbnorth: $scope.bounds.northEast.lat,
-            //         bbwest: $scope.bounds.southWest.lng,
-            //         bbsouth: $scope.bounds.southWest.lat,
-            //         bbeast: $scope.bounds.northEast.lng
-            //     };
-            //     console.log("using otherdata")
-            //     return bounds;
-            // }
-
             var north, west, south, east;
 
             if ($scope.currentBounds._northEast.lat > 90) {north = 90}
@@ -292,7 +246,7 @@
             else {west = $scope.currentBounds._southWest.lng}
 
             if ($scope.currentBounds._southWest.lat < -90) {south = -90}
-            else {south = $scope.currentBounds._northEast.lat}
+            else {south = $scope.currentBounds._southWest.lat}
 
             if ($scope.currentBounds._northEast.lng > 180) {east = 180}
             else {east = $scope.currentBounds._northEast.lng}
@@ -311,11 +265,18 @@
          */
         function parseTimeFilter(){
             var times = [0, 0];
-            var d = new Date();
-            var n = d.getTime()/1000; //milliseconds to seconds
+            var date = new Date();
+            var currentTime = date.getTime()/1000; //milliseconds to seconds
 
-            times[0] = Math.round(n - (60*60*$scope.timeFilter));
-            times[1] = Math.round(n);
+            var hours = $scope.timeFilter;
+            var offset = 60*60*hours;
+
+            if ($scope.timeFilter == 0) {
+                times[0] = 0;
+            } else {
+                times[0] = Math.round(currentTime - offset);
+            }
+            times[1] = Math.round(currentTime);
 
             return times;
         }
@@ -367,17 +328,17 @@
          * Pagination
          * https://angular-ui.github.io/bootstrap/#/pagination
          */
-        // $scope.totalItems = 64;
-        // $scope.currentPage = 4;
-        // $scope.setPage = function (pageNo) {
-        //     $scope.currentPage = pageNo;
-        // };
-        // $scope.pageChanged = function() {
-        //     $log.log('Page changed to: ' + $scope.currentPage);
-        // };
-        // $scope.maxSize = 5;
-        // $scope.bigTotalItems = 175;
-        // $scope.bigCurrentPage = 1;
+        $scope.totalItems = 64;
+        $scope.currentPage = 4;
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.pageChanged = function() {
+            $log.log('Page changed to: ' + $scope.currentPage);
+        };
+        $scope.maxSize = 5;
+        $scope.bigTotalItems = 175;
+        $scope.bigCurrentPage = 1;
     }
 
     /**
@@ -475,26 +436,26 @@
         //     }
         // ];
         $scope.markers = {
-            1: {
-                id: 1,
-                lat: 51.33843,
-                lng: 12.37866,
-                focus: true,
-                draggable: false,
-                message: "Test Marker 1",
-                icon: $scope.icons.smallerDefault
-            },
-            2: {
-                id: 2,
-                lat: 51.33948,
-                lng: 12.37637,
-                focus: false,
-                draggable: false,
-                message: "Test Marker 2",
-                icon: $scope.icons.blue
-            }
+            // 1: {
+            //     id: 1,
+            //     lat: 51.33843,
+            //     lng: 12.37866,
+            //     focus: true,
+            //     draggable: false,
+            //     message: "Test Marker 1",
+            //     icon: $scope.icons.smallerDefault
+            // },
+            // 2: {
+            //     id: 2,
+            //     lat: 51.33948,
+            //     lng: 12.37637,
+            //     focus: false,
+            //     draggable: false,
+            //     message: "Test Marker 2",
+            //     icon: $scope.icons.blue
+            // }
         };
-        $scope.currentMarkerID = 1;
+        $scope.currentMarkerID = 0;
 
         /**
          * Map event functions for future extensibility (Marker Clustering)
