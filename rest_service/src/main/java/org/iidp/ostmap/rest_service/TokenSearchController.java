@@ -118,6 +118,7 @@ public class TokenSearchController {
 
                 rawKeys.add(new Range(termIndexEntry.getKey().getColumnQualifier()));
             }
+            termIndexScanner.close();
         }
 
         boolean isFirst = true;
@@ -134,6 +135,7 @@ public class TokenSearchController {
             result += json;
 
         }
+        bs.close();
 
         return result + "]";
     }
