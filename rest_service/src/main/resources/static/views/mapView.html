@@ -11,10 +11,20 @@
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'0'">All</label>
         </div>
         <button class="btn btn-primary btn-lg" ng-click="search.clearFilters()" >Reset</button>
-        <!--<button class="btn btn-primary btn-lg" ng-disabled="clickOnce" ng-click="onBounds(); clickOnce = true; search.clearFilters()">[DEBUG] Start bounds event handler</button>-->
         <div class="btn-group ">
             <label class="btn btn-danger btn-lg" ng-model="autoUpdateDisabled" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false>Disable AutoUpdate</label>
             <label class="btn btn-danger btn-lg" ng-disabled="!autoUpdateDisabled" ng-click="search.updateFilters()">Manual Update</label>
+        </div>
+
+        <div class="btn-group" uib-dropdown is-open="status.isopen">
+            <button id="single-button" type="button" class="btn btn-danger btn-lg" uib-dropdown-toggle ng-disabled="disabled">
+                Data Source: {{dataSource}} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-form" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                <li role="menuitem" ng-click="dataSource = 'accumulo'"><a>Accumulo (Default)</a></li>
+                <li role="menuitem" ng-click="dataSource = 'restTest'"><a>REST Test Data (::8080 w/ delay)</a></li>
+                <li role="menuitem" ng-click="dataSource = 'static'"><a>Static Test Data (example.json)</a></li>
+            </ul>
         </div>
 
         <label class="" style="margin-left: 10px">Current Filters: {{currentFilters}}</label>
@@ -43,11 +53,12 @@
         </div>
     </div>
 
-    <div class="row alert alert-danger" uib-collapse="clickOnce=false" role="alert">
+    <div class="row alert alert-danger" uib-collapse="clickOnce" role="alert">
         <strong>[DEBUG]</strong>
         <button class="btn btn-danger btn-sm" ng-click="clickOnce = true;">Hide</button>
         <br>
         <code>
+            dataSource: {{dataSource}}<br>
             autoUpdateDisable: {{autoUpdateDisabled}}<br>
             TweetID: {{currentMarkerID}}<br>
             {{currentBounds}}<br>

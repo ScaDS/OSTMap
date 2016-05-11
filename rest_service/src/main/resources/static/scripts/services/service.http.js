@@ -53,7 +53,7 @@
 
     /**
      * The possible search fields as array
-     * @type {*[]}
+     * @type {{text: {checked: boolean}, user: {checked: boolean}}}
      * @private
      */
     var _searchFields =
@@ -77,6 +77,7 @@
         return {
             getTweetsFromServerByToken: _getTweetsFromServerByToken,
             getTweetsFromServerByGeoTime: _getTweetsFromServerByGeoTime,
+            getTweetsFromServerTest: _getTweetsFromServerTest,
             getTweetsFromLocal: _getTweetsFromLocal,
             getTweets: _getTweets,
             getSearchToken: _getSearchToken,
@@ -86,7 +87,7 @@
             getBoundingBox: _getBoundingBox,
             setBoundingBox: _setBoundingBox,
             getTimeWindow: _getTimeWindow,
-            setTimeWindow: _setTimeWindow,
+            setTimeWindow: _setTimeWindow
         };
 
         function _getTweetsFromServerByToken() {
@@ -101,6 +102,21 @@
 
         function _getTweetsFromServerByGeoTime() {
             var url = getGeoTemporalSearchUrl();
+            $http.get(url).success(function (data, status, headers, config) {
+                //Copy result data to the private array
+                angular.copy(data,_tweets);
+                console.log("HTTP response received")
+            }).error(function (data, status, headers, config) {
+                //TODO: Log the errors
+            });
+        };
+        function _getTweetsFromServerTest() {
+            var url = "http://localhost:8080/api/testgeo?bbnorth=" + _boundingBox.bbnorth
+                + "&bbsouth=" +  _boundingBox.bbsouth
+                + "&bbeast=" +  _boundingBox.bbeast
+                + "&bbwest=" +  _boundingBox.bbwest
+                + "&tstart=" + _timePeriod.tstart
+                + "&tend=" + _timePeriod.tend;;
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
@@ -185,7 +201,6 @@
         function getGeoTemporalSearchUrl()
         {
             return "/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth
-            // return "http://localhost:8080/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth  //for debugging
                 + "&bbsouth=" +  _boundingBox.bbsouth
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
@@ -219,20 +234,9 @@
 
         /**
          * Setter for _boundingBox
-         * @param north
-         * @param west
-         * @param south
-         * @param east
          * @private
+         * @param bounds
          */
-        // function _setBoundingBox(north, west, south, east){
-        //     _boundingBox = {
-        //         bbnorth: north,
-        //         bbwest: west,
-        //         bbsouth: south,
-        //         bbeast: east
-        //     };
-        // }
         function _setBoundingBox(bounds){
             _boundingBox = bounds
         }
@@ -248,9 +252,8 @@
 
         /**
          * Setter for _timePeriod
-         * @param start
-         * @param end
          * @private
+         * @param times
          */
         function _setTimeWindow(times){
             _timePeriod = {

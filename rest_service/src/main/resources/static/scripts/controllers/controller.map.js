@@ -35,6 +35,8 @@
         mapInit($scope);
 
         $scope.autoUpdateDisabled = true;
+        $scope.dataSource = "accumulo";
+
 
         $scope.currentFilters = "";
         $scope.timeFilter = 1;
@@ -83,11 +85,15 @@
             /**
              * get the tweets from the REST interface
              */
-            // httpService.getTweetsFromServerByGeoTime();  //Get by GeoTime
-            // httpService.getTweetsFromServerTest();       //Get using test REST API
-            httpService.getTweetsFromLocal();            //Get from local (debug)
-
-            // httpService.getTweetsFromServerByToken();    //Get by Token
+            if ($scope.dataSource == "accumulo") {
+                httpService.getTweetsFromServerByGeoTime();  //Get by GeoTime
+            } else if ($scope.dataSource == "restTest") {
+                httpService.getTweetsFromServerTest();       //Get using test REST API
+            } else if ($scope.dataSource == "static") {
+                httpService.getTweetsFromLocal();            //Get from local (debug)
+            } else {
+                httpService.getTweetsFromServerByToken();    //Get by Token
+            }
 
             /**
              * Call marker population function
