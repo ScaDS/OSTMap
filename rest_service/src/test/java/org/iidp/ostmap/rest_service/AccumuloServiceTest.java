@@ -162,8 +162,8 @@ public class AccumuloServiceTest {
         String result = tsc.getResult(accumuloService, fieldArray,searchToken);
 
 
-        System.out.println(result + " <-> " + tweetKatze);
-        assertEquals(tweetKatze,result);
+        System.out.println(result + " <-> " + "["+tweetKatze+"]");
+        assertEquals("["+tweetKatze+"]",result);
     }
 
     @Test
