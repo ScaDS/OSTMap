@@ -4,11 +4,11 @@
         <!--<rzslider ng_disabled=true rz-slider-model="slider_ticks_values_tooltip.value" rz-slider-options="slider_ticks_values_tooltip.options"></rzslider>-->
 
         <div class="btn-group ">
-            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'1'">1h</label>
-            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'2'">2h</label>
-            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'3'">4h</label>
-            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'24'">1d</label>
-            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="'0'">All</label>
+            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="1">1h</label>
+            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="2">2h</label>
+            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="3">4h</label>
+            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="24">1d</label>
+            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="0">All</label>
         </div>
         <button class="btn btn-primary btn-lg" ng-click="search.clearFilters()">Reset</button>
         <!--<button class="btn btn-primary btn-lg" ng-disabled=false ng-click="search.updateFilters()">[DEBUG] Refresh</button>-->
