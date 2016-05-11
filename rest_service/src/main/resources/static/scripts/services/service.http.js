@@ -77,7 +77,7 @@
         return {
             getTweetsFromServerByToken: _getTweetsFromServerByToken,
             getTweetsFromServerByGeoTime: _getTweetsFromServerByGeoTime,
-            // getTweetsFromLocal: _getTweetsFromLocal,
+            getTweetsFromLocal: _getTweetsFromLocal,
             getTweets: _getTweets,
             getSearchToken: _getSearchToken,
             setSearchToken: _setSearchToken,
@@ -104,6 +104,7 @@
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
+                console.log("HTTP response received")
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
             });
@@ -184,6 +185,7 @@
         function getGeoTemporalSearchUrl()
         {
             return "/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth
+            // return "http://localhost:8080/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth  //for debugging
                 + "&bbsouth=" +  _boundingBox.bbsouth
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest

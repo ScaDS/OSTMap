@@ -61,6 +61,15 @@ public class MainController {
             e.printStackTrace();
         }
 
+        /**
+         * Artificial response delay to simulate accumulo backend worst-case
+         */
+        try {
+            Thread.sleep(1000);                 //1000 milliseconds is one second.
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+
         return result;
     }
 }
