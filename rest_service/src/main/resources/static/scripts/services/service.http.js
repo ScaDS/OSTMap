@@ -91,26 +91,36 @@
         };
 
         function _getTweetsFromServerByToken() {
+            document.getElementById("loading").style.visibility = "visible";
+
             var url = getTokenSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
+                document.getElementById("loading").style.visibility = "hidden";
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
+                document.getElementById("loading").style.visibility = "hidden";
             });
         }
 
         function _getTweetsFromServerByGeoTime() {
+            document.getElementById("loading").style.visibility = "visible";
+
             var url = getGeoTemporalSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
                 console.log("HTTP response received")
+                document.getElementById("loading").style.visibility = "hidden";
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
+                document.getElementById("loading").style.visibility = "hidden";
             });
         };
         function _getTweetsFromServerTest() {
+            document.getElementById("loading").style.visibility = "visible";
+
             var url = "http://localhost:8080/api/testgeo?bbnorth=" + _boundingBox.bbnorth
                 + "&bbsouth=" +  _boundingBox.bbsouth
                 + "&bbeast=" +  _boundingBox.bbeast
@@ -121,8 +131,10 @@
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
                 console.log("HTTP response received")
+                document.getElementById("loading").style.visibility = "hidden";
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
+                document.getElementById("loading").style.visibility = "hidden";
             });
         }
 
@@ -131,12 +143,15 @@
          * @private
          */
         function _getTweetsFromLocal() {
+            document.getElementById("loading").style.visibility = "visible";
+
             var url = "data/example-response.json";
             $http.get(url).then(function (result) {
                 if(result.status == 200){
                     //Copy result data to the private array
                     angular.copy(result.data,_tweets);
                 }
+                document.getElementById("loading").style.visibility = "hidden";
             });
         }
 
