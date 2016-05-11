@@ -91,16 +91,12 @@
         };
 
         function _getTweetsFromServerByToken() {
-            document.getElementById("loading").style.visibility = "visible";
-
             var url = getTokenSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
-                document.getElementById("loading").style.visibility = "hidden";
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
-                document.getElementById("loading").style.visibility = "hidden";
             });
         }
 

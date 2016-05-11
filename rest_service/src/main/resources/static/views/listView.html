@@ -3,7 +3,7 @@
     <input ng-model="search.inputValue" ng-model-options="{ getterSetter: true }" type="text" class="form-control" placeholder="Search for...">
     <div class="input-group-btn">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
+                aria-expanded="false" ng-disabled="!search.searchFields.text.checked && !search.searchFields.user.checked">
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;Search&nbsp;<span
                 class="caret"></span>
         </button>
