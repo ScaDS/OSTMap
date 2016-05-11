@@ -39,7 +39,7 @@
 
 
         $scope.currentFilters = "";
-        $scope.timeFilter = 1;
+        $scope.timeFilter = 0.25;
         $scope.search = [];
         $scope.search.hashtagFilter = "#";
         // $scope.search.searchFilter = "Default Search Filter";
@@ -285,6 +285,7 @@
             }
             times[1] = Math.round(currentTime);
 
+            console.log(times)
             return times;
         }
 
@@ -304,9 +305,9 @@
                 map.on('moveend', function() {
                     $scope.currentBounds = map.getBounds();
                     if($scope.autoUpdateDisabled) {
-                        console.log("Data watcher triggered, autoUpdateDisabled: no action taken");
+                        console.log("Map watcher triggered, autoUpdateDisabled: no action taken");
                     } else {
-                        console.log("Data watcher triggered, populating markers");
+                        console.log("Map watcher triggered, updating filters");
                         $scope.search.updateFilters();
                     }
                 });
