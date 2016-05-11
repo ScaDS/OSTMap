@@ -37,8 +37,8 @@
         $scope.currentFilters = "";
         $scope.timeFilter = '1';
         $scope.search = [];
-        $scope.search.hashtagFilter = "yolo";
-        $scope.search.searchFilter = "Default Search Filter";
+        $scope.search.hashtagFilter = "#";
+        // $scope.search.searchFilter = "Default Search Filter";
         $scope.search.searchFilter = httpService.getSearchToken();
 
         /**
@@ -54,10 +54,10 @@
                 lat: 50,
                 lng: 12,
                 zoom: 4
-            }
+            };
 
             $scope.search.updateFilters();
-        }
+        };
         /**
          * Set the hashtag filter by clicking on a top10 hashtag then call a filter update
          * @param hashtag
@@ -65,7 +65,7 @@
         $scope.search.setHashtagFilter = function (hashtag) {
             $scope.search.hashtagFilter = "#" + hashtag;
             $scope.search.updateFilters();
-        }
+        };
         /**
          * Update filters
          */
@@ -73,31 +73,39 @@
             /**
              * Pass the filters to the httpService
              */
-            httpService.setSearchToken($scope.search.searchFilter)
-            httpService.setSearchToken($scope.search.hashtagFilter)
-            httpService.setSearchToken("yolo")
-            httpService.setTimeWindow(parseTimeFilter())
-            httpService.setBoundingBox($scope.getBounds())
+            httpService.setSearchToken($scope.search.searchFilter);
+            // httpService.setSearchToken($scope.search.hashtagFilter);
+            // httpService.setSearchToken("yolo");
+            httpService.setTimeWindow(parseTimeFilter());
+            httpService.setBoundingBox($scope.getBounds());
+            // $scope.getBounds().then(function(bounds) {
+            //     httpService.setBoundingBox(bounds);
+            // });
             /**
              * get the tweets from the REST interface
              */
-            httpService.getTweetsFromServerByGeoTime()
-            // httpService.getTweetsFromServerByToken()
-            $scope.data.tweets = httpService.getTweets()
+            // httpService.getTweetsFromServerByGeoTime().then(function(result) {
+            //     $scope.populateMarkers();
+            //     console.log(new Date().getTime() + ": Response: " + result);
+            // });
+            httpService.getTweetsFromServerByGeoTime();
+            // httpService.getTweetsFromServerByToken();
+            // $scope.data.tweets = httpService.getTweets();
 
             /**
              * Get the tweets from the JSON file
              */
             // httpService.getTweetsFromLocal();
-            // $scope.data.tweets = httpService.getTweets()
+            // $scope.data.tweets = httpService.getTweets();
             /**
              * Call marker population function
              */
-            $scope.populateMarkers();
+            // $scope.populateMarkers();
+
             /**
              * Update current map boundaries
              */
-            $scope.getBounds();
+            // $scope.getBounds();
 
             /**
              * Update the filter display
@@ -117,23 +125,28 @@
             $scope.currentFilters = $scope.search.searchFilter + " | " +
                 $scope.search.hashtagFilter + " | " +
                 $scope.timeFilter + "h | " +
-                "[" + $scope.center.lat + ", " + $scope.center.lng + ", " + $scope.center.zoom + "]";
+                "[" + httpService.getBoundingBox().bbnorth.toFixed(2) +
+                ", " + httpService.getBoundingBox().bbwest.toFixed(2) +
+                ", " + httpService.getBoundingBox().bbsouth.toFixed(2) +
+                ", " + httpService.getBoundingBox().bbeast.toFixed(2) + "]";
 
-            console.log("Filters updated: " + $scope.currentFilters + " | " + $scope.currentBounds)
-        }
+            console.log("Filters updated: " + $scope.currentFilters + " | " + $scope.bounds);
+        };
         /**
          * Move the map center to the coordinates of the clicked tweet
          *
          * @param id
+         * @param lat
+         * @param lng
          */
         $scope.search.goToTweet = function (id, lat, lng) {
-            console.log("selected tweet id: " + id + ", [" + lat + "," + lng + "]")
+            console.log("selected tweet id: " + id + ", [" + lat + "," + lng + "]");
 
             /**
              * Check if latitude and longitude are available
              */
             if (lat == undefined || lng == undefined) {
-                alert("Missing Coordinates!")
+                alert("Missing Coordinates!");
             } else {
                 /**
                  * Move map center to the tweet
@@ -143,12 +156,13 @@
                     lat: lat,
                     lng: lng,
                     zoom: 6
-                }
+                };
 
                 /**
                  * Scroll document to the map element
                  */
-                document.getElementById("map").scrollIntoView();
+                // document.getElementById("map").scrollIntoView();
+                document.getElementById("navbar").scrollIntoView();
 
                 /**
                  * Un-selects the old marker
@@ -163,7 +177,7 @@
                     $scope.markers[id].focus = true;
                 }
             }
-        }
+        };
 
         /**
          * Slider
@@ -204,7 +218,7 @@
              * Filter bad data
              * Add coordinate pairs to marker array
              */
-            angular.forEach($scope.data.tweets, function(value, key) {
+            angular.forEach($scope.data.tweets, function(value) {
                 var tweet = value;
                 // Check if tweet has the property 'coordinates' and 'id'... if not, leave the forEach function
                 if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id')){
@@ -224,71 +238,130 @@
                         draggable: false,
                         message: tweet.text,
                         icon: $scope.icons.red
-                    }
+                    };
                     // $scope.markers.push(newMarker)
                     // $scope.markers.push(tweet.id + ": " +  newMarker)
-                    $scope.markers[tweet.id] = newMarker
+                    $scope.markers[tweet.id] = newMarker;
                 }
             });
-        }
+        };
 
 
         $scope.currentBounds = null;
+        $scope.runOnce = false;
+
         /**
-         * Direct access to Leaflet Map Object to pull current map bounds
+         * Return bounds as object.
+         *
+         * @returns {{bbnorth: *, bbwest: *, bbsouth: *, bbeast: *}}
          */
         $scope.getBounds = function () {
-            // leafletData.getMap().then(
+            // leafletData.getMap("map").then(
             //     function(map) {
             //         $scope.currentBounds = map.getBounds();
+            //
+            //         var bounds = {
+            //             bbnorth: $scope.currentBounds._northEast.lat,
+            //             bbwest: $scope.currentBounds._southWest.lng,
+            //             bbsouth: $scope.currentBounds._southWest.lat,
+            //             bbeast: $scope.currentBounds._northEast.lng
+            //         };
+            //         return bounds;
+            //         console.log("using leafletdata")
+            //         $scope.runOnce = true;
             //     }
             // );
-            $scope.currentBounds = $scope.bounds;
 
-            var bounds = {
-                bbnorth: $scope.bounds.northEast.lat,
-                bbwest: $scope.bounds.southWest.lng,
-                bbsouth: $scope.bounds.southWest.lat,
-                bbeast: $scope.bounds.northEast.lng
+            // if (!runOnce) {
+            //     var bounds = {
+            //         bbnorth: $scope.bounds.northEast.lat,
+            //         bbwest: $scope.bounds.southWest.lng,
+            //         bbsouth: $scope.bounds.southWest.lat,
+            //         bbeast: $scope.bounds.northEast.lng
+            //     };
+            //     console.log("using otherdata")
+            //     return bounds;
+            // }
+
+            var north, west, south, east;
+
+            if ($scope.currentBounds._northEast.lat > 90) {north = 90}
+            else {north = $scope.currentBounds._northEast.lat}
+
+            if ($scope.currentBounds._southWest.lng < -180) {west = -180}
+            else {west = $scope.currentBounds._southWest.lng}
+
+            if ($scope.currentBounds._southWest.lat < -90) {south = -90}
+            else {south = $scope.currentBounds._northEast.lat}
+
+            if ($scope.currentBounds._northEast.lng > 180) {east = 180}
+            else {east = $scope.currentBounds._northEast.lng}
+
+            return {
+                bbnorth: north,
+                bbwest: west,
+                bbsouth: south,
+                bbeast: east
             };
-
-            return bounds;
-        }
-
-        /**
-         * Update the filters when the bounds are changed
-         */
-        $scope.onBounds = function () {
-            leafletData.getMap().then(function(map) {
-                map.on('moveend', function(e) {
-                    $scope.search.updateFilters();
-                });
-            });
-        }
+        };
 
         /**
          * Interpret the time filter and return a time window
          * @returns {number[]}
          */
         function parseTimeFilter(){
-            var times = [0, 0]
+            var times = [0, 0];
             var d = new Date();
-            var n = d.getTime()/1000;
+            var n = d.getTime()/1000; //milliseconds to seconds
 
-            times[0] = Math.round(n - (60*60*$scope.timeFilter))
-            times[1] = Math.round(n)
+            times[0] = Math.round(n - (60*60*$scope.timeFilter));
+            times[1] = Math.round(n);
 
-            return times
+            return times;
         }
 
         /**
          * Run when page is loaded
          */
         $scope.$on('$viewContentLoaded', function() {
-            console.log("Page Loaded")
-            // $scope.search.updateFilters();
+            console.log("Page Loaded");
             $scope.onBounds()
         });
+
+        /**
+         * Update the filters when the bounds are changed
+         */
+        $scope.onBounds = function () {
+            leafletData.getMap("map").then(function(map) {
+                map.on('moveend', function() {
+                    $scope.currentBounds = map.getBounds();
+                    $scope.search.updateFilters();
+                });
+                console.log("Mapbounds watcher started");
+
+                /**
+                 * Workaround to trigger a filter update due to a mapbound change
+                 * @type {{lat: number, lng: number, zoom: number}}
+                 */
+                $scope.center ={
+                    lat: 50,
+                    lng: 12,
+                    zoom: 3
+                };
+            });
+        };
+
+        /**
+         * Populate markers whenever tweet data changes
+         */
+        $scope.$watch(function() {
+                return $scope.data.tweets;
+            }, function() {
+                console.log("Data watcher triggered, populating markers");
+                $scope.populateMarkers();
+            },
+            true
+        );
 
         /**
          * Pagination
@@ -323,7 +396,7 @@
             lat: 50,
             lng: 12,
             zoom: 4
-        }
+        };
         $scope.regions = {
             europe: {
                 northEast: {
@@ -335,9 +408,19 @@
                     lng: -25
                 }
             }
-        }
-        $scope.maxBounds = $scope.regions.europe
-        $scope.bounds = null
+        };
+        // $scope.maxBounds = $scope.regions.europe;
+        $scope.maxBounds = {
+            northEast: {
+                lat: 90,
+                lng: 180
+            },
+            southWest: {
+                lat: -90,
+                lng: -180
+            }
+        };
+        $scope.bounds = null;
 
         /**
          * Marker icon definition
@@ -365,7 +448,7 @@
                 // shadowAnchor: [4, 62],  // the same for the shadow
                 popupAnchor:  [0, -18] // point from which the popup should open relative to the iconAnchor
             }
-        }
+        };
 
         /**
          * Test markers
@@ -411,7 +494,7 @@
                 icon: $scope.icons.blue
             }
         };
-        $scope.currentMarkerID = 1
+        $scope.currentMarkerID = 1;
 
         /**
          * Map event functions for future extensibility (Marker Clustering)
@@ -429,7 +512,7 @@
                 enable: [],
                 logic: 'emit'
             }
-        }
+        };
 
         /**
          * Initialization for leaflet.js
