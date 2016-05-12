@@ -1,13 +1,23 @@
 package org.iidp.ostmap.rest_service;
 
+import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.data.Range;
+import org.apache.hadoop.io.Text;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api")
@@ -32,13 +42,18 @@ public class TokenSearchController {
             @RequestParam(name = "field") String paramCommaSeparatedFieldList,
             @RequestParam(name = "token") String paramToken
             ) {
-        _paramCommaSeparatedFieldList = paramCommaSeparatedFieldList;
-        _paramToken = paramToken;
+        try {
+            _paramCommaSeparatedFieldList = URLDecoder.decode(paramCommaSeparatedFieldList, "UTF-8");
+            _paramToken = URLDecoder.decode(paramToken, "UTF-8").toLowerCase();
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException();
+        }
+
 
         String resultList = "";
         if(validateQueryParams())
         {
-            resultList = MainController.getTestTweets();
+            resultList = getResultsFromAccumulo();
         }else{
             throw new IllegalArgumentException();
         }
@@ -70,6 +85,59 @@ public class TokenSearchController {
         }
 
         return consistent;
+    }
+
+    public String getResultsFromAccumulo(){
+        AccumuloService accumuloService = new AccumuloService();
+        String result = null;
+        String[] fieldArray = _paramCommaSeparatedFieldList.split(",");
+        try {
+            accumuloService.readConfig(MainController.configFilePath);
+
+            result = getResult(accumuloService, fieldArray,_paramToken);
+
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        } catch (AccumuloSecurityException e) {
+            e.printStackTrace();
+        } catch (TableNotFoundException e) {
+            e.printStackTrace();
+        } catch (AccumuloException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    protected String getResult(AccumuloService accumuloService, String[] fieldArray, String token) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+        String result = "[";
+        List<Range> rawKeys = new ArrayList<>();
+        for(String field:fieldArray){
+            // get all results from tokenIndex to the list
+            Scanner termIndexScanner = accumuloService.getTermIdexScanner(token,field);
+            for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
+
+                rawKeys.add(new Range(termIndexEntry.getKey().getColumnQualifier()));
+            }
+            termIndexScanner.close();
+        }
+
+        boolean isFirst = true;
+        BatchScanner bs = accumuloService.getRawDataBatchScanner(rawKeys);
+        for (Map.Entry<Key, Value> rawDataEntry : bs) {
+
+            if(!isFirst){
+                result += ",";
+            }else{
+
+                isFirst=false;
+            }
+            String json = rawDataEntry.getValue().toString();
+            result += json;
+
+        }
+        bs.close();
+
+        return result + "]";
     }
 
     @ExceptionHandler
