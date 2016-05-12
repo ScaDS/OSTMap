@@ -7,7 +7,6 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
-import org.iidp.ostmap.batch_processing.ConverterProcess;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
