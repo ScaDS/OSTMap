@@ -77,6 +77,7 @@
         return {
             getTweetsFromServerByToken: _getTweetsFromServerByToken,
             getTweetsFromServerByGeoTime: _getTweetsFromServerByGeoTime,
+            getTweetsFromServerTest: _getTweetsFromServerTest,
             getTweetsFromLocal: _getTweetsFromLocal,
             getTweets: _getTweets,
             getSearchToken: _getSearchToken,
@@ -86,45 +87,54 @@
             getBoundingBox: _getBoundingBox,
             setBoundingBox: _setBoundingBox,
             getTimeWindow: _getTimeWindow,
-            setTimeWindow: _setTimeWindow,
-            getTweetsFromServerTest: _getTweetsFromServerTest
+            setTimeWindow: _setTimeWindow
         };
 
         function _getTweetsFromServerByToken() {
+            document.getElementById("loading").style.visibility = "visible";
+
             var url = getTokenSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
+                document.getElementById("loading").style.visibility = "hidden";
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
+                document.getElementById("loading").style.visibility = "hidden";
             });
         }
 
         function _getTweetsFromServerByGeoTime() {
+            document.getElementById("loading").style.visibility = "visible";
+
             var url = getGeoTemporalSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
                 console.log("HTTP response received")
+                document.getElementById("loading").style.visibility = "hidden";
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
+                document.getElementById("loading").style.visibility = "hidden";
             });
-        }
-        
+        };
         function _getTweetsFromServerTest() {
-            var url = "http://localhost:8080/api/testgeo?bbnorth=" + _boundingBox.bbnorth  //for debugging
+            document.getElementById("loading").style.visibility = "visible";
+
+            var url = "http://localhost:8080/api/testgeo?bbnorth=" + _boundingBox.bbnorth
                 + "&bbsouth=" +  _boundingBox.bbsouth
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
                 + "&tstart=" + _timePeriod.tstart
                 + "&tend=" + _timePeriod.tend;
-            
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
                 console.log("HTTP response received")
+                document.getElementById("loading").style.visibility = "hidden";
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
+                document.getElementById("loading").style.visibility = "hidden";
             });
         }
 
@@ -133,12 +143,15 @@
          * @private
          */
         function _getTweetsFromLocal() {
+            document.getElementById("loading").style.visibility = "visible";
+
             var url = "data/example-response.json";
             $http.get(url).then(function (result) {
                 if(result.status == 200){
                     //Copy result data to the private array
                     angular.copy(result.data,_tweets);
                 }
+                document.getElementById("loading").style.visibility = "hidden";
             });
         }
 
@@ -193,8 +206,7 @@
          */
         function getTokenSearchUrl()
         {
-            var url = "/api/tokensearch?field=" + buildFieldString() + "&token=" + _searchToken;
-            return encodeURI(url);
+            return "/api/tokensearch?field=" + buildFieldString() + "&token=" + _searchToken;
         }
 
         /**
@@ -203,13 +215,12 @@
          */
         function getGeoTemporalSearchUrl()
         {
-            var url = "/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth
+            return "/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth
                 + "&bbsouth=" +  _boundingBox.bbsouth
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
                 + "&tstart=" + _timePeriod.tstart
                 + "&tend=" + _timePeriod.tend;
-            return encodeURI(url);
         }
 
         /**
@@ -241,14 +252,6 @@
          * @private
          * @param bounds
          */
-        // function _setBoundingBox(north, west, south, east){
-        //     _boundingBox = {
-        //         bbnorth: north,
-        //         bbwest: west,
-        //         bbsouth: south,
-        //         bbeast: east
-        //     };
-        // }
         function _setBoundingBox(bounds){
             _boundingBox = bounds
         }
