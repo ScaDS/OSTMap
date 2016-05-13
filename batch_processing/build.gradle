@@ -48,7 +48,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes("Main-Class": "org.iidp.ostmap.batch_processing.ConverterProcess")
+        attributes("Main-Class": "org.iidp.ostmap.batch_processing.Main")
     }
 }
 
