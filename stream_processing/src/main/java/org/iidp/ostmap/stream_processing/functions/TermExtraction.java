@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.iidp.ostmap.commons.tokenizer.*;
+
 /**
  * class extracting the user of a given tweet
  */

@@ -4,7 +4,7 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.flink.util.Collector;
 import org.iidp.ostmap.stream_processing.functions.TermExtraction;
-import org.iidp.ostmap.stream_processing.functions.Tokenizer;
+import org.iidp.ostmap.commons.tokenizer.*;
 import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
 import org.iidp.ostmap.stream_processing.types.TermIndexKey;
 import org.junit.BeforeClass;
