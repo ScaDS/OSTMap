@@ -7,6 +7,7 @@ import org.apache.flink.util.Collector;
 import org.apache.commons.codec.Charsets;
 import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
 import scala.Tuple2;
+import scala.Tuple3;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -15,7 +16,7 @@ import java.nio.ByteBuffer;
  * class calculating the custom key (for accumulo) for a given tweet with timestamp
  *
  */
-public class CalculateRawTwitterDataKey implements FlatMapFunction<Tuple2<Long, String>, Tuple2<RawTwitterDataKey, String>>, Serializable {
+public class CalculateRawTwitterDataKey implements FlatMapFunction<Tuple3<Long, String, String>, Tuple2<RawTwitterDataKey, String>>, Serializable {
 
     // hash function to use (murmurhash) see https://github.com/google/guava/wiki/HashingExplained
     private static HashFunction hash = Hashing.murmur3_32();
@@ -27,9 +28,9 @@ public class CalculateRawTwitterDataKey implements FlatMapFunction<Tuple2<Long, 
      * @throws Exception
      */
     @Override
-    public void flatMap(Tuple2<Long, String> inTuple, Collector<Tuple2<RawTwitterDataKey, String>> out) throws Exception {
+    public void flatMap(Tuple3<Long, String, String> inTuple, Collector<Tuple2<RawTwitterDataKey, String>> out) throws Exception {
         int hash = getHash(inTuple._2());
-        RawTwitterDataKey rtdKey = RawTwitterDataKey.buildRawTwitterDataKey(inTuple._1, hash);
+        RawTwitterDataKey rtdKey = RawTwitterDataKey.buildRawTwitterDataKey(inTuple._1(), hash);
 
         //Collect user-entry
         out.collect(new Tuple2<>(rtdKey, inTuple._2()));
