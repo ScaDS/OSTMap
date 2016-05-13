@@ -1,20 +1,13 @@
 package org.iidp.ostmap.batch_processing.tweetPerUserAnalysis;
 
-import org.apache.accumulo.core.client.*;
-import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.apache.accumulo.core.security.Authorizations;
+import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.Job;
+import org.iidp.ostmap.commons.accumulo.FlinkEnvManager;
+import org.iidp.ostmap.commons.enums.TableIdentifier;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
 
 /**
  * writes csv containg a count of tweets per user in a given timeframe
@@ -22,30 +15,22 @@ import java.util.Properties;
  */
 public class TPUAnalysis {
 
-    public static final String PROPERTY_INSTANCE = "accumulo.instance";
-    private String accumuloInstanceName;
-    public static final String PROPERTY_USER = "accumulo.user";
-    private String accumuloUser;
-    public static final String PROPERTY_PASSWORD = "accumulo.password";
-    private String accumuloPassword;
-    public static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
-    private String accumuloZookeeper;
-    public static final String inTable = "RawTwitterData";
-    private Job job;
-
 
     /**
-     * run conversion process
-     * @param configPath path to config file
+     *
+     * @param configPath
+     * @param outputPath path for csv export
+     * @param timeMin
+     * @param timeMax
+     * @param limit first n element only, if 0 don't filter
      * @throws Exception
      */
-    public void run(String configPath, String outputPath, long timeMin, long timeMax) throws Exception {
+    public void run(String configPath, String outputPath, long timeMin, long timeMax, int limit)throws Exception {
 
-        readConfig(configPath);
+        FlinkEnvManager fem = new FlinkEnvManager(configPath, "converterJob",
+                TableIdentifier.RAW_TWITTER_DATA.get(),null);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-
-        DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
+        DataSet<Tuple2<Key,Value>> rawTwitterDataRows = fem.getDataFromAccumulo();;
 
         DataSet<Tuple2<String,Integer>> tweetCount = rawTwitterDataRows
                 .filter(new TimeFilter(timeMin, timeMax))
@@ -53,61 +38,41 @@ public class TPUAnalysis {
                 .groupBy(0)
                 .sum(1);
 
-        //tweetCount.writeAsCsv(outputPath).setParallelism(1);
-        tweetCount.writeAsCsv(outputPath);
+        tweetCount =tweetCount.sortPartition(1, Order.DESCENDING)
+                .setParallelism(1);
+
+        if(limit >0){
+            tweetCount = tweetCount.first(limit).setParallelism(1);
+        }
 
 
-        env.execute("TPUAnalysis");
+        tweetCount.writeAsCsv(outputPath).setParallelism(1);
+        //tweetCount.writeAsCsv(outputPath);
+
+
+        fem.getExecutionEnvironment().execute("TPUAnalysis");
 
     }
 
-
-    /**
-     * parses the config file at the given position for the necessary parameters
-     *
-     * @param path
-     * @throws IOException
-     */
-    private void readConfig(String path) throws IOException {
-        Properties props = new Properties();
-        FileInputStream fis = new FileInputStream(path);
-        props.load(fis);
-        accumuloInstanceName = props.getProperty(PROPERTY_INSTANCE);
-        accumuloUser = props.getProperty(PROPERTY_USER);
-        accumuloPassword = props.getProperty(PROPERTY_PASSWORD);
-        accumuloZookeeper = props.getProperty(PROPERTY_ZOOKEEPER);
-    }
-
-    /**
-     * makes accumulo input accessible by flink DataSet api
-     * @param env
-     * @return
-     * @throws IOException
-     * @throws AccumuloSecurityException
-     */
-    private DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
-        job = Job.getInstance(new Configuration(), "TPUAnalysisJob");
-        AccumuloInputFormat.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword));
-        AccumuloInputFormat.setScanAuthorizations(job, new Authorizations("standard"));
-        ClientConfiguration clientConfig = new ClientConfiguration();
-        clientConfig.withInstance(accumuloInstanceName);
-        clientConfig.withZkHosts(accumuloZookeeper);
-        AccumuloInputFormat.setZooKeeperInstance(job, clientConfig);
-        AccumuloInputFormat.setInputTableName(job, inTable);
-        return env.createHadoopInput(new AccumuloInputFormat(),Key.class,Value.class, job);
-    }
 
 
 
     /**
      * entry point
      *
-     * @param args 1st parameter is used as path to config file
+     * @param args pathToConfig, pathCSV, longTimeMin, longTimeMax (,limitFirstN)
      */
     public static void main(String[] args) throws Exception {
 
         TPUAnalysis d = new TPUAnalysis();
-        d.run(args[0], args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+        if(args.length >4){
+            d.run(args[0], args[1], Integer.parseInt(args[2]),
+                    Integer.parseInt(args[3]), Integer.parseInt(args[4]));
+
+        }else{
+            d.run(args[0], args[1], Integer.parseInt(args[2]),
+                    Integer.parseInt(args[3]), 0);
+        }
 
     }
 

@@ -15,11 +15,14 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * test for ConverterProcess with example entry in Mini Accumulo Cluster
@@ -104,7 +107,7 @@ public class TPUAnalysisTest {
 
         //run TPUAnalysis
         TPUAnalysis tpua = new TPUAnalysis();
-        tpua.run(settings.getAbsolutePath(),output.getAbsolutePath(),0,100);
+        tpua.run(settings.getAbsolutePath(),output.getAbsolutePath(),0,100,0);
 
         System.out.println("test table:-----------------------------------------------------");
         org.apache.accumulo.core.client.Scanner s = conn.createScanner("RawTwitterData", new Authorizations("standard"));
@@ -113,7 +116,22 @@ public class TPUAnalysisTest {
         }
         s.close();
 
+        assertFalse(output.isDirectory());
+        List<String> resList =new ArrayList<>();
+        System.out.println("Output file:----------------------------------------------------");
+        Scanner in = new Scanner(new FileReader(output.getAbsolutePath()));
 
+        while (in.hasNext()) {
+            String str = in.next();
+            resList.add(str);
+            System.out.println(str);
+        }
+        System.out.println("------------------------------------------------------------------");
+
+        assertEquals(2,resList.size());
+        assertEquals("u1name,5", resList.get(0));
+        assertEquals("otherName,1", resList.get(1));
+        /*
         if(!output.isDirectory()){
             System.out.println("Output file:----------------------------------------------------");
             Scanner in = new Scanner(new FileReader(output.getAbsolutePath()));
@@ -135,39 +153,7 @@ public class TPUAnalysisTest {
             }
             System.out.println("------------------------------------------------------------------");
         }
-
-
-
-/*
-        System.out.println("TermIndex has "+i+" entrys");
-        //assertEquals(i, 22);
-
-        d = new ConverterProcess();
-        System.out.println("settings file path: "+settings.getAbsolutePath());
-        d.run(settings.getAbsolutePath());
-
-        //output result after conversion
-        System.out.println("RawTwitterData: -----------------------------------------------------");
-        s = conn.createScanner("RawTwitterData", new Authorizations("standard"));
-        for(Map.Entry<Key, Value> entry: s){
-            System.out.println(entry.getKey() + " | " +entry.getValue());
-            //assertEquals(entry.getValue().toString(), testString);
-        }
-        s.close();
-
-        System.out.println("TermIndex: -----------------------------------------------------");
-        s = conn.createScanner("TermIndex", new Authorizations("standard"));
-        i = 0;
-        for(Map.Entry<Key, Value> entry: s){
-            System.out.println(entry.getKey() + " | " + entry.getValue());
-            i++;
-            if(entry.getKey().getRow().toString().equals("for")){
-                //token "for" should appear 3 times
-                assertEquals(entry.getValue().toString(),"3");
-            }
-        }
-        s.close();*/
-
+        */
     }
 
 
