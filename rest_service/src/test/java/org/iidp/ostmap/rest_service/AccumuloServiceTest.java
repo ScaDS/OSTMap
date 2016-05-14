@@ -59,8 +59,8 @@ public class AccumuloServiceTest {
         }
 
         //write example entry to RawTwitterData
-        tweetHund = "Vollstaendiger Tweet hund";
-        tweetKatze = "Vollstaendiger Tweet katze #katze";
+        tweetHund = "Vollstaendiger Tweet hund maus";
+        tweetKatze = "Vollstaendiger Tweet katze #katze maus";
         //File f = new File(AccumuloServiceTest.class.getResource("example-response.json").getFile());
         File f = new File(ClassLoader.getSystemClassLoader().getResource("example-response.json").getFile());
 
@@ -97,6 +97,8 @@ public class AccumuloServiceTest {
         m4.put("text".getBytes(),bb.array(),"2".getBytes());
         Mutation m5 = new Mutation("hund");
         m5.put("text".getBytes(),bb.array(),"2".getBytes());
+        Mutation m55 = new Mutation("maus");
+        m55.put("text".getBytes(),bb.array(),"2".getBytes());
         Mutation m6 = new Mutation("Vollstaendiger");
         m6.put("text".getBytes(),bb2.array(),"2".getBytes());
         Mutation m7 = new Mutation("Tweet");
@@ -105,6 +107,8 @@ public class AccumuloServiceTest {
         m8.put("text".getBytes(),bb2.array(),"2".getBytes());
         Mutation m9 = new Mutation("#katze");
         m9.put("text".getBytes(),bb2.array(),"2".getBytes());
+        Mutation m10 = new Mutation("maus");
+        m10.put("text".getBytes(),bb2.array(),"2".getBytes());
 
         System.out.println(Arrays.toString("text".getBytes()));
 
@@ -112,10 +116,12 @@ public class AccumuloServiceTest {
         bwti.addMutation(m3);
         bwti.addMutation(m4);
         bwti.addMutation(m5);
+        bwti.addMutation(m55);
         bwti.addMutation(m6);
         bwti.addMutation(m7);
         bwti.addMutation(m8);
         bwti.addMutation(m9);
+        bwti.addMutation(m10);
         bwti.close();
 
         //create settings file with data of Mini Accumulo Cluster
@@ -193,7 +199,7 @@ public class AccumuloServiceTest {
         System.out.println("settings file path: " + settings.getAbsolutePath());
 
         String fieldList = "user,text";
-        String searchToken = "kat*";
+        String searchToken = "mau*";
 
         TokenSearchController tsc = new TokenSearchController();
         tsc.set_paramCommaSeparatedFieldList(fieldList);
@@ -201,8 +207,8 @@ public class AccumuloServiceTest {
         tsc.validateQueryParams();
         String result = tsc.getResultsFromAccumulo(settings.getAbsolutePath());
 
-        System.out.println(result + " <-> " + "["+tweetKatze+"]");
-        assertEquals("["+tweetKatze+"]",result);
+        System.out.println(result + " <-> " + "["+tweetKatze+','+tweetHund+"]");
+        assertEquals("["+tweetHund+','+tweetKatze+"]",result);
     }
 
      @Test
