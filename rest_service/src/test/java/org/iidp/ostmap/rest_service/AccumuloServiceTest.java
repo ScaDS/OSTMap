@@ -59,7 +59,7 @@ public class AccumuloServiceTest {
 
         //write example entry to RawTwitterData
         tweetHund = "Vollstaendiger Tweet hund";
-        tweetKatze = "Vollstaendiger Tweet katze";
+        tweetKatze = "Vollstaendiger Tweet katze #katze";
         //File f = new File(AccumuloServiceTest.class.getResource("example-response.json").getFile());
         File f = new File(ClassLoader.getSystemClassLoader().getResource("example-response.json").getFile());
 
@@ -102,6 +102,8 @@ public class AccumuloServiceTest {
         m7.put("text".getBytes(),bb2.array(),"2".getBytes());
         Mutation m8 = new Mutation("katze");
         m8.put("text".getBytes(),bb2.array(),"2".getBytes());
+        Mutation m9 = new Mutation("#katze");
+        m9.put("text".getBytes(),bb2.array(),"2".getBytes());
 
         System.out.println(Arrays.toString("text".getBytes()));
 
@@ -112,6 +114,7 @@ public class AccumuloServiceTest {
         bwti.addMutation(m6);
         bwti.addMutation(m7);
         bwti.addMutation(m8);
+        bwti.addMutation(m9);
         bwti.close();
 
         //create settings file with data of Mini Accumulo Cluster
@@ -150,17 +153,34 @@ public class AccumuloServiceTest {
     @Test
     public void testAccumuloServiceTokenSearch() throws Exception {
         //run Token Search
-        AccumuloService accumuloService = new AccumuloService();
         System.out.println("settings file path: " + settings.getAbsolutePath());
-        accumuloService.readConfig(settings.getAbsolutePath());
 
-        String[] fieldArray = {"user","text"};
+        String fieldList = "user,text";
         String searchToken = "katze";
 
         TokenSearchController tsc = new TokenSearchController();
+        tsc.set_paramCommaSeparatedFieldList(fieldList);
+        tsc.set_paramToken(searchToken);
+        tsc.validateQueryParams();
+        String result = tsc.getResultsFromAccumulo(settings.getAbsolutePath());
 
-        String result = tsc.getResult(accumuloService, fieldArray,searchToken);
+        System.out.println(result + " <-> " + "["+tweetKatze+"]");
+        assertEquals("["+tweetKatze+"]",result);
+    }
 
+    @Test
+    public void testAccumuloServiceTokenSearchHashtag() throws Exception {
+        //run Token Search
+        System.out.println("settings file path: " + settings.getAbsolutePath());
+
+        String fieldList = "user,text";
+        String searchToken = "#katze";
+
+        TokenSearchController tsc = new TokenSearchController();
+        tsc.set_paramCommaSeparatedFieldList(fieldList);
+        tsc.set_paramToken(searchToken);
+        tsc.validateQueryParams();
+        String result = tsc.getResultsFromAccumulo(settings.getAbsolutePath());
 
         System.out.println(result + " <-> " + "["+tweetKatze+"]");
         assertEquals("["+tweetKatze+"]",result);

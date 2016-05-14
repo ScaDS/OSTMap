@@ -34,6 +34,9 @@ class AccumuloService {
      * @throws IOException
      */
     void readConfig(String path) throws IOException {
+        if(null == path){
+            throw new RuntimeException("No path to accumulo config file given. You have to start the webservice with the path to accumulo config as first parameter.");
+        }
         Properties props = new Properties();
         FileInputStream fis = new FileInputStream(path);
         props.load(fis);

@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.io.*;
 @SpringBootApplication
 public class MainController {
-    private static Logger log = Logger.getLogger(MainController.class);
+    static Logger log = Logger.getLogger(MainController.class);
     public static String configFilePath;
 
     /**
@@ -20,7 +20,7 @@ public class MainController {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        if(args != null && args.length > 0 && args[0] != ""){
+        if(args != null && args.length > 0 && !args[0].equals("")){
             System.out.println("Use config file: " + args[0]);
             configFilePath = args[0];
         }else {

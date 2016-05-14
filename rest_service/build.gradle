@@ -21,6 +21,11 @@ jar {
     version =  '0.1.0'
 }
 
+run {
+    if ( project.hasProperty('args') ) {
+        args project.args.split('\\s+')
+    }
+}
 repositories {
     mavenCentral()
     maven {
