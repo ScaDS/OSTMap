@@ -1,9 +1,10 @@
-package org.iidp.ostmap.batch_processing;
+package org.iidp.ostmap.commons.accumulo;
 
-import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.ClientConfiguration;
 import org.apache.accumulo.core.client.mapreduce.AccumuloFileOutputFormat;
-import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
 import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
+import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
@@ -17,52 +18,57 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
-import org.iidp.ostmap.commons.tokenizer.Tokenizer;
+import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 /**
- * converts data from RawTwitterTable to new format and saves it to TermIndex
- *
+ * connects to accumulo and provides access to flink ExecutionEnvironment
+ * (f.eg. for DataSet API)
  */
-public class ConverterProcess {
+public class FlinkEnvManager {
 
-    public static final String PROPERTY_INSTANCE = "accumulo.instance";
     private String accumuloInstanceName;
-    public static final String PROPERTY_USER = "accumulo.user";
     private String accumuloUser;
-    public static final String PROPERTY_PASSWORD = "accumulo.password";
     private String accumuloPassword;
-    public static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
     private String accumuloZookeeper;
-    public static final String inTable = "RawTwitterData";
-    public static final String outTable = "TermIndex";
+    private String inTable;
+    private String outTable;
+    private String jobName;
     private Job job;
+    private ExecutionEnvironment env;
 
 
     /**
-     * run conversion process
-     * @param path path to config file
-     * @throws Exception
+     *
+     * @param configPath path for config file
+     * @param jobName name used in getDataFromAccumulo
+     * @param inTable input tabel name used in getDataFromAccumulo
+     * @param outTable output table name used in getHadoopOF()
+     * @throws IOException
      */
-    public void run(String path) throws Exception {
+    public FlinkEnvManager(String configPath, String jobName,
+                           String inTable, String outTable) throws IOException {
+        this.inTable = inTable;
+        this.outTable = outTable;
+        this.jobName = jobName;
+        readConfig(configPath);
+    }
 
-        readConfig(path);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
+    /**
+     *
+     * @return create new ExecutionEnvironment if null
+     */
+    public ExecutionEnvironment getExecutionEnvironment(){
+        if(env == null){
 
-        DataSet<Tuple2<Text, Mutation>> termIndexMutations = rawTwitterDataRows
-                .flatMap(new ConverterFlatMap(new Tokenizer(),outTable));
-
-        HadoopOutputFormat hof = getHadoopOF();
-        termIndexMutations.output(hof);
-
-        env.execute("ConverterProcess");
-
+            env = ExecutionEnvironment.getExecutionEnvironment();
+        }
+        return env;
     }
 
 
@@ -76,10 +82,28 @@ public class ConverterProcess {
         Properties props = new Properties();
         FileInputStream fis = new FileInputStream(path);
         props.load(fis);
-        accumuloInstanceName = props.getProperty(PROPERTY_INSTANCE);
-        accumuloUser = props.getProperty(PROPERTY_USER);
-        accumuloPassword = props.getProperty(PROPERTY_PASSWORD);
-        accumuloZookeeper = props.getProperty(PROPERTY_ZOOKEEPER);
+        accumuloInstanceName = props.getProperty(AccumuloIdentifiers.PROPERTY_INSTANCE.toString());
+        accumuloUser = props.getProperty(AccumuloIdentifiers.PROPERTY_USER.toString());
+        accumuloPassword = props.getProperty(AccumuloIdentifiers.PROPERTY_PASSWORD.toString());
+        accumuloZookeeper = props.getProperty(AccumuloIdentifiers.PROPERTY_ZOOKEEPER.toString());
+
+        System.out.println(accumuloInstanceName + " " + accumuloUser + " " +
+                accumuloPassword + " " + accumuloZookeeper +" "+
+                this.inTable + " "+ this.outTable);
+
+    }
+
+    /**
+     *
+     * @return makes accumulo input accessible by flink DataSet api, uses own env.
+     * @throws IOException
+     * @throws AccumuloSecurityException
+     */
+    public DataSet<Tuple2<Key,Value>> getDataFromAccumulo() throws IOException, AccumuloSecurityException {
+        if(env == null){
+            getExecutionEnvironment();
+        }
+        return getDataFromAccumulo(env);
     }
 
     /**
@@ -89,8 +113,8 @@ public class ConverterProcess {
      * @throws IOException
      * @throws AccumuloSecurityException
      */
-    private DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
-        job = Job.getInstance(new Configuration(), "converterJob");
+    public DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
+        job = Job.getInstance(new Configuration(), jobName);
         AccumuloInputFormat.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword));
         AccumuloInputFormat.setScanAuthorizations(job, new Authorizations("standard"));
         ClientConfiguration clientConfig = new ClientConfiguration();
@@ -106,8 +130,11 @@ public class ConverterProcess {
      * @return
      * @throws AccumuloSecurityException
      */
-    private HadoopOutputFormat getHadoopOF() throws AccumuloSecurityException {
+    public HadoopOutputFormat getHadoopOF() throws AccumuloSecurityException, IOException {
 
+        if(job == null){
+            job = Job.getInstance(new Configuration(), jobName);
+        }
         AccumuloOutputFormat.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword));
         ClientConfiguration clientConfig = new ClientConfiguration();
         clientConfig.withInstance(accumuloInstanceName);
@@ -119,19 +146,6 @@ public class ConverterProcess {
         HadoopOutputFormat<Text, Mutation> hadoopOF =
                 new HadoopOutputFormat<>(new AccumuloOutputFormat() , job);
         return hadoopOF;
-    }
-
-
-    /**
-     * entry point
-     *
-     * @param args 1st parameter is used as path to config file
-     */
-    public static void main(String[] args) throws Exception {
-
-        ConverterProcess d = new ConverterProcess();
-        d.run(args[0]);
-
     }
 
 }
