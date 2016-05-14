@@ -88,7 +88,7 @@ public class TokenSearchController {
 
             for(String field:fieldArray){
                 // get all results from tokenIndex to the list
-                Scanner termIndexScanner = accumuloService.getTermIdexScanner(_paramToken,field);
+                Scanner termIndexScanner = accumuloService.getTermIndexScanner(_paramToken,field);
                 for (Map.Entry<Key, Value> termIndexEntry : termIndexScanner) {
                     rawKeys.add(new Range(termIndexEntry.getKey().getColumnQualifier()));
                 }

@@ -42,6 +42,7 @@ public class AccumuloServiceTest {
     @BeforeClass
     public static void setUpCluster() throws IOException, AccumuloException, TableNotFoundException, TableExistsException, AccumuloSecurityException {
         amc = new AmcHelper();
+
         amc.startMiniCluster(tmpDir.getRoot().getAbsolutePath());
 
         tmpSettingsDir.create();
@@ -187,32 +188,21 @@ public class AccumuloServiceTest {
     }
 
     @Test
-    public void testBuildPrefixFromLong() throws Exception{
-        Date date = new Date();
-        long longTime = date.getTime();
-        byte[] result = AccumuloService.buildPrefix(longTime);
+    public void testAccumuloServiceTokenSearchWildcard() throws Exception {
+        //run Token Search
+        System.out.println("settings file path: " + settings.getAbsolutePath());
 
-        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
-        bb.putLong(longTime);
+        String fieldList = "user,text";
+        String searchToken = "kat*";
 
-        System.out.println("testBuildPrefixFromLong");
-        //assertEquals(bb.array(),result);
-        assertTrue(Arrays.equals(bb.array(),result));
-    }
+        TokenSearchController tsc = new TokenSearchController();
+        tsc.set_paramCommaSeparatedFieldList(fieldList);
+        tsc.set_paramToken(searchToken);
+        tsc.validateQueryParams();
+        String result = tsc.getResultsFromAccumulo(settings.getAbsolutePath());
 
-    @Test
-    public void testBuildPrefixFromString() throws Exception{
-        Date date = new Date();
-        long longTime = date.getTime();
-        String longString = Long.toString(longTime);
-        byte[] result = AccumuloService.buildPrefix(longString);
-
-        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
-        bb.putLong(longTime);
-
-        System.out.println("testBuildPrefixFromString");
-        //assertEquals(bb.array(),result);
-        assertTrue(Arrays.equals(bb.array(),result));
+        System.out.println(result + " <-> " + "["+tweetKatze+"]");
+        assertEquals("["+tweetKatze+"]",result);
     }
 
      @Test
