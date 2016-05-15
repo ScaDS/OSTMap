@@ -8,6 +8,8 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.hadoop.io.Text;
 import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
 
@@ -129,6 +131,7 @@ public class GeoTemporalTweetQuery {
             //TODO: filter exact window
             if(true){
 
+                //TODO: get RawTwiiterData value
                 tc.process(entry.getValue().toString());
             }
         }
@@ -146,7 +149,38 @@ public class GeoTemporalTweetQuery {
 
         Coverage coverage = GeoHash.coverBoundingBox(west,north,east,south,8);
 
+
+        List<Tuple2<String,String>> hashRanges = mergeHashes(coverage.getHashes());
+
         //TODO: gereate Ranges
         return rangeList;
+    }
+
+    /**
+     * creates a list of ranges (Tuple2<startHash, endHash>) from a set of hashes
+     * @param hashStrings
+     * @return
+     */
+    private List<Tuple2<String,String>> mergeHashes(Set<String> hashStrings){
+
+        List<Tuple2<String,String>> mergedHashes = new ArrayList<>();
+
+        List<String> sortedHashes = new ArrayList<>(hashStrings);
+        Collections.sort(sortedHashes);
+
+        int i = 0;
+        while(i < sortedHashes.size()){
+
+            Tuple2<String,String > nextTupel = new Tuple2<>();
+            nextTupel.f0 = sortedHashes.get(i);
+            //Todo:this
+        }
+
+        return mergedHashes;
+    }
+
+    private Boolean isNext(String hash1, String hash2){
+        //TODO:this
+        return true;
     }
 }
