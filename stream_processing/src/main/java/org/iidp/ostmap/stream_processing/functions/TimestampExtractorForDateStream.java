@@ -11,7 +11,7 @@ public class TimestampExtractorForDateStream extends AscendingTimestampExtractor
 
     @Override
     public long extractAscendingTimestamp(Tuple3<Long, String, String> element) {
-        Long ts = element._1(); // Long.parseLong(element._3());
+        Long ts = element._1();
         return ts;
         }
 

@@ -81,10 +81,12 @@ public class Driver {
 
 
         // stream of tuples containing timestamp and tweet's json-String
-        DataStream<Tuple3<Long, String, String>> dateStream = geoStream.flatMap(new DateExtraction());
+        DataStream<Tuple2<Long, String>> dateStream = geoStream.flatMap(new DateExtraction());
 
         dateStream.getExecutionEnvironment().setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         dateStream
+                .flatMap(new LanguageFrequencyRowExtraction())
+                .flatMap(new LanguageTagExtraction())
                 .assignTimestampsAndWatermarks(new TimestampExtractorForDateStream())
                 .windowAll(TumblingEventTimeWindows.of(Time.minutes(1)))
                 .apply (new AllWindowFunctionLangFreq())

@@ -59,7 +59,7 @@ public class KeyExtractionTest {
     public void testSomething() throws Exception {
 
         CalculateRawTwitterDataKey cRtd = new CalculateRawTwitterDataKey();
-        Tuple3<Long, String, String> inTuple = new Tuple3<>(ts, tweet, "");
+        Tuple2<Long, String> inTuple = new Tuple2<>(ts, tweet);
 
 
         Collector collector = new Collector<Tuple2<RawTwitterDataKey, Integer>>() {

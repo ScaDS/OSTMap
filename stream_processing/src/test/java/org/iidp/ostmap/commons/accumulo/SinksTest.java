@@ -61,7 +61,6 @@ public class SinksTest {
         Driver dr = new Driver();
         // we don't need paths to files (for run) because we provide tweet for local stream and want to use minicluster with default properties
         dr.addMACdata(accumulo.getInstanceName(), accumulo.getZooKeepers());
-        String path = "/home/loewwnzahn/Dokumente/uni/master_sem02/praxis/workspace/OSTMap/stream_processing/twitter.properties";
         dr.run("", "", tweetList);
 
         //We have to wait because in the sinks the writers have maxLatency of 10 secs
@@ -124,10 +123,6 @@ public class SinksTest {
 
         System.out.println("[5/5] Tested tokens with success");
 
-        Scanner s4 = conn.createScanner("TweetFrequency", new Authorizations("standard"));
-        for(Map.Entry<Key, Value> entry: s4){
-            System.out.println("--INDB: " + entry.getKey() + "___" + entry.getValue());
-        }
 
     }
 }

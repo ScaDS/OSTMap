@@ -19,7 +19,7 @@ public class AllWindowFunctionLangFreq implements AllWindowFunction<Tuple3<Long,
         Map<String, Integer> collected = new HashMap<String, Integer>();
         String lastTimestamp = null;
         for (Tuple3<Long, String, String> tuple : values) {
-            String langTag = extractLangTag(tuple._2());
+            String langTag = tuple._2();
             lastTimestamp = tuple._3();
             if (collected.get(langTag) == null) {
                 collected.put(langTag, 1);
@@ -35,14 +35,6 @@ public class AllWindowFunctionLangFreq implements AllWindowFunction<Tuple3<Long,
     }
 
 
-    public String extractLangTag(String json) {
-        int pos1 = json.indexOf("\"lang\":\"");
-        int pos2 = pos1 + 8;
-        int pos3 = json.indexOf("\",\"", pos2);
-        if (pos1 > -1 && pos2 > -1 && pos3 > -1) {
-            return json.substring(pos2, pos3).toLowerCase();
-        } else return null;
-    }
 
 
 }
