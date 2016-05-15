@@ -19,19 +19,12 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
     public void flatMap(Tuple2<String, String> in, Collector<Tuple2<String, String>> out) {
 
         JSONObject obj = null;
-        String userName = "";
+        String userName = in.f0;
         String coordinates = "";
 
         try {
-            obj = new JSONObject(in.f1.toString());
-            userName = obj.getJSONObject("user").getString("name");
-            coordinates = obj.getString("coordinates");
-            //coordinates = obj.getJSONObject("coordinates").getString("coordinates");
-            /**
-             * TODO: fallback location und geo auswerten falls es keine coordinates gibt
-             */
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

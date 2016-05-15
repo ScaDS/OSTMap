@@ -45,7 +45,8 @@ public class Calculator {
      * @param path
      * @throws IOException
      */
-    private void readConfig(String path) throws IOException {
+    //TODO make private again
+    public void readConfig(String path) throws IOException {
         Properties props = new Properties();
         FileInputStream fis = new FileInputStream(path);
         props.load(fis);
@@ -62,7 +63,8 @@ public class Calculator {
      * @throws IOException
      * @throws AccumuloSecurityException
      */
-    private DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
+    // TODO make private after testing
+    public DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
         job = Job.getInstance(new Configuration(), "areaCalculationJob");
         AccumuloInputFormat.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword));
         AccumuloInputFormat.setScanAuthorizations(job, new Authorizations("standard"));
