@@ -1,4 +1,4 @@
-package org.iidp.ostmap.commons.areacalc;
+package org.iidp.ostmap.batch_processing.areacalc;
 
 
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -8,9 +8,11 @@ import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
+import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.util.Collector;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
@@ -86,6 +88,13 @@ public class Calculator {
         DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
 
         DataSet<Tuple2<String,String>> geoList = rawTwitterDataRows.flatMap(new GeoExtrationFlatMap());
+
+        DataSet<Tuple2<String,String>> reducedGroup = geoList
+                                                        .groupBy(0)
+                                                        .reduceGroup(new CoordGroupReduce());
+
+        DataSet<Tuple2<String,String>> userRanking = reducedGroup.flatMap(new GeoCalcFlatMap());
+
 
 
 
