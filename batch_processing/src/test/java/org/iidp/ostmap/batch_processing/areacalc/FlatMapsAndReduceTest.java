@@ -100,8 +100,8 @@ public class FlatMapsAndReduceTest {
                 "       \"id\": 1 \n" +
                 "   },\n" +
                 "   \"geo\": [\n" +
-                "       -2.164786,\n" +
-                "       52.546974\n" +
+                "       0.164786,\n" +
+                "       0.546974\n" +
                 "   ],\n" +
                 "   \"coordinates\": null, \n" +
                 "   \"place\": null\n" +
@@ -114,8 +114,8 @@ public class FlatMapsAndReduceTest {
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
-                "       -3.164786,\n" +
-                "       53.546974\n" +
+                "       -50.164786,\n" +
+                "       -53.546974\n" +
                 "   ],\n" +
                 "   \"place\": null\n" +
                 " }");
@@ -179,7 +179,7 @@ public class FlatMapsAndReduceTest {
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
-                "       -3.164786,\n" +
+                "       -8.164786,\n" +
                 "       53.546974\n" +
                 "   ],\n" +
                 "   \"place\": null\n" +
@@ -211,6 +211,58 @@ public class FlatMapsAndReduceTest {
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m10);
+        Mutation m14 = new Mutation("row14");
+        m14.put("CF", "CQ", "{\n" +
+                "   \"user\":{\n" +
+                "       \"id\": 4 \n" +
+                "   },\n" +
+                "   \"geo\": null,\n" +
+                "   \"coordinates\": [" +
+                "       0,\n" +
+                "       0\n" +
+                "   ],\n" +
+                "   \"place\": null\n" +
+                " }");
+        bw.addMutation(m14);
+        Mutation m11 = new Mutation("row11");
+        m11.put("CF", "CQ", "{\n" +
+                "   \"user\":{\n" +
+                "       \"id\": 4 \n" +
+                "   },\n" +
+                "   \"geo\": null,\n" +
+                "   \"coordinates\": [" +
+                "       20,\n" +
+                "       0\n" +
+                "   ],\n" +
+                "   \"place\": null\n" +
+                " }");
+        bw.addMutation(m11);
+        Mutation m12 = new Mutation("row12");
+        m12.put("CF", "CQ", "{\n" +
+                "   \"user\":{\n" +
+                "       \"id\": 4 \n" +
+                "   },\n" +
+                "   \"geo\": null,\n" +
+                "   \"coordinates\": [" +
+                "       10,\n" +
+                "       20\n" +
+                "   ],\n" +
+                "   \"place\": null\n" +
+                " }");
+        bw.addMutation(m12);
+        Mutation m13 = new Mutation("row13");
+        m13.put("CF", "CQ", "{\n" +
+                "   \"user\":{\n" +
+                "       \"id\": 4 \n" +
+                "   },\n" +
+                "   \"geo\": null,\n" +
+                "   \"coordinates\": [" +
+                "       10,\n" +
+                "       10\n" +
+                "   ],\n" +
+                "   \"place\": null\n" +
+                " }");
+        bw.addMutation(m13);
         bw.close();
 
         //output result after conversion
@@ -253,5 +305,9 @@ public class FlatMapsAndReduceTest {
                 .reduceGroup(new CoordGroupReduce());
         System.out.println("Reduced Data: -----------------------------------------------------");
         reducedGroup.print();
+
+        DataSet<Tuple2<String, String>> ranking = reducedGroup.flatMap(new GeoCalcFlatMap());
+        System.out.println("Ranking: -----------------------------------------------------");
+        ranking.print();
     }
 }
