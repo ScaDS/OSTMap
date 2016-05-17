@@ -42,7 +42,7 @@ public class GeoTemporalKeyTest {
 
     @Test
     public void testSomething() throws Exception {
-        GeoTemporalKey geoTemporalKey = GeoTemporalKey.buildRowKey(tweet);
+        GeoTemporalKey geoTemporalKey = GeoTemporalKey.buildKey(tweet);
 
         assertEquals(geoHash, geoTemporalKey.geoHash);
         assertTrue(spreadingByte == geoTemporalKey.spreadingByte);
