@@ -50,7 +50,6 @@ public class Extractor {
 
         } catch (JSONException e) {
             System.err.println("No Correct JSON File");
-            e.printStackTrace();
             return null;
         }
 
