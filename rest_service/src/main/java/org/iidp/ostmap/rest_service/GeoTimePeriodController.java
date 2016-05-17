@@ -13,7 +13,6 @@ import org.codehaus.jettison.json.JSONObject;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Objects;
 
@@ -137,7 +136,7 @@ public class GeoTimePeriodController {
         String result = "[";
         BatchScanner rawDataScanner = null;
         try {
-            rawDataScanner = accumuloService.getRawDataScannerByRange(startTime,endTime);
+            rawDataScanner = accumuloService.getRawDataScannerByTimeSpan(startTime,endTime);
         } catch (AccumuloSecurityException e) {
             e.printStackTrace();
         } catch (AccumuloException e) {
