@@ -7,6 +7,7 @@ import org.iidp.ostmap.stream_processing.functions.*;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.iidp.ostmap.stream_processing.sinks.GeoTemporalIndexSink;
 import org.iidp.ostmap.stream_processing.sinks.LanguageFrequencySink;
 import org.iidp.ostmap.stream_processing.sinks.RawTwitterDataSink;
 import org.iidp.ostmap.stream_processing.sinks.TermIndexSink;
@@ -27,6 +28,7 @@ public class Driver {
     private final String tableNameTerms = "TermIndex";
     private final String tableNameRawData = "RawTwitterData";
     private final String tableNameFrequencies = "TweetFrequency";
+    private final String tableNameGeoTemporal = "GeoTemporalIndex";
     // configuration values for accumulo
     private String accumuloInstanceName;
     private String accumuloZookeeper;
@@ -68,6 +70,7 @@ public class Driver {
         RawTwitterDataSink rtdSink = new RawTwitterDataSink();
         TermIndexSink tiSink = new TermIndexSink();
         LanguageFrequencySink frqSink = new LanguageFrequencySink();
+        GeoTemporalIndexSink gtiSink = new GeoTemporalIndexSink();
         SinkConfiguration sc;
         if(runOnMAC) {
             sc = SinkConfiguration.createConfigForMinicluster(accumuloInstanceName, accumuloZookeeper);
@@ -78,6 +81,7 @@ public class Driver {
         rtdSink.configure(sc, tableNameRawData);
         tiSink.configure(sc, tableNameTerms);
         frqSink.configure(sc, tableNameFrequencies);
+        gtiSink.configure(sc, tableNameGeoTemporal);
 
 
         // stream of tuples containing timestamp and tweet's json-String
@@ -95,9 +99,15 @@ public class Driver {
         // stream of tuples containing RawTwitterDataKey and tweet's json-String
         DataStream<Tuple2<RawTwitterDataKey, String>> rtdStream = dateStream.flatMap(new CalculateRawTwitterDataKey());
 
-        // write into rawTwitterData-table
+        /** write into rawTwitterData-table */
         rtdStream.addSink(rtdSink);
 
+        /** write into geoTemporalIndex-table */
+        rtdStream
+                .flatMap(new GeoTemporalKeyExtraction())
+                .addSink(gtiSink);
+
+        /** write into termIndex-table */
         // processing for user
         rtdStream
                 .flatMap(new UserExtraction())
