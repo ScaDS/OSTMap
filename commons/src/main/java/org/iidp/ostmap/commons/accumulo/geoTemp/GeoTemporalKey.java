@@ -4,6 +4,7 @@ import com.github.davidmoten.geo.GeoHash;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import org.apache.commons.codec.Charsets;
+import org.iidp.ostmap.commons.extractor.Extractor;
 
 
 import java.nio.ByteBuffer;

@@ -6,6 +6,7 @@ import com.google.common.hash.Hashing;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.codec.Charsets;
+import org.iidp.ostmap.commons.extractor.Extractor;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
