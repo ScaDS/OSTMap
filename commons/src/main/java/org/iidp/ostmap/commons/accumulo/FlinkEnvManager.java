@@ -56,6 +56,15 @@ public class FlinkEnvManager {
         readConfig(configPath);
     }
 
+    /**
+     * only configure accumulo (don't use flink functions)
+     * @param configPath
+     * @throws IOException
+     */
+    public FlinkEnvManager(String configPath) throws IOException {
+        readConfig(configPath);
+    }
+
 
 
     /**
@@ -112,7 +121,7 @@ public class FlinkEnvManager {
      * @throws AccumuloSecurityException
      * @throws AccumuloException
      */
-    Connector getConnector() throws AccumuloSecurityException, AccumuloException {
+    public Connector getConnector() throws AccumuloSecurityException, AccumuloException {
         // build the accumulo connector
         Instance inst = new ZooKeeperInstance(accumuloInstanceName, accumuloZookeeper);
         Connector conn = inst.getConnector(accumuloUser, new PasswordToken(accumuloPassword));
