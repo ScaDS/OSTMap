@@ -107,16 +107,18 @@ public class GeoTimePeriodController {
         boolean isFirst = true;
 
         for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
-            String json = rawDataEntry.getValue().toString();
-
             //check if tweet is in box
-            Double[] longLat = Extractor.extractLocation(json);
-                if(longLat.equals(null)){
-                    longLat= new Double[]{0.0,0.0};
-                }
+            JSONObject obj = null;
+            try {
+                obj = new JSONObject(json);
+                JSONArray coords = obj.getJSONObject("coordinates").getJSONArray("coordinates");
+
+                Double longitude = coords.getDouble(0);
+                Double latitude = coords.getDouble(1);
+
                 //TODO: does this work across meridians?
-                if(west < longLat[0] && longLat[0] < east &&
-                        south < longLat[1] && longLat[1] < north){
+                if(west < longitude && longitude < east &&
+                        south < latitude && latitude < north){
 
                     if(!isFirst){
                         result += ",";
@@ -133,7 +135,6 @@ public class GeoTimePeriodController {
                     System.out.println(west + " < " + longitude + " < "+east);
                     System.out.println(south + " < " + latitude + " < "+north);*/
                 }
-
 
         }
         rawDataScanner.close();
