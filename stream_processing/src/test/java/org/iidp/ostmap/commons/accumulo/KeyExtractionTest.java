@@ -11,13 +11,14 @@ import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import scala.Tuple2;
+import scala.Tuple3;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 
-import static org.iidp.ostmap.stream_processing.functions.DateExtraction.formatter;
+import static org.iidp.ostmap.stream_processing.functions.DateExtraction.formatterExtract;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -40,7 +41,7 @@ public class KeyExtractionTest {
     @BeforeClass
     public static void calcData() throws AccumuloException, AccumuloSecurityException, InterruptedException, IOException {
 
-        ZonedDateTime time = ZonedDateTime.parse("Fri Apr 29 09:05:55 +0000 2016", formatter);
+        ZonedDateTime time = ZonedDateTime.parse("Fri Apr 29 09:05:55 +0000 2016", formatterExtract);
         ts = time.toEpochSecond();
         tweet = "{\"created_at\":\"Fri Apr 29 09:05:55 +0000 2016\",\"id\":725974381906804738,\"id_str\":\"725974381906804738\",\"text\":\"Das sage ich dir gleich, das funktioniert doch nie! #haselnuss\",\"user\":{\"id\":179905182,\"name\":\"Peter Tosh\",\"screen_name\":\"PeTo\"}}";
 
