@@ -5,9 +5,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-/**
- * Created by schotti on 11.05.16.
- */
+
 public class Extractor {
 
     public static Double[] extractLocation(String json) {
@@ -26,7 +24,7 @@ public class Extractor {
 
                 }
             } else {
-                System.out.println("In places");
+                //System.out.println("In places");
                 JSONArray places = obj.getJSONObject("place").getJSONObject("bounding_box").getJSONArray("coordinates").getJSONArray(0);
 
                    if (places.length() > 2) {
