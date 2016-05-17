@@ -14,10 +14,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 /**
- * Class containing the geoTemporal-key-row
- * and static functionality for building it
+ * Class containing the geoTemporal-key's row and columnQualifier
+ * and static functionality for building the named values
  */
-public class GeoTemporalRowKey {
+public class GeoTemporalKey {
 
     /** ------ row -------------- */
     //spreading byte + day + geohash = 11 bytes
@@ -32,6 +32,13 @@ public class GeoTemporalRowKey {
     //8 byte long string created using com.github.davidmoten:geo:0.7.1
     public String geoHash;
 
+    /** ------ column qualifier -------------- */
+    // lat + long as 2*4b
+    public static byte[] columQualifier;
+
+
+    /** ------ hash and formatter -------------- */
+
     //the murmur-hash-function
     private static HashFunction hash = Hashing.murmur3_32();
 
@@ -40,28 +47,36 @@ public class GeoTemporalRowKey {
 
 
     // empty constructor
-    public GeoTemporalRowKey() {}
+    public GeoTemporalKey() {}
 
     /**
-     * Builds the key's row byte-array for a given tweet
+     * Builds the key's row and columnQualifier byte-arrays for a given tweet
      * @param json the tweet's json
-     * @return
+     * @return  the GeoTemporalKey-object
      */
-    public static GeoTemporalRowKey buildRowKey(String json) {
-        GeoTemporalRowKey key = new GeoTemporalRowKey();
+    public static GeoTemporalKey buildRowKey(String json) {
+        GeoTemporalKey key = new GeoTemporalKey();
+        Double[] loc = Extractor.extractLocation(json);
+
         key.spreadingByte = calcSpreadingByte(json);
         key.day = calcDay(json);
-        key.geoHash = calcGeoHash(json);
+        key.geoHash = calcGeoHash(loc);
+        key.columQualifier = calcColumnQualifier(loc);
 
         // 1b + 2b + 8b = 11b
         ByteBuffer bb = ByteBuffer.allocate(11);
-        bb.put((byte)(key.spreadingByte & 0xFF))        // first byte of int
-                .putShort(key.day)                      // day as short
-                .put(key.geoHash.getBytes());           // geoHash-String's bytes
+        bb.put((byte)(key.spreadingByte & 0xFF))            // first byte of int
+                .putShort(key.day)                              // day as short
+                .put(key.geoHash.getBytes(Charsets.UTF_8));           // geoHash-String's bytes
         key.rowBytes = bb.array();
         return key;
     }
 
+    /**
+     * Calculates spreadingByte (hash modulo 255)
+     * @param json  tweet's json
+     * @return      the calculated int value
+     */
     public static int calcSpreadingByte(String json) {
         int bufferSize = json.length();
         ByteBuffer bb = ByteBuffer.allocate(bufferSize);
@@ -69,6 +84,11 @@ public class GeoTemporalRowKey {
         return hash.hashBytes(bb.array()).asInt() % 255;
     }
 
+    /**
+     * Calculates days since 1.1.1970
+     * @param json  tweet's json
+     * @return      number of days as short value
+     */
     public static short calcDay(String json) {
         short day = 0;
         int pos1 = json.indexOf("\"created_at\":\"");
@@ -83,9 +103,22 @@ public class GeoTemporalRowKey {
         return day;
     }
 
-    public static String calcGeoHash(String json) {
-        Double[] loc = Extractor.extractLocation(json);
-        return GeoHash.encodeHash(loc[0], loc[1], 8);
+    /**
+     * Calculates the geoHash
+     * @param loc   location as long-lat-array
+     * @return      the 8 character long hash
+     */
+    private static String calcGeoHash(Double[] loc) {
+        return GeoHash.encodeHash(loc[1], loc[0], 8);
+    }
+
+    /**
+     * Calculates the location-byte-array
+     * @param loc   location as long-lat-array
+     * @return      the location-byte-array (4byte lat + 4byte long = 8byte)
+     */
+    private static byte[] calcColumnQualifier(Double[] loc) {
+        return ByteBuffer.allocate(8).putFloat(loc[1].floatValue()).putFloat(loc[0].floatValue()).array();
     }
 
 }
