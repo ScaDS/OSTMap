@@ -3,9 +3,7 @@ package org.iidp.ostmap.commons.extractor;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Created by schotti on 11.05.16.
- */
+
 public class ExtractorTest {
     public String json1= "{\n" +
             "    \"created_at\": \"Wed Mar 30 15:09:10 +0000 2016\",\n" +
