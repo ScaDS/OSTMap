@@ -153,6 +153,8 @@ public class GeoTimePeriodController {
             //check if tweet is in box
             JSONObject obj = null;
             try {
+
+                // TODO Add Extractor here 
                 obj = new JSONObject(json);
                 JSONArray coords = obj.getJSONObject("coordinates").getJSONArray("coordinates");
 
