@@ -26,13 +26,13 @@ public class GeoTemporalKey {
     public byte[] rowBytes;
 
     //murmur_32 of original json string modulo 255
-    private int spreadingByte;
+    protected int spreadingByte;
 
     //days since 1.1.1970
-    private short day;
+    protected short day;
 
     //8 byte long string created using com.github.davidmoten:geo:0.7.1
-    private String geoHash;
+    protected String geoHash;
 
     /** ------ column qualifier -------------- */
     // lat + long as 2*4b
