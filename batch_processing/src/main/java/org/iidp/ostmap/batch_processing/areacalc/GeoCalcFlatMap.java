@@ -8,6 +8,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Vector;
 
 
@@ -16,6 +18,7 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
 
     double equatorialEarthRadius = 6378.1370;
     double deg2rad = (Math.PI / 180.);
+    int decimalPlaces = 5;
 
     public GeoCalcFlatMap(){
     }
@@ -56,13 +59,19 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
                     double Area1 = getAreaInSquareKm(tempCoordinates1);
                     double Area2 = getAreaInSquareKm(tempCoordinates2);
                     double Area3 = getAreaInSquareKm(tempCoordinates3);
-                    if(Area0 > originArea && Area0 > Area1 && Area0 > Area2 && Area0 > Area3){
+                    System.out.println("########################################################################################");
+                    System.out.println("OriginArea: "+ originArea);
+                    System.out.println("Areas: "+ Area0);
+                    System.out.println("Areas: "+ Area1);
+                    System.out.println("Areas: "+ Area2);
+                    System.out.println("Areas: "+ Area3);
+                    if(Area0 >= originArea && Area0 >= Area1 && Area0 >= Area2 && Area0 >= Area3){
                         coordinates = (Vector<double[]>) tempCoordinates0.clone();
-                    }else if(Area1 > originArea && Area1 > Area0 && Area1 > Area2 && Area1 > Area3){
+                    }else if(Area1 >= originArea && Area1 >= Area0 && Area1 >= Area2 && Area1 >= Area3){
                         coordinates = (Vector<double[]>) tempCoordinates1.clone();
-                    }else if(Area2 > originArea && Area2 > Area1 && Area2 > Area0 && Area2 > Area3){
+                    }else if(Area2 >= originArea && Area2 >= Area1 && Area2 >= Area0 && Area2 >= Area3){
                         coordinates = (Vector<double[]>) tempCoordinates2.clone();
-                    }else if(Area3 > originArea && Area3 > Area1 && Area3 > Area2 && Area3 > Area0){
+                    }else if(Area3 >= originArea && Area3 >= Area1 && Area3 >= Area2 && Area3 >= Area0){
                         coordinates = (Vector<double[]>) tempCoordinates3.clone();
                     }
                 }
@@ -82,6 +91,12 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
     public double getAreaInSquareMeters(){
         return 0.0;
     }
+
+    /**
+     * calculates the area the Vector of coordinates defines
+     * @param coordinates
+     * @return
+     */
     public double getAreaInSquareKm(Vector<double[]> coordinates){
         double area = 0.;
         double maxArea = 0.;
@@ -92,7 +107,7 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
         double ac = this.haversineInKm(a[0],a[1],c[0],c[1]);
         double bc = this.haversineInKm(b[0],b[1],c[0],c[1]);
         if(coordinates.size() == 3){
-            return this.heronForm(ab,ac,bc);
+            return this.round(this.heronForm(ab,ac,bc),decimalPlaces);
         }else{
             double[] d = coordinates.get(3);
             double ad = this.haversineInKm(a[0],a[1],d[0],d[1]);
@@ -105,47 +120,47 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
             boolean konvex = false;
             if(abc > abd && abc > acd && abc > bcd){
                 if(abc*0.9 <= abd + acd + bcd && abd + acd + bcd <= abc*1.1){
-                    return abc;
+                    return this.round(abc,decimalPlaces);
                 }else{
                     konvex = true;
                 }
             }else if(abd > abc && abd > acd && abd > bcd){
                 if(abd*0.9 <= abc + acd + bcd && abd*1.1 >= abc + acd + bcd){
-                    return abd;
+                    return this.round(abd,decimalPlaces);
                 }else{
                     konvex = true;
                 }
             }else if(acd > abc && acd > abd && acd > bcd){
                 if(acd*0.9 <= abd + abc + bcd && acd*1.1 >= abd + abc + bcd){
-                    return acd;
+                    return this.round(acd,decimalPlaces);
                 }else{
                     konvex = true;
                 }
             }else if(bcd > abc && bcd > abd && bcd > acd){
                 if(bcd*0.9 <= abd + acd + abc && bcd*1.1 >= abd + acd + abc){
-                    return bcd;
+                    return this.round(bcd,decimalPlaces);
                 }else{
                     konvex = true;
                 }
             }else if(!konvex){
-                return 0.;
+                return 0.66666;
             }
             if(konvex){
                 if(ab<ac){
                     if(ac<ad){
                         // ad is the diagonal
-                        return this.heronForm(ab,bd,ad) + this.heronForm(ac,cd,ad);
+                        return this.round(this.heronForm(ab,bd,ad) + this.heronForm(ac,cd,ad),decimalPlaces);
                     }else{
                         // ac is the diagonal
-                        return this.heronForm(ab,bc,ac) + this.heronForm(ad,cd,ac);
+                        return this.round(this.heronForm(ab,bc,ac) + this.heronForm(ad,cd,ac),decimalPlaces);
                     }
                 }else{
                     if(ab<ad){
                         // ad is the diagonal
-                        return this.heronForm(ab,bd,ad) + this.heronForm(ac,cd,ad);
+                        return this.round(this.heronForm(ab,bd,ad) + this.heronForm(ac,cd,ad),decimalPlaces);
                     }else{
                         // ab is the diagonal
-                        return this.heronForm(ac,bc,ab) + this.heronForm(ad,cd,ab);
+                        return this.round(this.heronForm(ac,bc,ab) + this.heronForm(ad,cd,ab),decimalPlaces);
                     }
                 }
             }
@@ -182,5 +197,19 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
         double d = equatorialEarthRadius * c;
 
         return d;
+    }
+
+    /**
+     * Rounds the given double to the given decimal places
+     * @param value
+     * @param places
+     * @return
+     */
+    private double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

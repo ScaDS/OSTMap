@@ -25,13 +25,12 @@ public class GeoExtrationFlatMap implements FlatMapFunction<Tuple2<Key, Value>, 
 
         try {
             obj = new JSONObject(in.f1.toString());
-            userName = obj.getJSONObject("user").getString("id");
+            userName = obj.getJSONObject("user").getString("screen_name");
             if(!obj.get("geo").equals(null)){
                 coordinates = obj.getJSONArray("geo").get(0).toString() + "," + obj.getJSONArray("geo").get(1).toString();
             }else if(!obj.get("coordinates").equals(null)){
                 coordinates = obj.getJSONArray("coordinates").get(0).toString() + "," + obj.getJSONArray("coordinates").get(1).toString();
             }else if(!obj.get("place").equals(null)){
-                //coordinates = obj.getJSONObject("place").getJSONObject("bounding_box").getJSONArray("coordinates").get(0).toString();
                 JSONArray coords = obj.getJSONObject("place").getJSONObject("bounding_box").getJSONArray("coordinates").getJSONArray(0);
                 /**
                  * JSONArray is not iterable

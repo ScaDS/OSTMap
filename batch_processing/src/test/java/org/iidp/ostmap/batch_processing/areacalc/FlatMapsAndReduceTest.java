@@ -60,7 +60,7 @@ public class FlatMapsAndReduceTest {
         Mutation m1 = new Mutation("row1");
         m1.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 1 \n" +
+                "       \"screen_name\": Horst \n" +
                 "   },\n" +
                 "   \"geo\": null, \n" +
                 "   \"coordinates\": null, \n" +
@@ -97,7 +97,7 @@ public class FlatMapsAndReduceTest {
         Mutation m2 = new Mutation("row2");
         m2.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 1 \n" +
+                "       \"screen_name\": Horst \n" +
                 "   },\n" +
                 "   \"geo\": [\n" +
                 "       0.164786,\n" +
@@ -110,7 +110,7 @@ public class FlatMapsAndReduceTest {
         Mutation m3 = new Mutation("row3");
         m3.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 1 \n" +
+                "       \"screen_name\": Horst \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -123,7 +123,7 @@ public class FlatMapsAndReduceTest {
         Mutation m4 = new Mutation("row4");
         m4.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 2 \n" +
+                "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -136,7 +136,7 @@ public class FlatMapsAndReduceTest {
         Mutation m5 = new Mutation("row5");
         m5.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 2 \n" +
+                "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -149,7 +149,7 @@ public class FlatMapsAndReduceTest {
         Mutation m6 = new Mutation("row6");
         m6.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 2 \n" +
+                "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -162,7 +162,7 @@ public class FlatMapsAndReduceTest {
         Mutation m7 = new Mutation("row7");
         m7.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 2 \n" +
+                "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -175,7 +175,7 @@ public class FlatMapsAndReduceTest {
         Mutation m8 = new Mutation("row8");
         m8.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 2 \n" +
+                "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -188,7 +188,7 @@ public class FlatMapsAndReduceTest {
         Mutation m9 = new Mutation("row9");
         m9.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 3 \n" +
+                "       \"screen_name\": Peter \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -201,7 +201,7 @@ public class FlatMapsAndReduceTest {
         Mutation m10 = new Mutation("row10");
         m10.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 3 \n" +
+                "       \"screen_name\": Peter \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -214,7 +214,7 @@ public class FlatMapsAndReduceTest {
         Mutation m14 = new Mutation("row14");
         m14.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 4 \n" +
+                "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -227,7 +227,7 @@ public class FlatMapsAndReduceTest {
         Mutation m11 = new Mutation("row11");
         m11.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 4 \n" +
+                "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -240,7 +240,7 @@ public class FlatMapsAndReduceTest {
         Mutation m12 = new Mutation("row12");
         m12.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 4 \n" +
+                "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +
@@ -253,7 +253,7 @@ public class FlatMapsAndReduceTest {
         Mutation m13 = new Mutation("row13");
         m13.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"id\": 4 \n" +
+                "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
                 "   \"coordinates\": [" +

@@ -9,9 +9,13 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
+import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.io.TextOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.core.fs.FileSystem;
+import org.apache.flink.core.fs.Path;
 import org.apache.flink.util.Collector;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
@@ -96,8 +100,12 @@ public class Calculator {
                                                         .reduceGroup(new CoordGroupReduce());
 
         DataSet<Tuple2<String,String>> userRanking = reducedGroup.flatMap(new GeoCalcFlatMap());
+        userRanking.sortPartition(1, Order.ASCENDING);
 
+        TextOutputFormat<String> tof = new TextOutputFormat<>(new Path("file:///tmp/userranking"));
+        tof.setWriteMode(FileSystem.WriteMode.OVERWRITE);
 
+        userRanking.writeAsText("file:///tmp/userranking", FileSystem.WriteMode.OVERWRITE).setParallelism(1);
 
 
 
