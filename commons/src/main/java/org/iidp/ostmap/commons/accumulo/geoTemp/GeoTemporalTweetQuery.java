@@ -131,8 +131,19 @@ public class GeoTemporalTweetQuery {
      */
     private boolean isInExactWindow(Key k){
 
-        //TODO
-        return true;
+        Long tweetTime = ByteBuffer.wrap(k.getColumnFamily().getBytes()).getLong();
+
+        ByteBuffer bb = ByteBuffer.wrap(k.getColumnQualifier().getBytes());
+
+        float tweetLat = bb.getFloat();
+        float tweetLon = bb.getFloat();
+
+        return startTime < tweetTime &&
+                tweetTime < endTime &&
+                west < tweetLon &&
+                tweetLon < east &&
+                south < tweetLat &&
+                tweetLat < north;
     }
 
 
