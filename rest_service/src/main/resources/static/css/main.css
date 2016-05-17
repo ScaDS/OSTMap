@@ -5,20 +5,15 @@
 
 .map{
     height: 520px;
-    width: 600px;
+    width: 100%;
 }
 
-.top10{
-    margin-left: 30px;
-    width: 300px;
-
-}
-
-.indent-1 {
-    float: left;
-}
-.indent-1 section {
-    float: left;
+.loading{
+    position: relative;
+    width: 90%;
+    z-index: 1000;
+    margin-top: -30px;
+    margin-bottom: -30px;
 }
 
 .bottom-bar{
@@ -28,12 +23,12 @@
 
 .red {
     border-radius: 120px;
-    opacity: .75;
+    opacity: .50;
     background-color: #FF0000;
 }
 
 .blue {
     border-radius: 120px;
-    opacity: .75;
+    opacity: .50;
     background-color: #0000FF;
 }

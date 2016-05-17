@@ -26,15 +26,8 @@
     var _tweets = [];
 
     /**
-     * The URI of the webservice
-     * @type {string}
-     * @private
-     */
-    var _serverUrl = "http://localhost:8080/api";
-
-    /**
      * The bounding box to search in
-     * * @param bbnorth the northern latitude for the bounding box to search, e.g. 10.123
+     * @param bbnorth the northern latitude for the bounding box to search, e.g. 10.123
      * @param bbwest the western longitude for the bounding box to search, e.g. 30.123
      * @param bbsouth the southern latitude for the bounding box to search, e.g. -10.456
      * @param bbeast the eastern longitude for the bounding box to search, e.g. -30.789
@@ -42,11 +35,11 @@
      * @private
      */
     var _boundingBox = {
-            bbnorth: 0.0,
-            bbwest: 0.0,
-            bbsouth: 0.0,
-            bbeast: 0.0
-        };
+        bbnorth: 0.0,
+        bbwest: 0.0,
+        bbsouth: 0.0,
+        bbeast: 0.0
+    };
 
     /**
      * The time period to search in (s unix time, e.g. 1461942000000)
@@ -60,18 +53,18 @@
 
     /**
      * The possible search fields as array
-     * @type {*[]}
+     * @type {{text: {checked: boolean}, user: {checked: boolean}}}
      * @private
      */
     var _searchFields =
-        {
-            text: {
-                checked: true
-            },
-            user: {
-                checked: false
-            }
-        };
+    {
+        text: {
+            checked: true
+        },
+        user: {
+            checked: false
+        }
+    };
 
     /**
      * The token to search for, e.g. #yolo or yolo
@@ -84,31 +77,64 @@
         return {
             getTweetsFromServerByToken: _getTweetsFromServerByToken,
             getTweetsFromServerByGeoTime: _getTweetsFromServerByGeoTime,
+            getTweetsFromServerTest: _getTweetsFromServerTest,
             getTweetsFromLocal: _getTweetsFromLocal,
             getTweets: _getTweets,
             getSearchToken: _getSearchToken,
             setSearchToken: _setSearchToken,
             getSearchFields: _getSearchFields,
-            setSearchFields: _setSearchFields
+            setSearchFields: _setSearchFields,
+            getBoundingBox: _getBoundingBox,
+            setBoundingBox: _setBoundingBox,
+            getTimeWindow: _getTimeWindow,
+            setTimeWindow: _setTimeWindow
         };
 
         function _getTweetsFromServerByToken() {
+            document.getElementById("loading").style.visibility = "visible";
+
             var url = getTokenSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
+                document.getElementById("loading").style.visibility = "hidden";
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
+                document.getElementById("loading").style.visibility = "hidden";
             });
         }
 
         function _getTweetsFromServerByGeoTime() {
+            document.getElementById("loading").style.visibility = "visible";
+
             var url = getGeoTemporalSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
+                console.log("HTTP response received")
+                document.getElementById("loading").style.visibility = "hidden";
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
+                document.getElementById("loading").style.visibility = "hidden";
+            });
+        };
+        function _getTweetsFromServerTest() {
+            document.getElementById("loading").style.visibility = "visible";
+
+            var url = "http://localhost:8080/api/testgeo?bbnorth=" + _boundingBox.bbnorth
+                + "&bbsouth=" +  _boundingBox.bbsouth
+                + "&bbeast=" +  _boundingBox.bbeast
+                + "&bbwest=" +  _boundingBox.bbwest
+                + "&tstart=" + _timePeriod.tstart
+                + "&tend=" + _timePeriod.tend;
+            $http.get(url).success(function (data, status, headers, config) {
+                //Copy result data to the private array
+                angular.copy(data,_tweets);
+                console.log("HTTP response received")
+                document.getElementById("loading").style.visibility = "hidden";
+            }).error(function (data, status, headers, config) {
+                //TODO: Log the errors
+                document.getElementById("loading").style.visibility = "hidden";
             });
         }
 
@@ -117,12 +143,15 @@
          * @private
          */
         function _getTweetsFromLocal() {
+            document.getElementById("loading").style.visibility = "visible";
+
             var url = "data/example-response.json";
             $http.get(url).then(function (result) {
                 if(result.status == 200){
                     //Copy result data to the private array
-                   angular.copy(result.data,_tweets);
+                    angular.copy(result.data,_tweets);
                 }
+                document.getElementById("loading").style.visibility = "hidden";
             });
         }
 
@@ -177,7 +206,7 @@
          */
         function getTokenSearchUrl()
         {
-            return _serverUrl + "/tokensearch?field=" + buildFieldString() + "&token=" + _searchToken;
+            return "/api/tokensearch?field=" + encodeURI(buildFieldString()) + "&token=" + encodeURI(_searchToken);
         }
 
         /**
@@ -186,7 +215,7 @@
          */
         function getGeoTemporalSearchUrl()
         {
-            return _serverUrl + "/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth
+            return "/api/geotemporalsearch?bbnorth=" + _boundingBox.bbnorth
                 + "&bbsouth=" +  _boundingBox.bbsouth
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
@@ -209,6 +238,43 @@
             return checkedFields.join(',');
         }
 
-    }
+        /**
+         * Getter for _boundingBox
+         * @returns {{bbnorth: number, bbwest: number, bbsouth: number, bbeast: number}}
+         * @private
+         */
+        function _getBoundingBox(){
+            return _boundingBox;
+        }
 
+        /**
+         * Setter for _boundingBox
+         * @private
+         * @param bounds
+         */
+        function _setBoundingBox(bounds){
+            _boundingBox = bounds
+        }
+
+        /**
+         * Getter for _timePeriod
+         * @returns {{tstart: string, tend: string}}
+         * @private
+         */
+        function _getTimeWindow(){
+            return _timePeriod;
+        }
+
+        /**
+         * Setter for _timePeriod
+         * @private
+         * @param times
+         */
+        function _setTimeWindow(times){
+            _timePeriod = {
+                tstart: times[0],
+                tend: times[1]
+            };
+        }
+    }
 })();
