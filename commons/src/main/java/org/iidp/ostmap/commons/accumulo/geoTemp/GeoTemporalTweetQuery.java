@@ -90,7 +90,8 @@ public class GeoTemporalTweetQuery {
                 south == null ||
                 startTime == null ||
                 endTime == null ||
-                tc == null){
+                tc == null ||
+                fem == null){
 
             System.err.println("Error: not all query parameters set");
             return;
@@ -198,7 +199,7 @@ public class GeoTemporalTweetQuery {
             nextTupel.f1 = sortedHashes.get(i);
             do{
                 isSuccessive = false;
-                if(isNext(sortedHashes.get(i),sortedHashes.get(i+1))){
+                if(i+1 < sortedHashes.size() && isNext(sortedHashes.get(i),sortedHashes.get(i+1))){
 
                     i++;
                     nextTupel.f1 = sortedHashes.get(i);

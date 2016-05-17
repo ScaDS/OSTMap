@@ -3,10 +3,15 @@ package org.iidp.ostmap.commons.accumulo.geoTemp;
 import com.github.davidmoten.geo.GeoHash;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.hadoop.io.Text;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -14,44 +19,33 @@ import static org.junit.Assert.assertTrue;
 public class GeoTemporalTweetQueryTest {
 
     @Test
-    public void understandRangeAPI(){
+    public void mergeHashesTest(){
+        Set<String> testList = new HashSet<>();
 
-        //Integer i = new Integer(200)
+        testList.add("th04b501");
+        testList.add("th04b503");
+        testList.add("th04b502");
+        testList.add("th06vehc");
+        testList.add("th04b500");
+        testList.add("th04b505");
 
-        Byte b = (byte) 211;
-        b++;
-        assertEquals( 212, Byte.toUnsignedInt(b));
+        GeoTemporalTweetQuery gtq = new GeoTemporalTweetQuery();
+        List<Tuple2<String,String>> sorted = gtq.mergeHashes(testList);
 
-        ByteBuffer rawKey = ByteBuffer.allocate(Long.BYTES + Integer.BYTES);
-        rawKey.putLong(12345).putInt(123);
+        assertEquals(3, sorted.size());
 
-
-        ByteBuffer geoTempKey = ByteBuffer.allocate(11);
-
-        String hash = GeoHash.encodeHash(23.0,42.0,8);
-
-        geoTempKey.put((byte) 111).putShort((short) 321).put(hash.getBytes());
-
-        Range r  = new Range(new Text(geoTempKey.array()),new Text(geoTempKey.array()));
-
-        Key k = new Key(new Text(geoTempKey.array()),new Text(rawKey.array()));
-
-        assertTrue(r.contains(k));
-
+        assertEquals("th04b500", sorted.get(0).f0);
+        assertEquals("th04b503", sorted.get(0).f1);
     }
 
+
     @Test
-    public void byteArrayIncrement(){
+    public void getNextHashTest(){
 
-        ByteBuffer geoTempKey = ByteBuffer.allocate(11);
+        //System.out.println(GeoTemporalTweetQuery.getNextHash(GeoHash.encodeHash(23.0,45.6,8)));
 
-        String hash = GeoHash.encodeHash(23.0,45.0,8);
-
-
-        System.out.println(hash);
-
-
-        System.out.println(GeoTemporalTweetQuery.getNextHash(hash));
+        assertEquals("th04b501",GeoTemporalTweetQuery.getNextHash(GeoHash.encodeHash(23.0,45.0,8)));
+        assertEquals("th06vehc",GeoTemporalTweetQuery.getNextHash(GeoHash.encodeHash(23.0,45.6,8)));
 
     }
 }
