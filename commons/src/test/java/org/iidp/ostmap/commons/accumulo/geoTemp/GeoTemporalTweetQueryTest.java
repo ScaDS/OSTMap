@@ -18,8 +18,9 @@ public class GeoTemporalTweetQueryTest {
 
         //Integer i = new Integer(200)
 
-        Byte b = (byte) 111;
-        assertEquals( 111, Byte.toUnsignedInt(b));
+        Byte b = (byte) 211;
+        b++;
+        assertEquals( 212, Byte.toUnsignedInt(b));
 
         ByteBuffer rawKey = ByteBuffer.allocate(Long.BYTES + Integer.BYTES);
         rawKey.putLong(12345).putInt(123);
@@ -36,6 +37,21 @@ public class GeoTemporalTweetQueryTest {
         Key k = new Key(new Text(geoTempKey.array()),new Text(rawKey.array()));
 
         assertTrue(r.contains(k));
+
+    }
+
+    @Test
+    public void byteArrayIncrement(){
+
+        ByteBuffer geoTempKey = ByteBuffer.allocate(11);
+
+        String hash = GeoHash.encodeHash(23.0,45.0,8);
+
+
+        System.out.println(hash);
+
+
+        System.out.println(GeoTemporalTweetQuery.getNextHash(hash));
 
     }
 }

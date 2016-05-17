@@ -1,5 +1,6 @@
 package org.iidp.ostmap.commons.accumulo.geoTemp;
 
+import com.github.davidmoten.geo.Base32;
 import com.github.davidmoten.geo.Coverage;
 import com.github.davidmoten.geo.GeoHash;
 import org.apache.accumulo.core.client.*;
@@ -15,6 +16,7 @@ import org.iidp.ostmap.commons.enums.TableIdentifier;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -35,7 +37,16 @@ public class GeoTemporalTweetQuery {
     private Short startDay, endDay;
     private TweetCallback tc;
 
-    GeoTemporalTweetQuery(String configPath) throws IOException {
+    public GeoTemporalTweetQuery(String configPath) throws IOException {
+        readConfig(configPath);
+
+    }
+
+    public GeoTemporalTweetQuery(){
+
+    }
+
+    public void setConfig(String configPath)throws IOException {
         readConfig(configPath);
 
     }
@@ -152,16 +163,30 @@ public class GeoTemporalTweetQuery {
 
         List<Tuple2<String,String>> hashRanges = mergeHashes(coverage.getHashes());
 
-        //TODO: gereate Ranges
+        for(Tuple2<String,String> rangeTupel: hashRanges){
+            for(short day = startDay; day < endDay; day++){
+                for(byte spreadingByte = (byte) 0; spreadingByte < 255; spreadingByte++){
+
+                    ByteBuffer startKey = ByteBuffer.allocate(11);
+                    startKey.put(spreadingByte).putShort(day).put(rangeTupel.f0.getBytes());
+
+                    ByteBuffer endKey = ByteBuffer.allocate(11);
+                    endKey.put(spreadingByte).putShort(day).put(rangeTupel.f1.getBytes());
+
+                    rangeList.add(new Range(new Text(startKey.array()), new Text(endKey.array())));
+                }
+            }
+        }
+
         return rangeList;
     }
 
     /**
-     * creates a list of ranges (Tuple2<startHash, endHash>) from a set of hashes
+     * creates a list of successive subsets of hashes (Tuple2<startHash, endHash>) from a set of hashes
      * @param hashStrings
      * @return
      */
-    private List<Tuple2<String,String>> mergeHashes(Set<String> hashStrings){
+    protected List<Tuple2<String,String>> mergeHashes(Set<String> hashStrings){
 
         List<Tuple2<String,String>> mergedHashes = new ArrayList<>();
 
@@ -169,18 +194,48 @@ public class GeoTemporalTweetQuery {
         Collections.sort(sortedHashes);
 
         int i = 0;
+        boolean isSuccessive;
         while(i < sortedHashes.size()){
 
             Tuple2<String,String > nextTupel = new Tuple2<>();
             nextTupel.f0 = sortedHashes.get(i);
-            //Todo:this
+            nextTupel.f1 = sortedHashes.get(i);
+            do{
+                isSuccessive = false;
+                if(isNext(sortedHashes.get(i),sortedHashes.get(i+1))){
+
+                    i++;
+                    nextTupel.f1 = sortedHashes.get(i);
+                    isSuccessive = true;
+                }
+            }while(isSuccessive);
+
+            mergedHashes.add(nextTupel);
+            i++;
         }
 
         return mergedHashes;
     }
 
-    private Boolean isNext(String hash1, String hash2){
-        //TODO:this
-        return true;
+    /**
+     * checks if two hashes are successive
+     * @param hash1
+     * @param hash2
+     * @return
+     */
+    protected Boolean isNext(String hash1, String hash2){
+
+        return hash2.equals(getNextHash(hash1));
+    }
+
+    /**
+     * calculates the next hash
+     * @param hash
+     * @return
+     */
+    protected static String getNextHash(String hash) {
+        long decode = Base32.decodeBase32(hash);
+        decode++;
+        return Base32.encodeBase32(decode,8);
     }
 }
