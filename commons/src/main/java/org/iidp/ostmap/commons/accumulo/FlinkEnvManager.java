@@ -1,7 +1,6 @@
 package org.iidp.ostmap.commons.accumulo;
 
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.ClientConfiguration;
+import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.client.mapreduce.AccumuloFileOutputFormat;
 import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
 import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
@@ -57,6 +56,15 @@ public class FlinkEnvManager {
         readConfig(configPath);
     }
 
+    /**
+     * only configure accumulo (don't use flink functions)
+     * @param configPath
+     * @throws IOException
+     */
+    public FlinkEnvManager(String configPath) throws IOException {
+        readConfig(configPath);
+    }
+
 
 
     /**
@@ -104,6 +112,22 @@ public class FlinkEnvManager {
             getExecutionEnvironment();
         }
         return getDataFromAccumulo(env);
+    }
+
+    /**
+     * builds a accumulo connector
+     *
+     * @return the ready to use connector
+     * @throws AccumuloSecurityException
+     * @throws AccumuloException
+     */
+    public Connector getConnector() throws AccumuloSecurityException, AccumuloException {
+        // build the accumulo connector
+        Instance inst = new ZooKeeperInstance(accumuloInstanceName, accumuloZookeeper);
+        Connector conn = inst.getConnector(accumuloUser, new PasswordToken(accumuloPassword));
+        Authorizations auths = new Authorizations("standard");
+        conn.securityOperations().changeUserAuthorizations("root", auths);
+        return conn;
     }
 
     /**

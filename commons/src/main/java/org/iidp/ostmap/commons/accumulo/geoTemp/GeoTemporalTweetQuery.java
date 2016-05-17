@@ -4,6 +4,7 @@ import com.github.davidmoten.geo.Base32;
 import com.github.davidmoten.geo.Coverage;
 import com.github.davidmoten.geo.GeoHash;
 import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
@@ -11,6 +12,7 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.hadoop.io.Text;
+import org.iidp.ostmap.commons.accumulo.FlinkEnvManager;
 import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
 
@@ -27,18 +29,15 @@ import java.util.*;
  */
 public class GeoTemporalTweetQuery {
 
-    private String accumuloInstanceName;
-    private String accumuloUser;
-    private String accumuloPassword;
-    private String accumuloZookeeper;
-
     private Double north, east, south, west;
     private Long startTime, endTime;
     private Short startDay, endDay;
     private TweetCallback tc;
+    private FlinkEnvManager fem;
 
     public GeoTemporalTweetQuery(String configPath) throws IOException {
-        readConfig(configPath);
+
+        fem = new FlinkEnvManager(configPath);
 
     }
 
@@ -47,44 +46,12 @@ public class GeoTemporalTweetQuery {
     }
 
     public void setConfig(String configPath)throws IOException {
-        readConfig(configPath);
+
+        fem = new FlinkEnvManager(configPath);
 
     }
 
-    /**
-     * Parses the config file at the given path for the necessary parameter.
-     *
-     * @param path the path to the config file
-     * @throws IOException
-     */
-    private void readConfig(String path) throws IOException {
-        if(null == path){
-            throw new RuntimeException("No path to accumulo config file given. You have to start the webservice with the path to accumulo config as first parameter.");
-        }
-        Properties props = new Properties();
-        FileInputStream fis = new FileInputStream(path);
-        props.load(fis);
-        accumuloInstanceName = props.getProperty(AccumuloIdentifiers.PROPERTY_INSTANCE.toString());
-        accumuloUser = props.getProperty(AccumuloIdentifiers.PROPERTY_USER.toString());
-        accumuloPassword = props.getProperty(AccumuloIdentifiers.PROPERTY_PASSWORD.toString());
-        accumuloZookeeper = props.getProperty(AccumuloIdentifiers.PROPERTY_ZOOKEEPER.toString());
-    }
 
-    /**
-     * builds a accumulo connector
-     *
-     * @return the ready to use connector
-     * @throws AccumuloSecurityException
-     * @throws AccumuloException
-     */
-    Connector getConnector() throws AccumuloSecurityException, AccumuloException {
-        // build the accumulo connector
-        Instance inst = new ZooKeeperInstance(accumuloInstanceName, accumuloZookeeper);
-        Connector conn = inst.getConnector(accumuloUser, new PasswordToken(accumuloPassword));
-        Authorizations auths = new Authorizations("standard");
-        conn.securityOperations().changeUserAuthorizations("root", auths);
-        return conn;
-    }
 
     public void setBoundingBox(double north,
                                double east,
@@ -130,24 +97,42 @@ public class GeoTemporalTweetQuery {
         }
 
 
-        Connector conn = getConnector();
+        Connector conn = fem.getConnector();
         Authorizations auths = new Authorizations("standard");
-        BatchScanner scan = conn.createBatchScanner(TableIdentifier.GEO_TEMPORAL_INDEX.get(), auths,32);
+        BatchScanner geoTempScan = conn.createBatchScanner(TableIdentifier.GEO_TEMPORAL_INDEX.get(), auths,32);
+        Scanner rawTwitterScan = conn.createScanner(TableIdentifier.RAW_TWITTER_DATA.get(),auths);
+
+
 
         List<Range> rangeList = getRangeList();
 
-        scan.setRanges(rangeList);
-        for (Map.Entry<Key, Value> entry : scan) {
+        geoTempScan.setRanges(rangeList);
+        for (Map.Entry<Key, Value> entry : geoTempScan) {
 
-            //TODO: filter exact window
-            if(true){
+            //filter exact window
+            if(isInExactWindow(entry.getKey())){
 
-                //TODO: get RawTwiiterData value
-                tc.process(entry.getValue().toString());
+                //get RawTwitterData from key
+                rawTwitterScan.setRange(new Range(entry.getKey().getColumnFamily()));
+                for(Map.Entry<Key,Value> rawEntry: rawTwitterScan){
+
+                    tc.process(rawEntry.getValue().toString());
+                }
             }
         }
 
-        scan.close();
+        geoTempScan.close();
+    }
+
+    /**
+     * checks if a GeoTimeIndex key matches the exact window of the query
+     * @param k
+     * @return
+     */
+    private boolean isInExactWindow(Key k){
+
+        //TODO
+        return true;
     }
 
 

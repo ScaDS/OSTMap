@@ -42,6 +42,7 @@ public class AccumuloServiceTest {
     @BeforeClass
     public static void setUpCluster() throws IOException, AccumuloException, TableNotFoundException, TableExistsException, AccumuloSecurityException {
         amc = new AmcHelper();
+
         amc.startMiniCluster(tmpDir.getRoot().getAbsolutePath());
 
         tmpSettingsDir.create();
@@ -58,8 +59,8 @@ public class AccumuloServiceTest {
         }
 
         //write example entry to RawTwitterData
-        tweetHund = "Vollstaendiger Tweet hund";
-        tweetKatze = "Vollstaendiger Tweet katze #katze";
+        tweetHund = "Vollstaendiger Tweet hund maus";
+        tweetKatze = "Vollstaendiger Tweet katze #katze maus";
         //File f = new File(AccumuloServiceTest.class.getResource("example-response.json").getFile());
         File f = new File(ClassLoader.getSystemClassLoader().getResource("example-response.json").getFile());
 
@@ -96,6 +97,8 @@ public class AccumuloServiceTest {
         m4.put("text".getBytes(),bb.array(),"2".getBytes());
         Mutation m5 = new Mutation("hund");
         m5.put("text".getBytes(),bb.array(),"2".getBytes());
+        Mutation m55 = new Mutation("maus");
+        m55.put("text".getBytes(),bb.array(),"2".getBytes());
         Mutation m6 = new Mutation("Vollstaendiger");
         m6.put("text".getBytes(),bb2.array(),"2".getBytes());
         Mutation m7 = new Mutation("Tweet");
@@ -104,6 +107,8 @@ public class AccumuloServiceTest {
         m8.put("text".getBytes(),bb2.array(),"2".getBytes());
         Mutation m9 = new Mutation("#katze");
         m9.put("text".getBytes(),bb2.array(),"2".getBytes());
+        Mutation m10 = new Mutation("maus");
+        m10.put("text".getBytes(),bb2.array(),"2".getBytes());
 
         System.out.println(Arrays.toString("text".getBytes()));
 
@@ -111,10 +116,12 @@ public class AccumuloServiceTest {
         bwti.addMutation(m3);
         bwti.addMutation(m4);
         bwti.addMutation(m5);
+        bwti.addMutation(m55);
         bwti.addMutation(m6);
         bwti.addMutation(m7);
         bwti.addMutation(m8);
         bwti.addMutation(m9);
+        bwti.addMutation(m10);
         bwti.close();
 
         //create settings file with data of Mini Accumulo Cluster
@@ -187,32 +194,21 @@ public class AccumuloServiceTest {
     }
 
     @Test
-    public void testBuildPrefixFromLong() throws Exception{
-        Date date = new Date();
-        long longTime = date.getTime();
-        byte[] result = AccumuloService.buildPrefix(longTime);
+    public void testAccumuloServiceTokenSearchWildcard() throws Exception {
+        //run Token Search
+        System.out.println("settings file path: " + settings.getAbsolutePath());
 
-        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
-        bb.putLong(longTime);
+        String fieldList = "user,text";
+        String searchToken = "mau*";
 
-        System.out.println("testBuildPrefixFromLong");
-        //assertEquals(bb.array(),result);
-        assertTrue(Arrays.equals(bb.array(),result));
-    }
+        TokenSearchController tsc = new TokenSearchController();
+        tsc.set_paramCommaSeparatedFieldList(fieldList);
+        tsc.set_paramToken(searchToken);
+        tsc.validateQueryParams();
+        String result = tsc.getResultsFromAccumulo(settings.getAbsolutePath());
 
-    @Test
-    public void testBuildPrefixFromString() throws Exception{
-        Date date = new Date();
-        long longTime = date.getTime();
-        String longString = Long.toString(longTime);
-        byte[] result = AccumuloService.buildPrefix(longString);
-
-        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
-        bb.putLong(longTime);
-
-        System.out.println("testBuildPrefixFromString");
-        //assertEquals(bb.array(),result);
-        assertTrue(Arrays.equals(bb.array(),result));
+        System.out.println(result + " <-> " + "["+tweetKatze+','+tweetHund+"]");
+        assertEquals("["+tweetHund+','+tweetKatze+"]",result);
     }
 
      @Test

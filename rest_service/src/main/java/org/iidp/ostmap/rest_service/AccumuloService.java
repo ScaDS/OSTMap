@@ -23,7 +23,6 @@ class AccumuloService {
     private String accumuloPassword;
     private static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
     private String accumuloZookeeper;
-    private static final byte[] RAW_DATA_CF = "t".getBytes();
     private static final String rawTwitterDataTableName = "RawTwitterData";
     private static final String termIndexTableName = "TermIndex";
 
@@ -64,6 +63,7 @@ class AccumuloService {
 
     /**
      * Creates a scanner for the accumulo term index table.
+     *
      * @param token the token to search for
      * @param field the field to search for
      * @return a scanner instance
@@ -71,41 +71,61 @@ class AccumuloService {
      * @throws AccumuloException
      * @throws TableNotFoundException
      */
-    Scanner getTermIdexScanner(String token, String field) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+    Scanner getTermIndexScanner(String token, String field) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
         Authorizations auths = new Authorizations("standard");
         Scanner scan = conn.createScanner(termIndexTableName, auths);
         scan.fetchColumnFamily(new Text(field.getBytes()));
-        scan.setRange(new Range(token));
-        IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
-        GrepIterator.setTerm(grepIterSetting, token);
-        scan.addScanIterator(grepIterSetting);
+        //Check if the token has a wildcard as last character
+        if(hasWildCard(token)){
+            token = token.replace("*","");
+            scan.setRange(Range.prefix(token));
+        }else {
+            scan.setRange(new Range(token));
+            IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
+            GrepIterator.setTerm(grepIterSetting, token);
+            scan.addScanIterator(grepIterSetting);
+        }
         return scan;
     }
 
-
-
-    BatchScanner getRawDataScannerByRange(String startRowPrefix, String endRowPrefix) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+    /**
+     * Builds a Range from the given start and end timestamp and returns a batch scanner.
+     *
+     * @param startTime start time as string
+     * @param endTime endt time as string
+     * @return the batch scanner
+     * @throws AccumuloSecurityException
+     * @throws AccumuloException
+     * @throws TableNotFoundException
+     */
+    BatchScanner getRawDataScannerByTimeSpan(String startTime, String endTime) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
         Authorizations auths = new Authorizations("standard");
         BatchScanner scan = conn.createBatchScanner(rawTwitterDataTableName, auths,5);
 
         ByteBuffer bb = ByteBuffer.allocate(Long.BYTES );
-        bb.putLong(Long.parseLong(startRowPrefix));
+        bb.putLong(Long.parseLong(startTime));
 
         ByteBuffer bb2 = ByteBuffer.allocate(Long.BYTES); //TODO: make end inclusive again
-        bb2.putLong(Long.parseLong(endRowPrefix));
-
+        bb2.putLong(Long.parseLong(endTime));
 
         List<Range> rangeList = new ArrayList<>();
         Range r = new Range(new Text(bb.array()), new Text(bb2.array()));
         rangeList.add(r);
-        //System.out.println(r);
         scan.setRanges(rangeList);
-
         return scan;
     }
 
+    /**
+     * Builds a batch scanner for table "RawTwitterData" by the given List of Ranges.
+     *
+     * @param rangeFilter the list of ranges, applied to the Batch Scanner
+     * @return the batch scanner
+     * @throws AccumuloSecurityException
+     * @throws AccumuloException
+     * @throws TableNotFoundException
+     */
     BatchScanner getRawDataBatchScanner(List<Range> rangeFilter) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
         Authorizations auths = new Authorizations("standard");
@@ -114,18 +134,13 @@ class AccumuloService {
         return scan;
     }
 
-    static byte[] buildPrefix(String timestamp)
-    {
-        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
-        long time = Long.valueOf(timestamp).longValue();
-        bb.putLong(time);
-        return bb.array();
-    }
-
-    static byte[] buildPrefix(long timestamp)
-    {
-        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
-        bb.putLong(timestamp);
-        return bb.array();
+    /**
+     * Checks if the given string ends with a wildcard *
+     *
+     * @param token the string to check
+     * @return true if ends with wildcard, false if not
+     */
+    private boolean hasWildCard(String token){
+        return token.endsWith("*");
     }
 }
