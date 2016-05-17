@@ -108,6 +108,8 @@ public class GeoTimePeriodController {
 
         for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
             //check if tweet is in box
+            String json = rawDataEntry.getValue().toString();
+
             JSONObject obj = null;
             try {
                 obj = new JSONObject(json);
@@ -136,8 +138,10 @@ public class GeoTimePeriodController {
                     System.out.println(south + " < " + latitude + " < "+north);*/
                 }
 
-        }
-        rawDataScanner.close();
+        } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            rawDataScanner.close();
         return result + "]";
     }
 
