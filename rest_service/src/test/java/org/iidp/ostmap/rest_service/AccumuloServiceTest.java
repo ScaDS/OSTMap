@@ -213,47 +213,42 @@ public class AccumuloServiceTest {
 
      @Test
      public void testGeoTime() throws Exception{
-         AccumuloService accumuloService = new AccumuloService();
          System.out.println("settings file path: " + settings.getAbsolutePath());
-         accumuloService.readConfig(settings.getAbsolutePath());
 
          GeoTimePeriodController gtpc = new GeoTimePeriodController();
+         gtpc.set_paramNorthCoordinate("42");
+         gtpc.set_paramEastCoordinate("30");
+         gtpc.set_paramSouthCoordinate("38");
+         gtpc.set_paramWestCoordinate("28");
+         gtpc.set_paramStartTime(Long.toString(12300));
+         gtpc.set_paramEndTime(Long.toString(12399));
 
          //example dataset should be in this window
-         String result = gtpc.getResult(accumuloService,(new Long(12300).toString()),(new Long(12399).toString()),42,30,28,28);
+         String result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          System.out.println("GeoTimeResult: " + result);
          System.out.println("------");
          assertTrue(result.length() > 2);
 
          //should not be in time range
-         result = gtpc.getResult(accumuloService,(new Long(12399).toString()),(new Long(12400).toString()),42,30,28,28);
+         gtpc.set_paramStartTime(Long.toString(12399));
+         gtpc.set_paramEndTime(Long.toString(12400));
+         result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          System.out.println("GeoTimeResult: " + result);
          System.out.println("------");
          assertTrue(result.length() == 2);
 
          //should not be in window
-         result = gtpc.getResult(accumuloService,(new Long(12300).toString()),(new Long(12399).toString()),30,45,29,44);
+         gtpc.set_paramNorthCoordinate("30");
+         gtpc.set_paramEastCoordinate("45");
+         gtpc.set_paramSouthCoordinate("29");
+         gtpc.set_paramWestCoordinate("44");
+         gtpc.set_paramStartTime(Long.toString(12300));
+         gtpc.set_paramEndTime(Long.toString(12399));
+         result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          System.out.println("GeoTimeResult: " + result);
          System.out.println("------");
          assertTrue(result.length() == 2);
 
-/*
-         String result = gtpc.getResult(accumuloService,(new Long(12300).toString()),(new Long(12399).toString()));
-         System.out.println("GeoTimeResult: " + result);
-         assertEquals(tweetHund+tweetKatze+tweet3, result);
-
-         result = gtpc.getResult(accumuloService,(new Long(1).toString()),(new Long(2).toString()));
-         System.out.println("GeoTimeResult: " + result);
-         assertEquals("", result);
-
-         result = gtpc.getResult(accumuloService,(new Long(12347).toString()),(new Long(12399).toString()));
-         System.out.println("GeoTimeResult: " + result);
-         assertEquals(tweetKatze+tweet3, result);
-
-         result = gtpc.getResult(accumuloService,(new Long(12340).toString()),(new Long(12348).toString()));
-         System.out.println("GeoTimeResult: " + result);
-         assertEquals(tweetHund+tweetKatze, result);
-*/
      }
 
 
