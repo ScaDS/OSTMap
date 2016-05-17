@@ -1,5 +1,6 @@
 package org.iidp.ostmap.batch_processing;
 
+import org.iidp.ostmap.batch_processing.GeoTempConverter.GeoTempConverter;
 import org.iidp.ostmap.batch_processing.converter.ConverterProcess;
 import org.iidp.ostmap.batch_processing.tweetPerUserAnalysis.TPUAnalysis;
 
@@ -17,7 +18,10 @@ public class Main {
                     +"\t\targuments: pathToConfig\n"
                     +"\n\ttweetPerUser\n"
                     +"\t\tcreates CSV file with tweet count per user in timerange\n"
-                    +"\t\targuments: pathToConfig, pathCSV, longTimeMin, longTimeMax (,limitFirstN)");
+                    +"\t\targuments: pathToConfig, pathCSV, longTimeMin, longTimeMax (,limitFirstN)\n"
+                    +"\n\tgeoTempConverter\n"
+                    +"\t\tconverts RawTwitterData to GeoTemporalIndex\n"
+                    +"\t\targuments: pathToConfig");
             return;
         }
 
@@ -32,6 +36,13 @@ public class Main {
             case "tweetPerUser":
                 try {
                     TPUAnalysis.main(Arrays.copyOfRange(args, 1,args.length));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "geoTempConverter":
+                try {
+                    GeoTempConverter.main(Arrays.copyOfRange(args, 1,args.length));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
