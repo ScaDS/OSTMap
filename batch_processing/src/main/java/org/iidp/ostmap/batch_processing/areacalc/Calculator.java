@@ -99,8 +99,9 @@ public class Calculator {
                                                         .groupBy(0)
                                                         .reduceGroup(new CoordGroupReduce());
 
-        DataSet<Tuple2<String,String>> userRanking = reducedGroup.flatMap(new GeoCalcFlatMap());
-        userRanking.sortPartition(1, Order.ASCENDING);
+        DataSet<Tuple2<String,Double>> userRanking = reducedGroup.flatMap(new GeoCalcFlatMap())
+                .sortPartition(1, Order.DESCENDING).setParallelism(1);
+
 
         TextOutputFormat<String> tof = new TextOutputFormat<>(new Path("file:///tmp/userranking"));
         tof.setWriteMode(FileSystem.WriteMode.OVERWRITE);
@@ -112,5 +113,15 @@ public class Calculator {
         env.execute("AreaCalculationProcess");
 
     }
+    /**
+     * entry point
+     *
+     * @param args only one argument to pass; path to config file
+     */
+    public static void main(String[] args) throws Exception {
 
+        Calculator calc = new Calculator();
+        calc.run(args[0]);
+
+    }
 }

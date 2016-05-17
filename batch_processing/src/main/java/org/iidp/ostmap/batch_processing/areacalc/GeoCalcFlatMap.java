@@ -13,7 +13,7 @@ import java.math.RoundingMode;
 import java.util.Vector;
 
 
-public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tuple2<String,String>> {
+public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tuple2<String,Double>> {
 
 
     double equatorialEarthRadius = 6378.1370;
@@ -23,8 +23,13 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
     public GeoCalcFlatMap(){
     }
 
+    /**
+     * Calculates the area defined by the coordinates of a users tweets
+     * @param in user with extracted coordinates
+     * @param out User with biggest area defined by tweets
+     */
     @Override
-    public void flatMap(Tuple2<String, String> in, Collector<Tuple2<String, String>> out) {
+    public void flatMap(Tuple2<String, String> in, Collector<Tuple2<String, Double>> out) {
 
         JSONObject obj = null;
         String userName = in.f0;
@@ -83,7 +88,7 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
         }
 
 
-        out.collect(new Tuple2<>(userName,area+""));
+        out.collect(new Tuple2<>(userName,area));
 
 
     }
@@ -94,8 +99,8 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
 
     /**
      * calculates the area the Vector of coordinates defines
-     * @param coordinates
-     * @return
+     * @param coordinates all the coordinates from all the tweets o a single user
+     * @return the biggest area defined by this coordinates
      */
     public double getAreaInSquareKm(Vector<double[]> coordinates){
         double area = 0.;
@@ -170,10 +175,10 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
 
     /**
      * Calculates the area of a triangle using the heron formula
-     * @param sideA
-     * @param sideB
-     * @param sideC
-     * @return
+     * @param sideA first side of the triangle
+     * @param sideB second side of the triangle
+     * @param sideC third side of the triangle
+     * @return the area defined by the triangle
      */
     public double heronForm(double sideA, double sideB, double sideC){
         double s = (sideA+sideB+sideC)/2;
@@ -183,10 +188,10 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
 
     /**
      * calculates the distance between two sets of coordinates using the haversine formula
-     * @param lat1
-     * @param long1
-     * @param lat2
-     * @param long2
+     * @param lat1 latitude coordinate 1
+     * @param long1 longitude coordinate 1
+     * @param lat2 latitude coordinate 2
+     * @param long2 longitude coordinate 2
      * @return
      */
     public double haversineInKm(double lat1, double long1, double lat2, double long2){
@@ -201,9 +206,9 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
 
     /**
      * Rounds the given double to the given decimal places
-     * @param value
-     * @param places
-     * @return
+     * @param value Number to round
+     * @param places number of decimal places to round to
+     * @return The rounded number
      */
     private double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();

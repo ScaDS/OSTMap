@@ -270,7 +270,6 @@ public class FlatMapsAndReduceTest {
         Scanner s = conn.createScanner(TableIdentifier.RAW_TWITTER_TABLE.get(), new Authorizations("standard"));
         for (Map.Entry<Key, Value> entry : s) {
             System.out.println(entry.getKey() + " | " + entry.getValue());
-            //assertEquals(entry.getValue().toString(), testString);
         }
         s.close();
 
@@ -306,7 +305,7 @@ public class FlatMapsAndReduceTest {
         System.out.println("Reduced Data: -----------------------------------------------------");
         reducedGroup.print();
 
-        DataSet<Tuple2<String, String>> ranking = reducedGroup.flatMap(new GeoCalcFlatMap());
+        DataSet<Tuple2<String, Double>> ranking = reducedGroup.flatMap(new GeoCalcFlatMap());
         System.out.println("Ranking: -----------------------------------------------------");
         ranking.print();
     }

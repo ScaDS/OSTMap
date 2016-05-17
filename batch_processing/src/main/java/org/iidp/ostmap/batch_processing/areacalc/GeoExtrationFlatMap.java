@@ -16,6 +16,11 @@ public class GeoExtrationFlatMap implements FlatMapFunction<Tuple2<Key, Value>, 
     public GeoExtrationFlatMap(){
     }
 
+    /**
+     * Extracts the Coordinates from any given tweet
+     * @param in Entries from the Rawtwittertable
+     * @param out extracted data
+     */
     @Override
     public void flatMap(Tuple2<Key, Value> in, Collector<Tuple2<String, String>> out) {
 
