@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 public class GeoTemporalTweetQueryTest {
 
-    @Test
+   /* @Test
     public void mergeHashesTest(){
         Set<String> testList = new HashSet<>();
 
@@ -47,5 +47,5 @@ public class GeoTemporalTweetQueryTest {
         assertEquals("th04b501",GeoTemporalTweetQuery.getNextHash(GeoHash.encodeHash(23.0,45.0,8)));
         assertEquals("th06vehc",GeoTemporalTweetQuery.getNextHash(GeoHash.encodeHash(23.0,45.6,8)));
 
-    }
+    }*/
 }

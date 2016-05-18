@@ -101,32 +101,33 @@ public class GeoTemporalTweetQuery {
         Connector conn = fem.getConnector();
         Authorizations auths = new Authorizations("standard");
         BatchScanner geoTempScan = conn.createBatchScanner(TableIdentifier.GEO_TEMPORAL_INDEX.get(), auths,32);
-        Scanner rawTwitterScan = conn.createScanner(TableIdentifier.RAW_TWITTER_DATA.get(),auths);
-
-        //TODO: filter in accumulo
+        BatchScanner rawTwitterScan = conn.createBatchScanner(TableIdentifier.RAW_TWITTER_DATA.get(),auths,32);
 
 
-        //TODO: batch nacheinander
+        List<Range> geoRangeList = getRangeList();
 
+        geoTempScan.setRanges(geoRangeList);
+        //TODO: set filter
 
-        List<Range> rangeList = getRangeList();
+        List<Range> rawRangeList = new ArrayList<>();
 
-        geoTempScan.setRanges(rangeList);
         for (Map.Entry<Key, Value> entry : geoTempScan) {
 
-            //filter exact window
-            if(isInExactWindow(entry.getKey())){
-
-                //get RawTwitterData from key
-                rawTwitterScan.setRange(new Range(entry.getKey().getColumnFamily()));
-                for(Map.Entry<Key,Value> rawEntry: rawTwitterScan){
-
-                    tc.process(rawEntry.getValue().toString());
-                }
-            }
+            rawRangeList.add(new Range(entry.getKey().getColumnFamily()));
         }
 
         geoTempScan.close();
+
+
+        rawTwitterScan.setRanges(rawRangeList);
+        //TODO: set filter
+        for(Map.Entry<Key, Value> entry : rawTwitterScan){
+            //get RawTwitterData from keys
+
+            tc.process(entry.getValue().toString());
+
+        }
+        rawTwitterScan.close();
     }
 
     /**
@@ -134,7 +135,7 @@ public class GeoTemporalTweetQuery {
      * @param k
      * @return
      */
-    private boolean isInExactWindow(Key k){
+    /*private boolean isInExactWindow(Key k){
 
         Long tweetTime = ByteBuffer.wrap(k.getColumnFamily().getBytes()).getLong();
 
@@ -149,7 +150,7 @@ public class GeoTemporalTweetQuery {
                 tweetLon < east &&
                 south < tweetLat &&
                 tweetLat < north;
-    }
+    }*/
 
 
     /**
@@ -161,20 +162,16 @@ public class GeoTemporalTweetQuery {
 
         Coverage coverage = GeoHash.coverBoundingBox(west,north,east,south,8);
 
+        Set<String> hashes = coverage.getHashes();
 
-        List<Tuple2<String,String>> hashRanges = mergeHashes(coverage.getHashes());
-
-        for(Tuple2<String,String> rangeTupel: hashRanges){
+        for(String hash: hashes){
             for(short day = startDay; day < endDay; day++){
                 for(byte spreadingByte = (byte) 0; spreadingByte < 255; spreadingByte++){
 
                     ByteBuffer startKey = ByteBuffer.allocate(11);
-                    startKey.put(spreadingByte).putShort(day).put(rangeTupel.f0.getBytes());
+                    startKey.put(spreadingByte).putShort(day).put(hash.getBytes());
 
-                    ByteBuffer endKey = ByteBuffer.allocate(11);
-                    endKey.put(spreadingByte).putShort(day).put(rangeTupel.f1.getBytes());
-
-                    rangeList.add(new Range(new Text(startKey.array()), new Text(endKey.array())));
+                    rangeList.add(new Range(new Text(startKey.array())));
                 }
             }
         }
@@ -187,7 +184,7 @@ public class GeoTemporalTweetQuery {
      * @param hashStrings
      * @return
      */
-    protected List<Tuple2<String,String>> mergeHashes(Set<String> hashStrings){
+   /* protected List<Tuple2<String,String>> mergeHashes(Set<String> hashStrings){
 
         List<Tuple2<String,String>> mergedHashes = new ArrayList<>();
 
@@ -216,7 +213,7 @@ public class GeoTemporalTweetQuery {
         }
 
         return mergedHashes;
-    }
+    }*/
 
     /**
      * checks if two hashes are successive
@@ -224,7 +221,7 @@ public class GeoTemporalTweetQuery {
      * @param hash2
      * @return
      */
-    protected Boolean isNext(String hash1, String hash2){
+  /*  protected Boolean isNext(String hash1, String hash2){
 
         return hash2.equals(getNextHash(hash1));
     }
@@ -235,9 +232,9 @@ public class GeoTemporalTweetQuery {
      * @param hash
      * @return
      */
-    protected static String getNextHash(String hash) {
+  /*  protected static String getNextHash(String hash) {
         long decode = Base32.decodeBase32(hash);
         decode++;
         return Base32.encodeBase32(decode,8);
-    }
+    }*/
 }
