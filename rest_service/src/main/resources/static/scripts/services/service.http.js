@@ -284,7 +284,10 @@
          */
         function getTokenSearchUrl()
         {
-            return "/api/tokensearch?field=" + encodeURI(buildFieldString()) + "&token=" + encodeURI(_searchToken);
+            var urlEncodedSearchToken = encodeURI(_searchToken);
+            //replace # with %23
+            urlEncodedSearchToken = urlEncodedSearchToken.replace(/#/g, '%23');
+            return "/api/tokensearch?field=" + encodeURI(buildFieldString()) + "&token=" + urlEncodedSearchToken;
         }
 
         /**
