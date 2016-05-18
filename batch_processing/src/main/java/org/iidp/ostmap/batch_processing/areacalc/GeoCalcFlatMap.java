@@ -192,9 +192,9 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
      * @param long1 longitude coordinate 1
      * @param lat2 latitude coordinate 2
      * @param long2 longitude coordinate 2
-     * @return
+     * @return the distance betweend the two coordinates
      */
-    public double haversineInKm(double lat1, double long1, double lat2, double long2){
+    public double haversineInKm(double long1, double lat1, double long2, double lat2){
         double dlong = (long2 - long1) * deg2rad;
         double dlat = (lat2 - lat1) * deg2rad;
         double a = Math.pow(Math.sin(dlat / 2.), 2.) + Math.cos(lat1 * deg2rad) * Math.cos(lat2 * deg2rad) * Math.pow(Math.sin(dlong / 2.), 2.);
