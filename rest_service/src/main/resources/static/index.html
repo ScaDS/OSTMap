@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-layout/src/ui-layout.css"/>
     <link rel="stylesheet" href="bower_components/angularjs-slider/dist/rzslider.min.css"/>
+    <link rel="stylesheet" href="bower_components/leaflet.markercluster/dist/MarkerCluster.css"/>
+    <link rel="stylesheet" href="bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css"/>
 
 </head>
 <body>
@@ -23,6 +25,17 @@
     <navigation></navigation>
 
     <div class="container">
+        <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
+        <div class="loading" id="loading">
+            <uib-alert class="alert" type="danger" role="alert">
+                <button class="btn btn-danger btn-sm" ng-click="ignoreLoading()">Ignore</button>
+                Status: {{timePassed}} s
+                <br>
+                {{info}}
+
+            </uib-alert>
+        </div>
+
         <div ng-view></div>
     </div>
 
@@ -41,6 +54,7 @@
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="bower_components/leaflet/dist/leaflet.js"></script>
+<script src="bower_components/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 <script src="bower_components/ui-leaflet/dist/ui-leaflet.min.js"></script>
 <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
 <script src="bower_components/angular-ui-layout/src/ui-layout.js"></script>

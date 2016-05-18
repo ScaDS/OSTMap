@@ -47,6 +47,7 @@ mainClassName = "org.iidp.ostmap.rest_service.MainController"
 
 dependencies {
     compile project(':commons')
+    compile project(':accumulo_iterators')
     // tag::jetty[]
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"

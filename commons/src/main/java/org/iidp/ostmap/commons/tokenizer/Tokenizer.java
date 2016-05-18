@@ -1,15 +1,19 @@
 package org.iidp.ostmap.commons.tokenizer;
 
+import org.apache.sling.commons.json.JSONException;
+import org.apache.sling.commons.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
-
-/**
- * Created by CSchott on 23.04.16.
- */
 public class Tokenizer implements Serializable{
 
     private List<String> separator = new ArrayList<String>();
@@ -17,29 +21,31 @@ public class Tokenizer implements Serializable{
 
     public Tokenizer(){
 
-        separator.add(".");
-        separator.add(",");
-        separator.add("'");
-        separator.add("!");
-        separator.add("?");
-        separator.add("\"");
-        separator.add(";");
-        separator.add("(");
-        separator.add(")");
-        separator.add("[");
-        separator.add("]");
-        separator.add("{");
-        separator.add("}");
-        separator.add("/");
-        separator.add("+");
-        separator.add("*");
-        separator.add(">");
-        separator.add("<");
+        try {
+            String filePath = new File("").getAbsolutePath();
+            filePath=filePath.concat("/src/main/java/org/iidp/ostmap/commons/tokenizer/tokenizerConfig.json");
+            //System.out.println(filePath);
 
+            byte[] encoded = Files.readAllBytes(Paths.get(filePath));
+            String json = new String(encoded, Charset.defaultCharset());
+            //System.out.println(json);
 
+            JSONObject obj = new JSONObject(json);
 
-        doubleList.add("#");
-        doubleList.add("@");
+            for(int i=0; i<obj.getJSONArray("separator").length();i++) {
+                separator.add(obj.getJSONArray("separator").getString(i));
+            }
+
+            for (int i=0; i<obj.getJSONArray("duplicators").length();i++){
+                doubleList.add(obj.getJSONArray("duplicators").getString(i));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
