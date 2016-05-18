@@ -115,33 +115,24 @@ public class GeoTimePeriodController {
             for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
                 String json = rawDataEntry.getValue().toString();
 
-                //check if tweet is in box
-                JSONObject obj = new JSONObject(json);
-                String JSON_KEY_COORDINATES = "coordinates";
-                if(!obj.has(JSON_KEY_COORDINATES))
-                {
-                    continue;
-                }
-                if(!obj.getJSONObject(JSON_KEY_COORDINATES).has(JSON_KEY_COORDINATES)){
-                    continue;
-                }
-                JSONArray coords = obj.getJSONObject(JSON_KEY_COORDINATES).getJSONArray(JSON_KEY_COORDINATES);
-                if(coords.isNull(0) || coords.isNull(1)){
-                    continue;
-                }
-                Double longitude = coords.getDouble(0);
-                Double latitude = coords.getDouble(1);
+                Double[] longLat = Extractor.extractLocation(json);
+                if (longLat != null && longLat[0] != null && longLat[1] != null) {
+                    Double longitude = longLat[0];
+                    Double latitude = longLat[1];
+                    //TODO: does this work across meridians?
+                    if(west < longitude && longitude < east &&
+                            south < latitude && latitude < north){
 
-                //TODO: does this work across meridians?
-                if(west < longitude && longitude < east && south < latitude && latitude < north){
-                    if(!isFirst){
-                        result += ",";
-                    }else{
-                        isFirst=false;
+                        if(!isFirst){
+                            result += ",";
+                        }else{
+
+                            isFirst=false;
+                        }
+
+                        result += json;
                     }
-                    result += json;
                 }
-
             }
 
             rawDataScanner.close();
