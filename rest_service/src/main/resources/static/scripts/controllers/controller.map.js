@@ -34,10 +34,8 @@
     function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData) {
         mapInit($scope);
 
-        document.getElementById("loading").style.visibility = "hidden";
-
         $scope.autoUpdateDisabled = true;
-        $scope.dataSource = "accumulo";
+        $scope.dataSource = "accumulo"; //default: "accumulo";
 
         $scope.currentFilters = "";
         $scope.timeFilter = 0.25;
@@ -61,7 +59,9 @@
                 zoom: 4
             };
 
-            $scope.search.updateFilters();
+            setTimeout(function(){
+                $scope.search.updateFilters();
+            }, 500);
         };
 
         /**
@@ -77,44 +77,70 @@
         /**
          * Update filters
          */
+        var updateQueued = false;
         $scope.search.updateFilters = function () {
-            /**
-             * Pass the filters to the httpService
-             */
-            httpService.setSearchToken($scope.search.searchFilter);
-            // httpService.setSearchToken("yolo");
-            httpService.setTimeWindow(parseTimeFilter());
-            httpService.setBoundingBox($scope.getBounds());
-            /**
-             * get the tweets from the REST interface
-             */
-            if ($scope.dataSource == "accumulo") {
-                httpService.getTweetsFromServerByGeoTime();  //Get by GeoTime
-            } else if ($scope.dataSource == "restTest") {
-                httpService.getTweetsFromServerTest();       //Get using test REST API
-            } else if ($scope.dataSource == "static") {
-                httpService.getTweetsFromLocal();            //Get from local (debug)
+            if (!httpService.getLoading()) {
+                httpService.setLoading(true);
+                /**
+                 * Pass the filters to the httpService
+                 */
+                httpService.setSearchToken($scope.search.searchFilter);
+                httpService.setTimeWindow(parseTimeFilter());
+                httpService.setBoundingBox($scope.getBounds());
+                /**
+                 * get the tweets from the REST interface
+                 */
+                httpService.queueAddGetTweetFrom($scope.dataSource, $scope.search);
+
+                if ($scope.dataSource == "accumulo") {
+                    //Get by GeoTime
+                    httpService.getTweetsFromServerByGeoTime().then(function (status) {
+                        $scope.$emit('updateStatus', status);
+                    });
+                } else if ($scope.dataSource == "restTest") {
+                    //Get using test REST API
+                    httpService.getTweetsFromServerTest().then(function (status) {
+                        $scope.$emit('updateStatus', status);
+                    });
+                } else if ($scope.dataSource == "static") {
+                    //Get from local (debug)
+                    httpService.getTweetsFromLocal().then(function (status) {
+                        $scope.$emit('updateStatus', status);
+                    });
+                } else {
+                    //Get by Token
+                    httpService.getTweetsFromServerByToken().then(function (status) {
+                        $scope.$emit('updateStatus', status);
+                    });
+                }
+
+                /**
+                 * Update the filter display
+                 * Check for null values, replace with Default
+                 *
+                 * @type {string}
+                 */
+                $scope.currentFilters = $scope.search.searchFilter + " | " +
+                    $scope.search.hashtagFilter + " | " +
+                    $scope.timeFilter + "h | " +
+                    "[" + httpService.getBoundingBox().bbnorth.toFixed(2) +
+                    ", " + httpService.getBoundingBox().bbwest.toFixed(2) +
+                    ", " + httpService.getBoundingBox().bbsouth.toFixed(2) +
+                    ", " + httpService.getBoundingBox().bbeast.toFixed(2) + "]";
+
+                console.log("Filters updated: " + $scope.currentFilters + " | " + $scope.bounds);
+                $scope.$emit('updateStatus', "Loading: " + $scope.currentFilters + " | " + $scope.bounds);
             } else {
-                httpService.getTweetsFromServerByToken();    //Get by Token
+                updateQueued = true;
             }
-
-            /**
-             * Update the filter display
-             * Check for null values, replace with Default
-             *
-             * @type {string}
-             */
-            $scope.currentFilters = $scope.search.searchFilter + " | " +
-                $scope.search.hashtagFilter + " | " +
-                $scope.timeFilter + "h | " +
-                "[" + httpService.getBoundingBox().bbnorth.toFixed(2) +
-                ", " + httpService.getBoundingBox().bbwest.toFixed(2) +
-                ", " + httpService.getBoundingBox().bbsouth.toFixed(2) +
-                ", " + httpService.getBoundingBox().bbeast.toFixed(2) + "]";
-
-            console.log("Filters updated: " + $scope.currentFilters + " | " + $scope.bounds);
-
         };
+
+        $scope.$on('updateStatus', function(event, message){
+            if(updateQueued) {
+                $scope.search.updateFilters();
+                updateQueued = false;
+            }
+        });
 
         /**
          * Move the map center to the coordinates of the clicked tweet
@@ -139,7 +165,7 @@
                 $scope.center ={
                     lat: lat,
                     lng: lng,
-                    zoom: 6
+                    zoom: 10
                 };
 
                 /**
@@ -197,7 +223,7 @@
             /**
              * Reset all markers
              */
-            $scope.markers = {}
+            $scope.markers = {};
 
             /**
              * Iterate through tweets
@@ -216,15 +242,28 @@
                      * Create new marker then add to marker array
                      * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
-                    var newMarker = {
-                        id: tweet.id,
-                        lat: tweet.coordinates.coordinates[1],
-                        lng: tweet.coordinates.coordinates[0],
-                        focus: false,
-                        draggable: false,
-                        message: "@" + tweet.user.screen_name + ": " + tweet.text,
-                        icon: $scope.icons.red
-                    };
+                    var newMarker = {}
+                    if($scope.clusteringEnabled) {
+                        newMarker = {
+                            id: tweet.id,
+                            layer: 'cluster',
+                            lat: tweet.coordinates.coordinates[1],
+                            lng: tweet.coordinates.coordinates[0],
+                            focus: false,
+                            draggable: false,
+                            message: "@" + tweet.user.screen_name + ": " + tweet.text,
+                        };
+                    } else {
+                        newMarker = {
+                            id: tweet.id,
+                            lat: tweet.coordinates.coordinates[1],
+                            lng: tweet.coordinates.coordinates[0],
+                            focus: false,
+                            draggable: false,
+                            message: "@" + tweet.user.screen_name + ": " + tweet.text,
+                            icon: $scope.icons.red
+                        };
+                    }
                     // $scope.markers.push(newMarker)
                     // $scope.markers.push(tweet.id + ": " +  newMarker)
                     $scope.markers[tweet.id] = newMarker;
@@ -292,6 +331,8 @@
             $scope.onBounds()
         });
 
+        
+
         /**
          * Update the filters when the bounds are changed
          */
@@ -300,9 +341,9 @@
                 map.on('moveend', function() {
                     $scope.currentBounds = map.getBounds();
                     if($scope.autoUpdateDisabled) {
-                        console.log("Map watcher triggered, autoUpdateDisabled: no action taken");
+                        // console.log("Map watcher triggered, autoUpdateDisabled: no action taken");
                     } else {
-                        console.log("Map watcher triggered, updating filters");
+                        // console.log("Map watcher triggered, updating filters");
                         $scope.search.updateFilters();
                     }
                 });
@@ -450,7 +491,7 @@
         $scope.currentMarkerID = 0;
 
         /**
-         * Map event functions for future extensibility (Marker Clustering)
+         * Map functions for future extensibility (Marker Clustering)
          * https://asmaloney.com/2015/06/code/clustering-markers-on-leaflet-maps/
          * http://leafletjs.com/2012/08/20/guest-post-markerclusterer-0-1-released.html
          *
@@ -466,5 +507,22 @@
                 logic: 'emit'
             }
         };
+
+        $scope.layers = {
+            baselayers: {
+                osm: {
+                    name: "OpenStreetMap",
+                    type: "xyz",
+                    url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                }
+            },
+            overlays: {
+                cluster: {
+                    name: "Clustered Markers",
+                    type: "markercluster",
+                    visible: true
+                }
+            }
+        }
     }
 })();

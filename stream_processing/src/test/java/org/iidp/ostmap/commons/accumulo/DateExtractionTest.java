@@ -11,7 +11,7 @@ import scala.Tuple2;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 
-import static org.iidp.ostmap.stream_processing.functions.DateExtraction.formatter;
+import static org.iidp.ostmap.stream_processing.functions.DateExtraction.formatterExtract;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -30,7 +30,7 @@ public class DateExtractionTest {
 
     @BeforeClass
     public static void calcData() throws AccumuloException, AccumuloSecurityException, InterruptedException, IOException {
-        time = ZonedDateTime.parse("Fri Apr 29 09:05:55 +0000 2016", formatter);
+        time = ZonedDateTime.parse("Fri Apr 29 09:05:55 +0000 2016", formatterExtract);
         key = time.toEpochSecond();
         keyF = 1461920755255L;
         tweet = "{\"created_at\":\"Fri Apr 29 09:05:55 +0000 2016\",\"id\":725974381906804738,\"id_str\":\"725974381906804738\",\"text\":\"Das sage ich dir gleich, das funktioniert doch nie! #haselnuss\",\"user\":{\"id\":179905182,\"name\":\"Peter Tosh\",\"screen_name\":\"PeTo\"}}";
