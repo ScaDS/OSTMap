@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -44,9 +45,26 @@ public class GeoTemporalKeyTest {
     public void testSomething() throws Exception {
         GeoTemporalKey geoTemporalKey = GeoTemporalKey.buildKey(tweet);
 
+        // Check variables
         assertEquals(geoHash, geoTemporalKey.geoHash);
         assertTrue(spreadingByte == geoTemporalKey.spreadingByte);
         assertTrue(days == geoTemporalKey.day);
+
+        // Check byteArrays
+        assertEquals("56.971493/24.128656", GeoTemporalKey.columQualifierToString(geoTemporalKey.columQualifier));
+
+        byte[] sliceDays = Arrays.copyOfRange(geoTemporalKey.rowBytes, 1, 3);
+        short daysFromBA = ByteBuffer.wrap(sliceDays).getShort();
+
+        assertTrue(daysFromBA==days);
+
+        byte[] subGeoHash = Arrays.copyOfRange(geoTemporalKey.rowBytes, 3, 11);
+        String geoHashFromBA = new String(subGeoHash);
+        assertEquals(geoHash, geoHashFromBA);
+
+        int spreadingByteFromBA = geoTemporalKey.rowBytes[0];
+        assertTrue(spreadingByteFromBA==108);
+        assertTrue(daysFromBA==16920);
 
     }
 }
