@@ -63,8 +63,8 @@ public class AccumuloServiceTest {
         }
 
         //write example entry to RawTwitterData
-        tweetHund = "{\"text\": \"Vollstaendiger Tweet hund maus\"}";
-        tweetKatze = "{\"text\": \"Vollstaendiger Tweet katze #katze maus\"}";
+        tweetHund = "{\"text\":\"Vollstaendiger Tweet hund maus\"}";
+        tweetKatze = "{\"text\":\"Vollstaendiger Tweet katze #katze maus\"}";
         //File f = new File(AccumuloServiceTest.class.getResource("example-response.json").getFile());
         File f = new File(ClassLoader.getSystemClassLoader().getResource("example-response.json").getFile());
 
