@@ -1,17 +1,21 @@
 package org.iidp.ostmap.stream_processing;
 
-import org.iidp.ostmap.stream_processing.functions.CalculateRawTwitterDataKey;
-import org.iidp.ostmap.stream_processing.functions.DateExtraction;
-import org.iidp.ostmap.stream_processing.functions.TermExtraction;
-import org.iidp.ostmap.stream_processing.functions.UserExtraction;
+
+import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.iidp.ostmap.stream_processing.functions.*;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.iidp.ostmap.stream_processing.sinks.LanguageFrequencySink;
 import org.iidp.ostmap.stream_processing.sinks.RawTwitterDataSink;
 import org.iidp.ostmap.stream_processing.sinks.TermIndexSink;
 import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
 import org.iidp.ostmap.stream_processing.types.SinkConfiguration;
 import scala.Tuple2;
+import scala.Tuple3;
+
+import java.util.ArrayList;
 
 /**
  *         Entry point of the twitter stream persist.
@@ -22,6 +26,7 @@ public class Driver {
     // names of the target accumulo tables
     private final String tableNameTerms = "TermIndex";
     private final String tableNameRawData = "RawTwitterData";
+    private final String tableNameFrequencies = "TweetFrequency";
     // configuration values for accumulo
     private String accumuloInstanceName;
     private String accumuloZookeeper;
@@ -45,7 +50,7 @@ public class Driver {
         run(pathToTwitterProperties, pathToAccumuloProperties, null);
     }
 
-    public void run(String pathToTwitterProperties, String pathToAccumuloProperties, String tweet) throws Exception
+    public void run(String pathToTwitterProperties, String pathToAccumuloProperties, ArrayList<String> tweet) throws Exception
     {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
@@ -56,12 +61,13 @@ public class Driver {
             geoStream = env.addSource(new GeoTwitterSource(pathToTwitterProperties));
         }
         else {
-            geoStream = env.fromElements ( tweet );
+            geoStream = env.fromCollection ( tweet );
         }
 
         // decide which configuration should be used
         RawTwitterDataSink rtdSink = new RawTwitterDataSink();
         TermIndexSink tiSink = new TermIndexSink();
+        LanguageFrequencySink frqSink = new LanguageFrequencySink();
         SinkConfiguration sc;
         if(runOnMAC) {
             sc = SinkConfiguration.createConfigForMinicluster(accumuloInstanceName, accumuloZookeeper);
@@ -71,11 +77,23 @@ public class Driver {
         }
         rtdSink.configure(sc, tableNameRawData);
         tiSink.configure(sc, tableNameTerms);
+        frqSink.configure(sc, tableNameFrequencies);
+
+
+        // stream of tuples containing timestamp and tweet's json-String
+        DataStream<Tuple2<Long, String>> dateStream = geoStream.flatMap(new DateExtraction());
+
+        dateStream.getExecutionEnvironment().setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        dateStream
+                .flatMap(new LanguageFrequencyRowExtraction())
+                .flatMap(new LanguageTagExtraction())
+                .assignTimestampsAndWatermarks(new TimestampExtractorForDateStream())
+                .windowAll(TumblingEventTimeWindows.of(Time.minutes(1)))
+                .apply (new AllWindowFunctionLangFreq())
+                .addSink(frqSink);
 
         // stream of tuples containing RawTwitterDataKey and tweet's json-String
-        DataStream<Tuple2<RawTwitterDataKey, String>> rtdStream = geoStream
-                                                                    .flatMap(new DateExtraction())
-                                                                    .flatMap(new CalculateRawTwitterDataKey());
+        DataStream<Tuple2<RawTwitterDataKey, String>> rtdStream = dateStream.flatMap(new CalculateRawTwitterDataKey());
 
         // write into rawTwitterData-table
         rtdStream.addSink(rtdSink);

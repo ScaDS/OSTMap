@@ -29,7 +29,7 @@ public class CalculateRawTwitterDataKey implements FlatMapFunction<Tuple2<Long, 
     @Override
     public void flatMap(Tuple2<Long, String> inTuple, Collector<Tuple2<RawTwitterDataKey, String>> out) throws Exception {
         int hash = getHash(inTuple._2());
-        RawTwitterDataKey rtdKey = RawTwitterDataKey.buildRawTwitterDataKey(inTuple._1, hash);
+        RawTwitterDataKey rtdKey = RawTwitterDataKey.buildRawTwitterDataKey(inTuple._1(), hash);
 
         //Collect user-entry
         out.collect(new Tuple2<>(rtdKey, inTuple._2()));
