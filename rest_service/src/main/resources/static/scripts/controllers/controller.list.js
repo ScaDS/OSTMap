@@ -37,7 +37,6 @@
         console.log();
 
         $scope.dataSource = "accumulo";
-        document.getElementById("loading").style.visibility = "hidden";
 
         /**
          * Get the tweets array from the httpService
@@ -49,23 +48,38 @@
             httpService.setSearchToken($scope.search.inputValue);
             httpService.setSearchFields($scope.search.searchFields);
 
-
+            /**
+             * get the tweets from the REST interface
+             */
             if ($scope.dataSource == "accumulo") {
-                httpService.getTweetsFromServerByToken();    //Get by Token
+                //Get by GeoTime
+                httpService.getTweetsFromServerByToken().then(function (status) {
+                    $scope.$emit('updateStatus', status);
+                });
             } else if ($scope.dataSource == "restTest") {
-                httpService.getTweetsFromServerTest();       //Get using test REST API
+                //Get using test REST API
+                httpService.getTweetsFromServerTest().then(function (status) {
+                    $scope.$emit('updateStatus', status);
+                });
             } else if ($scope.dataSource == "static") {
-                httpService.getTweetsFromLocal();            //Get from local (debug)
+                //Get from local (debug)
+                httpService.getTweetsFromLocal().then(function (status) {
+                    $scope.$emit('updateStatus', status);
+                });
             } else {
-                httpService.getTweetsFromServerByToken();    //Get by Token
+                //Get by Token
+                httpService.getTweetsFromServerByToken().then(function (status) {
+                    $scope.$emit('updateStatus', status);
+                });
             }
-            // httpService.getTweetsFromServerByToken();
 
             if (mode && mode === 'list') {
 
             } else if (mode && mode === 'map') {
                 //TODO: Call Service to load Data for the Map view
             }
+
+            $scope.$emit('updateStatus', "Loading: " + $scope.search.searchFields.text.checked + " | " + $scope.search.searchFields.user.checked + " | '" + $scope.search.inputValue + "'");
         }
     }
 })();

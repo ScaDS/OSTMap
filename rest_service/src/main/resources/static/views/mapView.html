@@ -12,7 +12,7 @@
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="24">1d</label>
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="0">All</label>
         </div>
-        <button class="btn btn-primary btn-lg" ng-click="search.clearFilters()" >Reset</button>
+        <button class="btn btn-primary btn-lg" ng-click="search.clearFilters()">Reset</button>
         <div class="btn-group ">
             <label class="btn btn-danger btn-lg" ng-model="autoUpdateDisabled" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false>Disable AutoUpdate</label>
             <label class="btn btn-danger btn-lg" ng-disabled="!autoUpdateDisabled" ng-click="search.updateFilters()">Manual Update</label>
@@ -35,16 +35,10 @@
         <br>
     </div>
 
-    <div class="loading" id="loading">
-        <uib-alert class="alert" type="danger" role="alert">
-            Status: Loading
-        </uib-alert>
-    </div>
-
     <div class="row">
         <div class="col-xs-12 col-md-8">
             <!--1. UI-Leaflet Map-->
-            <leaflet id="map" class="map" lf-center="center" bounds="bounds" maxbounds="maxBounds" markers="markers" event-broadcast="events"></leaflet>
+            <leaflet id="map" class="map" lf-center="center" bounds="bounds" maxbounds="maxBounds" markers="markers" layers="layers" event-broadcast="events"></leaflet>
         </div>
 
         <div class="col-xs-6 col-md-4">
@@ -62,7 +56,7 @@
         </div>
     </div>
 
-    <div class="row alert alert-danger" uib-collapse="clickOnce" role="alert">
+    <div class="row alert alert-danger" uib-collapse="clickOnce = true" role="alert">
         <strong>[DEBUG]</strong>
         <button class="btn btn-danger btn-sm" ng-click="clickOnce = true;">Hide</button>
         <br>

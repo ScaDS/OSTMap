@@ -10,12 +10,6 @@
 </div>
 <p>&nbsp;</p>
 
-<div class="loading" id="loading">
-    <uib-alert class="alert" type="danger" role="alert">
-        Status: Loading
-    </uib-alert>
-</div>
-
 <div class="input-group">
     <input ng-model="search.inputValue" ng-model-options="{ getterSetter: true }" type="text" class="form-control" placeholder="Search for..."
            ng-keyup="$event.keyCode == 13 && (search.searchFields.text.checked || search.searchFields.user.checked) && search.onClick('list')">

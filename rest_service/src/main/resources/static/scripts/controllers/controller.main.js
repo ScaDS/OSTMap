@@ -20,8 +20,10 @@
      * @type {string[]}
      */
     MainCtrl.$inject = [
+        '$rootScope',
         '$scope',
-        '$location'
+        '$interval',
+        'httpService'
         ];
 
     /**
@@ -31,10 +33,61 @@
      * @param $location
      * @constructor
      */
-    function MainCtrl($scope,$location) {
-
+    function MainCtrl($rootScope, $scope, $interval, httpService) {
+        
         $scope.app = [];
         $scope.app.name = "OSTMap";
-    
+
+        document.getElementById("loading").style.visibility = "hidden";
+        
+        $scope.timePassed = 0;
+        $scope.info = "";
+        var timestamp = 0;
+
+        $scope.alerts = [
+            // { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
+            // { type: 'success', msg: 'Well done! You successfully read this important alert message.' }
+        ];
+
+        $scope.addAlert = function() {
+            $scope.alerts.push({msg: 'Another alert!'});
+        };
+
+        $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
+        };
+
+        $scope.ignoreLoading = function () {
+            httpService.setLoading(false);
+            document.getElementById("loading").style.visibility = "hidden";
+        }
+
+        $scope.$on('updateStatus', function(event, message){
+            if (message != 200) {
+                $scope.info = message;
+            }
+            $scope.setLoadingDisplay(httpService.getLoading(), message);
+        });
+
+        $scope.setLoadingDisplay = function (loadingStatus, message) {
+            if (loadingStatus) {
+                document.getElementById("loading").style.visibility = "visible";
+            } else {
+                document.getElementById("loading").style.visibility = "hidden";
+            }
+
+            timestamp = Date.now()
+            var intervalPromise = $interval(function () {
+                $scope.timePassed = Math.round((Date.now() - timestamp)/100)/10;
+
+                if(!httpService.getLoading()) {
+                    $interval.cancel(intervalPromise);
+                }
+            }, 100);
+        };
+
+        $rootScope.$on('alertControl', function(event, message){
+            // $scope.alerts.push({msg: 'Another alert!'});
+        });
     }
 })();
