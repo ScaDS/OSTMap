@@ -103,6 +103,10 @@ public class GeoTemporalTweetQuery {
         BatchScanner geoTempScan = conn.createBatchScanner(TableIdentifier.GEO_TEMPORAL_INDEX.get(), auths,32);
         Scanner rawTwitterScan = conn.createScanner(TableIdentifier.RAW_TWITTER_DATA.get(),auths);
 
+        //TODO: filter in batchscanner
+        geoTempScan.
+
+        //TODO: batch nacheinander
 
 
         List<Range> rangeList = getRangeList();
@@ -225,6 +229,7 @@ public class GeoTemporalTweetQuery {
         return hash2.equals(getNextHash(hash1));
     }
 
+    //TODO: remove
     /**
      * calculates the next hash
      * @param hash
