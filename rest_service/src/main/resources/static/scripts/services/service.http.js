@@ -15,7 +15,9 @@
      * @type {string[]}
      */
     httpService.$inject = [
-        '$http'
+        '$rootScope',
+        '$http',
+        '$q'
     ];
 
     /**
@@ -73,12 +75,28 @@
      */
     var _searchToken = "";
 
-    function httpService($http) {
+    /**
+     * Loading status
+     * @type {boolean}
+     */
+    var isLoading = false;
+
+    var maxQueueSize = 2;
+
+    var maxSimultaneous = 1;
+
+    var queue = [];
+
+    var processing = [];
+
+    function httpService($rootScope, $http, $q) {
         return {
             getTweetsFromServerByToken: _getTweetsFromServerByToken,
             getTweetsFromServerByGeoTime: _getTweetsFromServerByGeoTime,
             getTweetsFromServerTest: _getTweetsFromServerTest,
             getTweetsFromLocal: _getTweetsFromLocal,
+            queueAddGetTweetFrom: _queueAddGetTweetFrom,
+            removeFromQueue: _removeFromQueue,
             getTweets: _getTweets,
             getSearchToken: _getSearchToken,
             setSearchToken: _setSearchToken,
@@ -87,55 +105,105 @@
             getBoundingBox: _getBoundingBox,
             setBoundingBox: _setBoundingBox,
             getTimeWindow: _getTimeWindow,
-            setTimeWindow: _setTimeWindow
+            setTimeWindow: _setTimeWindow,
+            getLoading: _getLoading,
+            setLoading: _setLoading,
         };
 
+        function _queueAddGetTweetFrom(api, filters) {
+            if (queue.size < maxQueueSize) {
+                
+            }
+
+            switch(api) {
+                case "accumulo":
+                    $rootScope.$emit('alertControl', api);
+                    break;
+                case "restTest":
+                    $rootScope.$emit('alertControl', api);
+                    break;
+                case "static":
+                    $rootScope.$emit('alertControl', api);
+                    break;
+                default:
+                    $rootScope.$emit('alertControl', api);
+            }
+
+            processQueue();
+        }
+
+        function _removeFromQueue(index) {
+            queue.splice(index, 1);
+        }
+
+        function processQueue() {
+            if (processing.size < maxSimultaneous) {
+                processQueue();
+            } else {
+
+            }
+        }
+
         function _getTweetsFromServerByToken() {
-            document.getElementById("loading").style.visibility = "visible";
+            _setLoading(true);
+            var deferred = $q.defer();
 
             var url = getTokenSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
-                document.getElementById("loading").style.visibility = "hidden";
+                _setLoading(status);
+                deferred.resolve(status);
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
-                document.getElementById("loading").style.visibility = "hidden";
+                _setLoading(status);
+                deferred.resolve(status + "\n" + headers + "\n" + config);
             });
+
+            return deferred.promise;
         }
 
         function _getTweetsFromServerByGeoTime() {
-            document.getElementById("loading").style.visibility = "visible";
+            _setLoading(true);
+            var deferred = $q.defer();
 
             var url = getGeoTemporalSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
-                console.log("HTTP response received")
-                document.getElementById("loading").style.visibility = "hidden";
+                _setLoading(status);
+                deferred.resolve(status);
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
-                document.getElementById("loading").style.visibility = "hidden";
+                _setLoading(status);
+                deferred.resolve(status + "\n" + headers + "\n" + config);
             });
-        };
-        function _getTweetsFromServerTest() {
-            document.getElementById("loading").style.visibility = "visible";
 
-            var url = "http://localhost:8080/api/testgeo?bbnorth=" + _boundingBox.bbnorth
-                + "&bbsouth=" +  _boundingBox.bbsouth
-                + "&bbeast=" +  _boundingBox.bbeast
-                + "&bbwest=" +  _boundingBox.bbwest
-                + "&tstart=" + _timePeriod.tstart
-                + "&tend=" + _timePeriod.tend;
+            return deferred.promise;
+        }
+        function _getTweetsFromServerTest() {
+            _setLoading(true);
+            var deferred = $q.defer();
+
+            var url = "http://localhost:8080/api/testgeo"
+            + "?bbnorth=" + _boundingBox.bbnorth
+            + "&bbsouth=" +  _boundingBox.bbsouth
+            + "&bbeast=" +  _boundingBox.bbeast
+            + "&bbwest=" +  _boundingBox.bbwest
+            + "&tstart=" + _timePeriod.tstart
+            + "&tend=" + _timePeriod.tend;
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);
-                console.log("HTTP response received")
-                document.getElementById("loading").style.visibility = "hidden";
+                _setLoading(status);
+                deferred.resolve(status);
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
-                document.getElementById("loading").style.visibility = "hidden";
+                _setLoading(status);
+                deferred.resolve(status + "\n" + headers + "\n" + config);
             });
+
+            return deferred.promise;
         }
 
         /**
@@ -143,16 +211,26 @@
          * @private
          */
         function _getTweetsFromLocal() {
-            document.getElementById("loading").style.visibility = "visible";
+            _setLoading(true);
+            var deferred = $q.defer();
 
             var url = "data/example-response.json";
             $http.get(url).then(function (result) {
-                if(result.status == 200){
-                    //Copy result data to the private array
-                    angular.copy(result.data,_tweets);
-                }
-                document.getElementById("loading").style.visibility = "hidden";
+                setTimeout(function(){
+                    if(result.status == 200){
+                        //Copy result data to the private array
+                        angular.copy(result.data,_tweets);
+                        _setLoading(status);
+                        deferred.resolve(result.status);
+                    } else {
+                        _setLoading(status);
+                        deferred.resolve(result.status + "\n" + result.headers + "\n" + result.config);
+                    }
+                }, 2000);
+
             });
+
+            return deferred.promise;
         }
 
         /**
@@ -206,7 +284,7 @@
          */
         function getTokenSearchUrl()
         {
-            return "/api/tokensearch?field=" + buildFieldString() + "&token=" + _searchToken;
+            return "/api/tokensearch?field=" + encodeURI(buildFieldString()) + "&token=" + encodeURI(_searchToken);
         }
 
         /**
@@ -275,6 +353,20 @@
                 tstart: times[0],
                 tend: times[1]
             };
+        }
+
+        function _getLoading(){
+            return isLoading;
+        }
+
+        function _setLoading(status){
+            if (!status || status == 200) {
+                isLoading = false;
+            } else if (status) {
+                isLoading = true;
+            } else {
+                isLoading = false;
+            }
         }
     }
 })();
