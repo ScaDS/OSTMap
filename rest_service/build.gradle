@@ -8,26 +8,45 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin:'application'
 
+configurations {
+    all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+}
 
 jar {
     baseName = 'gs-spring-boot'
     version =  '0.1.0'
 }
 
+run {
+    if ( project.hasProperty('args') ) {
+        args project.args.split('\\s+')
+    }
+}
 repositories {
     mavenCentral()
+    maven {
+        url "http://repo.spring.io/release"
+    }
+    maven {
+        url "http://repo.hortonworks.com/content/groups/public/"
+    }
+    maven {
+        url "http://repo.hortonworks.com/content/repositories/releases/"
+    }
 }
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+group 'org.iidp.ostmap'
+sourceCompatibility = 1.8
+
 mainClassName = "org.iidp.ostmap.rest_service.MainController"
 
+
 dependencies {
+    compile project(':commons')
     // tag::jetty[]
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
@@ -37,9 +56,16 @@ dependencies {
     // tag::actuator[]
     compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]
-    testCompile("junit:junit")
-}
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    compile 'org.codehaus.jettison:jettison:1.1'
+
+    testCompile 'junit:junit'
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: 'org.slf4j'
+    }
+
+    compile('org.apache.accumulo:accumulo-core:1.7.0.2.4.0.0-169') {
+        exclude group: 'org.mortbay.jetty', module: 'jetty'
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    }
 }

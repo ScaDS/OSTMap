@@ -3,6 +3,7 @@ package org.iidp.ostmap.commons.tokenizer;
 /**
  * Created by schotti on 28.04.16.
  */
+//import org.jcp.xml.dsig.internal.SignerOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class TokenizerTest {
 
-    private static final String INPUT_TEXT1 = "this is some text\n and i love it #truelove @test" ;
+    private static final String INPUT_TEXT1 = "this is some text\n and +i love (it) #truelove @test''...../''!+<>!!! " ;
     private static final String INPUT_TEXT2 = "Hello Example ...";
     private static final String[] TOKENS1 = new String[] { "this" ,"is", "some", "text", "and" , "love", "it", "#truelove", "truelove","@test", "test"};
     private static final String[] TOKENS2 = new String[] { "hello"  ,"example" };
@@ -24,6 +25,7 @@ public class TokenizerTest {
         List<String> tokens1 = tokenizer.tokenizeString(INPUT_TEXT1);
 
         for(String s: tokens1){
+            System.out.println(s);
             Boolean equal1 = false;
             for(int i= 0 ; i<TOKENS1.length;i++){
                 if(s.equals(TOKENS1[i])){
