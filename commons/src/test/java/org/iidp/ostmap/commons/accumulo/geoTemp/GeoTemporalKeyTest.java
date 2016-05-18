@@ -55,6 +55,7 @@ public class GeoTemporalKeyTest {
 
         byte[] sliceDays = Arrays.copyOfRange(geoTemporalKey.rowBytes, 1, 3);
         short daysFromBA = ByteBuffer.wrap(sliceDays).getShort();
+
         assertTrue(daysFromBA==days);
 
         byte[] subGeoHash = Arrays.copyOfRange(geoTemporalKey.rowBytes, 3, 11);
@@ -63,5 +64,7 @@ public class GeoTemporalKeyTest {
 
         int spreadingByteFromBA = geoTemporalKey.rowBytes[0];
         assertTrue(spreadingByteFromBA==108);
+        assertTrue(daysFromBA==16920);
+
     }
 }
