@@ -185,7 +185,13 @@
             _setLoading(true);
             var deferred = $q.defer();
 
-            var url = "http://localhost:8080/api/testgeo?xyz";
+            var url = "http://localhost:8080/api/testgeo"
+            + "?bbnorth=" + _boundingBox.bbnorth
+            + "&bbsouth=" +  _boundingBox.bbsouth
+            + "&bbeast=" +  _boundingBox.bbeast
+            + "&bbwest=" +  _boundingBox.bbwest
+            + "&tstart=" + _timePeriod.tstart
+            + "&tend=" + _timePeriod.tend;
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 angular.copy(data,_tweets);

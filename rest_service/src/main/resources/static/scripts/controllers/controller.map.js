@@ -59,7 +59,9 @@
                 zoom: 4
             };
 
-            $scope.search.updateFilters();
+            setTimeout(function(){
+                $scope.search.updateFilters();
+            }, 500);
         };
 
         /**

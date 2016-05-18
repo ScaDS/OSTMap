@@ -59,7 +59,8 @@
 
         $scope.ignoreLoading = function () {
             httpService.setLoading(false);
-            document.getElementById("loading").style.visibility = "hidden";
+            $scope.$emit('updateStatus', status);
+            // document.getElementById("loading").style.visibility = "hidden";
         }
 
         $scope.$on('updateStatus', function(event, message){
@@ -72,8 +73,10 @@
         $scope.setLoadingDisplay = function (loadingStatus, message) {
             if (loadingStatus) {
                 document.getElementById("loading").style.visibility = "visible";
+                // $scope.alerts.push({type: 'danger', msg: message + " " + $scope.timePassed});
             } else {
                 document.getElementById("loading").style.visibility = "hidden";
+                // $scope.alerts.splice(index, 1);
             }
 
             timestamp = Date.now()
