@@ -103,8 +103,8 @@ public class GeoTemporalTweetQuery {
         BatchScanner geoTempScan = conn.createBatchScanner(TableIdentifier.GEO_TEMPORAL_INDEX.get(), auths,32);
         Scanner rawTwitterScan = conn.createScanner(TableIdentifier.RAW_TWITTER_DATA.get(),auths);
 
-        //TODO: filter in batchscanner
-        geoTempScan.
+        //TODO: filter in accumulo
+
 
         //TODO: batch nacheinander
 
