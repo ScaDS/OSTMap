@@ -56,7 +56,8 @@
         </div>
     </div>
 
-    <div class="row alert alert-danger" uib-collapse="clickOnce = true" role="alert">
+    <div class="row alert alert-danger" uib-collapse="clickOnce" role="alert">
+        <label class="btn btn-danger btn-lsmg" ng-model="clusteringEnabled" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false ng-click="populateMarkers();">Clustering</label>
         <strong>[DEBUG]</strong>
         <button class="btn btn-danger btn-sm" ng-click="clickOnce = true;">Hide</button>
         <br>

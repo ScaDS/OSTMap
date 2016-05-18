@@ -80,6 +80,7 @@
         var updateQueued = false;
         $scope.search.updateFilters = function () {
             if (!httpService.getLoading()) {
+                httpService.setLoading(true);
                 /**
                  * Pass the filters to the httpService
                  */
@@ -222,7 +223,7 @@
             /**
              * Reset all markers
              */
-            $scope.markers = {}
+            $scope.markers = {};
 
             /**
              * Iterate through tweets
@@ -241,16 +242,28 @@
                      * Create new marker then add to marker array
                      * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
-                    var newMarker = {
-                        id: tweet.id,
-                        layer: 'cluster',
-                        lat: tweet.coordinates.coordinates[1],
-                        lng: tweet.coordinates.coordinates[0],
-                        focus: false,
-                        draggable: false,
-                        message: "@" + tweet.user.screen_name + ": " + tweet.text,
-                        // icon: $scope.icons.red
-                    };
+                    var newMarker = {}
+                    if($scope.clusteringEnabled) {
+                        newMarker = {
+                            id: tweet.id,
+                            layer: 'cluster',
+                            lat: tweet.coordinates.coordinates[1],
+                            lng: tweet.coordinates.coordinates[0],
+                            focus: false,
+                            draggable: false,
+                            message: "@" + tweet.user.screen_name + ": " + tweet.text,
+                        };
+                    } else {
+                        newMarker = {
+                            id: tweet.id,
+                            lat: tweet.coordinates.coordinates[1],
+                            lng: tweet.coordinates.coordinates[0],
+                            focus: false,
+                            draggable: false,
+                            message: "@" + tweet.user.screen_name + ": " + tweet.text,
+                            icon: $scope.icons.red
+                        };
+                    }
                     // $scope.markers.push(newMarker)
                     // $scope.markers.push(tweet.id + ": " +  newMarker)
                     $scope.markers[tweet.id] = newMarker;
