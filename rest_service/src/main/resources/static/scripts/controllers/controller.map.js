@@ -34,8 +34,9 @@
     function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData) {
         mapInit($scope);
 
-        $scope.autoUpdateDisabled = true;
-        $scope.dataSource = "accumulo"; //default: "accumulo";
+        $scope.autoUpdate = false;
+        $scope.dataSource = "static"; //default: "accumulo";
+        $scope.clusteringEnabled = false;
 
         $scope.currentFilters = "";
         $scope.timeFilter = 0.25;
@@ -106,6 +107,8 @@
                     //Get from local (debug)
                     httpService.getTweetsFromLocal().then(function (status) {
                         $scope.$emit('updateStatus', status);
+                        $scope.data.tweets = httpService.getTweets();
+                        $scope.populateMarkers();
                     });
                 } else {
                     //Get by Token
@@ -224,6 +227,7 @@
              * Reset all markers
              */
             $scope.markers = {};
+            var newMarkers = [];
 
             /**
              * Iterate through tweets
@@ -252,6 +256,7 @@
                             focus: false,
                             draggable: false,
                             message: "@" + tweet.user.screen_name + ": " + tweet.text,
+                            icon: $scope.icons.red
                         };
                     } else {
                         newMarker = {
@@ -266,9 +271,10 @@
                     }
                     // $scope.markers.push(newMarker)
                     // $scope.markers.push(tweet.id + ": " +  newMarker)
-                    $scope.markers[tweet.id] = newMarker;
+                    newMarkers[tweet.id] = newMarker;
                 }
             });
+            $scope.markers = newMarkers;
         };
 
         $scope.currentBounds = null;
@@ -340,11 +346,11 @@
             leafletData.getMap("map").then(function(map) {
                 map.on('moveend', function() {
                     $scope.currentBounds = map.getBounds();
-                    if($scope.autoUpdateDisabled) {
-                        // console.log("Map watcher triggered, autoUpdateDisabled: no action taken");
-                    } else {
+                    if($scope.autoUpdate) {
                         // console.log("Map watcher triggered, updating filters");
                         $scope.search.updateFilters();
+                    } else {
+                        // console.log("Map watcher triggered, autoUpdateDisabled: no action taken");
                     }
                 });
                 console.log("Mapbounds watcher started");
@@ -364,14 +370,14 @@
         /**
          * Populate markers whenever tweet data changes
          */
-        $scope.$watch(function() {
-                return $scope.data.tweets;
-            }, function() {
-                console.log("Data watcher triggered, populating markers");
-                $scope.populateMarkers();
-            },
-            true
-        );
+        // $scope.$watch(function() {
+        //         return $scope.data.tweets;
+        //     }, function() {
+        //         console.log("Data watcher triggered, populating markers");
+        //         $scope.populateMarkers();
+        //     },
+        //     true
+        // );
 
         /**
          * Pagination
@@ -510,6 +516,11 @@
 
         $scope.layers = {
             baselayers: {
+                gray: {
+                    name: "OpenStreetMap-Gray",
+                    type: "xyz",
+                    url: "http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                },
                 osm: {
                     name: "OpenStreetMap",
                     type: "xyz",

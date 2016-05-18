@@ -10,17 +10,19 @@
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="2">2h</label>
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="3">4h</label>
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="24">1d</label>
-            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="0">All</label>
+            <!--<label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="0">All</label>-->
         </div>
         <button class="btn btn-primary btn-lg" ng-click="search.clearFilters()">Reset</button>
         <div class="btn-group ">
-            <label class="btn btn-danger btn-lg" ng-model="autoUpdateDisabled" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false>Disable AutoUpdate</label>
-            <label class="btn btn-danger btn-lg" ng-disabled="!autoUpdateDisabled" ng-click="search.updateFilters()">Manual Update</label>
+            <label class="btn btn-danger btn-lg" ng-model="autoUpdate" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false>AutoUpdate</label>
+            <label class="btn btn-danger btn-lg" ng-disabled="autoUpdate" ng-click="search.updateFilters()">Manual Update</label>
         </div>
+
+        <label class="btn btn-danger btn-lg" ng-model="clusteringEnabled" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false ng-click="populateMarkers();">Clustering</label>
 
         <div class="btn-group" uib-dropdown is-open="status.isopen">
             <button id="single-button" type="button" class="btn btn-danger btn-lg" uib-dropdown-toggle ng-disabled="disabled">
-                Data Source: {{dataSource}} <span class="caret"></span>
+                Data: {{dataSource}} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-form" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                 <li role="menuitem" ng-click="dataSource = 'accumulo'"><a>Accumulo (Default)</a></li>
@@ -57,13 +59,13 @@
     </div>
 
     <div class="row alert alert-danger" uib-collapse="clickOnce" role="alert">
-        <label class="btn btn-danger btn-lsmg" ng-model="clusteringEnabled" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false ng-click="populateMarkers();">Clustering</label>
         <strong>[DEBUG]</strong>
         <button class="btn btn-danger btn-sm" ng-click="clickOnce = true;">Hide</button>
         <br>
         <code>
+            clustering: {{clusteringEnabled}}<br>
             dataSource: {{dataSource}}<br>
-            autoUpdateDisable: {{autoUpdateDisabled}}<br>
+            autoUpdate: {{autoUpdate}}<br>
             TweetID: {{currentMarkerID}}<br>
             {{currentBounds}}<br>
             Maxbounds:
@@ -87,7 +89,7 @@
         <!-- Table -->
         <table class="table table-hover tabled-striped table-condensed table-responsive">
             <caption>{{data.tweets.length}} Tweets</caption>
-            <tr ng-repeat="tweet in data.tweets" ng-click="search.goToTweet(tweet.id, tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0])">
+            <tr ng-repeat="tweet in data.tweets|limitTo:30" ng-click="search.goToTweet(tweet.id, tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0])">
                 <td>
                     <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">
                 </td>
@@ -96,7 +98,7 @@
                 </td>
                 <td>
                     <p style="word-wrap:break-word;">{{tweet.text}}</p>
-                    <code style="word-wrap:break-word;">{{tweet.geo.coordinates}}</code>
+                    <code style="word-wrap:break-word;">{{tweet.coordinates.coordinates[1]}}, {{tweet.coordinates.coordinates[0]}}</code>
                 </td>
             </tr>
         </table>
