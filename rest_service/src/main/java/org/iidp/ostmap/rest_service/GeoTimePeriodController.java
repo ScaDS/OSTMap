@@ -3,12 +3,11 @@ package org.iidp.ostmap.rest_service;
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
+import org.iidp.ostmap.commons.extractor.Extractor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.codehaus.jettison.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Map;
@@ -138,8 +137,6 @@ public class GeoTimePeriodController {
             rawDataScanner.close();
         } catch (IOException | AccumuloSecurityException | AccumuloException | TableNotFoundException  e) {
             throw new RuntimeException("There was a failure during Accumulo communication.",e);
-        } catch (JSONException jse){
-
         }
         result += "]";
         return result;
