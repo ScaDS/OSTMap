@@ -37,7 +37,7 @@ public class Calculator {
     private String accumuloPassword;
     public static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
     private String accumuloZookeeper;
-    public static final String inTable = TableIdentifier.RAW_TWITTER_TABLE.get();
+    public static final String inTable = TableIdentifier.RAW_TWITTER_DATA.get();
     private Job job;
 
 

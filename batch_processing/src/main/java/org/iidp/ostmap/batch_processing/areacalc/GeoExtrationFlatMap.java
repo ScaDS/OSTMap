@@ -9,9 +9,12 @@ import org.apache.flink.util.Collector;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.iidp.ostmap.commons.extractor.Extractor;
+
 import java.io.Serializable;
 
 public class GeoExtrationFlatMap implements FlatMapFunction<Tuple2<Key, Value>, Tuple2<String,String>>, Serializable {
+
 
     public GeoExtrationFlatMap(){
     }
@@ -26,8 +29,16 @@ public class GeoExtrationFlatMap implements FlatMapFunction<Tuple2<Key, Value>, 
 
         JSONObject obj = null;
         String userName = "";
-        String coordinates = "";
-
+        Double[] coordinates = Extractor.extractLocation(in.f1.toString());
+        try{
+            obj = new JSONObject(in.f1.toString());
+            userName = obj.getJSONObject("user").getString("screen_name");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        /**
+         * deprecated
+         *
         try {
             obj = new JSONObject(in.f1.toString());
             userName = obj.getJSONObject("user").getString("screen_name");
@@ -37,9 +48,6 @@ public class GeoExtrationFlatMap implements FlatMapFunction<Tuple2<Key, Value>, 
                 coordinates = obj.getJSONArray("coordinates").get(0).toString() + "," + obj.getJSONArray("coordinates").get(1).toString();
             }else if(!obj.get("place").equals(null)){
                 JSONArray coords = obj.getJSONObject("place").getJSONObject("bounding_box").getJSONArray("coordinates").getJSONArray(0);
-                /**
-                 * JSONArray is not iterable
-                 */
                 double xCoord = 0.0;
                 double yCoord = 0.0;
                 for (int i = 0; i < 4; i++) {
@@ -51,13 +59,13 @@ public class GeoExtrationFlatMap implements FlatMapFunction<Tuple2<Key, Value>, 
                 // TODO errorhandling
             }
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
+         */
 
 
-        out.collect(new Tuple2<>(userName,coordinates));
+        out.collect(new Tuple2<>(userName,coordinates[0]+","+coordinates[1]));
 
 
     }

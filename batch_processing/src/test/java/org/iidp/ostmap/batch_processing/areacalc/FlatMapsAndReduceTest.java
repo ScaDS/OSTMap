@@ -52,15 +52,15 @@ public class FlatMapsAndReduceTest {
         Connector conn = amc.getConnector();
         System.out.println("I am connected as: " + conn.whoami());
 
-        conn.tableOperations().create(TableIdentifier.RAW_TWITTER_TABLE.get());
-        BatchWriter bw = conn.createBatchWriter(TableIdentifier.RAW_TWITTER_TABLE.get(), new BatchWriterConfig());
+        conn.tableOperations().create(TableIdentifier.RAW_TWITTER_DATA.get());
+        BatchWriter bw = conn.createBatchWriter(TableIdentifier.RAW_TWITTER_DATA.get(), new BatchWriterConfig());
 
 
         //write example entries to RawTwitterData
         Mutation m1 = new Mutation("row1");
         m1.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"screen_name\": Horst \n" +
+                "       \"screen_name\": Zorne \n" +
                 "   },\n" +
                 "   \"geo\": null, \n" +
                 "   \"coordinates\": null, \n" +
@@ -97,26 +97,32 @@ public class FlatMapsAndReduceTest {
         Mutation m2 = new Mutation("row2");
         m2.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"screen_name\": Horst \n" +
+                "       \"screen_name\": Zorne \n" +
                 "   },\n" +
-                "   \"geo\": [\n" +
-                "       0.164786,\n" +
-                "       0.546974\n" +
-                "   ],\n" +
-                "   \"coordinates\": null, \n" +
+                "   \"geo\": null,\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        27.2147884,\n" +
+                "        38.4614716\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m2);
         Mutation m3 = new Mutation("row3");
         m3.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
-                "       \"screen_name\": Horst \n" +
+                "       \"screen_name\": Zorne \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       -50.164786,\n" +
-                "       -53.546974\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        -0.2147884,\n" +
+                "        -0.4614716\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m3);
@@ -126,10 +132,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       -3.164786,\n" +
-                "       53.546974\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        -3.2147884,\n" +
+                "        53.4614716\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m4);
@@ -139,10 +148,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       -4.164786,\n" +
-                "       54.546974\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        -4.2147884,\n" +
+                "        54.4614716\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m5);
@@ -152,10 +164,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       -5.164786,\n" +
-                "       55.546974\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        -5.2147884,\n" +
+                "        55.4614716\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m6);
@@ -165,10 +180,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       -2.164786,\n" +
-                "       52.546974\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        -2.2147884,\n" +
+                "        52.4614716\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m7);
@@ -178,10 +196,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       -8.164786,\n" +
-                "       53.546974\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        -8.2147884,\n" +
+                "        53.4614716\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m8);
@@ -191,10 +212,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Peter \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       -3.164786,\n" +
-                "       53.546974\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        -3.2147884,\n" +
+                "        53.4614716\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m9);
@@ -204,10 +228,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Peter \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       -3.164786,\n" +
-                "       53.546974\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        47.2147884,\n" +
+                "        28.4614716\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m10);
@@ -217,10 +244,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       0,\n" +
-                "       0\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        0,\n" +
+                "        0\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m14);
@@ -230,10 +260,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       20,\n" +
-                "       0\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        20,\n" +
+                "        0\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m11);
@@ -243,10 +276,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       10,\n" +
-                "       20\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        10,\n" +
+                "        20\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m12);
@@ -256,10 +292,13 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
-                "   \"coordinates\": [" +
-                "       10,\n" +
-                "       10\n" +
-                "   ],\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        10,\n" +
+                "        10\n" +
+                "      ]\n" +
+                "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m13);
@@ -267,7 +306,7 @@ public class FlatMapsAndReduceTest {
 
         //output result after conversion
         System.out.println("RawTwitterData: -----------------------------------------------------");
-        Scanner s = conn.createScanner(TableIdentifier.RAW_TWITTER_TABLE.get(), new Authorizations("standard"));
+        Scanner s = conn.createScanner(TableIdentifier.RAW_TWITTER_DATA.get(), new Authorizations("standard"));
         for (Map.Entry<Key, Value> entry : s) {
             System.out.println(entry.getKey() + " | " + entry.getValue());
         }
