@@ -4,7 +4,6 @@ import com.github.davidmoten.geo.GeoHash;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import org.apache.commons.codec.Charsets;
-import org.codehaus.jettison.json.JSONException;
 import org.iidp.ostmap.commons.extractor.Extractor;
 
 
@@ -13,6 +12,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -21,8 +21,11 @@ import java.util.Locale;
  */
 public class GeoTemporalKey {
 
-    /** ------ row -------------- */
-    //spreading byte + day + geohash = 11 bytes
+
+    /**
+     * spreading byte + day + geohash
+     * 1b + 2b + 8b = 11 bytes
+     */
     public byte[] rowBytes;
 
     //murmur_32 of original json string modulo 255
@@ -131,5 +134,33 @@ public class GeoTemporalKey {
     private static byte[] calcColumnQualifier(Double[] loc) {
         return ByteBuffer.allocate(8).putFloat(loc[1].floatValue()).putFloat(loc[0].floatValue()).array();
     }
+
+    /**
+     * Extracts human readable String of rowBytes
+     * @param rowBytes  row-bytes
+     * @return String of rowBytes
+     */
+    public static String rowBytesToString(byte[] rowBytes) {
+        byte[] sliceDays = Arrays.copyOfRange(rowBytes, 1, 3);
+        short daysFromBA = ByteBuffer.wrap(sliceDays).getShort();
+
+        byte[] subGeoHash = Arrays.copyOfRange(rowBytes, 3, 10);
+        String geoHashFromBA = new String(subGeoHash);
+
+        int spreadingByteFromBA = rowBytes[0];
+        return spreadingByteFromBA + " " + daysFromBA + " " + geoHashFromBA;
+    }
+
+    /**
+     * Extracts String of 'lat / long'  format
+     * @param columQualifier    bytes of colQualifier
+     * @return String of 'lat / long'  format
+     */
+    public static String columQualifierToString(byte[] columQualifier) {
+        float latitude = ByteBuffer.wrap(columQualifier).getFloat(0);
+        float longitude = ByteBuffer.wrap(columQualifier).getFloat(4);
+        return latitude + "/" + longitude ;
+    }
+
 
 }
