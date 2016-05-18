@@ -278,7 +278,7 @@
          */
         function getTokenSearchUrl()
         {
-            return "/api/tokensearch?field=" + buildFieldString() + "&token=" + _searchToken;
+            return "/api/tokensearch?field=" + encodeURI(buildFieldString()) + "&token=" + encodeURI(_searchToken);
         }
 
         /**

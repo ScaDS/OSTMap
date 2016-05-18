@@ -1,4 +1,4 @@
-package org.iidp.ostmap.batch_processing;
+package org.iidp.ostmap.batch_processing.converter;
 
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.data.Key;

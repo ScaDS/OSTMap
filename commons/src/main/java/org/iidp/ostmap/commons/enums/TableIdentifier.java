@@ -2,7 +2,7 @@ package org.iidp.ostmap.commons.enums;
 
 
 public enum TableIdentifier {
-    RAW_TWITTER_TABLE("RawTwitterTable"),
+    RAW_TWITTER_DATA("RawTwitterData"),
     TERM_INDEX("TermIndex");
 
     String identifier = "";
