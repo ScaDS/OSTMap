@@ -1,22 +1,17 @@
 package org.iidp.ostmap.commons.accumulo.geoTemp;
 
-import com.github.davidmoten.geo.Base32;
 import com.github.davidmoten.geo.Coverage;
 import com.github.davidmoten.geo.GeoHash;
 import org.apache.accumulo.core.client.*;
-import org.apache.accumulo.core.client.Scanner;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.hadoop.io.Text;
+import org.iidp.ostmap.accumuloiterators.GeoTempFilter;
 import org.iidp.ostmap.commons.accumulo.FlinkEnvManager;
-import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
@@ -105,53 +100,35 @@ public class GeoTemporalTweetQuery {
 
 
         List<Range> geoRangeList = getRangeList();
-
         geoTempScan.setRanges(geoRangeList);
-        //TODO: set filter
 
+        //set filter for exact query window
+        IteratorSetting filterIteratorConfig = new IteratorSetting(20, "GeoTempFilterIterator", GeoTempFilter.class);
+        filterIteratorConfig.addOption("north", north.toString());
+        filterIteratorConfig.addOption("east", east.toString());
+        filterIteratorConfig.addOption("south", south.toString());
+        filterIteratorConfig.addOption("west", west.toString());
+        filterIteratorConfig.addOption("startTime", startTime.toString());
+        filterIteratorConfig.addOption("endTime", endTime.toString());
+
+        geoTempScan.addScanIterator(filterIteratorConfig);
+
+        //query on GeoTempoalIndex for RawTwitterKeys
         List<Range> rawRangeList = new ArrayList<>();
-
         for (Map.Entry<Key, Value> entry : geoTempScan) {
 
             rawRangeList.add(new Range(entry.getKey().getColumnFamily()));
         }
-
         geoTempScan.close();
 
-
+        //query on RawTwitterData
         rawTwitterScan.setRanges(rawRangeList);
-        //TODO: set filter
         for(Map.Entry<Key, Value> entry : rawTwitterScan){
-            //get RawTwitterData from keys
 
             tc.process(entry.getValue().toString());
-
         }
         rawTwitterScan.close();
     }
-
-    /**
-     * checks if a GeoTimeIndex key matches the exact window of the query
-     * @param k
-     * @return
-     */
-    /*private boolean isInExactWindow(Key k){
-
-        Long tweetTime = ByteBuffer.wrap(k.getColumnFamily().getBytes()).getLong();
-
-        ByteBuffer bb = ByteBuffer.wrap(k.getColumnQualifier().getBytes());
-
-        float tweetLat = bb.getFloat();
-        float tweetLon = bb.getFloat();
-
-        return startTime < tweetTime &&
-                tweetTime < endTime &&
-                west < tweetLon &&
-                tweetLon < east &&
-                south < tweetLat &&
-                tweetLat < north;
-    }*/
-
 
     /**
      *
@@ -226,7 +203,6 @@ public class GeoTemporalTweetQuery {
         return hash2.equals(getNextHash(hash1));
     }
 
-    //TODO: remove
     /**
      * calculates the next hash
      * @param hash

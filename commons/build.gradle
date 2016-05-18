@@ -22,6 +22,9 @@ sourceCompatibility = 1.8
 
 
 dependencies {
+
+    compile project(':accumulo_iterators')
+
     testCompile 'junit:junit:4.11'
 
     compile 'org.apache.accumulo:accumulo-minicluster:1.7.0.2.4.0.0-169'
