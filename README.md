@@ -9,7 +9,7 @@ OSTMap reads geotagged data from the twitter stream. We save it to an small hado
 
 ## Screenshots
 ![listview](https://raw.githubusercontent.com/IIDP/OSTMap/screenshots/screenshots/results_for_swimming_list.jpg)
-![listview](https://github.com/IIDP/OSTMap/screenshots/screenshots/results_for_swimming_list.jpg)
+![mapview](https://raw.githubusercontent.com/IIDP/OSTMap/screenshots/screenshots/results_for_swimming_map.jpg)
 
 ## Demo
 Currently we don't run a public accessible instance. Is there someone who wants to sponsor one?
