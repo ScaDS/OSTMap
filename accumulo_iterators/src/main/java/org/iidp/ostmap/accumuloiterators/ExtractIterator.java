@@ -56,8 +56,11 @@ public class ExtractIterator extends WrappingIterator {
 
         originalJson = new JSONObject(originalString);
 
-        // extract created_at
 
+        // extract id_str
+        reducedJson.put("id_str", originalJson.get("id_str"));
+
+        // extract created_at
         reducedJson.put("created_at", originalJson.get("created_at"));
 
         // extract text

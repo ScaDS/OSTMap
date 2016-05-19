@@ -1,6 +1,7 @@
 package org.iidp.ostmap.stream_processing;
 
 
+import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.iidp.ostmap.stream_processing.functions.*;
@@ -54,6 +55,8 @@ public class Driver {
     {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        // one watermark each ten second
+        env.getConfig().setAutoWatermarkInterval(1000);
 
         // decide which stream source should be used
         DataStream<String> geoStream;
@@ -83,7 +86,6 @@ public class Driver {
         // stream of tuples containing timestamp and tweet's json-String
         DataStream<Tuple2<Long, String>> dateStream = geoStream.flatMap(new DateExtraction());
 
-        dateStream.getExecutionEnvironment().setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         dateStream
                 .flatMap(new LanguageFrequencyRowExtraction())
                 .flatMap(new LanguageTagExtraction())

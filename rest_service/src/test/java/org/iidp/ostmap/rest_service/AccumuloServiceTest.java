@@ -176,6 +176,7 @@ public class AccumuloServiceTest {
             String value = kv.getValue().toString();
             JSONObject json = new JSONObject(value);
             // needed fields
+            assertTrue(json.has("id_str"));
             assertTrue(json.has("created_at"));
             assertTrue(json.has("text"));
             assertTrue(json.has("user"));
@@ -183,7 +184,7 @@ public class AccumuloServiceTest {
             assertTrue(json.has("place"));
 
             // test for some forbidden fields
-            assertFalse(json.has("id_str"));
+            assertFalse(json.has("id"));
             assertFalse(json.has("entities"));
         }
         System.out.println("[testReduceIterator end]");
