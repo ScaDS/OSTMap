@@ -1,13 +1,14 @@
 package org.iidp.ostmap.rest_service;
 
 import org.apache.accumulo.core.client.*;
-import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -20,11 +21,14 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class AccumuloServiceTest {
@@ -59,8 +63,8 @@ public class AccumuloServiceTest {
         }
 
         //write example entry to RawTwitterData
-        tweetHund = "Vollstaendiger Tweet hund maus";
-        tweetKatze = "Vollstaendiger Tweet katze #katze maus";
+        tweetHund = "{\"text\": \"Vollstaendiger Tweet hund maus\"}";
+        tweetKatze = "{\"text\": \"Vollstaendiger Tweet katze #katze maus\"}";
         //File f = new File(AccumuloServiceTest.class.getResource("example-response.json").getFile());
         File f = new File(ClassLoader.getSystemClassLoader().getResource("example-response.json").getFile());
 
@@ -82,7 +86,7 @@ public class AccumuloServiceTest {
         Mutation m11 = new Mutation(bb3.array());
         m11.put("t", "", tweet3);
 
-        System.out.println("keyFormat: "+new String(bb3.array()));
+        System.out.println("keyFormat: " + new String(bb3.array()));
 
         BatchWriter bw = conn.createBatchWriter("RawTwitterData", new BatchWriterConfig());
         bw.addMutation(m1);
@@ -92,23 +96,23 @@ public class AccumuloServiceTest {
 
         //write example data to TermIndex
         Mutation m3 = new Mutation("Vollstaendiger");
-        m3.put("text".getBytes(),bb.array(),"2".getBytes());
+        m3.put("text".getBytes(), bb.array(), "2".getBytes());
         Mutation m4 = new Mutation("Tweet");
-        m4.put("text".getBytes(),bb.array(),"2".getBytes());
+        m4.put("text".getBytes(), bb.array(), "2".getBytes());
         Mutation m5 = new Mutation("hund");
-        m5.put("text".getBytes(),bb.array(),"2".getBytes());
+        m5.put("text".getBytes(), bb.array(), "2".getBytes());
         Mutation m55 = new Mutation("maus");
-        m55.put("text".getBytes(),bb.array(),"2".getBytes());
+        m55.put("text".getBytes(), bb.array(), "2".getBytes());
         Mutation m6 = new Mutation("Vollstaendiger");
-        m6.put("text".getBytes(),bb2.array(),"2".getBytes());
+        m6.put("text".getBytes(), bb2.array(), "2".getBytes());
         Mutation m7 = new Mutation("Tweet");
-        m7.put("text".getBytes(),bb2.array(),"2".getBytes());
+        m7.put("text".getBytes(), bb2.array(), "2".getBytes());
         Mutation m8 = new Mutation("katze");
-        m8.put("text".getBytes(),bb2.array(),"2".getBytes());
+        m8.put("text".getBytes(), bb2.array(), "2".getBytes());
         Mutation m9 = new Mutation("#katze");
-        m9.put("text".getBytes(),bb2.array(),"2".getBytes());
+        m9.put("text".getBytes(), bb2.array(), "2".getBytes());
         Mutation m10 = new Mutation("maus");
-        m10.put("text".getBytes(),bb2.array(),"2".getBytes());
+        m10.put("text".getBytes(), bb2.array(), "2".getBytes());
 
         System.out.println(Arrays.toString("text".getBytes()));
 
@@ -127,9 +131,9 @@ public class AccumuloServiceTest {
         //create settings file with data of Mini Accumulo Cluster
         FileOutputStream fos = new FileOutputStream(settings, false);
         BufferedWriter br = new BufferedWriter(new OutputStreamWriter(fos));
-        String parameters = "accumulo.instance=" + conn.getInstance().getInstanceName() + "\n"+
-                "accumulo.user=" + conn.whoami() +"\n"+
-                "accumulo.password=password\n"+
+        String parameters = "accumulo.instance=" + conn.getInstance().getInstanceName() + "\n" +
+                "accumulo.user=" + conn.whoami() + "\n" +
+                "accumulo.password=password\n" +
                 "accumulo.zookeeper=" + conn.getInstance().getZooKeepers();
 
         System.out.println(parameters);
@@ -142,8 +146,8 @@ public class AccumuloServiceTest {
 
         System.out.println("RawTwitterData: -----------------------------------------------------");
         Scanner s = conn.createScanner("RawTwitterData", new Authorizations("standard"));
-        for(Map.Entry<Key, Value> entry: s){
-            System.out.println(entry.getKey() + " | " +entry.getValue());
+        for (Map.Entry<Key, Value> entry : s) {
+            System.out.println(entry.getKey() + " | " + entry.getValue());
             //assertEquals(entry.getValue().toString(), testString);
         }
         s.close();
@@ -155,6 +159,36 @@ public class AccumuloServiceTest {
     public static void shutDownCluster() {
 
         amc.stopMiniCluster();
+    }
+
+    @Test
+    public void testReduceIterator() throws AccumuloSecurityException, AccumuloException, TableNotFoundException, IOException, JSONException {
+        System.out.println("");
+        System.out.println("[testReduceIterator start]");
+        AccumuloService as = new AccumuloService();
+        as.readConfig(settings.getAbsolutePath());
+        ByteBuffer bb3 = ByteBuffer.allocate(Long.BYTES + Integer.BYTES);
+        bb3.putLong(12349).putInt(679);
+        List<Range> testRange = new ArrayList<>();
+        testRange.add(new Range(new Text(bb3.array())));
+        BatchScanner bs = as.getRawDataBatchScanner(testRange);
+        for (Map.Entry<Key, Value> kv : bs) {
+            String value = kv.getValue().toString();
+            JSONObject json = new JSONObject(value);
+            // needed fields
+            assertTrue(json.has("id_str"));
+            assertTrue(json.has("created_at"));
+            assertTrue(json.has("text"));
+            assertTrue(json.has("user"));
+            assertTrue(json.has("coordinates"));
+            assertTrue(json.has("place"));
+
+            // test for some forbidden fields
+            assertFalse(json.has("id"));
+            assertFalse(json.has("entities"));
+        }
+        System.out.println("[testReduceIterator end]");
+        System.out.println("");
     }
 
     @Test
@@ -171,8 +205,8 @@ public class AccumuloServiceTest {
         tsc.validateQueryParams();
         String result = tsc.getResultsFromAccumulo(settings.getAbsolutePath());
 
-        System.out.println(result + " <-> " + "["+tweetKatze+"]");
-        assertEquals("["+tweetKatze+"]",result);
+        System.out.println(result + " <-> " + "[" + tweetKatze + "]");
+        assertEquals("[" + tweetKatze + "]", result);
     }
 
     @Test
@@ -189,8 +223,8 @@ public class AccumuloServiceTest {
         tsc.validateQueryParams();
         String result = tsc.getResultsFromAccumulo(settings.getAbsolutePath());
 
-        System.out.println(result + " <-> " + "["+tweetKatze+"]");
-        assertEquals("["+tweetKatze+"]",result);
+        System.out.println(result + " <-> " + "[" + tweetKatze + "]");
+        assertEquals("[" + tweetKatze + "]", result);
     }
 
     @Test
@@ -207,53 +241,48 @@ public class AccumuloServiceTest {
         tsc.validateQueryParams();
         String result = tsc.getResultsFromAccumulo(settings.getAbsolutePath());
 
-        System.out.println(result + " <-> " + "["+tweetKatze+','+tweetHund+"]");
-        assertEquals("["+tweetHund+','+tweetKatze+"]",result);
+        System.out.println(result + " <-> " + "[" + tweetKatze + ',' + tweetHund + "]");
+        assertEquals("[" + tweetHund + ',' + tweetKatze + "]", result);
     }
 
      @Test
      public void testGeoTime() throws Exception{
-         AccumuloService accumuloService = new AccumuloService();
          System.out.println("settings file path: " + settings.getAbsolutePath());
-         accumuloService.readConfig(settings.getAbsolutePath());
 
          GeoTimePeriodController gtpc = new GeoTimePeriodController();
+         gtpc.set_paramNorthCoordinate("42");
+         gtpc.set_paramEastCoordinate("30");
+         gtpc.set_paramSouthCoordinate("38");
+         gtpc.set_paramWestCoordinate("28");
+         gtpc.set_paramStartTime(Long.toString(12300));
+         gtpc.set_paramEndTime(Long.toString(12399));
 
          //example dataset should be in this window
-         String result = gtpc.getResult(accumuloService,(new Long(12300).toString()),(new Long(12399).toString()),42,30,28,28);
+         String result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          System.out.println("GeoTimeResult: " + result);
          System.out.println("------");
          assertTrue(result.length() > 2);
 
          //should not be in time range
-         result = gtpc.getResult(accumuloService,(new Long(12399).toString()),(new Long(12400).toString()),42,30,28,28);
+         gtpc.set_paramStartTime(Long.toString(12399));
+         gtpc.set_paramEndTime(Long.toString(12400));
+         result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          System.out.println("GeoTimeResult: " + result);
          System.out.println("------");
          assertTrue(result.length() == 2);
 
          //should not be in window
-         result = gtpc.getResult(accumuloService,(new Long(12300).toString()),(new Long(12399).toString()),30,45,29,44);
+         gtpc.set_paramNorthCoordinate("30");
+         gtpc.set_paramEastCoordinate("45");
+         gtpc.set_paramSouthCoordinate("29");
+         gtpc.set_paramWestCoordinate("44");
+         gtpc.set_paramStartTime(Long.toString(12300));
+         gtpc.set_paramEndTime(Long.toString(12399));
+         result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          System.out.println("GeoTimeResult: " + result);
          System.out.println("------");
          assertTrue(result.length() == 2);
 
-/*
-         String result = gtpc.getResult(accumuloService,(new Long(12300).toString()),(new Long(12399).toString()));
-         System.out.println("GeoTimeResult: " + result);
-         assertEquals(tweetHund+tweetKatze+tweet3, result);
-
-         result = gtpc.getResult(accumuloService,(new Long(1).toString()),(new Long(2).toString()));
-         System.out.println("GeoTimeResult: " + result);
-         assertEquals("", result);
-
-         result = gtpc.getResult(accumuloService,(new Long(12347).toString()),(new Long(12399).toString()));
-         System.out.println("GeoTimeResult: " + result);
-         assertEquals(tweetKatze+tweet3, result);
-
-         result = gtpc.getResult(accumuloService,(new Long(12340).toString()),(new Long(12348).toString()));
-         System.out.println("GeoTimeResult: " + result);
-         assertEquals(tweetHund+tweetKatze, result);
-*/
      }
 
 

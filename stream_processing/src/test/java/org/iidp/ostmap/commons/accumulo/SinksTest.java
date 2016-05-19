@@ -50,12 +50,18 @@ public class SinksTest {
     @Test
     public void testSomething() throws Exception {
 
-        String tweet = "{\"created_at\":\"Fri Apr 29 09:05:55 +0000 2016\",\"id\":725974381906804738,\"id_str\":\"725974381906804738\",\"text\":\"Das sage ich dir gleich, das funktioniert doch nie! #haselnuss\",\"user\":{\"id\":179905182,\"name\":\"Peter Tosh\",\"screen_name\":\"PeTo\",\"location\":null}}";
+        String tweet = "{\"created_at\":\"Fri Apr 29 09:05:45 +0000 2016\",\"id\":725974381906804738,\"id_str\":\"725974381906804738\",\"text\":\"Das sage ich dir gleich, das funktioniert doch nie! #haselnuss\",\"user\":{\"id\":179905182,\"name\":\"Peter Tosh\",\"screen_name\":\"PeTo\",\"location\":null\",\"lang\":\"de\",\"contributors_enabled\":false}}";
+        String tweet2 = "{\"created_at\":\"Fri Apr 29 09:05:55 +0000 2016\",\"id\":725974381906804739,\"id_str\":\"725974381906804739\",\"text\":\"Jetzt ist Sommer! #eis\",\"user\":{\"id\":179905182,\"name\":\"Peter Tosh\",\"screen_name\":\"PeTo\",\"location\":null\",\"lang\":\"de\",\"contributors_enabled\":false}}";
+        String tweet3 = "{\"created_at\":\"Sat Apr 30 10:09:55 +0000 2016\",\"id\":725974381906804740,\"id_str\":\"725974381906804740\",\"text\":\"Work, work, work? #finished\",\"user\":{\"id\":179905182,\"name\":\"Peter Tosh\",\"screen_name\":\"PeTo\",\"location\":null\",\"lang\":\"en\",\"contributors_enabled\":false}}";
+        ArrayList<String> tweetList = new ArrayList<>();
+        tweetList.add(tweet);
+        tweetList.add(tweet2);
+        tweetList.add(tweet3);
 
         Driver dr = new Driver();
         // we don't need paths to files (for run) because we provide tweet for local stream and want to use minicluster with default properties
         dr.addMACdata(accumulo.getInstanceName(), accumulo.getZooKeepers());
-        dr.run("", "", tweet);
+        dr.run("", "", tweetList);
 
         //We have to wait because in the sinks the writers have maxLatency of 10 secs
         Thread.sleep(22000);
