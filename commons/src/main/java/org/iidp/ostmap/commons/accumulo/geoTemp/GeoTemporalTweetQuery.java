@@ -99,20 +99,18 @@ public class GeoTemporalTweetQuery {
         BatchScanner rawTwitterScan = conn.createBatchScanner(TableIdentifier.RAW_TWITTER_DATA.get(),auths,32);
 
 
+        System.out.println("getList");
         List<Range> geoRangeList = getRangeList();
         geoTempScan.setRanges(geoRangeList);
 
         //set filter for exact query window
         IteratorSetting filterIteratorConfig = new IteratorSetting(20, "GeoTempFilterIterator", GeoTempFilter.class);
-        filterIteratorConfig.addOption("north", north.toString());
-        filterIteratorConfig.addOption("east", east.toString());
-        filterIteratorConfig.addOption("south", south.toString());
-        filterIteratorConfig.addOption("west", west.toString());
-        filterIteratorConfig.addOption("startTime", startTime.toString());
-        filterIteratorConfig.addOption("endTime", endTime.toString());
+        GeoTempFilter.setBoundingBox(filterIteratorConfig,north,east,
+                south,west,startTime,endTime);
 
         geoTempScan.addScanIterator(filterIteratorConfig);
 
+        System.out.println("getKeys");
         //query on GeoTempoalIndex for RawTwitterKeys
         List<Range> rawRangeList = new ArrayList<>();
         for (Map.Entry<Key, Value> entry : geoTempScan) {
@@ -121,6 +119,7 @@ public class GeoTemporalTweetQuery {
         }
         geoTempScan.close();
 
+        System.out.println("getRaw");
         //query on RawTwitterData
         rawTwitterScan.setRanges(rawRangeList);
         for(Map.Entry<Key, Value> entry : rawTwitterScan){
@@ -137,13 +136,19 @@ public class GeoTemporalTweetQuery {
     private List<Range> getRangeList(){
         List<Range> rangeList = new ArrayList<>();
 
-        Coverage coverage = GeoHash.coverBoundingBox(west,north,east,south,8);
+        System.out.println("getCoverage");
+        Coverage coverage = GeoHash.coverBoundingBox(north,west,south,east,8);
 
+        System.out.println("getHashes");
         Set<String> hashes = coverage.getHashes();
 
+        System.out.println("for0");
         for(String hash: hashes){
+            System.out.println("for1");
             for(short day = startDay; day < endDay; day++){
+                System.out.println("for2");
                 for(byte spreadingByte = (byte) 0; spreadingByte < 255; spreadingByte++){
+                    System.out.println("for3");
 
                     ByteBuffer startKey = ByteBuffer.allocate(11);
                     startKey.put(spreadingByte).putShort(day).put(hash.getBytes());

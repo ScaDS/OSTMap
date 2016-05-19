@@ -1,5 +1,6 @@
 package org.iidp.ostmap.accumuloiterators;
 
+import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.Filter;
@@ -32,6 +33,19 @@ public class GeoTempFilter extends Filter{
 
     }
 
+    public static void setBoundingBox(IteratorSetting config, double north,
+                                      double east, double south, double west,
+                                      long startTime, long endTime) {
+
+        config.addOption("north", Double.toString(north));
+        config.addOption("east", Double.toString(east));
+        config.addOption("west", Double.toString(west));
+        config.addOption("south", Double.toString(south));
+
+        config.addOption("startTime", Long.toString(startTime));
+        config.addOption("endTime", Long.toString(endTime));
+
+    }
 
     @Override
     public boolean accept(Key k, Value v) {

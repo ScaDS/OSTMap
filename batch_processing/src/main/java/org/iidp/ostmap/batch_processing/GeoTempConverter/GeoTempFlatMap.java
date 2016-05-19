@@ -27,7 +27,7 @@ public class GeoTempFlatMap implements FlatMapFunction<Tuple2<Key, Value>, Tuple
         if(gtk.rowBytes != null && gtk.columQualifier != null){
             //create mutations for username and screen name
             Mutation m = new Mutation(gtk.rowBytes);
-            m.put(value.f0.getRow().getBytes(), gtk.columQualifier, null);
+            m.put(value.f0.getRow().getBytes(), gtk.columQualifier, new byte[0]);
             out.collect(new Tuple2<>(new Text(outputTableName), m));
         }
 
