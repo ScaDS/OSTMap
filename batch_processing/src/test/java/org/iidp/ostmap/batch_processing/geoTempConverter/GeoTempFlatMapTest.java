@@ -8,8 +8,6 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.hadoop.io.Text;
-import org.iidp.ostmap.batch_processing.converter.ConverterFlatMap;
-import org.iidp.ostmap.commons.tokenizer.Tokenizer;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
@@ -84,7 +82,7 @@ public class GeoTempFlatMapTest {
                                 "}\n").getBytes())));
 
         DataSet<Tuple2<Text,Mutation>> output = input.flatMap(
-                new ConverterFlatMap(new Tokenizer(),"table"));
+                new GeoTempFlatMap("table"));
 
 
 

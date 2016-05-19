@@ -21,6 +21,8 @@ import org.junit.rules.TemporaryFolder;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -68,18 +70,18 @@ public class GeoTemporalTweetQueryTest implements TweetCallback {
         tweet3 =  "tweet3";//=  new String(Files.readAllBytes(f.toPath()));
 
         ByteBuffer bb = ByteBuffer.allocate(Long.BYTES + Integer.BYTES);
-        bb.putLong(12345).putInt(123);
+        bb.putLong(999999997L).putInt(123);
 
         Mutation m1 = new Mutation(bb.array());
         m1.put("t", "", tweetHund);
 
         ByteBuffer bb2 = ByteBuffer.allocate(Long.BYTES + Integer.BYTES);
-        bb2.putLong(12347).putInt(678);
+        bb2.putLong(999999998L).putInt(678);
         Mutation m2 = new Mutation(bb2.array());
         m2.put("t", "", tweetKatze);
 
         ByteBuffer bb3 = ByteBuffer.allocate(Long.BYTES + Integer.BYTES);
-        bb3.putLong(12349).putInt(679);
+        bb3.putLong(999999999L).putInt(679);
         Mutation m11 = new Mutation(bb3.array());
         m11.put("t", "", tweet3);
 
@@ -92,29 +94,29 @@ public class GeoTemporalTweetQueryTest implements TweetCallback {
         bw.close();
 
         //write corresponding GeoTemporalIndex
-        float lat1 = 40;
-        float lon1 = 40;
-        float lat2 = 90;
-        float lon2 = 40;
-        float lat3 = 90;
-        float lon3 = 90;
+        float lat1 = (float) -1.0;
+        float lon1 = (float) -1.0;
+        float lat2 = (float) 0.0005;
+        float lon2 = (float) 0.0005;
+        float lat3 = (float) 1.1;
+        float lon3 = (float) 0.0005;
 
         ByteBuffer rowKey = ByteBuffer.allocate(11);
-        rowKey.put((byte) 123).put((new Text(GeoHash.encodeHash(lat1,lon1,8)).getBytes()));
+        rowKey.put((byte) 123).putShort((short) 11565).put((new Text(GeoHash.encodeHash(lat1,lon1,8)).getBytes()));
         ByteBuffer cf = ByteBuffer.allocate(8);
         cf.putFloat(lat1).putFloat(lon1);
         Mutation m3 = new Mutation(rowKey.array());
         m3.put(bb.array(), cf.array(), new byte[0]);
 
         rowKey = ByteBuffer.allocate(11);
-        rowKey.put((byte) 122).put((new Text(GeoHash.encodeHash(lat2,lon2,8)).getBytes()));
+        rowKey.put((byte) 122).putShort((short) 11565).put((new Text(GeoHash.encodeHash(lat2,lon2,8)).getBytes()));
         cf = ByteBuffer.allocate(8);
         cf.putFloat(lat2).putFloat(lon2);
         Mutation m4 = new Mutation(rowKey.array());
         m4.put(bb2.array(), cf.array(), new byte[0]);
 
         rowKey = ByteBuffer.allocate(11);
-        rowKey.put((byte) 122).put((new Text(GeoHash.encodeHash(lat3,lon3,8)).getBytes()));
+        rowKey.put((byte) 122).putShort((short) 11565).put((new Text(GeoHash.encodeHash(lat3,lon3,8)).getBytes()));
         cf = ByteBuffer.allocate(8);
         cf.putFloat(lat3).putFloat(lon3);
         Mutation m5 = new Mutation(rowKey.array());
@@ -177,26 +179,44 @@ public class GeoTemporalTweetQueryTest implements TweetCallback {
 
         GeoTemporalTweetQuery gttq = new GeoTemporalTweetQuery(settings.getAbsolutePath());
 
-        gttq.setBoundingBox(60,50,30,20);
-        gttq.setTimeRange(12340, 12350);
+        gttq.setBoundingBox(0.001,0.001,0.0,0.0);
+        gttq.setTimeRange(999099000L, 1000000000);
         gttq.setCallback(this);
 
-        //gttq.query();
+        gttq.query();
 
         System.out.println(result);
+
+        assertEquals("{\"text\": \"Vollstaendiger Tweet katze #katze maus\"}", result);
     }
 
-    @Test
+   /* @Test
     public void testGeoHash(){
-        Coverage coverage = GeoHash.coverBoundingBox(60.0,0.0,0.0,40.0,8);
+        Coverage coverage = GeoHash.coverBoundingBox(0.001,0.0,0.0,0.001,8);
 
         System.out.println("getHashes");
         Set<String> hashes = coverage.getHashes();
-    }
+        System.out.println(hashes.size());
+
+        for(String hash: hashes){
+            System.out.println(hash);
+        }
+        System.out.println("---");
+        System.out.println(GeoHash.encodeHash(0.0001,0.0001,8));
+    }*/
 
 
     @Override
     public void process(String json) {
         result += json;
     }
+
+   /* @Test
+    public void testTime(){
+        Date date = new Date(1000L*999999999L);
+        System.out.println(date);
+
+        LocalDate startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        System.out.println(startDate);
+    }*/
 }

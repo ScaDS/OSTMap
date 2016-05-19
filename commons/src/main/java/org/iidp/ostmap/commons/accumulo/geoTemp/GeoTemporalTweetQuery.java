@@ -66,10 +66,14 @@ public class GeoTemporalTweetQuery {
 
         LocalDate epoch = LocalDate.ofEpochDay(0);
 
-        LocalDate startDate = (new Date(startTime)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate startDate = (new Date(startTime*1000L)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        System.out.println(startDate);
         startDay = (short) ChronoUnit.DAYS.between(epoch, startDate);
-        LocalDate endDate = (new Date(startTime)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        System.out.println(startDay);
+        LocalDate endDate = (new Date(endTime*1000L)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        System.out.println(endDate);
         endDay = (short) ChronoUnit.DAYS.between(epoch, endDate);
+        System.out.println(endDay);
     }
 
     public void setCallback(TweetCallback tc){
@@ -101,6 +105,9 @@ public class GeoTemporalTweetQuery {
 
         System.out.println("getList");
         List<Range> geoRangeList = getRangeList();
+        if(geoRangeList.size() == 0){
+            return;
+        }
         geoTempScan.setRanges(geoRangeList);
 
         //set filter for exact query window
@@ -120,6 +127,9 @@ public class GeoTemporalTweetQuery {
         geoTempScan.close();
 
         System.out.println("getRaw");
+        if(rawRangeList.size() == 0){
+            return;
+        }
         //query on RawTwitterData
         rawTwitterScan.setRanges(rawRangeList);
         for(Map.Entry<Key, Value> entry : rawTwitterScan){
@@ -136,22 +146,16 @@ public class GeoTemporalTweetQuery {
     private List<Range> getRangeList(){
         List<Range> rangeList = new ArrayList<>();
 
-        System.out.println("getCoverage");
         Coverage coverage = GeoHash.coverBoundingBox(north,west,south,east,8);
 
-        System.out.println("getHashes");
         Set<String> hashes = coverage.getHashes();
 
-        System.out.println("for0");
         for(String hash: hashes){
-            System.out.println("for1");
             for(short day = startDay; day < endDay; day++){
-                System.out.println("for2");
-                for(byte spreadingByte = (byte) 0; spreadingByte < 255; spreadingByte++){
-                    System.out.println("for3");
+                for(int spreadingByte = 0; spreadingByte < 255; spreadingByte++){
 
                     ByteBuffer startKey = ByteBuffer.allocate(11);
-                    startKey.put(spreadingByte).putShort(day).put(hash.getBytes());
+                    startKey.put((byte)spreadingByte).putShort(day).put(hash.getBytes());
 
                     rangeList.add(new Range(new Text(startKey.array())));
                 }
