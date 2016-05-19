@@ -188,7 +188,7 @@ public class GeoTemporalTweetQueryTest implements TweetCallback {
 
     @Test
     public void testGeoHash(){
-        Coverage coverage = GeoHash.coverBoundingBox(60,0,0,40,8);
+        Coverage coverage = GeoHash.coverBoundingBox(60.0,0.0,0.0,40.0,8);
 
         System.out.println("getHashes");
         Set<String> hashes = coverage.getHashes();

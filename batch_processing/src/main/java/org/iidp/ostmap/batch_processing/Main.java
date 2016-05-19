@@ -1,6 +1,6 @@
 package org.iidp.ostmap.batch_processing;
 
-import org.iidp.ostmap.batch_processing.GeoTempConverter.GeoTempConverter;
+import org.iidp.ostmap.batch_processing.geoTempConverter.GeoTempConverter;
 import org.iidp.ostmap.batch_processing.converter.ConverterProcess;
 import org.iidp.ostmap.batch_processing.tweetPerUserAnalysis.TPUAnalysis;
 

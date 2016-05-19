@@ -1,4 +1,4 @@
-package org.iidp.ostmap.batch_processing.GeoTempConverter;
+package org.iidp.ostmap.batch_processing.geoTempConverter;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
