@@ -4,6 +4,7 @@ package org.iidp.ostmap.batch_processing.areacalc;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -86,8 +87,23 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
             e.printStackTrace();
         }
 
+        JSONObject data = new JSONObject();
+        try {
+            data.append("user",userName);
+            data.append("area",area);
+            JSONArray coordsJSON = new JSONArray();
+            for(double[] entry: coordinates){
+                JSONArray newCoords = new JSONArray();
+                newCoords.put(entry[0]);
+                newCoords.put(entry[1]);
+                coordsJSON.put(newCoords);
+            }
+            data.append("coordinates",coordsJSON);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        out.collect(new Tuple2<>(userName,area));
+        out.collect(new Tuple2<>(data.toString(),area));
 
 
     }
