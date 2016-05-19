@@ -2,6 +2,7 @@ package org.iidp.ostmap.rest_service;
 
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.data.Range;
+import org.iidp.ostmap.rest_service.helper.JsonHelper;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -108,6 +109,7 @@ public class TokenSearchController {
                     }
 
                     String json = rawDataEntry.getValue().toString();
+                    json = JsonHelper.generateCoordinates(json);
                     result += json;
                 }
                 bs.close();

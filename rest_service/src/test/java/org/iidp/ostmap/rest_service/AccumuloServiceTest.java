@@ -63,8 +63,8 @@ public class AccumuloServiceTest {
         }
 
         //write example entry to RawTwitterData
-        tweetHund = "{\"text\": \"Vollstaendiger Tweet hund maus\"}";
-        tweetKatze = "{\"text\": \"Vollstaendiger Tweet katze #katze maus\"}";
+        tweetHund = "{\"text\":\"Vollstaendiger Tweet hund maus\"}";
+        tweetKatze = "{\"text\":\"Vollstaendiger Tweet katze #katze maus\"}";
         //File f = new File(AccumuloServiceTest.class.getResource("example-response.json").getFile());
         File f = new File(ClassLoader.getSystemClassLoader().getResource("example-response.json").getFile());
 
@@ -176,6 +176,7 @@ public class AccumuloServiceTest {
             String value = kv.getValue().toString();
             JSONObject json = new JSONObject(value);
             // needed fields
+            assertTrue(json.has("id_str"));
             assertTrue(json.has("created_at"));
             assertTrue(json.has("text"));
             assertTrue(json.has("user"));
@@ -183,7 +184,7 @@ public class AccumuloServiceTest {
             assertTrue(json.has("place"));
 
             // test for some forbidden fields
-            assertFalse(json.has("id_str"));
+            assertFalse(json.has("id"));
             assertFalse(json.has("entities"));
         }
         System.out.println("[testReduceIterator end]");

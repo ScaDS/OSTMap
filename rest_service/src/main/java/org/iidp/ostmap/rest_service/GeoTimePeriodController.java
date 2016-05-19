@@ -5,6 +5,7 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.codehaus.jettison.json.JSONException;
 import org.iidp.ostmap.commons.extractor.Extractor;
+import org.iidp.ostmap.rest_service.helper.JsonHelper;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -128,7 +129,7 @@ public class GeoTimePeriodController {
 
                             isFirst=false;
                         }
-
+                        json = JsonHelper.generateCoordinates(json);
                         result += json;
                     }
                 }

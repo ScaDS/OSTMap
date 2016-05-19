@@ -17,3 +17,4 @@ local.properties
 .recommenders
 .project
 .classpath
+*.log
