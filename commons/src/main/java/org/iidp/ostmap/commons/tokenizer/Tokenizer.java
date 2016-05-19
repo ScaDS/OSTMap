@@ -3,9 +3,7 @@ package org.iidp.ostmap.commons.tokenizer;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,15 +20,19 @@ public class Tokenizer implements Serializable{
     public Tokenizer(){
 
         try {
-            String filePath = new File("").getAbsolutePath();
-            filePath=filePath.concat("/src/main/java/org/iidp/ostmap/commons/tokenizer/tokenizerConfig.json");
-            //System.out.println(filePath);
 
-            byte[] encoded = Files.readAllBytes(Paths.get(filePath));
-            String json = new String(encoded, Charset.defaultCharset());
-            //System.out.println(json);
+            InputStream in = this.getClass().getResourceAsStream("/tokenizerConfig.json");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String line = null;
 
-            JSONObject obj = new JSONObject(json);
+            String test= "";
+            while((line = reader.readLine())!=null){
+
+                test=test.concat(line);
+            }
+
+            
+            JSONObject obj = new JSONObject(test);
 
             for(int i=0; i<obj.getJSONArray("separator").length();i++) {
                 separator.add(obj.getJSONArray("separator").getString(i));
