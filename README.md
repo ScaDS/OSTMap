@@ -3,7 +3,7 @@
 ## Overview
 OSTMap (Open Source Twitter Map)
 
-OSTMap development started as one project at the [IT-Ringvorlesung 2016](https://www.informatik.uni-leipzig.de/ifi/kooperation/it-ringvorlesung/sommersemester-2016/). A team of six students with some help of two big data experts implements OSTMap over a period of 6 weeks.
+OSTMap development started as one project at the [IT-Ringvorlesung 2016](https://www.informatik.uni-leipzig.de/ifi/kooperation/it-ringvorlesung/sommersemester-2016/). A team of six students (and some help of two big data experts from [mgm tp](http://www.mgm-tp.com/)) implements OSTMap over a period of 6 weeks.
 
 OSTMap reads geotagged data from the twitter stream. We save it to an small hadoop cluster (1 master, 4 worker nodes) running HDP 2.4 with Apache Accumulo and Apache Flink. In addition we have a user interface to search for tweets by a term search and a map search. The results are presented as list or on the map. In addition we run some analysis batch jobs on this data.
 
@@ -32,6 +32,8 @@ Currently we don't run a public accessible instance. Is there someone who wants 
  * a spring boot application serving the ui and the rest services used by the ui
 
 ## Links
+* [IT-Ringvorlesung 2016](https://www.informatik.uni-leipzig.de/ifi/kooperation/it-ringvorlesung/sommersemester-2016/) at university of Leipzig
+* industry partner for this project: [mgm tp](http://www.mgm-tp.com/)
 * for information regardning development see: [wiki](https://github.com/IIDP/OSTMap/wiki)
 * for issues see: [issues](https://github.com/IIDP/OSTMap/issues)
 * for our milestones see: [milestones](https://github.com/IIDP/OSTMap/milestones)
