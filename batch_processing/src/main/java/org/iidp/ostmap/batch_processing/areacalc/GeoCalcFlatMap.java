@@ -31,7 +31,6 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
     @Override
     public void flatMap(Tuple2<String, String> in, Collector<Tuple2<String, Double>> out) {
 
-        JSONObject obj = null;
         String userName = in.f0;
         String[] coords;
         Vector<double[]> coordinates = new Vector<>();
@@ -103,8 +102,6 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
      * @return the biggest area defined by this coordinates
      */
     public double getAreaInSquareKm(Vector<double[]> coordinates){
-        double area = 0.;
-        double maxArea = 0.;
         double[] a = coordinates.get(0);
         double[] b = coordinates.get(1);
         double[] c = coordinates.get(2);
@@ -147,8 +144,8 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
                 }else{
                     konvex = true;
                 }
-            }else if(!konvex){
-                return 0.66666;
+            }else {
+                konvex = true;
             }
             if(konvex){
                 if(ab<ac){
@@ -170,7 +167,7 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
                 }
             }
         }
-        return 0.;
+        return 0.333;
     }
 
     /**
