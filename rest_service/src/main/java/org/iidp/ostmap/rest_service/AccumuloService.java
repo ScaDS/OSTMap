@@ -86,10 +86,7 @@ class AccumuloService {
             token = token.replace("*", "");
             scan.setRange(Range.prefix(token));
         } else {
-            scan.setRange(new Range(token));
-            IteratorSetting grepIterSetting = new IteratorSetting(5, "grepIter", GrepIterator.class);
-            GrepIterator.setTerm(grepIterSetting, token);
-            scan.addScanIterator(grepIterSetting);
+            scan.setRange(Range.exact(token));
         }
         return scan;
     }
