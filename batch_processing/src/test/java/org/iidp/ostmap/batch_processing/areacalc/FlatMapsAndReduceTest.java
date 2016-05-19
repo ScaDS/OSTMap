@@ -238,22 +238,6 @@ public class FlatMapsAndReduceTest {
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m10);
-        Mutation m14 = new Mutation("row14");
-        m14.put("CF", "CQ", "{\n" +
-                "   \"user\":{\n" +
-                "       \"screen_name\": Falk \n" +
-                "   },\n" +
-                "   \"geo\": null,\n" +
-                "    \"coordinates\": {\n" +
-                "      \"type\": \"Point\",\n" +
-                "      \"coordinates\": [\n" +
-                "        0,\n" +
-                "        0\n" +
-                "      ]\n" +
-                "    },\n" +
-                "   \"place\": null\n" +
-                " }");
-        bw.addMutation(m14);
         Mutation m11 = new Mutation("row11");
         m11.put("CF", "CQ", "{\n" +
                 "   \"user\":{\n" +
@@ -263,7 +247,7 @@ public class FlatMapsAndReduceTest {
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
-                "        20,\n" +
+                "        0,\n" +
                 "        0\n" +
                 "      ]\n" +
                 "    },\n" +
@@ -279,8 +263,8 @@ public class FlatMapsAndReduceTest {
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
-                "        10,\n" +
-                "        20\n" +
+                "        20,\n" +
+                "        0\n" +
                 "      ]\n" +
                 "    },\n" +
                 "   \"place\": null\n" +
@@ -296,12 +280,76 @@ public class FlatMapsAndReduceTest {
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
                 "        10,\n" +
-                "        10\n" +
+                "        20\n" +
                 "      ]\n" +
                 "    },\n" +
                 "   \"place\": null\n" +
                 " }");
         bw.addMutation(m13);
+        Mutation m14 = new Mutation("row14");
+        m14.put("CF", "CQ", "{\n" +
+                "   \"user\":{\n" +
+                "       \"screen_name\": Falk \n" +
+                "   },\n" +
+                "   \"geo\": null,\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        10,\n" +
+                "        10\n" +
+                "      ]\n" +
+                "    },\n" +
+                "   \"place\": null\n" +
+                " }");
+        bw.addMutation(m14);
+        Mutation m15 = new Mutation("row15");
+        m15.put("CF", "CQ", "{\n" +
+                "   \"user\":{\n" +
+                "       \"screen_name\": Falk \n" +
+                "   },\n" +
+                "   \"geo\": null,\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        10,\n" +
+                "        10\n" +
+                "      ]\n" +
+                "    },\n" +
+                "   \"place\": null\n" +
+                " }");
+        bw.addMutation(m15);
+        Mutation m16 = new Mutation("row16");
+        m16.put("CF", "CQ", "{\n" +
+                "   \"user\":{\n" +
+                "       \"screen_name\": Falk \n" +
+                "   },\n" +
+                "   \"geo\": null,\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        10,\n" +
+                "        10\n" +
+                "      ]\n" +
+                "    },\n" +
+                "   \"place\": null\n" +
+                " }");
+        bw.addMutation(m16);
+        Mutation m17 = new Mutation("row17");
+        m17.put("CF", "CQ", "{\n" +
+                "   \"user\":{\n" +
+                "       \"screen_name\": Falk \n" +
+                "   },\n" +
+                "   \"geo\": null,\n" +
+                "    \"coordinates\": {\n" +
+                "      \"type\": \"Point\",\n" +
+                "      \"coordinates\": [\n" +
+                "        10,\n" +
+                "        10\n" +
+                "      ]\n" +
+                "    },\n" +
+                "   \"place\": null\n" +
+                " }");
+        bw.addMutation(m17);
         bw.close();
 
         //output result after conversion
