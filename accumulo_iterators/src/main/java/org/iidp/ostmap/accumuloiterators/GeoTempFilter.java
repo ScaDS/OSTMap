@@ -57,12 +57,12 @@ public class GeoTempFilter extends Filter{
         float tweetLat = bb.getFloat();
         float tweetLon = bb.getFloat();
 
-        return startTime < tweetTime &&
-                tweetTime < endTime &&
-                west < tweetLon &&
-                tweetLon < east &&
-                south < tweetLat &&
-                tweetLat < north;
+        return startTime <= tweetTime &&
+                tweetTime <= endTime &&
+                west <= tweetLon &&
+                tweetLon <= east &&
+                south <= tweetLat &&
+                tweetLat <= north;
 
 
     }
