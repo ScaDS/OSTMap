@@ -59,6 +59,11 @@ public class GeoTemporalTweetQuery {
         this.south = south;
     }
 
+    /**
+     * set time range for query
+     * @param startTime seconds since epoch
+     * @param endTime sceconds since epoch
+     */
     public void setTimeRange(long startTime, long endTime){
 
         this.startTime = startTime;
@@ -66,14 +71,15 @@ public class GeoTemporalTweetQuery {
 
         LocalDate epoch = LocalDate.ofEpochDay(0);
 
+        //*1000 convert seconds to ms since epoch
         LocalDate startDate = (new Date(startTime*1000L)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        System.out.println(startDate);
+        //System.out.println(startDate);
         startDay = (short) ChronoUnit.DAYS.between(epoch, startDate);
-        System.out.println(startDay);
+        //System.out.println(startDay);
         LocalDate endDate = (new Date(endTime*1000L)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        System.out.println(endDate);
+        //System.out.println(endDate);
         endDay = (short) ChronoUnit.DAYS.between(epoch, endDate);
-        System.out.println(endDay);
+        //System.out.println(endDay);
     }
 
     public void setCallback(TweetCallback tc){
@@ -81,6 +87,12 @@ public class GeoTemporalTweetQuery {
         this.tc = tc;
     }
 
+    /**
+     * executes query, calls callback.process() for each result
+     * @throws AccumuloSecurityException
+     * @throws AccumuloException
+     * @throws TableNotFoundException
+     */
     public void query() throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
 
         if(north == null ||
@@ -103,7 +115,7 @@ public class GeoTemporalTweetQuery {
         BatchScanner rawTwitterScan = conn.createBatchScanner(TableIdentifier.RAW_TWITTER_DATA.get(),auths,32);
 
 
-        System.out.println("getList");
+        //System.out.println("getList");
         List<Range> geoRangeList = getRangeList();
         if(geoRangeList.size() == 0){
             return;
@@ -117,7 +129,7 @@ public class GeoTemporalTweetQuery {
 
         geoTempScan.addScanIterator(filterIteratorConfig);
 
-        System.out.println("getKeys");
+        //System.out.println("getKeys");
         //query on GeoTempoalIndex for RawTwitterKeys
         List<Range> rawRangeList = new ArrayList<>();
         for (Map.Entry<Key, Value> entry : geoTempScan) {
@@ -126,7 +138,7 @@ public class GeoTemporalTweetQuery {
         }
         geoTempScan.close();
 
-        System.out.println("getRaw");
+        //System.out.println("getRaw");
         if(rawRangeList.size() == 0){
             return;
         }

@@ -194,7 +194,6 @@ public class GeoTempConverterTest {
         for(Map.Entry<Key, Value> entry: s){
             System.out.println(entry.getKey() + " | " + entry.getValue());
             i++;
-            //TODO System.out.println(entry.getKey().g);
         }
         s.close();
 
