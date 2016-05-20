@@ -42,7 +42,7 @@ public class GeoTempConverter {
      */
     public static void main(String[] args) throws Exception {
 
-        ConverterProcess d = new ConverterProcess();
+        GeoTempConverter d = new GeoTempConverter();
         d.run(args[0]);
 
     }
