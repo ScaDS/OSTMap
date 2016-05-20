@@ -163,8 +163,8 @@ public class GeoTemporalTweetQuery {
         Set<String> hashes = coverage.getHashes();
 
         for(String hash: hashes){
-            for(short day = startDay; day < endDay; day++){
-                for(int spreadingByte = 0; spreadingByte < 255; spreadingByte++){
+            for(short day = startDay; day <= endDay; day++){
+                for(int spreadingByte = 0; spreadingByte <= 255; spreadingByte++){
 
                     ByteBuffer startKey = ByteBuffer.allocate(11);
                     startKey.put((byte)spreadingByte).putShort(day).put(hash.getBytes());
