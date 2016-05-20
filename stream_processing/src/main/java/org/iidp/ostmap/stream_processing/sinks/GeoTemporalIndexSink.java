@@ -6,12 +6,14 @@ import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 import org.iidp.ostmap.commons.accumulo.geoTemp.GeoTemporalKey;
 import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
 import org.iidp.ostmap.stream_processing.types.SinkConfiguration;
 import scala.Tuple2;
 
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -64,8 +66,19 @@ public class GeoTemporalIndexSink extends RichSinkFunction<Tuple2<RawTwitterData
         // create the table if not already existent
         TableOperations tableOpts = conn.tableOperations();
         try{
-            tableOpts.create(table);
-        } catch(Exception e) {}
+            if(!tableOpts.exists(table)) {
+                tableOpts.create(table);
+                // create the presplits for the table
+                TreeSet<Text> splits = new TreeSet<Text>();
+                for (int i = 0; i <= 255; i++) {
+                    byte[] bytes = {(byte) i};
+                    splits.add(new Text(bytes));
+                }
+                tableOpts.addSplits(table, splits);
+            }
+        } catch(Exception e) {
+            log.error(e);
+        }
 
         // build and return the batchwriter
         return conn.createBatchWriter(table, bwConfig);
