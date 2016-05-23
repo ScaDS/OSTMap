@@ -78,6 +78,7 @@ public class GeoTimePeriodController {
      * @param paramWestCoordinate
      * @param paramStartTime
      * @param paramEndTime
+     * @param topten
      * @return a json response
      */
     @RequestMapping(
@@ -92,7 +93,8 @@ public class GeoTimePeriodController {
             @RequestParam(name = "bbsouth") String paramSouthCoordinate,
             @RequestParam(name = "bbwest")  String paramWestCoordinate,
             @RequestParam(name = "tstart")  String paramStartTime,
-            @RequestParam(name = "tend")    String paramEndTime
+            @RequestParam(name = "tend")    String paramEndTime,
+            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten
     ) {
         _paramNorthCoordinate = paramNorthCoordinate;
         _paramEastCoordinate = paramEastCoordinate;
@@ -103,7 +105,16 @@ public class GeoTimePeriodController {
 
         validateQueryParams();
 
-        return MainController.getTestTweets();
+        String tweets = MainController.getTestTweets();
+
+        String responseString = "";
+
+        if(topten){
+            responseString = JsonHelper.createTweetsWithHashtagRanking(tweets);
+        }else {
+            responseString = JsonHelper.createTweetsWithoutHashtagRanking(tweets);
+        }
+        return responseString;
     }
 
     String getResultsFromAccumulo(String configFilePath){
