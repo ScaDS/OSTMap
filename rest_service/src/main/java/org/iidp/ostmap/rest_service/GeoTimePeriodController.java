@@ -3,7 +3,6 @@ package org.iidp.ostmap.rest_service;
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.codehaus.jettison.json.JSONException;
 import org.iidp.ostmap.commons.extractor.Extractor;
 import org.iidp.ostmap.rest_service.helper.JsonHelper;
 import org.springframework.http.MediaType;
@@ -46,7 +45,8 @@ public class GeoTimePeriodController {
             @RequestParam(name = "bbsouth") String paramSouthCoordinate,
             @RequestParam(name = "bbwest")  String paramWestCoordinate,
             @RequestParam(name = "tstart")  String paramStartTime,
-            @RequestParam(name = "tend")    String paramEndTime
+            @RequestParam(name = "tend")    String paramEndTime,
+            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten
     ) {
         _paramNorthCoordinate = paramNorthCoordinate;
         _paramEastCoordinate = paramEastCoordinate;
@@ -57,7 +57,17 @@ public class GeoTimePeriodController {
 
         validateQueryParams();
 
-        return getResultsFromAccumulo(MainController.configFilePath);
+        String tweets = getResultsFromAccumulo(MainController.configFilePath);
+
+        String result = "";
+
+        if(topten){
+            result = JsonHelper.createTweetsWithHashtagRanking(tweets);
+        }else {
+            result = JsonHelper.createTweetsWithoutHashtagRanking(tweets);
+        }
+
+        return result;
     }
 
     /**

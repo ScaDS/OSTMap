@@ -2,6 +2,8 @@ package org.iidp.ostmap.rest_service;
 
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.data.Range;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
 import org.iidp.ostmap.rest_service.helper.JsonHelper;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -37,7 +39,8 @@ public class TokenSearchController {
     @ResponseBody
     String getTweetsByFieldsAndToken(
             @RequestParam(name = "field") String paramCommaSeparatedFieldList,
-            @RequestParam(name = "token") String paramToken
+            @RequestParam(name = "token") String paramToken,
+            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten
             ) {
         try {
             _paramCommaSeparatedFieldList = URLDecoder.decode(paramCommaSeparatedFieldList, "UTF-8");
@@ -49,7 +52,17 @@ public class TokenSearchController {
 
         validateQueryParams();
 
-        return getResultsFromAccumulo(MainController.configFilePath);
+        String tweets = getResultsFromAccumulo(MainController.configFilePath);
+
+        String result = "";
+
+        if(topten){
+            result = JsonHelper.createTweetsWithHashtagRanking(tweets);
+        }else {
+            result = JsonHelper.createTweetsWithoutHashtagRanking(tweets);
+        }
+
+        return result;
     }
 
     /**
