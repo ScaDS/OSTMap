@@ -1,0 +1,26 @@
+<uib-tabset active="active">
+    <uib-tab index="0" heading="Sliding Histogram">
+
+        <!--<div id="chart"></div>-->
+        <rickshaw
+                rickshaw-options="options"
+                rickshaw-features="features"
+                rickshaw-series="series">
+        </rickshaw>
+
+        <br><br>
+        <code>Data: {{series[0]}}</code>
+        <br><br>
+        <code>Data: {{series[1]}}</code>
+    </uib-tab>
+
+
+    <uib-tab index="1" heading="Scoreboard: Area">
+        Static content
+    </uib-tab>
+
+
+    <uib-tab index="2" heading="Scoreboard: Distance">
+        Static content
+    </uib-tab>
+</uib-tabset>

@@ -13,7 +13,8 @@
             'ui-leaflet',
             'nemLogging',
             'ui.layout',
-            'ui.bootstrap'
+            'ui.bootstrap',
+            'angular-rickshaw'
         ])
         .config(defineRoutes);
 
@@ -46,6 +47,13 @@
                 name: 'Map',
                 align: 'left',
                 glyphicon: 'glyphicon glyphicon-globe'
+            })
+            .when('/analytics', {
+                templateUrl: 'views/analyticsView.html',
+                controller: 'AnalyticsCtrl',
+                name: 'Analytics',
+                align: 'left',
+                glyphicon: 'glyphicon glyphicon-stats'
             })
             .when('/about', {
                 templateUrl: 'views/aboutView.html',
