@@ -35,9 +35,9 @@
         mapInit($scope);
 
         $scope.autoUpdate = false;
-        $scope.dataSource = "accumulo"; //default: "accumulo";
-        $scope.clusteringEnabled = false;
-        $scope.usePruneCluster = false;
+        $scope.dataSource = "static"; //default: "accumulo";
+        $scope.clusteringEnabled = true;
+        $scope.usePruneCluster = true;
 
         $scope.currentFilters = "";
         $scope.timeFilter = 0.25;
@@ -125,9 +125,6 @@
                     $scope.$emit('updateStatus', status);
                     $scope.data.tweets = httpService.getTweets();
                     $scope.populateMarkers();
-                    if($scope.usePruneCluster) {
-                        $scope.pruneCluster.ProcessView();
-                    }
 
                     console.log("(Inaccurate - for now) Marker population done in: " + (Date.now() - startTime) + "ms");
                 };
@@ -153,6 +150,13 @@
             }
         };
 
+        $scope.$on('updateStatus', function(event, message){
+            if(updateQueued) {
+                $scope.search.updateFilters();
+                updateQueued = false;
+            }
+        });
+
         /**
          * Populate the map with markers using coordinates from each tweet
          * Ignore tweets without coordinates
@@ -164,6 +168,9 @@
              * Reset all markers
              */
             $scope.markers = {};
+            var newMarkers = [];
+            $scope.pruneCluster.RemoveMarkers();
+            $scope.pruneCluster.ProcessView();
 
             /**
              * Iterate through tweets
@@ -171,9 +178,9 @@
              * Add coordinate pairs to marker array
              */
             var prom = [];
-            angular.forEach($scope.data.tweets, function(tweet) {
-
-            // $scope.data.tweets.forEach( function(tweet) {
+            // angular.forEach($scope.data.tweets, function(tweet) {
+            //
+            $scope.data.tweets.forEach( function(tweet) {
             // for(var i=0; i<$scope.data.tweets.length; i++){
             //     var tweet = $scope.data.tweets[i];
                 // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
@@ -187,7 +194,7 @@
                      * Create new marker then add to marker array
                      * @type {{id_str: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
-                    var tweettemplate = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>'
+                    var tweetMessage = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>'
 
                     var newMarker = {
                         id_str: tweet.id_str,
@@ -196,36 +203,41 @@
                         focus: false,
                         draggable: false,
                         // message: "@" + tweet.user.screen_name + ": " + tweet.text,
-                        message: tweettemplate,
-                        icon: $scope.icons.red
+                        message: tweetMessage,
+                        opacity: 0.40
                     };
+
                     if($scope.clusteringEnabled) {
                         if ($scope.usePruneCluster) {
-                            var marker = new PruneCluster.Marker(newMarker.lat,newMarker.lng);
-                            marker.data.icon = L.divIcon($scope.icons.red);
-                            $scope.pruneCluster.RegisterMarker(marker);
+                            var pruneMarker = new PruneCluster.Marker(tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0]);
+                            pruneMarker.data = newMarker;
+                            pruneMarker.data.icon = L.divIcon($scope.icons.red);
+                            pruneMarker.data.popup = tweetMessage;
+
+                            $scope.pruneCluster.RegisterMarker(pruneMarker);
                         } else {
-                            newMarker.layer = 'cluster'
-                            $scope.markers[tweet.id_str] = newMarker;
+                            newMarker.layer = 'cluster';
+                            newMarker.icon = $scope.icons.red;
+                            newMarkers.push(newMarker);
                         }
                     } else {
-                        newMarker.layer = 'dots'
-                        $scope.markers[tweet.id_str] = newMarker;
+                        newMarker.layer = 'dots';
+                        newMarker.icon = $scope.icons.red;
+                        newMarkers.push(newMarker);
                     }
                 }
             }
             );
+
+            if($scope.usePruneCluster) {
+                $scope.pruneCluster.ProcessView();
+            } else {
+                $scope.markers = _.clone(newMarkers);
+            }
             // $q.all(prom).then(function () {
             //     callback();
             // });
         };
-
-        $scope.$on('updateStatus', function(event, message){
-            if(updateQueued) {
-                $scope.search.updateFilters();
-                updateQueued = false;
-            }
-        });
 
         /**
          * Move the map center to the coordinates of the clicked tweet
@@ -234,8 +246,8 @@
          * @param lat
          * @param lng
          */
-        $scope.search.goToTweet = function (id_str, lat, lng) {
-            console.log("selected tweet id_str: " + id_str + ", [" + lat + "," + lng + "]");
+        $scope.search.goToTweet = function (index, lat, lng) {
+            console.log("selected tweet id_str: " + index + ", [" + lat + "," + lng + "]");
 
             /**
              * Check if latitude and longitude are available
@@ -268,10 +280,10 @@
                 if ($scope.currentMarkerID != 0) {
                     $scope.markers[$scope.currentMarkerID].focus = false;
                 }
-                $scope.currentMarkerID = id_str;
+                $scope.currentMarkerID = index;
 
-                if ($scope.markers[id_str] != null) {
-                    $scope.markers[id_str].focus = true;
+                if ($scope.markers[index] != null) {
+                    $scope.markers[index].focus = true;
                 }
             }
         };
@@ -448,13 +460,13 @@
                 type: 'div',
                 iconSize: [11, 11],
                 className: 'blue',
-                iconAnchor:  [5, 5]
+                iconAnchor:  [6, 6]
             },
             red: {
                 type: 'div',
                 iconSize: [11, 11],
                 className: 'red',
-                iconAnchor:  [5, 5]
+                iconAnchor:  [6, 6],
             },
             smallerDefault: {
                 iconUrl: 'bower_components/leaflet/dist/images/marker-icon.png',

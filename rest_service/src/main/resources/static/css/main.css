@@ -23,13 +23,11 @@
 
 .red {
     border-radius: 120px;
-    opacity: .40;
     background-color: #FF0000;
 }
 
 .blue {
     border-radius: 120px;
-    opacity: .40;
     background-color: #0000FF;
 }
 
