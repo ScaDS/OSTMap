@@ -56,6 +56,15 @@ public class FlinkEnvManager {
         readConfig(configPath);
     }
 
+    /**
+     * only configure accumulo (don't use flink functions)
+     * @param configPath
+     * @throws IOException
+     */
+    public FlinkEnvManager(String configPath) throws IOException {
+        readConfig(configPath);
+    }
+
 
 
     /**
@@ -85,11 +94,6 @@ public class FlinkEnvManager {
         accumuloUser = props.getProperty(AccumuloIdentifiers.PROPERTY_USER.toString());
         accumuloPassword = props.getProperty(AccumuloIdentifiers.PROPERTY_PASSWORD.toString());
         accumuloZookeeper = props.getProperty(AccumuloIdentifiers.PROPERTY_ZOOKEEPER.toString());
-
-        System.out.println(accumuloInstanceName + " " + accumuloUser + " " +
-                accumuloPassword + " " + accumuloZookeeper +" "+
-                this.inTable + " "+ this.outTable);
-
     }
 
     /**
@@ -112,7 +116,7 @@ public class FlinkEnvManager {
      * @throws AccumuloSecurityException
      * @throws AccumuloException
      */
-    Connector getConnector() throws AccumuloSecurityException, AccumuloException {
+    public Connector getConnector() throws AccumuloSecurityException, AccumuloException {
         // build the accumulo connector
         Instance inst = new ZooKeeperInstance(accumuloInstanceName, accumuloZookeeper);
         Connector conn = inst.getConnector(accumuloUser, new PasswordToken(accumuloPassword));

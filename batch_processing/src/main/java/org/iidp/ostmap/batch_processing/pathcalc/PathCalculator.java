@@ -1,4 +1,4 @@
-package org.iidp.ostmap.batch_processing.areacalc;
+package org.iidp.ostmap.batch_processing.pathcalc;
 
 
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -8,15 +8,14 @@ import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
-import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.TextOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.util.Collector;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
@@ -28,7 +27,7 @@ import java.util.Properties;
 /**
  * This class determines the user with the biggest area defined by his tweets
  */
-public class Calculator {
+public class PathCalculator {
     public static final String PROPERTY_INSTANCE = "accumulo.instance";
     private String accumuloInstanceName;
     public static final String PROPERTY_USER = "accumulo.user";
@@ -93,17 +92,17 @@ public class Calculator {
 
         DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
 
-        DataSet<Tuple2<String,String>> geoList = rawTwitterDataRows.flatMap(new GeoExtrationFlatMap());
+        DataSet<Tuple2<String,String>> geoList = rawTwitterDataRows.flatMap(new PathGeoExtrationFlatMap());
 
         DataSet<Tuple2<String,String>> reducedGroup = geoList
                                                         .groupBy(0)
-                                                        .reduceGroup(new CoordGroupReduce());
+                                                        .reduceGroup(new PathCoordGroupReduce());
 
-        DataSet<Tuple2<String,Double>> userRanking = reducedGroup.flatMap(new GeoCalcFlatMap())
+        DataSet<Tuple2<String,Double>> userRanking = reducedGroup.flatMap(new PathGeoCalcFlatMap())
                 .sortPartition(1, Order.DESCENDING).setParallelism(1);
 
 
-        TextOutputFormat<String> tof = new TextOutputFormat<>(new Path("file:///tmp/areauserranking"));
+        TextOutputFormat<String> tof = new TextOutputFormat<>(new Path("file:///tmp/pathuserranking"));
         tof.setWriteMode(FileSystem.WriteMode.OVERWRITE);
 
         userRanking.writeAsText("file:///tmp/userranking", FileSystem.WriteMode.OVERWRITE).setParallelism(1);
@@ -120,7 +119,7 @@ public class Calculator {
      */
     public static void main(String[] args) throws Exception {
 
-        Calculator calc = new Calculator();
+        PathCalculator calc = new PathCalculator();
         calc.run(args[0]);
 
     }

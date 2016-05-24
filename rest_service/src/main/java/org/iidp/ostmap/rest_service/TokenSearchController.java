@@ -2,8 +2,7 @@ package org.iidp.ostmap.rest_service;
 
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.data.Range;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
+import org.iidp.ostmap.commons.accumulo.AccumuloService;
 import org.iidp.ostmap.rest_service.helper.JsonHelper;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -17,10 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Controller
 @RequestMapping("/api")
 public class TokenSearchController {
+
+    static Logger log = LoggerFactory.getLogger(TokenSearchController.class);
 
     private String _paramCommaSeparatedFieldList,
         _paramToken;
@@ -39,12 +43,12 @@ public class TokenSearchController {
     @ResponseBody
     String getTweetsByFieldsAndToken(
             @RequestParam(name = "field") String paramCommaSeparatedFieldList,
-            @RequestParam(name = "token") String paramToken,
-            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten
+            @RequestParam(name = "token") String paramToken
             ) {
         try {
             _paramCommaSeparatedFieldList = URLDecoder.decode(paramCommaSeparatedFieldList, "UTF-8");
             _paramToken = URLDecoder.decode(paramToken, "UTF-8").toLowerCase();
+            log.info("Get Request received - FieldList: " + _paramCommaSeparatedFieldList + " Token: " + _paramToken);
             System.out.println("Get Request received - FieldList: " + _paramCommaSeparatedFieldList + " Token: " + _paramToken);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("Cannot decode query parameters.");
@@ -52,17 +56,7 @@ public class TokenSearchController {
 
         validateQueryParams();
 
-        String tweets = getResultsFromAccumulo(MainController.configFilePath);
-
-        String result = "";
-
-        if(topten){
-            result = JsonHelper.createTweetsWithHashtagRanking(tweets);
-        }else {
-            result = JsonHelper.createTweetsWithoutHashtagRanking(tweets);
-        }
-
-        return result;
+        return getResultsFromAccumulo(MainController.configFilePath);
     }
 
     /**

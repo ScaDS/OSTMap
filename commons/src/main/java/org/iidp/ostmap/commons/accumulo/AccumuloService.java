@@ -1,12 +1,12 @@
-package org.iidp.ostmap.rest_service;
+package org.iidp.ostmap.commons.accumulo;
 
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Range;
-import org.apache.accumulo.core.iterators.user.GrepIterator;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
 import org.iidp.ostmap.accumuloiterators.ExtractIterator;
+import org.iidp.ostmap.commons.enums.TableIdentifier;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-class AccumuloService {
+public class AccumuloService {
     private static final String PROPERTY_INSTANCE = "accumulo.instance";
     private String accumuloInstanceName;
     private static final String PROPERTY_USER = "accumulo.user";
@@ -24,12 +24,10 @@ class AccumuloService {
     private String accumuloPassword;
     private static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
     private String accumuloZookeeper;
-    private static final String rawTwitterDataTableName = "RawTwitterData";
-    private static final String termIndexTableName = "TermIndex";
 
 
-     // defines the number of threads a BatchScanner may use
-    private int numberOfThreadsForScan = 10;
+    // defines the number of threads a BatchScanner may use
+    private int numberOfThreadsForScan = 16;
 
     /**
      * Parses the config file at the given path for the necessary parameter.
@@ -37,7 +35,7 @@ class AccumuloService {
      * @param path the path to the config file
      * @throws IOException
      */
-    void readConfig(String path) throws IOException {
+    public void readConfig(String path) throws IOException {
         if (null == path) {
             throw new RuntimeException("No path to accumulo config file given. You have to start the webservice with the path to accumulo config as first parameter.");
         }
@@ -57,7 +55,7 @@ class AccumuloService {
      * @throws AccumuloSecurityException
      * @throws AccumuloException
      */
-    Connector getConnector() throws AccumuloSecurityException, AccumuloException {
+    public Connector getConnector() throws AccumuloSecurityException, AccumuloException {
         // build the accumulo connector
         Instance inst = new ZooKeeperInstance(accumuloInstanceName, accumuloZookeeper);
         Connector conn = inst.getConnector(accumuloUser, new PasswordToken(accumuloPassword));
@@ -76,10 +74,10 @@ class AccumuloService {
      * @throws AccumuloException
      * @throws TableNotFoundException
      */
-    Scanner getTermIndexScanner(String token, String field) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+    public Scanner getTermIndexScanner(String token, String field) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
         Authorizations auths = new Authorizations("standard");
-        Scanner scan = conn.createScanner(termIndexTableName, auths);
+        Scanner scan = conn.createScanner(TableIdentifier.TERM_INDEX.get(), auths);
         scan.fetchColumnFamily(new Text(field.getBytes()));
         //Check if the token has a wildcard as last character
         if (hasWildCard(token)) {
@@ -101,10 +99,10 @@ class AccumuloService {
      * @throws AccumuloException
      * @throws TableNotFoundException
      */
-    BatchScanner getRawDataScannerByTimeSpan(String startTime, String endTime) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+    public BatchScanner getRawDataScannerByTimeSpan(String startTime, String endTime) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
         Authorizations auths = new Authorizations("standard");
-        BatchScanner scan = conn.createBatchScanner(rawTwitterDataTableName, auths, numberOfThreadsForScan);
+        BatchScanner scan = conn.createBatchScanner(TableIdentifier.RAW_TWITTER_DATA.get(), auths, numberOfThreadsForScan);
         addReduceIterator(scan);
 
         ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
@@ -129,10 +127,10 @@ class AccumuloService {
      * @throws AccumuloException
      * @throws TableNotFoundException
      */
-    BatchScanner getRawDataBatchScanner(List<Range> rangeFilter) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+    public BatchScanner getRawDataBatchScanner(List<Range> rangeFilter) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
         Authorizations auths = new Authorizations("standard");
-        BatchScanner scan = conn.createBatchScanner(rawTwitterDataTableName, auths, numberOfThreadsForScan);
+        BatchScanner scan = conn.createBatchScanner(TableIdentifier.RAW_TWITTER_DATA.get(), auths, numberOfThreadsForScan);
         addReduceIterator(scan);
         scan.setRanges(rangeFilter);
         return scan;

@@ -13,7 +13,10 @@ apply plugin: 'spring-boot'
 apply plugin:'application'
 
 configurations {
-    all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+     all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    all*.exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
+    //alll*.exclude group: 'org.slf4j.impl', module: 'Log4jLoggerFactory'
+    // all*.exclude module : 'spring-boot-starter-logging'
 }
 
 jar {
@@ -47,8 +50,14 @@ mainClassName = "org.iidp.ostmap.rest_service.MainController"
 
 dependencies {
     compile project(':commons')
+
     compile project(':accumulo_iterators')
+
     // tag::jetty[]
+
+    compile ('org.springframework.boot:spring-boot-starter') {
+    }
+
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
@@ -62,11 +71,9 @@ dependencies {
 
     testCompile 'junit:junit'
     testCompile("org.springframework.boot:spring-boot-starter-test") {
-        exclude group: 'org.slf4j'
     }
 
     compile('org.apache.accumulo:accumulo-core:1.7.0.2.4.0.0-169') {
         exclude group: 'org.mortbay.jetty', module: 'jetty'
-        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
     }
 }
