@@ -154,12 +154,12 @@
         /**
          * Move the map center to the coordinates of the clicked tweet
          *
-         * @param id
+         * @param id_str
          * @param lat
          * @param lng
          */
-        $scope.search.goToTweet = function (id, lat, lng) {
-            console.log("selected tweet id: " + id + ", [" + lat + "," + lng + "]");
+        $scope.search.goToTweet = function (id_str, lat, lng) {
+            console.log("selected tweet id_str: " + id_str + ", [" + lat + "," + lng + "]");
 
             /**
              * Check if latitude and longitude are available
@@ -192,10 +192,10 @@
                 if ($scope.currentMarkerID != 0) {
                     $scope.markers[$scope.currentMarkerID].focus = false;
                 }
-                $scope.currentMarkerID = id;
+                $scope.currentMarkerID = id_str;
 
-                if ($scope.markers[id] != null) {
-                    $scope.markers[id].focus = true;
+                if ($scope.markers[id_str] != null) {
+                    $scope.markers[id_str].focus = true;
                 }
             }
         };
@@ -221,20 +221,20 @@
              * Add coordinate pairs to marker array
              */
             angular.forEach($scope.data.tweets, function(tweet) {
-                // Check if tweet has the property 'coordinates' and 'id'... if not, leave the forEach function
-                if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id')){
-                    return;
-                }
+                // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
+                // if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
+                //     return;
+                // }
 
-                if($scope.markers[tweet.id] == undefined && tweet.coordinates != null) {
+                if($scope.markers[tweet.id_str] == undefined && tweet.coordinates != null) {
                     /**
                      * Create new marker then add to marker array
-                     * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
+                     * @type {{id_str: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
-                    var tweettemplate = '<iframe border=0 frameborder=0 height=250 width=350 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id + '"></iframe>'
+                    var tweettemplate = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>'
 
                     var newMarker = {
-                        id: tweet.id,
+                        id_str: tweet.id_str,
                         lat: tweet.coordinates.coordinates[1],
                         lng: tweet.coordinates.coordinates[0],
                         focus: false,
@@ -249,9 +249,9 @@
                         newMarker.layer = 'dots'
                     }
                     // $scope.markers.push(newMarker)
-                    // $scope.markers.push(tweet.id + ": " +  newMarker)
-                    // newMarkers[tweet.id] = newMarker;
-                    $scope.markers[tweet.id] = newMarker;
+                    // $scope.markers.push(tweet.id_str + ": " +  newMarker)
+                    // newMarkers[tweet.id_str] = newMarker;
+                    $scope.markers[tweet.id_str] = newMarker;
                 }
             });
         };
@@ -317,10 +317,20 @@
         });
 
         /**
+         * Run-once
          * Update the filters when the bounds are changed
+         * Adds PruneCluster
          */
         $scope.onBounds = function () {
             leafletData.getMap("map").then(function(map) {
+                var pruneCluster = new PruneClusterForLeaflet();
+
+                // var marker = new PruneCluster.Marker(latitude, longitude);
+                // pruneCluster.RegisterMarker(marker);
+
+                map.addLayer(pruneCluster);
+
+
                 map.on('moveend', function() {
                     $scope.currentBounds = map.getBounds();
                     if($scope.autoUpdate) {

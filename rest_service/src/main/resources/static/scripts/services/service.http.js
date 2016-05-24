@@ -217,8 +217,8 @@
             _setLoading(true);
             var deferred = $q.defer();
 
-            // var url = "data/example-response.json";
-            var url = "data/berlin1d.json";
+            var url = "data/small-response.json";
+            // var url = "data/large-response.json";
             $http.get(url).then(function (result) {
                 setTimeout(function(){
                     if(result.status == 200){

@@ -6,7 +6,9 @@
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="0.5">30min</label>
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="1">1h</label>
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="2">2h</label>
-            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="3">4h</label>
+            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="4">4h</label>
+            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="6">6h</label>
+            <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="12">12h</label>
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="24">1d</label>
             <!--<label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="0">All</label>-->
         </div>
@@ -87,7 +89,7 @@
         <!-- Table -->
         <table class="table table-hover tabled-striped table-condensed table-responsive">
             <caption>{{data.tweets.length}} Tweets</caption>
-            <tr ng-repeat="tweet in data.tweets|limitTo:30" ng-click="search.goToTweet(tweet.id, tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0])">
+            <tr ng-repeat="tweet in data.tweets|limitTo:30" ng-click="search.goToTweet(tweet.id_str, tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0])">
                 <td>
                     <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">
                 </td>

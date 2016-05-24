@@ -41,3 +41,18 @@
     border: none !important;
     box-shadow: none !important;
 }
+
+.leaflet-popup-content-wrapper{
+    height: 450px;
+    /*width: 450px;*/
+}
+
+.Tweet {
+    /*position: fixed;*/
+    display: block;
+    margin-left: -10px;
+    /*margin-right: -10px;*/
+    height: 420px;
+    /*width: 95%;*/
+    border: 0;
+}
