@@ -25,10 +25,16 @@ public class TokenSearchController {
     private String _paramCommaSeparatedFieldList,
         _paramToken;
 
+    private int _paramLimit,
+        _paramOffset;
+
     /**
      * Mapping method for path /tokensearch
      * @param paramCommaSeparatedFieldList
      * @param paramToken
+     * @param paramTopten
+     * @param paramLimit
+     * @param paramOffset
      * @return the result as json
      */
     @RequestMapping(
@@ -40,15 +46,19 @@ public class TokenSearchController {
     String getTweetsByFieldsAndToken(
             @RequestParam(name = "field") String paramCommaSeparatedFieldList,
             @RequestParam(name = "token") String paramToken,
-            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten
+            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean paramTopten,
+            @RequestParam(name = "limit", required = false, defaultValue = "0") int paramLimit,
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int paramOffset
             ) {
         try {
             _paramCommaSeparatedFieldList = URLDecoder.decode(paramCommaSeparatedFieldList, "UTF-8");
             _paramToken = URLDecoder.decode(paramToken, "UTF-8").toLowerCase();
-            System.out.println("Get Request received - FieldList: " + _paramCommaSeparatedFieldList + " Token: " + _paramToken);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("Cannot decode query parameters.");
         }
+
+        _paramLimit = paramLimit;
+        _paramOffset = paramOffset;
 
         validateQueryParams();
 
@@ -56,7 +66,7 @@ public class TokenSearchController {
 
         String result = "";
 
-        if(topten){
+        if(paramTopten){
             result = JsonHelper.createTweetsWithHashtagRanking(tweets);
         }else {
             result = JsonHelper.createTweetsWithoutHashtagRanking(tweets);
@@ -94,6 +104,8 @@ public class TokenSearchController {
         String result = null;
         List<Range> rawKeys = null;
         String[] fieldArray = _paramCommaSeparatedFieldList.split(",");
+        int position = 0;
+        int count = 0;
         try {
             accumuloService.readConfig(configFilePath);
             result = "[";
@@ -114,16 +126,37 @@ public class TokenSearchController {
                 BatchScanner bs = accumuloService.getRawDataBatchScanner(rawKeys);
 
                 for (Map.Entry<Key, Value> rawDataEntry : bs) {
+                    if(_paramLimit > 0){
+                        //Limit the result
+                        if(position >= _paramOffset && count < _paramLimit){
+                            if(!isFirst){
+                                result += ",";
+                            }else{
+                                isFirst=false;
+                            }
 
-                    if(!isFirst){
-                        result += ",";
-                    }else{
-                        isFirst=false;
+                            String json = rawDataEntry.getValue().toString();
+                            json = JsonHelper.generateCoordinates(json);
+                            result += json;
+                            count++;
+                        }else {
+                            continue;
+                        }
+
+                    }else {
+                        //Get all data
+                        if(!isFirst){
+                            result += ",";
+                        }else{
+                            isFirst=false;
+                        }
+
+                        String json = rawDataEntry.getValue().toString();
+                        json = JsonHelper.generateCoordinates(json);
+                        result += json;
                     }
 
-                    String json = rawDataEntry.getValue().toString();
-                    json = JsonHelper.generateCoordinates(json);
-                    result += json;
+                    position++;
                 }
                 bs.close();
             }
@@ -142,6 +175,14 @@ public class TokenSearchController {
 
     void set_paramToken(String _paramToken) {
         this._paramToken = _paramToken;
+    }
+
+    public void set_paramLimit(int _paramLimit) {
+        this._paramLimit = _paramLimit;
+    }
+
+    public void set_paramOffset(int _paramOffset) {
+        this._paramOffset = _paramOffset;
     }
 
 

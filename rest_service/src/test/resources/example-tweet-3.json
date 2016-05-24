@@ -1,0 +1,182 @@
+{
+  "created_at": "Wed Mar 30 15:34:58 +0000 2016",
+  "id": 715200653140889600,
+  "id_str": "715200653140889600",
+  "text": "Vollstaendiger Tweet katze #katze maus",
+  "source": "\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+  "truncated": false,
+  "in_reply_to_status_id": null,
+  "in_reply_to_status_id_str": null,
+  "in_reply_to_user_id": null,
+  "in_reply_to_user_id_str": null,
+  "in_reply_to_screen_name": null,
+  "user": {
+    "id": 2590265922,
+    "id_str": "2590265922",
+    "name": "the big gay",
+    "screen_name": "yakisabo",
+    "location": "austria",
+    "url": "http:\/\/miyukki.flavors.me",
+    "description": "Cass\/23\/genderfluid. @0nematsu is my battery partner \u2764\ufe0f \/ @kylosolos is my bestest friend \u2764\ufe0f \/ I love @yolozuyaaa very much \u2764\ufe0f \/ @cham3l3ons is my qpprincess \u2764\ufe0f",
+    "protected": false,
+    "verified": false,
+    "followers_count": 171,
+    "friends_count": 370,
+    "listed_count": 0,
+    "favourites_count": 48346,
+    "statuses_count": 76219,
+    "created_at": "Thu Jun 26 21:22:55 +0000 2014",
+    "utc_offset": -25200,
+    "time_zone": "Pacific Time (US & Canada)",
+    "geo_enabled": true,
+    "lang": "en",
+    "contributors_enabled": false,
+    "is_translator": false,
+    "profile_background_color": "C0DEED",
+    "profile_background_image_url": "http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+    "profile_background_image_url_https": "https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+    "profile_background_tile": false,
+    "profile_link_color": "EEEE00",
+    "profile_sidebar_border_color": "C0DEED",
+    "profile_sidebar_fill_color": "DDEEF6",
+    "profile_text_color": "333333",
+    "profile_use_background_image": true,
+    "profile_image_url": "http:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+    "profile_image_url_https": "https:\/\/pbs.twimg.com\/profile_images\/715042999508537349\/yfxgBEBs_normal.jpg",
+    "profile_banner_url": "https:\/\/pbs.twimg.com\/profile_banners\/2590265922\/1459138490",
+    "default_profile": false,
+    "default_profile_image": false,
+    "following": null,
+    "follow_request_sent": null,
+    "notifications": null
+  },
+  "geo": null,
+  "coordinates": null,
+  "place": {
+    "id": "9f659d51e5c5deae",
+    "url": "https:\/\/api.twitter.com\/1.1\/geo\/id\/9f659d51e5c5deae.json",
+    "place_type": "city",
+    "name": "Vienna",
+    "full_name": "Vienna, Austria",
+    "country_code": "AT",
+    "country": "\u00d6sterreich",
+    "bounding_box": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            16.182180,
+            48.117666
+          ],
+          [
+            16.182180,
+            48.322574
+          ],
+          [
+            16.577511,
+            48.322574
+          ],
+          [
+            16.577511,
+            48.117666
+          ]
+        ]
+      ]
+    },
+    "attributes": {}
+  },
+  "contributors": null,
+  "is_quote_status": false,
+  "retweet_count": 0,
+  "favorite_count": 0,
+  "entities": {
+    "hashtags": [],
+    "urls": [],
+    "user_mentions": [],
+    "symbols": [],
+    "media": [
+      {
+        "id": 715200652125847552,
+        "id_str": "715200652125847552",
+        "indices": [
+          90,
+          113
+        ],
+        "media_url": "http:\/\/pbs.twimg.com\/media\/CeznNC0WwAAVldS.jpg",
+        "media_url_https": "https:\/\/pbs.twimg.com\/media\/CeznNC0WwAAVldS.jpg",
+        "url": "https:\/\/t.co\/G4GvR82QO5",
+        "display_url": "pic.twitter.com\/G4GvR82QO5",
+        "expanded_url": "http:\/\/twitter.com\/yakisabo\/status\/715200653140889600\/photo\/1",
+        "type": "photo",
+        "sizes": {
+          "large": {
+            "w": 111,
+            "h": 252,
+            "resize": "fit"
+          },
+          "small": {
+            "w": 111,
+            "h": 252,
+            "resize": "fit"
+          },
+          "thumb": {
+            "w": 111,
+            "h": 111,
+            "resize": "crop"
+          },
+          "medium": {
+            "w": 111,
+            "h": 252,
+            "resize": "fit"
+          }
+        }
+      }
+    ]
+  },
+  "extended_entities": {
+    "media": [
+      {
+        "id": 715200652125847552,
+        "id_str": "715200652125847552",
+        "indices": [
+          90,
+          113
+        ],
+        "media_url": "http:\/\/pbs.twimg.com\/media\/CeznNC0WwAAVldS.jpg",
+        "media_url_https": "https:\/\/pbs.twimg.com\/media\/CeznNC0WwAAVldS.jpg",
+        "url": "https:\/\/t.co\/G4GvR82QO5",
+        "display_url": "pic.twitter.com\/G4GvR82QO5",
+        "expanded_url": "http:\/\/twitter.com\/yakisabo\/status\/715200653140889600\/photo\/1",
+        "type": "photo",
+        "sizes": {
+          "large": {
+            "w": 111,
+            "h": 252,
+            "resize": "fit"
+          },
+          "small": {
+            "w": 111,
+            "h": 252,
+            "resize": "fit"
+          },
+          "thumb": {
+            "w": 111,
+            "h": 111,
+            "resize": "crop"
+          },
+          "medium": {
+            "w": 111,
+            "h": 252,
+            "resize": "fit"
+          }
+        }
+      }
+    ]
+  },
+  "favorited": false,
+  "retweeted": false,
+  "possibly_sensitive": false,
+  "filter_level": "low",
+  "lang": "en",
+  "timestamp_ms": "1459352098151"
+}

@@ -27,7 +27,6 @@ class AccumuloService {
     private static final String rawTwitterDataTableName = "RawTwitterData";
     private static final String termIndexTableName = "TermIndex";
 
-
      // defines the number of threads a BatchScanner may use
     private int numberOfThreadsForScan = 10;
 
@@ -157,5 +156,4 @@ class AccumuloService {
         IteratorSetting jsonExtractIteratorConfig = new IteratorSetting(20, "jsonExtractIterator", ExtractIterator.class);
         scan.addScanIterator(jsonExtractIteratorConfig);
     }
-
 }

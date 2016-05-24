@@ -23,6 +23,9 @@ public class GeoTimePeriodController {
             _paramStartTime,
             _paramEndTime ;
 
+    private int _paramLimit,
+            _paramOffset;
+
     /**
      * Mapping method for path /geotemporalsearch
      * @param paramNorthCoordinate
@@ -46,7 +49,9 @@ public class GeoTimePeriodController {
             @RequestParam(name = "bbwest")  String paramWestCoordinate,
             @RequestParam(name = "tstart")  String paramStartTime,
             @RequestParam(name = "tend")    String paramEndTime,
-            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten
+            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten,
+            @RequestParam(name = "limit", required = false, defaultValue = "1000") int paramLimit,
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int paramOffset
     ) {
         _paramNorthCoordinate = paramNorthCoordinate;
         _paramEastCoordinate = paramEastCoordinate;
@@ -54,6 +59,8 @@ public class GeoTimePeriodController {
         _paramWestCoordinate = paramWestCoordinate;
         _paramStartTime = paramStartTime;
         _paramEndTime = paramEndTime;
+        _paramLimit = paramLimit;
+        _paramOffset = paramOffset;
 
         validateQueryParams();
 
@@ -94,7 +101,9 @@ public class GeoTimePeriodController {
             @RequestParam(name = "bbwest")  String paramWestCoordinate,
             @RequestParam(name = "tstart")  String paramStartTime,
             @RequestParam(name = "tend")    String paramEndTime,
-            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten
+            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten,
+            @RequestParam(name = "limit", required = false, defaultValue = "0") int paramLimit,
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int paramOffset
     ) {
         _paramNorthCoordinate = paramNorthCoordinate;
         _paramEastCoordinate = paramEastCoordinate;
@@ -102,6 +111,8 @@ public class GeoTimePeriodController {
         _paramWestCoordinate = paramWestCoordinate;
         _paramStartTime = paramStartTime;
         _paramEndTime = paramEndTime;
+        _paramLimit = paramLimit;
+        _paramOffset = paramOffset;
 
         validateQueryParams();
 
@@ -120,12 +131,16 @@ public class GeoTimePeriodController {
     String getResultsFromAccumulo(String configFilePath){
         String result = "[";
         AccumuloService accumuloService = new AccumuloService();
+
         BatchScanner rawDataScanner;
 
         double north = Double.parseDouble(_paramNorthCoordinate);
         double west = Double.parseDouble(_paramWestCoordinate);
         double south = Double.parseDouble(_paramSouthCoordinate);
         double east = Double.parseDouble(_paramEastCoordinate);
+
+        int position = 0;
+        int count = 0;
 
         try {
             accumuloService.readConfig(configFilePath);
@@ -143,15 +158,33 @@ public class GeoTimePeriodController {
                     //TODO: does this work across meridians?
                     if(west < longitude && longitude < east &&
                             south < latitude && latitude < north){
+                        if(_paramLimit > 0) {
+                            //Limit the result
+                            if (position >= _paramOffset && count < _paramLimit) {
+                                if (!isFirst) {
+                                    result += ",";
+                                } else {
 
-                        if(!isFirst){
-                            result += ",";
-                        }else{
+                                    isFirst = false;
+                                }
+                                json = JsonHelper.generateCoordinates(json);
+                                result += json;
+                                count++;
+                            }else {
+                                position++;
+                                continue;
+                            }
+                        }else {
+                            if (!isFirst) {
+                                result += ",";
+                            } else {
 
-                            isFirst=false;
+                                isFirst = false;
+                            }
+                            json = JsonHelper.generateCoordinates(json);
+                            result += json;
                         }
-                        json = JsonHelper.generateCoordinates(json);
-                        result += json;
+                        position++;
                     }
                 }
             }
@@ -234,5 +267,13 @@ public class GeoTimePeriodController {
 
     public void set_paramEndTime(String _paramEndTime) {
         this._paramEndTime = _paramEndTime;
+    }
+
+    public void set_paramLimit(int _paramLimit) {
+        this._paramLimit = _paramLimit;
+    }
+
+    public void set_paramOffset(int _paramOffset) {
+        this._paramOffset = _paramOffset;
     }
 }
