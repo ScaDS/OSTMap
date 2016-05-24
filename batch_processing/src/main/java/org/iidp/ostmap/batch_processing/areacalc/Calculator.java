@@ -106,7 +106,7 @@ public class Calculator {
         TextOutputFormat<String> tof = new TextOutputFormat<>(new Path("file:///tmp/areauserranking"));
         tof.setWriteMode(FileSystem.WriteMode.OVERWRITE);
 
-        userRanking.writeAsText("file:///tmp/userranking", FileSystem.WriteMode.OVERWRITE).setParallelism(1);
+        userRanking.writeAsText("file:///tmp/areauserranking", FileSystem.WriteMode.OVERWRITE).setParallelism(1);
 
 
 
