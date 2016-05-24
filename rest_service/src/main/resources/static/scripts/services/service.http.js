@@ -107,7 +107,7 @@
             getTimeWindow: _getTimeWindow,
             setTimeWindow: _setTimeWindow,
             getLoading: _getLoading,
-            setLoading: _setLoading,
+            setLoading: _setLoading
         };
 
         function _queueAddGetTweetFrom(api, filters) {
@@ -152,7 +152,7 @@
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 //angular.copy(data,_tweets);
-                _tweets = _.clone(result.data);
+                _tweets = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -172,7 +172,7 @@
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 // angular.copy(data,_tweets);
-                _tweets = _.clone(data.data);
+                _tweets = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -197,7 +197,7 @@
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 // angular.copy(data,_tweets);
-                _tweets = _.clone(data.data);
+                _tweets = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -217,8 +217,8 @@
             _setLoading(true);
             var deferred = $q.defer();
 
-            // var url = "data/small-response.json";
-            var url = "data/large-response.json";
+            var url = "data/small-response.json";
+            // var url = "data/large-response.json";
             $http.get(url).then(function (data) {
                 setTimeout(function(){
                     if(data.status == 200){
