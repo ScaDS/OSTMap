@@ -172,9 +172,9 @@
              */
             var prom = [];
             // angular.forEach($scope.data.tweets, function(tweet) {
-            // $scope.data.tweets.forEach( function(tweet) {
-            for(var i=0; i<$scope.data.tweets.length; i++){
-                var tweet = $scope.data.tweets[i];
+            $scope.data.tweets.forEach( function(tweet) {
+            // for(var i=0; i<$scope.data.tweets.length; i++){
+            //     var tweet = $scope.data.tweets[i];
                 // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
                 // if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
                 //     return;
@@ -212,7 +212,7 @@
                     }
                 }
             }
-            // );
+            );
             // $q.all(prom).then(function () {
             //     callback();
             // });
