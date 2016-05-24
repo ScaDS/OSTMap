@@ -166,6 +166,7 @@
              */
             $scope.markers = {};
             var newMarkers = [];
+            $scope.pruneMarkers = [];
             $scope.pruneCluster.RemoveMarkers();
             $scope.pruneCluster.ProcessView();
 
@@ -205,8 +206,12 @@
                             pruneMarker.data = newMarker;
                             pruneMarker.data.icon = L.divIcon($scope.icons.red);
                             pruneMarker.data.popup = tweetMessage;
+                            // pruneMarker.openPopup = function() {
+                            //     L.marker.openPopup;
+                            // }
 
                             $scope.pruneCluster.RegisterMarker(pruneMarker);
+                            $scope.pruneMarkers.push(pruneMarker);
                         } else {
                             newMarker.layer = 'cluster';
                             newMarker.icon = $scope.icons.red;
@@ -222,13 +227,18 @@
             );
 
             $scope.pruneCluster.ProcessView();
-            // $scope.markers = newMarkers;
+            $scope.markers = newMarkers;
 
-            leafletData.getDirectiveControls().then(function (controls) {
-                controls.markers.create({});
-                controls.markers.create(newMarkers);
-                console.log("Marker population done in: " + (Date.now() - startTime) + "ms");
-            });
+            /**
+             * Manual ui-leaflet marker creation
+             * See $scope.markersWatchOptions for watcher toggles
+             * Also: HTML: markers-watch-options="markersWatchOptions"
+             */
+            // leafletData.getDirectiveControls().then(function (controls) {
+            //     controls.markers.create({});
+            //     controls.markers.create(newMarkers);
+            //     console.log("Marker population done in: " + (Date.now() - startTime) + "ms");
+            // });
         };
 
         /**
@@ -238,8 +248,8 @@
          * @param lat
          * @param lng
          */
-        $scope.search.goToTweet = function (index, lat, lng) {
-            console.log("selected tweet id_str: " + index + ", [" + lat + "," + lng + "]");
+        $scope.search.goToTweet = function (index, id_str, lat, lng) {
+            console.log("selected tweet index: " + index + ", [" + lat + "," + lng + "]");
 
             /**
              * Check if latitude and longitude are available
@@ -251,11 +261,11 @@
                  * Move map center to the tweet
                  * @type {{lat: *, lng: *, zoom: number}}
                  */
-                $scope.center ={
-                    lat: lat,
-                    lng: lng,
-                    zoom: 10
-                };
+                // $scope.center ={
+                //     lat: lat,
+                //     lng: lng,
+                //     zoom: 10
+                // };
 
                 /**
                  * Scroll document to the map element
@@ -270,13 +280,35 @@
                  * Makes the text label visible
                  */
                 if($scope.usePruneCluster) {
+                    // $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
+                    //     leafletMarker.openPopup();
+                    // };
+
                     if ($scope.currentMarkerID != 0) {
-                        $scope.markers[$scope.currentMarkerID].focus = false;
+                        // $scope.pruneMarkers[$scope.currentMarkerID].closePopup();
                     }
                     $scope.currentMarkerID = index;
 
-                    if ($scope.markers[index] != null) {
-                        $scope.markers[index].focus = true;
+                    if ($scope.pruneMarkers[index] != null) {
+                        // $scope.pruneMarkers[index].openPopup();
+                        console.log($scope.pruneCluster.GetMarkers()[index]);
+                        $scope.pruneCluster.GetMarkers()[index].bindPopup("test");
+                        
+                        $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
+                            leafletMarker.setIcon(L.divIcon($scope.icons.red)); // See http://leafletjs.com/reference.html#icon
+                            //listeners can be applied to markers in this function
+                            // leafletMarker.on('popup' + data.id_str, function(){
+                                //do click event logic here
+                                // leafletMarker.openPopup();
+                            // });
+                            // A popup can already be attached to the marker
+                            // bindPopup can override it, but it's faster to update the content instead
+                            if (leafletMarker.getPopup()) {
+                                leafletMarker.setPopupContent(data.message);
+                            } else {
+                                leafletMarker.bindPopup(data.message);
+                            }
+                        };
                     }
                 } else {
                     if ($scope.currentMarkerID != 0) {
@@ -360,6 +392,22 @@
             leafletData.getMap("map").then(function(map) {
                 $scope.pruneCluster = new PruneClusterForLeaflet();
                 map.addLayer($scope.pruneCluster);
+
+                // $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
+                //     leafletMarker.setIcon(L.divIcon($scope.icons.red)); // See http://leafletjs.com/reference.html#icon
+                //     //listeners can be applied to markers in this function
+                //     // leafletMarker.on('popup' + data.id_str, function(){
+                //         //do click event logic here
+                //         // leafletMarker.openPopup();
+                //     // });
+                //     // A popup can already be attached to the marker
+                //     // bindPopup can override it, but it's faster to update the content instead
+                //     if (leafletMarker.getPopup()) {
+                //         leafletMarker.setPopupContent(data.message);
+                //     } else {
+                //         leafletMarker.bindPopup(data.message);
+                //     }
+                // };
 
 
                 map.on('moveend', function() {

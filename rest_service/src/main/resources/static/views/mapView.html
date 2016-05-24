@@ -52,10 +52,11 @@
                     bounds="bounds"
                     maxbounds="maxBounds"
                     markers="markers"
-                    markers-watch-options="markersWatchOptions"
+
                     layers="layers"
                     event-broadcast="events">
             </leaflet>
+            <!--markers-watch-options="markersWatchOptions"-->
         </div>
 
         <div class="col-xs-6 col-md-4">
@@ -105,7 +106,7 @@
         <!-- Table -->
         <table class="table table-hover tabled-striped table-condensed table-responsive">
             <caption>{{data.tweets.length}} Tweets</caption>
-            <tr ng-repeat="tweet in data.tweets|limitTo:30 track by $index" ng-click="search.goToTweet($index, tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0])">
+            <tr ng-repeat="tweet in data.tweets|limitTo:30 track by $index" ng-click="search.goToTweet($index, id_str, tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0])">
                 <td>
                     <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">
                 </td>
