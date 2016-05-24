@@ -217,14 +217,14 @@
             _setLoading(true);
             var deferred = $q.defer();
 
-            var url = "data/small-response.json";
-            // var url = "data/large-response.json";
+            // var url = "data/small-response.json";
+            var url = "data/large-response.json";
             $http.get(url).then(function (data) {
                 setTimeout(function(){
                     if(data.status == 200){
                         //Copy result data to the private array
 
-                        // angular.copy(result.data,_tweets); //1595ms very slow
+                        // angular.copy(data.data,_tweets); //1595ms very slow
                         _tweets = _.clone(data.data);
                         // _tweets = result.data;
 

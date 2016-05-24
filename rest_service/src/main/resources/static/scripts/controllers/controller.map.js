@@ -120,13 +120,9 @@
                 }
 
                 var doUpdate = function () {
-                    var startTime = Date.now();
-
                     $scope.$emit('updateStatus', status);
                     $scope.data.tweets = httpService.getTweets();
                     $scope.populateMarkers();
-
-                    console.log("(Inaccurate - for now) Marker population done in: " + (Date.now() - startTime) + "ms");
                 };
 
                 /**
@@ -162,7 +158,8 @@
          * Ignore tweets without coordinates
          */
         $scope.populateMarkers = function () {
-            console.log("Populating Markers ");
+            // console.log("Populating Markers ");
+            var startTime = Date.now();
 
             /**
              * Reset all markers
@@ -177,12 +174,7 @@
              * Filter bad data
              * Add coordinate pairs to marker array
              */
-            var prom = [];
-            // angular.forEach($scope.data.tweets, function(tweet) {
-            //
             $scope.data.tweets.forEach( function(tweet) {
-            // for(var i=0; i<$scope.data.tweets.length; i++){
-            //     var tweet = $scope.data.tweets[i];
                 // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
                 if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
                     console.log("JSON Error");
@@ -229,14 +221,14 @@
             }
             );
 
-            if($scope.usePruneCluster) {
-                $scope.pruneCluster.ProcessView();
-            } else {
-                $scope.markers = _.clone(newMarkers);
-            }
-            // $q.all(prom).then(function () {
-            //     callback();
-            // });
+            $scope.pruneCluster.ProcessView();
+            // $scope.markers = newMarkers;
+
+            leafletData.getDirectiveControls().then(function (controls) {
+                controls.markers.create({});
+                controls.markers.create(newMarkers);
+                console.log("Marker population done in: " + (Date.now() - startTime) + "ms");
+            });
         };
 
         /**
@@ -277,13 +269,24 @@
                  * Give focus to selected tweet
                  * Makes the text label visible
                  */
-                if ($scope.currentMarkerID != 0) {
-                    $scope.markers[$scope.currentMarkerID].focus = false;
-                }
-                $scope.currentMarkerID = index;
+                if($scope.usePruneCluster) {
+                    if ($scope.currentMarkerID != 0) {
+                        $scope.markers[$scope.currentMarkerID].focus = false;
+                    }
+                    $scope.currentMarkerID = index;
 
-                if ($scope.markers[index] != null) {
-                    $scope.markers[index].focus = true;
+                    if ($scope.markers[index] != null) {
+                        $scope.markers[index].focus = true;
+                    }
+                } else {
+                    if ($scope.currentMarkerID != 0) {
+                        $scope.markers[$scope.currentMarkerID].focus = false;
+                    }
+                    $scope.currentMarkerID = index;
+
+                    if ($scope.markers[index] != null) {
+                        $scope.markers[index].focus = true;
+                    }
                 }
             }
         };
@@ -345,7 +348,7 @@
          */
         $scope.$on('$viewContentLoaded', function() {
             console.log("Page Loaded");
-            $scope.onBounds()
+            $scope.onStart()
         });
 
         /**
@@ -353,10 +356,11 @@
          * Update the filters when the bounds are changed
          * Adds PruneCluster
          */
-        $scope.pruneCluster = new PruneClusterForLeaflet();
-        $scope.onBounds = function () {
+        $scope.onStart = function () {
             leafletData.getMap("map").then(function(map) {
+                $scope.pruneCluster = new PruneClusterForLeaflet();
                 map.addLayer($scope.pruneCluster);
+
 
                 map.on('moveend', function() {
                     $scope.currentBounds = map.getBounds();
@@ -518,14 +522,39 @@
                 cluster: {
                     name: "Clustered Markers",
                     type: "markercluster",
-                    visible: true
+                    visible: true,
+                    layerOptions: {
+                        "chunkedLoading": true,
+                        "showCoverageOnHover": false,
+                        "removeOutsideVisibleBounds": true,
+                        "chunkProgress": updateProgressBar
+                    }
                 },
                 dots: {
                     name: "Red Dots",
                     type: "group",
-                    visible: true
+                    visible: true,
+                    layerOptions: {
+                        "chunkedLoading": true,
+                        "showCoverageOnHover": false,
+                        "removeOutsideVisibleBounds": true,
+                        "chunkProgress": updateProgressBar
+                    }
                 }
             }
+        };
+
+        $scope.markersWatchOptions = {
+            doWatch: false,
+            isDeep: false,
+            individual: {
+                doWatch: false,
+                isDeep: false
+            }
+        };
+
+        function updateProgressBar(processed, total, elapsed, layersArray) {
+           console.log("Chunk loading: " + processed + "/" + total + " " + elapsed + "ms")
         }
     }
 })();

@@ -45,7 +45,17 @@
     <div class="row">
         <div class="col-xs-12 col-md-8">
             <!--1. UI-Leaflet Map-->
-            <leaflet id="map" class="map" lf-center="center" bounds="bounds" maxbounds="maxBounds" markers="markers" layers="layers" event-broadcast="events"></leaflet>
+            <leaflet
+                    id="map"
+                    class="map"
+                    lf-center="center"
+                    bounds="bounds"
+                    maxbounds="maxBounds"
+                    markers="markers"
+                    markers-watch-options="markersWatchOptions"
+                    layers="layers"
+                    event-broadcast="events">
+            </leaflet>
         </div>
 
         <div class="col-xs-6 col-md-4">
