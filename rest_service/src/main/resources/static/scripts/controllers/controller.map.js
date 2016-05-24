@@ -47,6 +47,9 @@
         // $scope.search.searchFilter = "Default Search Filter";
         $scope.search.searchFilter = httpService.getSearchToken();
 
+        $scope.data = [];
+        $scope.data.tweets = httpService.getTweets();
+
         /**
          * Reset all filter values to default or null
          */
@@ -98,32 +101,37 @@
                 if ($scope.dataSource == "accumulo") {
                     //Get by GeoTime
                     httpService.getTweetsFromServerByGeoTime().then(function (status) {
-                        $scope.$emit('updateStatus', status);
-                        $scope.data.tweets = httpService.getTweets();
-                        $scope.populateMarkers();
+                        doUpdate();
                     });
                 } else if ($scope.dataSource == "restTest") {
                     //Get using test REST API
                     httpService.getTweetsFromServerTest().then(function (status) {
-                        $scope.$emit('updateStatus', status);
-                        $scope.data.tweets = httpService.getTweets();
-                        $scope.populateMarkers();
+                        doUpdate();
                     });
                 } else if ($scope.dataSource == "static") {
                     //Get from local (debug)
                     httpService.getTweetsFromLocal().then(function (status) {
-                        $scope.$emit('updateStatus', status);
-                        $scope.data.tweets = httpService.getTweets();
-                        $scope.populateMarkers();
+                        doUpdate();
                     });
                 } else {
                     //Get by Token
                     httpService.getTweetsFromServerByToken().then(function (status) {
-                        $scope.$emit('updateStatus', status);
-                        $scope.data.tweets = httpService.getTweets();
-                        $scope.populateMarkers();
+                        doUpdate();
                     });
                 }
+
+                var doUpdate = function () {
+                    var startTime = Date.now();
+
+                    $scope.$emit('updateStatus', status);
+                    $scope.data.tweets = httpService.getTweets();
+                    $scope.populateMarkers();
+                    if($scope.usePruneCluster) {
+                        $scope.pruneCluster.ProcessView();
+                    }
+
+                    console.log("(Inaccurate - for now) Marker population done in: " + (Date.now() - startTime) + "ms");
+                };
 
                 /**
                  * Update the filter display
@@ -144,6 +152,71 @@
             } else {
                 updateQueued = true;
             }
+        };
+
+        /**
+         * Populate the map with markers using coordinates from each tweet
+         * Ignore tweets without coordinates
+         */
+        $scope.populateMarkers = function () {
+            console.log("Populating Markers ");
+
+            /**
+             * Reset all markers
+             */
+            $scope.markers = {};
+
+            /**
+             * Iterate through tweets
+             * Filter bad data
+             * Add coordinate pairs to marker array
+             */
+            var prom = [];
+            // angular.forEach($scope.data.tweets, function(tweet) {
+            // $scope.data.tweets.forEach( function(tweet) {
+            for(var i=0; i<$scope.data.tweets.length; i++){
+                var tweet = $scope.data.tweets[i];
+                // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
+                // if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
+                //     return;
+                // }
+
+                if($scope.markers[tweet.id_str] == undefined && tweet.coordinates != null) {
+                    /**
+                     * Create new marker then add to marker array
+                     * @type {{id_str: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
+                     */
+                    var tweettemplate = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>'
+
+                    var newMarker = {
+                        id_str: tweet.id_str,
+                        lat: tweet.coordinates.coordinates[1],
+                        lng: tweet.coordinates.coordinates[0],
+                        focus: false,
+                        draggable: false,
+                        // message: "@" + tweet.user.screen_name + ": " + tweet.text,
+                        message: tweettemplate,
+                        icon: $scope.icons.red
+                    };
+                    if($scope.clusteringEnabled) {
+                        if ($scope.usePruneCluster) {
+                            var marker = new PruneCluster.Marker(newMarker.lat,newMarker.lng);
+                            marker.data.icon = L.divIcon($scope.icons.red);
+                            $scope.pruneCluster.RegisterMarker(marker);
+                        } else {
+                            newMarker.layer = 'cluster'
+                            $scope.markers[tweet.id_str] = newMarker;
+                        }
+                    } else {
+                        newMarker.layer = 'dots'
+                        $scope.markers[tweet.id_str] = newMarker;
+                    }
+                }
+            }
+            // );
+            // $q.all(prom).then(function () {
+            //     callback();
+            // });
         };
 
         $scope.$on('updateStatus', function(event, message){
@@ -201,74 +274,6 @@
                 }
             }
         };
-
-        $scope.data = [];
-        $scope.data.tweets = httpService.getTweets();
-
-        /**
-         * Populate the map with markers using coordinates from each tweet
-         * Ignore tweets without coordinates
-         */
-        $scope.populateMarkers = function () {
-            console.log("Populating Markers");
-            var startTime = Date.now();
-
-            /**
-             * Reset all markers
-             */
-            $scope.markers = {};
-
-            /**
-             * Iterate through tweets
-             * Filter bad data
-             * Add coordinate pairs to marker array
-             */
-            var prom = [];
-            // angular.forEach($scope.data.tweets, function(tweet) {
-            $scope.data.tweets.forEach( function(tweet) {
-                // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
-                if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
-                    return;
-                }
-
-                if($scope.markers[tweet.id_str] == undefined && tweet.coordinates != null) {
-                    /**
-                     * Create new marker then add to marker array
-                     * @type {{id_str: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
-                     */
-                    var tweettemplate = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>'
-
-                    var newMarker = {
-                        id_str: tweet.id_str,
-                        lat: tweet.coordinates.coordinates[1],
-                        lng: tweet.coordinates.coordinates[0],
-                        focus: false,
-                        draggable: false,
-                        // message: "@" + tweet.user.screen_name + ": " + tweet.text,
-                        message: tweettemplate,
-                        icon: $scope.icons.red
-                    };
-                    if($scope.clusteringEnabled) {
-                        if ($scope.usePruneCluster) {
-                            var marker = new PruneCluster.Marker(newMarker.lat,newMarker.lng);
-                            marker.data.icon = L.divIcon($scope.icons.red);
-                            $scope.pruneCluster.RegisterMarker(marker);
-                            $scope.pruneCluster.ProcessView();
-                        } else {
-                            newMarker.layer = 'cluster'
-                            $scope.markers[tweet.id_str] = newMarker;
-                        }
-                    } else {
-                        newMarker.layer = 'dots'
-                        $scope.markers[tweet.id_str] = newMarker;
-                    }
-                }
-            });
-            // $q.all(prom).then(function () {
-            //     callback();
-            // });
-            // console.log("Population done in: " + Math.round((Date.now() - startTime)/100)/10 + "ms");
-        }
 
         $scope.currentBounds = null;
 
