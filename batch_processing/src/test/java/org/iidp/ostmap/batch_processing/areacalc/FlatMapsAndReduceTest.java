@@ -135,8 +135,8 @@ public class FlatMapsAndReduceTest {
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
-                "        -3.2147884,\n" +
-                "        53.4614716\n" +
+                "        10.2812565,\n" +
+                "        48.4689845\n" +
                 "      ]\n" +
                 "    },\n" +
                 "   \"place\": null\n" +
@@ -151,8 +151,8 @@ public class FlatMapsAndReduceTest {
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
-                "        -4.2147884,\n" +
-                "        54.4614716\n" +
+                "        10.956997,\n" +
+                "        49.2964245\n" +
                 "      ]\n" +
                 "    },\n" +
                 "   \"place\": null\n" +
@@ -167,8 +167,8 @@ public class FlatMapsAndReduceTest {
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
-                "        -5.2147884,\n" +
-                "        55.4614716\n" +
+                "        11.7791195,\n" +
+                "        50.5866245\n" +
                 "      ]\n" +
                 "    },\n" +
                 "   \"place\": null\n" +
@@ -183,8 +183,8 @@ public class FlatMapsAndReduceTest {
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
-                "        -2.2147884,\n" +
-                "        52.4614716\n" +
+                "        9.1888644,\n" +
+                "        48.6959946\n" +
                 "      ]\n" +
                 "    },\n" +
                 "   \"place\": null\n" +
