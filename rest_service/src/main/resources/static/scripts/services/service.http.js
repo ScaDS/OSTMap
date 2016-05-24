@@ -172,7 +172,7 @@
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 // angular.copy(data,_tweets);
-                _tweets = _.clone(result.data);
+                _tweets = _.clone(data.data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -197,7 +197,7 @@
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 // angular.copy(data,_tweets);
-                _tweets = _.clone(result.data);
+                _tweets = _.clone(data.data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -219,20 +219,20 @@
 
             // var url = "data/small-response.json";
             var url = "data/large-response.json";
-            $http.get(url).then(function (result) {
+            $http.get(url).then(function (data) {
                 setTimeout(function(){
-                    if(result.status == 200){
+                    if(data.status == 200){
                         //Copy result data to the private array
 
                         // angular.copy(result.data,_tweets); //1595ms very slow
-                        _tweets = _.clone(result.data);
+                        _tweets = _.clone(data.data);
                         // _tweets = result.data;
 
                         _setLoading(status);
-                        deferred.resolve(result.status);
+                        deferred.resolve(data.status);
                     } else {
                         _setLoading(status);
-                        deferred.resolve(result.status + "\n" + result.headers + "\n" + result.config);
+                        deferred.resolve(data.status + "\n" + data.headers + "\n" + data.config);
                     }
                 }, 1);
 

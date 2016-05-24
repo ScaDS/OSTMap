@@ -35,10 +35,9 @@
         mapInit($scope);
 
         $scope.autoUpdate = false;
-        $scope.dataSource = "static"; //default: "accumulo";
+        $scope.dataSource = "accumulo"; //default: "accumulo";
         $scope.clusteringEnabled = false;
         $scope.usePruneCluster = false;
-
 
         $scope.currentFilters = "";
         $scope.timeFilter = 0.25;
