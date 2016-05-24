@@ -31,12 +31,14 @@
      * @param leafletData
      * @constructor
      */
-    function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData) {
+    function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData, $q) {
         mapInit($scope);
 
         $scope.autoUpdate = false;
         $scope.dataSource = "static"; //default: "accumulo";
         $scope.clusteringEnabled = false;
+        $scope.usePruneCluster = false;
+
 
         $scope.currentFilters = "";
         $scope.timeFilter = 0.25;
@@ -209,6 +211,7 @@
          */
         $scope.populateMarkers = function () {
             console.log("Populating Markers");
+            var startTime = Date.now();
 
             /**
              * Reset all markers
@@ -220,11 +223,13 @@
              * Filter bad data
              * Add coordinate pairs to marker array
              */
-            angular.forEach($scope.data.tweets, function(tweet) {
+            var prom = [];
+            // angular.forEach($scope.data.tweets, function(tweet) {
+            $scope.data.tweets.forEach( function(tweet) {
                 // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
-                // if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
-                //     return;
-                // }
+                if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
+                    return;
+                }
 
                 if($scope.markers[tweet.id_str] == undefined && tweet.coordinates != null) {
                     /**
@@ -244,17 +249,26 @@
                         icon: $scope.icons.red
                     };
                     if($scope.clusteringEnabled) {
-                        newMarker.layer = 'cluster'
+                        if ($scope.usePruneCluster) {
+                            var marker = new PruneCluster.Marker(newMarker.lat,newMarker.lng);
+                            marker.data.icon = L.divIcon($scope.icons.red);
+                            $scope.pruneCluster.RegisterMarker(marker);
+                            $scope.pruneCluster.ProcessView();
+                        } else {
+                            newMarker.layer = 'cluster'
+                            $scope.markers[tweet.id_str] = newMarker;
+                        }
                     } else {
                         newMarker.layer = 'dots'
+                        $scope.markers[tweet.id_str] = newMarker;
                     }
-                    // $scope.markers.push(newMarker)
-                    // $scope.markers.push(tweet.id_str + ": " +  newMarker)
-                    // newMarkers[tweet.id_str] = newMarker;
-                    $scope.markers[tweet.id_str] = newMarker;
                 }
             });
-        };
+            // $q.all(prom).then(function () {
+            //     callback();
+            // });
+            // console.log("Population done in: " + Math.round((Date.now() - startTime)/100)/10 + "ms");
+        }
 
         $scope.currentBounds = null;
 
@@ -321,15 +335,10 @@
          * Update the filters when the bounds are changed
          * Adds PruneCluster
          */
+        $scope.pruneCluster = new PruneClusterForLeaflet();
         $scope.onBounds = function () {
             leafletData.getMap("map").then(function(map) {
-                var pruneCluster = new PruneClusterForLeaflet();
-
-                // var marker = new PruneCluster.Marker(latitude, longitude);
-                // pruneCluster.RegisterMarker(marker);
-
-                map.addLayer(pruneCluster);
-
+                map.addLayer($scope.pruneCluster);
 
                 map.on('moveend', function() {
                     $scope.currentBounds = map.getBounds();

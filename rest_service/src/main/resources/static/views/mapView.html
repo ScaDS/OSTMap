@@ -63,7 +63,10 @@
         <button class="btn btn-danger btn-sm" ng-click="clickOnce = true;">Hide</button>
         <br>
         <code>
+            <label class="btn btn-danger btn-sm" ng-model="usePruneCluster" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false ng-click="clusteringEnabled=true; populateMarkers();">PruneCluster</label><br>
+
             clustering: {{clusteringEnabled}}<br>
+            PruneCluster: {{usePruneCluster}}<br>
             dataSource: {{dataSource}}<br>
             autoUpdate: {{autoUpdate}}<br>
             TweetID: {{currentMarkerID}}<br>
