@@ -31,11 +31,14 @@
      * @param leafletData
      * @constructor
      */
-    function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData) {
+    function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData, $q) {
         mapInit($scope);
 
-        $scope.autoUpdateDisabled = true;
-        $scope.dataSource = "accumulo"; //default: "accumulo";
+        $scope.autoUpdate = false;
+        $scope.dataSource = "static"; //default: "accumulo";
+        $scope.clusteringEnabled = false;
+        $scope.usePruneCluster = false;
+
 
         $scope.currentFilters = "";
         $scope.timeFilter = 0.25;
@@ -43,6 +46,9 @@
         $scope.search.hashtagFilter = "#";
         // $scope.search.searchFilter = "Default Search Filter";
         $scope.search.searchFilter = httpService.getSearchToken();
+
+        $scope.data = [];
+        $scope.data.tweets = httpService.getTweets();
 
         /**
          * Reset all filter values to default or null
@@ -95,24 +101,37 @@
                 if ($scope.dataSource == "accumulo") {
                     //Get by GeoTime
                     httpService.getTweetsFromServerByGeoTime().then(function (status) {
-                        $scope.$emit('updateStatus', status);
+                        doUpdate();
                     });
                 } else if ($scope.dataSource == "restTest") {
                     //Get using test REST API
                     httpService.getTweetsFromServerTest().then(function (status) {
-                        $scope.$emit('updateStatus', status);
+                        doUpdate();
                     });
                 } else if ($scope.dataSource == "static") {
                     //Get from local (debug)
                     httpService.getTweetsFromLocal().then(function (status) {
-                        $scope.$emit('updateStatus', status);
+                        doUpdate();
                     });
                 } else {
                     //Get by Token
                     httpService.getTweetsFromServerByToken().then(function (status) {
-                        $scope.$emit('updateStatus', status);
+                        doUpdate();
                     });
                 }
+
+                var doUpdate = function () {
+                    var startTime = Date.now();
+
+                    $scope.$emit('updateStatus', status);
+                    $scope.data.tweets = httpService.getTweets();
+                    $scope.populateMarkers();
+                    if($scope.usePruneCluster) {
+                        $scope.pruneCluster.ProcessView();
+                    }
+
+                    console.log("(Inaccurate - for now) Marker population done in: " + (Date.now() - startTime) + "ms");
+                };
 
                 /**
                  * Update the filter display
@@ -133,6 +152,71 @@
             } else {
                 updateQueued = true;
             }
+        };
+
+        /**
+         * Populate the map with markers using coordinates from each tweet
+         * Ignore tweets without coordinates
+         */
+        $scope.populateMarkers = function () {
+            console.log("Populating Markers ");
+
+            /**
+             * Reset all markers
+             */
+            $scope.markers = {};
+
+            /**
+             * Iterate through tweets
+             * Filter bad data
+             * Add coordinate pairs to marker array
+             */
+            var prom = [];
+            // angular.forEach($scope.data.tweets, function(tweet) {
+            // $scope.data.tweets.forEach( function(tweet) {
+            for(var i=0; i<$scope.data.tweets.length; i++){
+                var tweet = $scope.data.tweets[i];
+                // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
+                // if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
+                //     return;
+                // }
+
+                if($scope.markers[tweet.id_str] == undefined && tweet.coordinates != null) {
+                    /**
+                     * Create new marker then add to marker array
+                     * @type {{id_str: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
+                     */
+                    var tweettemplate = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>'
+
+                    var newMarker = {
+                        id_str: tweet.id_str,
+                        lat: tweet.coordinates.coordinates[1],
+                        lng: tweet.coordinates.coordinates[0],
+                        focus: false,
+                        draggable: false,
+                        // message: "@" + tweet.user.screen_name + ": " + tweet.text,
+                        message: tweettemplate,
+                        icon: $scope.icons.red
+                    };
+                    if($scope.clusteringEnabled) {
+                        if ($scope.usePruneCluster) {
+                            var marker = new PruneCluster.Marker(newMarker.lat,newMarker.lng);
+                            marker.data.icon = L.divIcon($scope.icons.red);
+                            $scope.pruneCluster.RegisterMarker(marker);
+                        } else {
+                            newMarker.layer = 'cluster'
+                            $scope.markers[tweet.id_str] = newMarker;
+                        }
+                    } else {
+                        newMarker.layer = 'dots'
+                        $scope.markers[tweet.id_str] = newMarker;
+                    }
+                }
+            }
+            // );
+            // $q.all(prom).then(function () {
+            //     callback();
+            // });
         };
 
         $scope.$on('updateStatus', function(event, message){
@@ -189,86 +273,6 @@
                     $scope.markers[id_str].focus = true;
                 }
             }
-        };
-
-        /**
-         * Slider
-         * https://github.com/angular-slider/angularjs-slider
-         *
-         * CURRENTLY UNUSED
-         *
-         * @type {{value: number, options: {ceil: number, floor: number, showTicksValues: boolean, ticksValuesTooltip: $scope.slider_ticks_values_tooltip.options.ticksValuesTooltip}}}
-         */
-        //Slider with ticks and values and tooltip
-        $scope.slider_ticks_values_tooltip = {
-            value: 1,
-            options: {
-                ceil: 5,
-                floor: 1,
-                showTicksValues: true,
-                ticksValuesTooltip: function (v) {
-                    return 'Tooltip for ' + v;
-                }
-            }
-        };
-
-        $scope.data = [];
-        $scope.data.tweets = httpService.getTweets();
-
-        /**
-         * Populate the map with markers using coordinates from each tweet
-         * Ignore tweets without coordinates
-         */
-        $scope.populateMarkers = function () {
-            /**
-             * Reset all markers
-             */
-            $scope.markers = {};
-
-            /**
-             * Iterate through tweets
-             * Filter bad data
-             * Add coordinate pairs to marker array
-             */
-            angular.forEach($scope.data.tweets, function(value) {
-                var tweet = value;
-                // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
-                if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
-                    return;
-                }
-
-                if($scope.markers[tweet.id_str] == undefined && tweet.coordinates != null) {
-                    /**
-                     * Create new marker then add to marker array
-                     * @type {{id_str: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
-                     */
-                    var newMarker = {}
-                    if($scope.clusteringEnabled) {
-                        newMarker = {
-                            id_str: tweet.id_str,
-                            layer: 'cluster',
-                            lat: tweet.coordinates.coordinates[1],
-                            lng: tweet.coordinates.coordinates[0],
-                            focus: false,
-                            draggable: false,
-                            message: "@" + tweet.user.screen_name + ": " + tweet.text,
-                        };
-                    } else {
-                        newMarker = {
-                            id_str: tweet.id_str,
-                            lat: tweet.coordinates.coordinates[1],
-                            lng: tweet.coordinates.coordinates[0],
-                            focus: false,
-                            draggable: false,
-                            message: "@" + tweet.user.screen_name + ": " + tweet.text,
-                            icon: $scope.icons.red
-                        };
-                    }
-                    // $scope.markers.push(newMarker)
-                    // $scope.markers.push(tweet.id_str + ": " +  newMarker)
-                    $scope.markers[tweet.id_str] = newMarker;
-                }
-            });
         };
 
         $scope.currentBounds = null;
@@ -331,20 +335,23 @@
             $scope.onBounds()
         });
 
-        
-
         /**
+         * Run-once
          * Update the filters when the bounds are changed
+         * Adds PruneCluster
          */
+        $scope.pruneCluster = new PruneClusterForLeaflet();
         $scope.onBounds = function () {
             leafletData.getMap("map").then(function(map) {
+                map.addLayer($scope.pruneCluster);
+
                 map.on('moveend', function() {
                     $scope.currentBounds = map.getBounds();
-                    if($scope.autoUpdateDisabled) {
-                        // console.log("Map watcher triggered, autoUpdateDisabled: no action taken");
-                    } else {
+                    if($scope.autoUpdate) {
                         // console.log("Map watcher triggered, updating filters");
                         $scope.search.updateFilters();
+                    } else {
+                        // console.log("Map watcher triggered, autoUpdateDisabled: no action taken");
                     }
                 });
                 console.log("Mapbounds watcher started");
@@ -364,14 +371,14 @@
         /**
          * Populate markers whenever tweet data changes
          */
-        $scope.$watch(function() {
-                return $scope.data.tweets;
-            }, function() {
-                console.log("Data watcher triggered, populating markers");
-                $scope.populateMarkers();
-            },
-            true
-        );
+        // $scope.$watch(function() {
+        //         return $scope.data.tweets;
+        //     }, function() {
+        //         console.log("Data watcher triggered, populating markers");
+        //         $scope.populateMarkers();
+        //     },
+        //     true
+        // );
 
         /**
          * Pagination
@@ -419,7 +426,6 @@
                 }
             }
         };
-        // $scope.maxBounds = $scope.regions.europe;
         $scope.maxBounds = {
             northEast: {
                 lat: 90,
@@ -439,13 +445,13 @@
         $scope.icons = {
             blue: {
                 type: 'div',
-                iconSize: [10, 10],
+                iconSize: [11, 11],
                 className: 'blue',
                 iconAnchor:  [5, 5]
             },
             red: {
                 type: 'div',
-                iconSize: [10, 10],
+                iconSize: [11, 11],
                 className: 'red',
                 iconAnchor:  [5, 5]
             },
@@ -464,39 +470,13 @@
          * Test markers
          * @type {*[]}
          */
-        $scope.markers = {
-            // 1: {
-            //     id_str: 0,
-            //     lat: 51.33843,
-            //     lng: 12.37866,
-            //     focus: true,
-            //     draggable: false,
-            //     message: "Test Marker 1",
-            //     icon: $scope.icons.smallerDefault
-            // },
-            // 2: {
-            //     id_str: 1,
-            //     lat: 51.33948,
-            //     lng: 12.37637,
-            //     focus: false,
-            //     draggable: false,
-            //     message: "Test Marker 2",
-            //     icon: $scope.icons.blue
-            // }
-        };
+        $scope.markers = {};
         /**
          * Variable used to track the selected marker
          * @type {number}
          */
         $scope.currentMarkerID = 0;
 
-        /**
-         * Map functions for future extensibility (Marker Clustering)
-         * https://asmaloney.com/2015/06/code/clustering-markers-on-leaflet-maps/
-         * http://leafletjs.com/2012/08/20/guest-post-markerclusterer-0-1-released.html
-         *
-         * @type {{map: {enable: string[], logic: string}, marker: {enable: Array, logic: string}}}
-         */
         $scope.events = {
             map: {
                 enable: ['moveend', 'popupopen'],
@@ -510,6 +490,11 @@
 
         $scope.layers = {
             baselayers: {
+                gray: {
+                    name: "OpenStreetMap-Gray",
+                    type: "xyz",
+                    url: "http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                },
                 osm: {
                     name: "OpenStreetMap",
                     type: "xyz",
@@ -520,6 +505,11 @@
                 cluster: {
                     name: "Clustered Markers",
                     type: "markercluster",
+                    visible: true
+                },
+                dots: {
+                    name: "Red Dots",
+                    type: "group",
                     visible: true
                 }
             }
