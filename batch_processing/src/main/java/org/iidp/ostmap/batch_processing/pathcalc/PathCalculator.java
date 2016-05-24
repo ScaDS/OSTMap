@@ -102,7 +102,7 @@ public class PathCalculator {
                 .sortPartition(1, Order.DESCENDING).setParallelism(1);
 
 
-        TextOutputFormat<String> tof = new TextOutputFormat<>(new Path("file:///tmp/userranking"));
+        TextOutputFormat<String> tof = new TextOutputFormat<>(new Path("file:///tmp/pathuserranking"));
         tof.setWriteMode(FileSystem.WriteMode.OVERWRITE);
 
         userRanking.writeAsText("file:///tmp/userranking", FileSystem.WriteMode.OVERWRITE).setParallelism(1);
