@@ -151,7 +151,7 @@
             var url = getTokenSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
-                // angular.copy(data,_tweets);
+                //angular.copy(data,_tweets);
                 _tweets = _.clone(result.data);
                 _setLoading(status);
                 deferred.resolve(status);
@@ -217,6 +217,7 @@
             _setLoading(true);
             var deferred = $q.defer();
 
+            // var url = "data/example-response.json";
             var url = "data/berlin1d.json";
             $http.get(url).then(function (result) {
                 setTimeout(function(){

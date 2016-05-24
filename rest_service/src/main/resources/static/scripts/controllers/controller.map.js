@@ -97,11 +97,15 @@
                     //Get by GeoTime
                     httpService.getTweetsFromServerByGeoTime().then(function (status) {
                         $scope.$emit('updateStatus', status);
+                        $scope.data.tweets = httpService.getTweets();
+                        $scope.populateMarkers();
                     });
                 } else if ($scope.dataSource == "restTest") {
                     //Get using test REST API
                     httpService.getTweetsFromServerTest().then(function (status) {
                         $scope.$emit('updateStatus', status);
+                        $scope.data.tweets = httpService.getTweets();
+                        $scope.populateMarkers();
                     });
                 } else if ($scope.dataSource == "static") {
                     //Get from local (debug)
@@ -114,6 +118,8 @@
                     //Get by Token
                     httpService.getTweetsFromServerByToken().then(function (status) {
                         $scope.$emit('updateStatus', status);
+                        $scope.data.tweets = httpService.getTweets();
+                        $scope.populateMarkers();
                     });
                 }
 
@@ -194,27 +200,6 @@
             }
         };
 
-        /**
-         * Slider
-         * https://github.com/angular-slider/angularjs-slider
-         *
-         * CURRENTLY UNUSED
-         *
-         * @type {{value: number, options: {ceil: number, floor: number, showTicksValues: boolean, ticksValuesTooltip: $scope.slider_ticks_values_tooltip.options.ticksValuesTooltip}}}
-         */
-        //Slider with ticks and values and tooltip
-        $scope.slider_ticks_values_tooltip = {
-            value: 1,
-            options: {
-                ceil: 5,
-                floor: 1,
-                showTicksValues: true,
-                ticksValuesTooltip: function (v) {
-                    return 'Tooltip for ' + v;
-                }
-            }
-        };
-
         $scope.data = [];
         $scope.data.tweets = httpService.getTweets();
 
@@ -223,19 +208,19 @@
          * Ignore tweets without coordinates
          */
         $scope.populateMarkers = function () {
+            console.log("Populating Markers");
+
             /**
              * Reset all markers
              */
             $scope.markers = {};
-            var newMarkers = [];
 
             /**
              * Iterate through tweets
              * Filter bad data
              * Add coordinate pairs to marker array
              */
-            angular.forEach($scope.data.tweets, function(value) {
-                var tweet = value;
+            angular.forEach($scope.data.tweets, function(tweet) {
                 // Check if tweet has the property 'coordinates' and 'id'... if not, leave the forEach function
                 if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id')){
                     return;
@@ -246,35 +231,29 @@
                      * Create new marker then add to marker array
                      * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
-                    var newMarker = {}
+                    var tweettemplate = '<iframe border=0 frameborder=0 height=250 width=350 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id + '"></iframe>'
+
+                    var newMarker = {
+                        id: tweet.id,
+                        lat: tweet.coordinates.coordinates[1],
+                        lng: tweet.coordinates.coordinates[0],
+                        focus: false,
+                        draggable: false,
+                        // message: "@" + tweet.user.screen_name + ": " + tweet.text,
+                        message: tweettemplate,
+                        icon: $scope.icons.red
+                    };
                     if($scope.clusteringEnabled) {
-                        newMarker = {
-                            id: tweet.id,
-                            layer: 'cluster',
-                            lat: tweet.coordinates.coordinates[1],
-                            lng: tweet.coordinates.coordinates[0],
-                            focus: false,
-                            draggable: false,
-                            message: "@" + tweet.user.screen_name + ": " + tweet.text,
-                            icon: $scope.icons.red
-                        };
+                        newMarker.layer = 'cluster'
                     } else {
-                        newMarker = {
-                            id: tweet.id,
-                            lat: tweet.coordinates.coordinates[1],
-                            lng: tweet.coordinates.coordinates[0],
-                            focus: false,
-                            draggable: false,
-                            message: "@" + tweet.user.screen_name + ": " + tweet.text,
-                            icon: $scope.icons.red
-                        };
+                        newMarker.layer = 'dots'
                     }
                     // $scope.markers.push(newMarker)
                     // $scope.markers.push(tweet.id + ": " +  newMarker)
-                    newMarkers[tweet.id] = newMarker;
+                    // newMarkers[tweet.id] = newMarker;
+                    $scope.markers[tweet.id] = newMarker;
                 }
             });
-            $scope.markers = newMarkers;
         };
 
         $scope.currentBounds = null;
@@ -336,8 +315,6 @@
             console.log("Page Loaded");
             $scope.onBounds()
         });
-
-        
 
         /**
          * Update the filters when the bounds are changed
@@ -425,7 +402,6 @@
                 }
             }
         };
-        // $scope.maxBounds = $scope.regions.europe;
         $scope.maxBounds = {
             northEast: {
                 lat: 90,
@@ -445,13 +421,13 @@
         $scope.icons = {
             blue: {
                 type: 'div',
-                iconSize: [10, 10],
+                iconSize: [11, 11],
                 className: 'blue',
                 iconAnchor:  [5, 5]
             },
             red: {
                 type: 'div',
-                iconSize: [10, 10],
+                iconSize: [11, 11],
                 className: 'red',
                 iconAnchor:  [5, 5]
             },
@@ -470,39 +446,13 @@
          * Test markers
          * @type {*[]}
          */
-        $scope.markers = {
-            // 1: {
-            //     id: 0,
-            //     lat: 51.33843,
-            //     lng: 12.37866,
-            //     focus: true,
-            //     draggable: false,
-            //     message: "Test Marker 1",
-            //     icon: $scope.icons.smallerDefault
-            // },
-            // 2: {
-            //     id: 1,
-            //     lat: 51.33948,
-            //     lng: 12.37637,
-            //     focus: false,
-            //     draggable: false,
-            //     message: "Test Marker 2",
-            //     icon: $scope.icons.blue
-            // }
-        };
+        $scope.markers = {};
         /**
          * Variable used to track the selected marker
          * @type {number}
          */
         $scope.currentMarkerID = 0;
 
-        /**
-         * Map functions for future extensibility (Marker Clustering)
-         * https://asmaloney.com/2015/06/code/clustering-markers-on-leaflet-maps/
-         * http://leafletjs.com/2012/08/20/guest-post-markerclusterer-0-1-released.html
-         *
-         * @type {{map: {enable: string[], logic: string}, marker: {enable: Array, logic: string}}}
-         */
         $scope.events = {
             map: {
                 enable: ['moveend', 'popupopen'],
@@ -531,6 +481,11 @@
                 cluster: {
                     name: "Clustered Markers",
                     type: "markercluster",
+                    visible: true
+                },
+                dots: {
+                    name: "Red Dots",
+                    type: "group",
                     visible: true
                 }
             }

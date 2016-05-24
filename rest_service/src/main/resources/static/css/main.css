@@ -22,13 +22,22 @@
 }
 
 .red {
-    border-radius: 220px;
-    opacity: .50;
+    border-radius: 120px;
+    opacity: .40;
     background-color: #FF0000;
 }
 
 .blue {
-    border-radius: 220px;
-    opacity: .50;
+    border-radius: 120px;
+    opacity: .40;
     background-color: #0000FF;
+}
+
+#tweet {
+    width: 400px !important;
+}
+
+#tweet iframe {
+    border: none !important;
+    box-shadow: none !important;
 }

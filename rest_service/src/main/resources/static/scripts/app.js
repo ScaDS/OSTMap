@@ -13,8 +13,7 @@
             'ui-leaflet',
             'nemLogging',
             'ui.layout',
-            'ui.bootstrap',
-            'rzModule'
+            'ui.bootstrap'
         ])
         .config(defineRoutes);
 
