@@ -94,11 +94,6 @@ public class FlinkEnvManager {
         accumuloUser = props.getProperty(AccumuloIdentifiers.PROPERTY_USER.toString());
         accumuloPassword = props.getProperty(AccumuloIdentifiers.PROPERTY_PASSWORD.toString());
         accumuloZookeeper = props.getProperty(AccumuloIdentifiers.PROPERTY_ZOOKEEPER.toString());
-
-        System.out.println(accumuloInstanceName + " " + accumuloUser + " " +
-                accumuloPassword + " " + accumuloZookeeper +" "+
-                this.inTable + " "+ this.outTable);
-
     }
 
     /**

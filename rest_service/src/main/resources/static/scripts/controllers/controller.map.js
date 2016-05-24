@@ -145,12 +145,12 @@
         /**
          * Move the map center to the coordinates of the clicked tweet
          *
-         * @param id
+         * @param id_str
          * @param lat
          * @param lng
          */
-        $scope.search.goToTweet = function (id, lat, lng) {
-            console.log("selected tweet id: " + id + ", [" + lat + "," + lng + "]");
+        $scope.search.goToTweet = function (id_str, lat, lng) {
+            console.log("selected tweet id_str: " + id_str + ", [" + lat + "," + lng + "]");
 
             /**
              * Check if latitude and longitude are available
@@ -183,10 +183,10 @@
                 if ($scope.currentMarkerID != 0) {
                     $scope.markers[$scope.currentMarkerID].focus = false;
                 }
-                $scope.currentMarkerID = id;
+                $scope.currentMarkerID = id_str;
 
-                if ($scope.markers[id] != null) {
-                    $scope.markers[id].focus = true;
+                if ($scope.markers[id_str] != null) {
+                    $scope.markers[id_str].focus = true;
                 }
             }
         };
@@ -232,20 +232,20 @@
              */
             angular.forEach($scope.data.tweets, function(value) {
                 var tweet = value;
-                // Check if tweet has the property 'coordinates' and 'id'... if not, leave the forEach function
-                if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id')){
+                // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
+                if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
                     return;
                 }
 
-                if($scope.markers[tweet.id] == undefined && tweet.coordinates != null) {
+                if($scope.markers[tweet.id_str] == undefined && tweet.coordinates != null) {
                     /**
                      * Create new marker then add to marker array
-                     * @type {{id: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
+                     * @type {{id_str: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
                     var newMarker = {}
                     if($scope.clusteringEnabled) {
                         newMarker = {
-                            id: tweet.id,
+                            id_str: tweet.id_str,
                             layer: 'cluster',
                             lat: tweet.coordinates.coordinates[1],
                             lng: tweet.coordinates.coordinates[0],
@@ -255,7 +255,7 @@
                         };
                     } else {
                         newMarker = {
-                            id: tweet.id,
+                            id_str: tweet.id_str,
                             lat: tweet.coordinates.coordinates[1],
                             lng: tweet.coordinates.coordinates[0],
                             focus: false,
@@ -265,8 +265,8 @@
                         };
                     }
                     // $scope.markers.push(newMarker)
-                    // $scope.markers.push(tweet.id + ": " +  newMarker)
-                    $scope.markers[tweet.id] = newMarker;
+                    // $scope.markers.push(tweet.id_str + ": " +  newMarker)
+                    $scope.markers[tweet.id_str] = newMarker;
                 }
             });
         };
@@ -466,7 +466,7 @@
          */
         $scope.markers = {
             // 1: {
-            //     id: 0,
+            //     id_str: 0,
             //     lat: 51.33843,
             //     lng: 12.37866,
             //     focus: true,
@@ -475,7 +475,7 @@
             //     icon: $scope.icons.smallerDefault
             // },
             // 2: {
-            //     id: 1,
+            //     id_str: 1,
             //     lat: 51.33948,
             //     lng: 12.37637,
             //     focus: false,
