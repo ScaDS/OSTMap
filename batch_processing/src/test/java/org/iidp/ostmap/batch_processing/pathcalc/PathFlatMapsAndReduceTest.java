@@ -1,6 +1,9 @@
-package org.iidp.ostmap.batch_processing.areacalc;
+package org.iidp.ostmap.batch_processing.pathcalc;
 
-import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.client.BatchWriter;
+import org.apache.accumulo.core.client.BatchWriterConfig;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
@@ -8,6 +11,10 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.iidp.ostmap.batch_processing.areacalc.Calculator;
+import org.iidp.ostmap.batch_processing.areacalc.CoordGroupReduce;
+import org.iidp.ostmap.batch_processing.areacalc.GeoCalcFlatMap;
+import org.iidp.ostmap.batch_processing.areacalc.GeoExtrationFlatMap;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
 import org.junit.AfterClass;
@@ -19,17 +26,15 @@ import org.junit.rules.TemporaryFolder;
 import java.io.*;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
 
-
-public class FlatMapsAndReduceTest {
+public class PathFlatMapsAndReduceTest {
 
     @ClassRule
     public static TemporaryFolder tmpDir = new TemporaryFolder();
     public static TemporaryFolder tmpSettingsDir = new TemporaryFolder();
     public static AmcHelper amc = new AmcHelper();
 
-    public FlatMapsAndReduceTest() throws IOException {
+    public PathFlatMapsAndReduceTest() throws IOException {
     }
 
     @BeforeClass
@@ -62,6 +67,7 @@ public class FlatMapsAndReduceTest {
                 "   \"user\":{\n" +
                 "       \"screen_name\": Zorne \n" +
                 "   },\n" +
+                "   \"timestamp_ms\": 1, \n" +
                 "   \"geo\": null, \n" +
                 "   \"coordinates\": null, \n" +
                 "   \"place\":{\n" +
@@ -100,6 +106,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Zorne \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 2, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -116,6 +123,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Zorne \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 3, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -132,11 +140,12 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 4, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
-                "        10.2812565,\n" +
-                "        48.4689845\n" +
+                "        -3.2147884,\n" +
+                "        53.4614716\n" +
                 "      ]\n" +
                 "    },\n" +
                 "   \"place\": null\n" +
@@ -148,11 +157,12 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 5, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
-                "        10.956997,\n" +
-                "        49.2964245\n" +
+                "        -4.2147884,\n" +
+                "        54.4614716\n" +
                 "      ]\n" +
                 "    },\n" +
                 "   \"place\": null\n" +
@@ -164,11 +174,12 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 6, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
-                "        11.7791195,\n" +
-                "        50.5866245\n" +
+                "        -5.2147884,\n" +
+                "        55.4614716\n" +
                 "      ]\n" +
                 "    },\n" +
                 "   \"place\": null\n" +
@@ -180,11 +191,12 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 7, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
-                "        9.1888644,\n" +
-                "        48.6959946\n" +
+                "        -2.2147884,\n" +
+                "        52.4614716\n" +
                 "      ]\n" +
                 "    },\n" +
                 "   \"place\": null\n" +
@@ -196,6 +208,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Oliver \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 8, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -212,6 +225,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Peter \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 9, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -228,6 +242,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Peter \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 10, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -244,6 +259,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 11, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -260,6 +276,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 12, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -276,6 +293,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 13, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -292,6 +310,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 14, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -308,6 +327,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 15, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -324,6 +344,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 16, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -340,6 +361,7 @@ public class FlatMapsAndReduceTest {
                 "       \"screen_name\": Falk \n" +
                 "   },\n" +
                 "   \"geo\": null,\n" +
+                "   \"timestamp_ms\": 17, \n" +
                 "    \"coordinates\": {\n" +
                 "      \"type\": \"Point\",\n" +
                 "      \"coordinates\": [\n" +
@@ -382,17 +404,17 @@ public class FlatMapsAndReduceTest {
         DataSet<Tuple2<Key, Value>> rawData = calc.getDataFromAccumulo(env);
 
 
-        DataSet<Tuple2<String, String>> geoList = rawData.flatMap(new GeoExtrationFlatMap());
+        DataSet<Tuple2<String, String>> geoList = rawData.flatMap(new PathGeoExtrationFlatMap());
         System.out.println("Extracted Data: -----------------------------------------------------");
         geoList.print();
 
         DataSet<Tuple2<String, String>> reducedGroup = geoList
                 .groupBy(0)
-                .reduceGroup(new CoordGroupReduce());
+                .reduceGroup(new PathCoordGroupReduce());
         System.out.println("Reduced Data: -----------------------------------------------------");
         reducedGroup.print();
 
-        DataSet<Tuple2<String, Double>> ranking = reducedGroup.flatMap(new GeoCalcFlatMap());
+        DataSet<Tuple2<String, Double>> ranking = reducedGroup.flatMap(new PathGeoCalcFlatMap());
         System.out.println("Ranking: -----------------------------------------------------");
         ranking.print();
     }

@@ -19,7 +19,7 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
 
     double equatorialEarthRadius = 6378.1370;
     double deg2rad = (Math.PI / 180.);
-    int decimalPlaces = 5;
+    int decimalPlaces = 10;
 
     public GeoCalcFlatMap(){
     }
@@ -64,12 +64,6 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
                     double Area1 = getAreaInSquareKm(tempCoordinates1);
                     double Area2 = getAreaInSquareKm(tempCoordinates2);
                     double Area3 = getAreaInSquareKm(tempCoordinates3);
-                    System.out.println("########################################################################################");
-                    System.out.println("OriginArea: "+ originArea);
-                    System.out.println("Areas: "+ Area0);
-                    System.out.println("Areas: "+ Area1);
-                    System.out.println("Areas: "+ Area2);
-                    System.out.println("Areas: "+ Area3);
                     if(Area0 >= originArea && Area0 >= Area1 && Area0 >= Area2 && Area0 >= Area3){
                         coordinates = (Vector<double[]>) tempCoordinates0.clone();
                     }else if(Area1 >= originArea && Area1 >= Area0 && Area1 >= Area2 && Area1 >= Area3){
@@ -82,10 +76,10 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
                 }
 
             }
-            area = this.getAreaInSquareKm(coordinates);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        area = this.getAreaInSquareKm(coordinates);
 
         JSONObject data = new JSONObject();
         try {
@@ -108,9 +102,9 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
 
     }
 
-    public double getAreaInSquareMeters(){
+    /*public double getAreaInSquareMeters(){
         return 0.0;
-    }
+    }*/
 
     /**
      * calculates the area the Vector of coordinates defines

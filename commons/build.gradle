@@ -22,9 +22,14 @@ sourceCompatibility = 1.8
 
 
 dependencies {
+
+    compile project(':accumulo_iterators')
+
     testCompile 'junit:junit:4.11'
 
     compile 'org.apache.accumulo:accumulo-minicluster:1.7.0.2.4.0.0-169'
+
+    compile 'com.github.davidmoten:geo:0.7.1'
 
     compile('org.apache.accumulo:accumulo-core:1.7.0.2.4.0.0-169') {
         exclude group: 'org.mortbay.jetty', module: 'jetty' //by both name and group

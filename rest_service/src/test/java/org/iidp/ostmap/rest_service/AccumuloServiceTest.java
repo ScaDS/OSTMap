@@ -1,7 +1,6 @@
 package org.iidp.ostmap.rest_service;
 
 import org.apache.accumulo.core.client.*;
-import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Range;
@@ -11,11 +10,9 @@ import org.apache.hadoop.io.Text;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.iidp.ostmap.commons.accumulo.AccumuloService;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.*;
@@ -270,133 +267,79 @@ public class AccumuloServiceTest {
 
          GeoTimePeriodController gtpc = new GeoTimePeriodController();
 
-         //wide Time range and wide bounding box to match all 3 tweets
-         gtpc.set_paramNorthCoordinate("49");
-         gtpc.set_paramEastCoordinate("30");
-         gtpc.set_paramSouthCoordinate("40");
-         gtpc.set_paramWestCoordinate("0");
-         gtpc.set_paramStartTime(Long.toString(12300));
-         gtpc.set_paramEndTime(Long.toString(12399));
+         GeoTempQuery query = new GeoTempQuery(
+                 "49",
+                 "30",
+                 "40",
+                 "0",
+                 "12300",
+                 "12399",
+                 settings.getAbsolutePath());
 
-         String result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
+         String result = query.getResult();
          JSONArray resultArray = new JSONArray(result);
          assertTrue(resultArray.length() == 3);
 
-         //short Time range and wide bounding box to match only tweet 1
-         gtpc.set_paramStartTime(Long.toString(12340));
-         gtpc.set_paramEndTime(Long.toString(12346));
+         //should not be in time range
+         query = new GeoTempQuery(
+                 "49",
+                 "30",
+                 "40",
+                 "0",
+                 "12340",
+                 "12346",
+                 settings.getAbsolutePath());
+         result = query.getResult();
 
-         result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          resultArray = new JSONArray(result);
 
          assertTrue(resultArray.length() == 1);
          assertEquals(tweet1Json.getString("id_str"),resultArray.getJSONObject(0).getString("id_str"));
 
-         //short Time range and wide bounding box to match only tweet 3
-         gtpc.set_paramStartTime(Long.toString(12348));
-         gtpc.set_paramEndTime(Long.toString(12350));
-
-         result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
+         //should not be in window
+         query = new GeoTempQuery(
+                 "30",
+                 "45",
+                 "29",
+                 "44",
+                 "12348",
+                 "12350",
+                 settings.getAbsolutePath());
+         result = query.getResult();
          resultArray = new JSONArray(result);
 
          assertTrue(resultArray.length() == 1);
          assertEquals(tweet3Json.getString("id_str"),resultArray.getJSONObject(0).getString("id_str"));
 
          //wide Time range and small bounding box to match tweet2 and tweet3
-         gtpc.set_paramNorthCoordinate("49");
-         gtpc.set_paramEastCoordinate("20");
-         gtpc.set_paramSouthCoordinate("40");
-         gtpc.set_paramWestCoordinate("0");
-         gtpc.set_paramStartTime(Long.toString(12300));
-         gtpc.set_paramEndTime(Long.toString(12399));
+         query = new GeoTempQuery(
+                 "49",
+                 "20",
+                 "40",
+                 "0",
+                 "12300",
+                 "12399",
+                 settings.getAbsolutePath());
+         result = query.getResult();
 
-         result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          resultArray = new JSONArray(result);
          assertTrue(resultArray.length() == 2);
          assertEquals(tweet2Json.getString("id_str"),resultArray.getJSONObject(0).getString("id_str"));
          assertEquals(tweet3Json.getString("id_str"),resultArray.getJSONObject(1).getString("id_str"));
 
          //short time range and small bounding box to match only tweet 1
-         gtpc.set_paramNorthCoordinate("42");
-         gtpc.set_paramEastCoordinate("30");
-         gtpc.set_paramSouthCoordinate("40");
-         gtpc.set_paramWestCoordinate("28");
-         gtpc.set_paramStartTime(Long.toString(12340));
-         gtpc.set_paramEndTime(Long.toString(12346));
-
-         result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
+         query = new GeoTempQuery(
+                 "42",
+                 "30",
+                 "40",
+                 "0",
+                 "12340",
+                 "12346",
+                 settings.getAbsolutePath());
+         result = query.getResult();
          resultArray = new JSONArray(result);
          assertTrue(resultArray.length() == 1);
          assertEquals(tweet1Json.getString("id_str"),resultArray.getJSONObject(0).getString("id_str"));
-     }
-
-    @Test
-    public void limitOffsetTest() throws Exception{
-        GeoTimePeriodController gtpc = new GeoTimePeriodController();
-
-        //wide Time range and wide bounding box to match all 3 tweets
-        gtpc.set_paramNorthCoordinate("49");
-        gtpc.set_paramEastCoordinate("30");
-        gtpc.set_paramSouthCoordinate("40");
-        gtpc.set_paramWestCoordinate("0");
-        gtpc.set_paramStartTime(Long.toString(12300));
-        gtpc.set_paramEndTime(Long.toString(12399));
-
-        //limit to 2
-        gtpc.set_paramLimit(2);
-        gtpc.set_paramOffset(0);
-
-        String result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
-        JSONArray resultArray = new JSONArray(result);
-        assertTrue(resultArray.length() == 2);
-        assertEquals(tweet1Json.getString("id_str"),resultArray.getJSONObject(0).getString("id_str"));
-        assertEquals(tweet2Json.getString("id_str"),resultArray.getJSONObject(1).getString("id_str"));
-
-        //limit to 1
-        gtpc.set_paramLimit(1);
-        gtpc.set_paramOffset(0);
-
-        result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
-        resultArray = new JSONArray(result);
-        assertTrue(resultArray.length() == 1);
-        assertEquals(tweet1Json.getString("id_str"),resultArray.getJSONObject(0).getString("id_str"));
-
-        //limit to 1 offset to 1
-        gtpc.set_paramLimit(1);
-        gtpc.set_paramOffset(1);
-
-        result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
-        resultArray = new JSONArray(result);
-        assertTrue(resultArray.length() == 1);
-        assertEquals(tweet2Json.getString("id_str"),resultArray.getJSONObject(0).getString("id_str"));
-
-        //limit to 2 offset to 1
-        gtpc.set_paramLimit(2);
-        gtpc.set_paramOffset(1);
-
-        result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
-        resultArray = new JSONArray(result);
-        assertTrue(resultArray.length() == 2);
-        assertEquals(tweet2Json.getString("id_str"),resultArray.getJSONObject(0).getString("id_str"));
-        assertEquals(tweet3Json.getString("id_str"),resultArray.getJSONObject(1).getString("id_str"));
-
-        //limit to 2 offset to 10
-        gtpc.set_paramLimit(2);
-        gtpc.set_paramOffset(10);
-
-        result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
-        resultArray = new JSONArray(result);
-        assertTrue(resultArray.length() == 0);
-
-        //limit to 2 offset to 2
-        gtpc.set_paramLimit(2);
-        gtpc.set_paramOffset(2);
-
-        result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
-        resultArray = new JSONArray(result);
-        assertTrue(resultArray.length() == 1);
-        assertEquals(tweet3Json.getString("id_str"),resultArray.getJSONObject(0).getString("id_str"));
-
     }
 
 

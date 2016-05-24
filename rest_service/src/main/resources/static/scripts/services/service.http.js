@@ -107,7 +107,7 @@
             getTimeWindow: _getTimeWindow,
             setTimeWindow: _setTimeWindow,
             getLoading: _getLoading,
-            setLoading: _setLoading,
+            setLoading: _setLoading
         };
 
         function _queueAddGetTweetFrom(api, filters) {
@@ -151,7 +151,8 @@
             var url = getTokenSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
-                angular.copy(data,_tweets);
+                //angular.copy(data,_tweets);
+                _tweets = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -170,7 +171,8 @@
             var url = getGeoTemporalSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
-                angular.copy(data,_tweets);
+                // angular.copy(data,_tweets);
+                _tweets = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -194,7 +196,8 @@
             + "&tend=" + _timePeriod.tend;
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
-                angular.copy(data,_tweets);
+                // angular.copy(data,_tweets);
+                _tweets = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -214,19 +217,24 @@
             _setLoading(true);
             var deferred = $q.defer();
 
-            var url = "data/example-response.json";
-            $http.get(url).then(function (result) {
+            var url = "data/small-response.json";
+            // var url = "data/large-response.json";
+            $http.get(url).then(function (data) {
                 setTimeout(function(){
-                    if(result.status == 200){
+                    if(data.status == 200){
                         //Copy result data to the private array
-                        angular.copy(result.data,_tweets);
+
+                        // angular.copy(result.data,_tweets); //1595ms very slow
+                        _tweets = _.clone(data.data);
+                        // _tweets = result.data;
+
                         _setLoading(status);
-                        deferred.resolve(result.status);
+                        deferred.resolve(data.status);
                     } else {
                         _setLoading(status);
-                        deferred.resolve(result.status + "\n" + result.headers + "\n" + result.config);
+                        deferred.resolve(data.status + "\n" + data.headers + "\n" + data.config);
                     }
-                }, 2000);
+                }, 1);
 
             });
 

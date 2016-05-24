@@ -1,5 +1,7 @@
 package org.iidp.ostmap.commons.extractor;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -236,10 +238,10 @@ public class ExtractorTest {
             "    \"timestamp_ms\": \"1459350710135\"\n" +
             "  }";
     @Test
-    public void testextractLocations(){
+    public void testextractLocations() throws JSONException {
 
-        Double[] extract1= Extractor.extractLocation(json1);
-        Double[] extract2= Extractor.extractLocation(json2);
+        Double[] extract1= Extractor.extractLocation(new JSONObject(json1));
+        Double[] extract2= Extractor.extractLocation(new JSONObject(json2));
 
         System.out.println(extract1[0]+"  " + extract1[1]);
 
