@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * This class determines the user with the biggest area defined by his tweets
+ * This class determines the user with the longest path defined by his tweets
  */
 public class PathCalculator {
     public static final String PROPERTY_INSTANCE = "accumulo.instance";
@@ -68,7 +68,7 @@ public class PathCalculator {
      */
     // TODO make private after testing
     public DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
-        job = Job.getInstance(new Configuration(), "areaCalculationJob");
+        job = Job.getInstance(new Configuration(), "pathCalculationJob");
         AccumuloInputFormat.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword));
         AccumuloInputFormat.setScanAuthorizations(job, new Authorizations("standard"));
         ClientConfiguration clientConfig = new ClientConfiguration();
