@@ -16,15 +16,16 @@ public class CoordGroupReduce implements GroupReduceFunction<Tuple2<String, Stri
     public void reduce(Iterable<Tuple2<String, String>> values, Collector<Tuple2<String, /*TODO POJO*/String>> out) throws Exception {
         coords = "";
         for (Tuple2<String,String> entry: values) {
-            if (coords.equals("")) {
-                coords += entry.f1;
-            } else {
-                coords += "|" + entry.f1;
-            }
             user = entry.f0;
             coordSet.add(entry.f1.toString());
         }
         if(coordSet.size() > 2){
+            coords = coordSet.first();
+            coordSet.remove(coordSet.first());
+            while(coordSet.size() > 0){
+                coords += "|" + coordSet.first();
+                coordSet.remove(coordSet.first());
+            }
             out.collect(new Tuple2<String,String>(user,coords));
         }
 

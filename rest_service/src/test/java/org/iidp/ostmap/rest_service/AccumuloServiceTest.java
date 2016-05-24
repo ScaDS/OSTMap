@@ -18,6 +18,8 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -52,20 +55,20 @@ public class AccumuloServiceTest {
         Connector conn = amc.getConnector();
         System.out.println("I am connected as: " + conn.whoami());
 
-        if (!conn.tableOperations().exists("RawTwitterData")) {
+        if(!conn.tableOperations().exists("RawTwitterData")){
             conn.tableOperations().create("RawTwitterData");
         }
-        if (!conn.tableOperations().exists("TermIndex")) {
+        if(!conn.tableOperations().exists("TermIndex")){
             conn.tableOperations().create("TermIndex");
         }
 
         //write example entry to RawTwitterData
-        tweetHund = "Vollstaendiger Tweet hund maus";
-        tweetKatze = "Vollstaendiger Tweet katze #katze maus";
+        tweetHund = "{\"text\":\"Vollstaendiger Tweet hund maus\"}";
+        tweetKatze = "{\"text\":\"Vollstaendiger Tweet katze #katze maus\"}";
         //File f = new File(AccumuloServiceTest.class.getResource("example-response.json").getFile());
         File f = new File(ClassLoader.getSystemClassLoader().getResource("example-response.json").getFile());
 
-        tweet3 = new String(Files.readAllBytes(f.toPath()));
+        tweet3 =  new String(Files.readAllBytes(f.toPath()));
 
         ByteBuffer bb = ByteBuffer.allocate(Long.BYTES + Integer.BYTES);
         bb.putLong(12345).putInt(123);
@@ -173,6 +176,7 @@ public class AccumuloServiceTest {
             String value = kv.getValue().toString();
             JSONObject json = new JSONObject(value);
             // needed fields
+            assertTrue(json.has("id_str"));
             assertTrue(json.has("created_at"));
             assertTrue(json.has("text"));
             assertTrue(json.has("user"));
@@ -180,7 +184,7 @@ public class AccumuloServiceTest {
             assertTrue(json.has("place"));
 
             // test for some forbidden fields
-            assertFalse(json.has("id_str"));
+            assertFalse(json.has("id"));
             assertFalse(json.has("entities"));
         }
         System.out.println("[testReduceIterator end]");
@@ -241,50 +245,45 @@ public class AccumuloServiceTest {
         assertEquals("[" + tweetHund + ',' + tweetKatze + "]", result);
     }
 
-    @Test
-    public void testGeoTime() throws Exception {
-        AccumuloService accumuloService = new AccumuloService();
-        System.out.println("settings file path: " + settings.getAbsolutePath());
-        accumuloService.readConfig(settings.getAbsolutePath());
+     @Test
+     public void testGeoTime() throws Exception{
+         System.out.println("settings file path: " + settings.getAbsolutePath());
 
-        GeoTimePeriodController gtpc = new GeoTimePeriodController();
+         GeoTimePeriodController gtpc = new GeoTimePeriodController();
+         gtpc.set_paramNorthCoordinate("42");
+         gtpc.set_paramEastCoordinate("30");
+         gtpc.set_paramSouthCoordinate("38");
+         gtpc.set_paramWestCoordinate("28");
+         gtpc.set_paramStartTime(Long.toString(12300));
+         gtpc.set_paramEndTime(Long.toString(12399));
 
-        //example dataset should be in this window
-        String result = gtpc.getResult(accumuloService, (new Long(12300).toString()), (new Long(12399).toString()), 42, 30, 28, 28);
-        System.out.println("GeoTimeResult: " + result);
-        System.out.println("------");
-        assertTrue(result.length() > 2);
-
-        //should not be in time range
-        result = gtpc.getResult(accumuloService, (new Long(12399).toString()), (new Long(12400).toString()), 42, 30, 28, 28);
-        System.out.println("GeoTimeResult: " + result);
-        System.out.println("------");
-        assertTrue(result.length() == 2);
-
-        //should not be in window
-        result = gtpc.getResult(accumuloService, (new Long(12300).toString()), (new Long(12399).toString()), 30, 45, 29, 44);
-        System.out.println("GeoTimeResult: " + result);
-        System.out.println("------");
-        assertTrue(result.length() == 2);
-
-/*
-         String result = gtpc.getResult(accumuloService,(new Long(12300).toString()),(new Long(12399).toString()));
+         //example dataset should be in this window
+         String result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          System.out.println("GeoTimeResult: " + result);
-         assertEquals(tweetHund+tweetKatze+tweet3, result);
+         System.out.println("------");
+         assertTrue(result.length() > 2);
 
-         result = gtpc.getResult(accumuloService,(new Long(1).toString()),(new Long(2).toString()));
+         //should not be in time range
+         gtpc.set_paramStartTime(Long.toString(12399));
+         gtpc.set_paramEndTime(Long.toString(12400));
+         result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          System.out.println("GeoTimeResult: " + result);
-         assertEquals("", result);
+         System.out.println("------");
+         assertTrue(result.length() == 2);
 
-         result = gtpc.getResult(accumuloService,(new Long(12347).toString()),(new Long(12399).toString()));
+         //should not be in window
+         gtpc.set_paramNorthCoordinate("30");
+         gtpc.set_paramEastCoordinate("45");
+         gtpc.set_paramSouthCoordinate("29");
+         gtpc.set_paramWestCoordinate("44");
+         gtpc.set_paramStartTime(Long.toString(12300));
+         gtpc.set_paramEndTime(Long.toString(12399));
+         result = gtpc.getResultsFromAccumulo(settings.getAbsolutePath());
          System.out.println("GeoTimeResult: " + result);
-         assertEquals(tweetKatze+tweet3, result);
+         System.out.println("------");
+         assertTrue(result.length() == 2);
 
-         result = gtpc.getResult(accumuloService,(new Long(12340).toString()),(new Long(12348).toString()));
-         System.out.println("GeoTimeResult: " + result);
-         assertEquals(tweetHund+tweetKatze, result);
-*/
-    }
+     }
 
 
 }

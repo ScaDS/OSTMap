@@ -4,6 +4,7 @@ package org.iidp.ostmap.batch_processing.areacalc;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -31,7 +32,6 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
     @Override
     public void flatMap(Tuple2<String, String> in, Collector<Tuple2<String, Double>> out) {
 
-        JSONObject obj = null;
         String userName = in.f0;
         String[] coords;
         Vector<double[]> coordinates = new Vector<>();
@@ -87,8 +87,23 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
             e.printStackTrace();
         }
 
+        JSONObject data = new JSONObject();
+        try {
+            data.append("user",userName);
+            data.append("area",area);
+            JSONArray coordsJSON = new JSONArray();
+            for(double[] entry: coordinates){
+                JSONArray newCoords = new JSONArray();
+                newCoords.put(entry[0]);
+                newCoords.put(entry[1]);
+                coordsJSON.put(newCoords);
+            }
+            data.append("coordinates",coordsJSON);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        out.collect(new Tuple2<>(userName,area));
+        out.collect(new Tuple2<>(data.toString(),area));
 
 
     }
@@ -103,8 +118,6 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
      * @return the biggest area defined by this coordinates
      */
     public double getAreaInSquareKm(Vector<double[]> coordinates){
-        double area = 0.;
-        double maxArea = 0.;
         double[] a = coordinates.get(0);
         double[] b = coordinates.get(1);
         double[] c = coordinates.get(2);
@@ -147,8 +160,8 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
                 }else{
                     konvex = true;
                 }
-            }else if(!konvex){
-                return 0.66666;
+            }else {
+                konvex = true;
             }
             if(konvex){
                 if(ab<ac){
@@ -170,7 +183,7 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
                 }
             }
         }
-        return 0.;
+        return 0.333;
     }
 
     /**
@@ -192,9 +205,9 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
      * @param long1 longitude coordinate 1
      * @param lat2 latitude coordinate 2
      * @param long2 longitude coordinate 2
-     * @return
+     * @return the distance betweend the two coordinates
      */
-    public double haversineInKm(double lat1, double long1, double lat2, double long2){
+    public double haversineInKm(double long1, double lat1, double long2, double lat2){
         double dlong = (long2 - long1) * deg2rad;
         double dlat = (lat2 - lat1) * deg2rad;
         double a = Math.pow(Math.sin(dlat / 2.), 2.) + Math.cos(lat1 * deg2rad) * Math.cos(lat2 * deg2rad) * Math.pow(Math.sin(dlong / 2.), 2.);

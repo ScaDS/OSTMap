@@ -3,15 +3,12 @@ package org.iidp.ostmap.rest_service;
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.springframework.http.HttpStatus;
+import org.iidp.ostmap.commons.extractor.Extractor;
+import org.iidp.ostmap.rest_service.helper.JsonHelper;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.codehaus.jettison.json.JSONObject;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
@@ -48,7 +45,8 @@ public class GeoTimePeriodController {
             @RequestParam(name = "bbsouth") String paramSouthCoordinate,
             @RequestParam(name = "bbwest")  String paramWestCoordinate,
             @RequestParam(name = "tstart")  String paramStartTime,
-            @RequestParam(name = "tend")    String paramEndTime
+            @RequestParam(name = "tend")    String paramEndTime,
+            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten
     ) {
         _paramNorthCoordinate = paramNorthCoordinate;
         _paramEastCoordinate = paramEastCoordinate;
@@ -57,16 +55,19 @@ public class GeoTimePeriodController {
         _paramStartTime = paramStartTime;
         _paramEndTime = paramEndTime;
 
-        String resultList = "";
+        validateQueryParams();
 
-        if(validateQueryParams())
-        {
-            resultList = getResultsFromAccumulo();
-        }else{
-            throw new IllegalArgumentException();
+        String tweets = getResultsFromAccumulo(MainController.configFilePath);
+
+        String result = "";
+
+        if(topten){
+            result = JsonHelper.createTweetsWithHashtagRanking(tweets);
+        }else {
+            result = JsonHelper.createTweetsWithoutHashtagRanking(tweets);
         }
 
-        return resultList;
+        return result;
     }
 
     /**
@@ -77,6 +78,7 @@ public class GeoTimePeriodController {
      * @param paramWestCoordinate
      * @param paramStartTime
      * @param paramEndTime
+     * @param topten
      * @return a json response
      */
     @RequestMapping(
@@ -91,7 +93,8 @@ public class GeoTimePeriodController {
             @RequestParam(name = "bbsouth") String paramSouthCoordinate,
             @RequestParam(name = "bbwest")  String paramWestCoordinate,
             @RequestParam(name = "tstart")  String paramStartTime,
-            @RequestParam(name = "tend")    String paramEndTime
+            @RequestParam(name = "tend")    String paramEndTime,
+            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten
     ) {
         _paramNorthCoordinate = paramNorthCoordinate;
         _paramEastCoordinate = paramEastCoordinate;
@@ -100,132 +103,97 @@ public class GeoTimePeriodController {
         _paramStartTime = paramStartTime;
         _paramEndTime = paramEndTime;
 
-        String resultList = "";
+        validateQueryParams();
 
-        if(validateQueryParams())
-        {
-            resultList = MainController.getTestTweets();
-        }else{
-            throw new IllegalArgumentException();
+        String tweets = MainController.getTestTweets();
+
+        String responseString = "";
+
+        if(topten){
+            responseString = JsonHelper.createTweetsWithHashtagRanking(tweets);
+        }else {
+            responseString = JsonHelper.createTweetsWithoutHashtagRanking(tweets);
         }
-
-        return resultList;
+        return responseString;
     }
 
-    public String getResultsFromAccumulo(){
-        String result = "";
+    String getResultsFromAccumulo(String configFilePath){
+        String result = "[";
         AccumuloService accumuloService = new AccumuloService();
+        BatchScanner rawDataScanner;
+
+        double north = Double.parseDouble(_paramNorthCoordinate);
+        double west = Double.parseDouble(_paramWestCoordinate);
+        double south = Double.parseDouble(_paramSouthCoordinate);
+        double east = Double.parseDouble(_paramEastCoordinate);
 
         try {
-            accumuloService.readConfig(MainController.configFilePath);
+            accumuloService.readConfig(configFilePath);
 
-            result = getResult(accumuloService,_paramStartTime,_paramEndTime,
-                    Double.parseDouble(_paramNorthCoordinate),
-                    Double.parseDouble(_paramEastCoordinate),
-                    Double.parseDouble(_paramSouthCoordinate),
-                    Double.parseDouble(_paramWestCoordinate));
+            rawDataScanner = accumuloService.getRawDataScannerByTimeSpan(_paramStartTime,_paramEndTime);
+            boolean isFirst = true;
 
-        } catch (IOException ioe){
-            ioe.printStackTrace();
+            for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
+                String json = rawDataEntry.getValue().toString();
+
+                Double[] longLat = Extractor.extractLocation(json);
+                if (longLat != null && longLat[0] != null && longLat[1] != null) {
+                    Double longitude = longLat[0];
+                    Double latitude = longLat[1];
+                    //TODO: does this work across meridians?
+                    if(west < longitude && longitude < east &&
+                            south < latitude && latitude < north){
+
+                        if(!isFirst){
+                            result += ",";
+                        }else{
+
+                            isFirst=false;
+                        }
+                        json = JsonHelper.generateCoordinates(json);
+                        result += json;
+                    }
+                }
+            }
+
+            rawDataScanner.close();
+        } catch (IOException | AccumuloSecurityException | AccumuloException | TableNotFoundException  e) {
+            throw new RuntimeException("There was a failure during Accumulo communication.",e);
         }
+        result += "]";
         return result;
     }
 
-    protected String getResult(AccumuloService accumuloService, String startTime,String endTime,
-                               double north, double east, double south, double west)  {
-        String result = "[";
-        BatchScanner rawDataScanner = null;
-        try {
-            rawDataScanner = accumuloService.getRawDataScannerByTimeSpan(startTime,endTime);
-        } catch (AccumuloSecurityException e) {
-            e.printStackTrace();
-        } catch (AccumuloException e) {
-            e.printStackTrace();
-        } catch (TableNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        boolean isFirst = true;
-
-        for (Map.Entry<Key, Value> rawDataEntry : rawDataScanner) {
-            String json = rawDataEntry.getValue().toString();
-
-            //check if tweet is in box
-            JSONObject obj = null;
-            try {
-
-                // TODO Add Extractor here 
-                obj = new JSONObject(json);
-                JSONArray coords = obj.getJSONObject("coordinates").getJSONArray("coordinates");
-
-                Double longitude = coords.getDouble(0);
-                Double latitude = coords.getDouble(1);
-
-                //TODO: does this work across meridians?
-                if(west < longitude && longitude < east &&
-                        south < latitude && latitude < north){
-
-                    if(!isFirst){
-                        result += ",";
-                    }else{
-
-                        isFirst=false;
-                    }
-
-                    result += json;
-
-
-                }else{
-                   /* System.out.println("This is should be wrong:");
-                    System.out.println(west + " < " + longitude + " < "+east);
-                    System.out.println(south + " < " + latitude + " < "+north);*/
-                }
-
-            }catch (JSONException e){
-
-                //e.printStackTrace();
-                //do nothing if tweet has no geotag
-            }
-        }
-        rawDataScanner.close();
-        return result + "]";
-    }
-
     /**
-     * Validates the Query parameters. Returns true, if parameters are valid, false if not.
-     * @return true, if parameters are valid, false if not
+     * Validates the Query parameters.
      */
-    private boolean validateQueryParams()
+    void validateQueryParams() throws IllegalArgumentException
     {
-        boolean consistent = true;
-
         long minTimestamp = 1451606400; //unix time in sec 01.01.2016 00:00 Uhr
 
         if(_paramNorthCoordinate == null || Objects.equals(_paramNorthCoordinate, "") || _paramNorthCoordinate.length() < 2 || !isFloat(_paramNorthCoordinate)){
-            consistent = false;
+            throw new IllegalArgumentException("Query parameter 'bborth' is null or not a float number.");
         }
         if(_paramEastCoordinate == null || Objects.equals(_paramEastCoordinate, "") || _paramEastCoordinate.length() < 2 || !isFloat(_paramEastCoordinate)){
-            consistent = false;
+            throw new IllegalArgumentException("Query parameter 'bbeast' is null or not a float number.");
         }
         if(_paramSouthCoordinate == null || Objects.equals(_paramSouthCoordinate, "") || _paramSouthCoordinate.length() < 2 || !isFloat(_paramSouthCoordinate)){
-            consistent = false;
+            throw new IllegalArgumentException("Query parameter 'bbsouth' is null or not a float number.");
         }
         if(_paramWestCoordinate == null || Objects.equals(_paramWestCoordinate, "") || _paramWestCoordinate.length() < 2 || !isFloat(_paramWestCoordinate)){
-            consistent = false;
+            throw new IllegalArgumentException("Query parameter 'bbwest' is null or not a float number.");
         }
         long tstart = Long.parseLong(_paramStartTime);
         long tend = Long.parseLong(_paramEndTime);
         if(_paramStartTime == null || Objects.equals(_paramStartTime, "") || _paramStartTime.length() != 10 || tstart < minTimestamp){
-            consistent = false;
+            throw new IllegalArgumentException("Query parameter 'tstart' is null, has more or less thant 10 digits or is smaller than " + String.valueOf(minTimestamp) + ".");
         }
         if(_paramEndTime == null || Objects.equals(_paramEndTime, "") || _paramEndTime.length() != 10 || tend < minTimestamp){
-            consistent = false;
+            throw new IllegalArgumentException("Query parameter 'tend' is null, has more or less thant 10 digits or is smaller than " + String.valueOf(minTimestamp) + ".");
         }
         if(tstart > tend){
-            consistent = false;
+            throw new IllegalArgumentException("Query parameter 'tstart' is bigger than 'tend.");
         }
-
-        return consistent;
     }
 
     /**
@@ -239,13 +207,32 @@ public class GeoTimePeriodController {
             Float.parseFloat(checkString);
             isFloat = true;
         } catch (NumberFormatException e){
-
+            isFloat = false;
         }
         return isFloat;
     }
 
-    @ExceptionHandler
-    void handleIllegalArgumentException(IllegalArgumentException e, HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value(),"The given parameters are not valid. Please check api documentation for further information.");
+    public void set_paramNorthCoordinate(String _paramNorthCoordinate) {
+        this._paramNorthCoordinate = _paramNorthCoordinate;
+    }
+
+    public void set_paramEastCoordinate(String _paramEastCoordinate) {
+        this._paramEastCoordinate = _paramEastCoordinate;
+    }
+
+    public void set_paramSouthCoordinate(String _paramSouthCoordinate) {
+        this._paramSouthCoordinate = _paramSouthCoordinate;
+    }
+
+    public void set_paramWestCoordinate(String _paramWestCoordinate) {
+        this._paramWestCoordinate = _paramWestCoordinate;
+    }
+
+    public void set_paramStartTime(String _paramStartTime) {
+        this._paramStartTime = _paramStartTime;
+    }
+
+    public void set_paramEndTime(String _paramEndTime) {
+        this._paramEndTime = _paramEndTime;
     }
 }
