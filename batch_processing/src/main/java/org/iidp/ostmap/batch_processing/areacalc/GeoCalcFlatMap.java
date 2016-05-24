@@ -76,10 +76,10 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
                 }
 
             }
-            area = this.getAreaInSquareKm(coordinates);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        area = this.getAreaInSquareKm(coordinates);
 
         JSONObject data = new JSONObject();
         try {
@@ -102,9 +102,9 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
 
     }
 
-    public double getAreaInSquareMeters(){
+    /*public double getAreaInSquareMeters(){
         return 0.0;
-    }
+    }*/
 
     /**
      * calculates the area the Vector of coordinates defines
