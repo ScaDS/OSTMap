@@ -18,7 +18,10 @@ import org.junit.rules.TemporaryFolder;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -261,11 +264,10 @@ public class AccumuloServiceTest {
         assertEquals(tweet3Json.getString("id_str"),resultArray.getJSONObject(1).getString("id_str"));
     }
 
+    @Ignore
      @Test
      public void geoTimeTest() throws Exception{
          System.out.println("settings file path: " + settings.getAbsolutePath());
-
-         GeoTimePeriodController gtpc = new GeoTimePeriodController();
 
          GeoTempQuery query = new GeoTempQuery(
                  "49",
