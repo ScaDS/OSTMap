@@ -44,7 +44,8 @@ public class GeoTimePeriodController {
             @RequestParam(name = "bbsouth") String southCoordinate,
             @RequestParam(name = "bbwest") String westCoordinate,
             @RequestParam(name = "tstart") String startTime,
-            @RequestParam(name = "tend") String endTime
+            @RequestParam(name = "tend") String endTime,
+            @RequestParam(name = "topten", required = false, defaultValue = "false") Boolean topten
     ) throws AccumuloException, TableNotFoundException, AccumuloSecurityException, IOException {
         log.debug("GeoTemporalQuery #################################");
         validateQueryParams(
