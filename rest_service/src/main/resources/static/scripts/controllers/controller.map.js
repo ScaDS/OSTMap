@@ -35,7 +35,7 @@
         mapInit($scope);
 
         $scope.autoUpdate = false;
-        $scope.dataSource = "static"; //default: "accumulo";
+        $scope.dataSource = "accumulo"; //default: "accumulo";
         $scope.clusteringEnabled = true;
         $scope.usePruneCluster = true;
 
