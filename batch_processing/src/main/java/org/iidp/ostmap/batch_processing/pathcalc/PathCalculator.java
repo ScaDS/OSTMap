@@ -105,7 +105,7 @@ public class PathCalculator {
         TextOutputFormat<String> tof = new TextOutputFormat<>(new Path("file:///tmp/pathuserranking"));
         tof.setWriteMode(FileSystem.WriteMode.OVERWRITE);
 
-        userRanking.writeAsText("file:///tmp/userranking", FileSystem.WriteMode.OVERWRITE).setParallelism(1);
+        userRanking.writeAsText("file:///tmp/pathuserranking", FileSystem.WriteMode.OVERWRITE).setParallelism(1);
 
 
 
