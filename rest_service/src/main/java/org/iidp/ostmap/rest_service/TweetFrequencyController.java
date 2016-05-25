@@ -1,13 +1,11 @@
 package org.iidp.ostmap.rest_service;
 
-import com.google.common.collect.Sets;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.codehaus.jettison.json.JSONObject;
 import org.iidp.ostmap.commons.accumulo.AccumuloService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.time.Instant;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -92,37 +89,42 @@ public class TweetFrequencyController {
             }
             tweetFrequencyScanner.close();
 
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 String debugOut = "";
-                for(String l : languages) {
-                    debugOut += l;
+                for (String l : languages) {
+                    debugOut += l + ",";
                 }
                 log.debug("languages: " + debugOut);
             }
 
-            Map<String,List<Integer>> tweetFrequency = new HashMap<>();
+            LocalDateTime endLdt = LocalDateTime.parse(endTime, minuteFormatter);
+            Map<String, List<Integer>> tweetFrequency = new HashMap<>();
             // query each language
             for (String language : languages) {
                 List<Integer> frequencies = new ArrayList<>();
                 Scanner languageFrequencyScanner = accumuloService.getTweetFrequencyScanner(startTime, endTime, language);
-                ZonedDateTime currentZdt = ZonedDateTime.parse(startTime,minuteFormatter);
+                LocalDateTime currentZdt = LocalDateTime.parse(startTime, minuteFormatter);
                 log.debug("query for: " + languageFrequencyScanner.toString());
                 for (Map.Entry<Key, Value> kv : languageFrequencyScanner) {
                     // get read timestamp and data
                     String readTs = kv.getKey().getRow().toString();
-                    ZonedDateTime readZdt = ZonedDateTime.parse(readTs,minuteFormatter);
+                    LocalDateTime readZdt = LocalDateTime.parse(readTs, minuteFormatter);
                     Integer readFrequency = Integer.parseInt(kv.getValue().toString());
                     // fill up until read value
-                    while(currentZdt.isBefore(readZdt)) {
+                    while (currentZdt.isBefore(readZdt)) {
                         frequencies.add(0);
                         currentZdt = currentZdt.plusMinutes(1);
                     }
                     // insert read value
                     frequencies.add(readFrequency);
                 }
+                while (currentZdt.isBefore(endLdt)) {
+                    frequencies.add(0);
+                    currentZdt = currentZdt.plusMinutes(1);
+                }
                 languageFrequencyScanner.close();
                 // add the language to the map
-                tweetFrequency.put(language,frequencies);
+                tweetFrequency.put(language, frequencies);
             }
             result = buildJsonString(tweetFrequency);
 
@@ -133,26 +135,37 @@ public class TweetFrequencyController {
         return result;
     }
 
-    public String buildJsonString( Map<String,List<Integer>> tweetFrequency) {
+    /**
+     * {
+     * "data":	{
+     * "en":[34,44,32,45],
+     * "de":[10,11,12]
+     * }
+     * }
+     *
+     * @param tweetFrequency
+     * @return
+     */
+    public String buildJsonString(Map<String, List<Integer>> tweetFrequency) {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"data\":{");
         boolean isFirst = true;
-        for(Map.Entry<String,List<Integer>> kv : tweetFrequency.entrySet() ) {
-            if(!isFirst){
+        for (Map.Entry<String, List<Integer>> kv : tweetFrequency.entrySet()) {
+            if (!isFirst) {
                 sb.append(",");
-            }else{
-                isFirst=false;
+            } else {
+                isFirst = false;
             }
 
             sb.append("\"");
             sb.append(kv.getKey());
             sb.append("\":[");
             boolean innerFirst = true;
-            for(Integer frq : kv.getValue()) {
-                if(!innerFirst){
+            for (Integer frq : kv.getValue()) {
+                if (!innerFirst) {
                     sb.append(",");
-                }else{
-                    innerFirst=false;
+                } else {
+                    innerFirst = false;
                 }
                 sb.append(frq);
             }
