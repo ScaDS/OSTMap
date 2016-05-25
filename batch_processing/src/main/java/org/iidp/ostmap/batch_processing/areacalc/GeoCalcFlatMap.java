@@ -83,8 +83,8 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
 
         JSONObject data = new JSONObject();
         try {
-            data.append("user",userName);
-            data.append("area",area);
+            data.put("user",userName);
+            data.put("area",area);
             JSONArray coordsJSON = new JSONArray();
             for(double[] entry: coordinates){
                 JSONArray newCoords = new JSONArray();
@@ -92,7 +92,7 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
                 newCoords.put(entry[1]);
                 coordsJSON.put(newCoords);
             }
-            data.append("coordinates",coordsJSON);
+            data.put("coordinates",coordsJSON);
         } catch (JSONException e) {
             e.printStackTrace();
         }
