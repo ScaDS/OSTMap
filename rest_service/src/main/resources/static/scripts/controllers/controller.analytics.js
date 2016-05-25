@@ -76,6 +76,8 @@
 
         $scope.populateMap = function () {
             console.log("Data: " + $scope.data);
+
+            $scope.data.tweetFrequency;
             //TODO: update map with data
 
 
@@ -87,6 +89,7 @@
          * @returns {number[]}
          */
         function parseTimeFilter(hours){
+            console.log("Hours" + hours);
             var times = [0, 0];
             var start;
             var end;
@@ -102,11 +105,24 @@
             }
             end = Math.round(currentTime);
 
-            times[0] = start;
-            times[1] = end;
-
             $scope.data.start = start;
             $scope.data.end = end;
+
+
+            start = Date(start).getFullYear()+
+                    Date(start).getMonth()+
+                    Date(start).getDay()+
+                    Date(start).getHours()+
+                    Date(start).getMinutes();
+            
+            end =   Date(end).getFullYear()+
+                    Date(end).getMonth()+
+                    Date(end).getDay()+
+                    Date(end).getHours()+
+                    Date(end).getMinutes();
+
+            times[0] = start;
+            times[1] = end;
 
             return times;
         }

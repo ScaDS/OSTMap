@@ -2,7 +2,6 @@
 <uib-tabset active="active">
     <uib-tab index="0" heading="Sliding Histogram">
         <br>
-
         <div class="btn-group ">
             <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="1">1h</label>
             <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="2">2h</label>
@@ -10,8 +9,10 @@
             <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="6">6h</label>
             <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="12">12h</label>
             <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="24">1d</label>
-            <label class="btn btn-danger btn-lg" ng-click="updateFilters()">Manual Update</label>
+            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="42">2d</label>
         </div>
+        <label class="btn btn-danger btn-lg" ng-click="updateFilters()">Manual Update</label>
+
         <br>
         <br>
         <label class="">Current Filters: {{timeFilter}}h</label>
