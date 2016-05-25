@@ -370,7 +370,7 @@
             var hours = $scope.timeFilter;
             var offset = 60*60*hours;
 
-            if ($scope.timeFilter == 0) {
+            if (hours == 0) {
                 times[0] = 0;
             } else {
                 times[0] = Math.round(currentTime - offset);

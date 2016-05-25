@@ -4,7 +4,8 @@ package org.iidp.ostmap.commons.enums;
 public enum TableIdentifier {
     RAW_TWITTER_DATA("RawTwitterData"),
     TERM_INDEX("TermIndex"),
-    GEO_TEMPORAL_INDEX("GeoTemporalIndex");
+    GEO_TEMPORAL_INDEX("GeoTemporalIndex"),
+    TWEET_FREQUENCY("TweetFrequency");
 
     String identifier = "";
 

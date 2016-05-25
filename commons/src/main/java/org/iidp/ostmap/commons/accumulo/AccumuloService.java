@@ -137,6 +137,28 @@ public class AccumuloService {
     }
 
     /**
+     * Creates a scanner for the accumulo tweet frequency table.
+     *
+     * @param startTime the start time
+     * @param endTime   the end time
+     * @param language may be null
+     * @return a scanner instance
+     * @throws AccumuloSecurityException
+     * @throws AccumuloException
+     * @throws TableNotFoundException
+     */
+    public Scanner getTweetFrequencyScanner(String startTime, String endTime, String language) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+        Connector conn = getConnector();
+        Authorizations auths = new Authorizations("standard");
+        Scanner scan = conn.createScanner(TableIdentifier.TWEET_FREQUENCY.get(), auths);
+        scan.setRange(new Range(startTime, true, endTime, true));
+        if(language != null) {
+            scan.fetchColumnFamily(new Text(language));
+        }
+        return scan;
+    }
+
+    /**
      * Checks if the given string ends with a wildcard *
      *
      * @param token the string to check
