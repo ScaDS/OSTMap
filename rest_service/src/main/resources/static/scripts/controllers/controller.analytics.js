@@ -89,26 +89,22 @@
          * @returns {number[]}
          */
         function parseTimeFilter(hours){
-            console.log("Hours" + hours);
             var times = [0, 0];
             var start;
             var end;
             var date = new Date();
-            var currentTime = date.getTime()/1000; //milliseconds to seconds
+            var currentTime = (date.getTime()/1000)/60; //milliseconds to seconds to minues
 
             var offset = 60*60*hours;
 
-            if (hours == 0) {
-                times[0] = 0;
-            } else {
-                start = Math.round(currentTime - offset);
-            }
+            start = Math.round(currentTime - offset);
             end = Math.round(currentTime);
 
             $scope.data.start = start;
             $scope.data.end = end;
 
             date.setMilliseconds(start);
+            console.log(date)
             start = zeroPad(date.getFullYear(), 4)+
                     zeroPad(date.getMonth(), 2)+
                     zeroPad(date.getDay(), 2)+
@@ -116,6 +112,7 @@
                     zeroPad(date.getMinutes(), 2);
 
             date.setMilliseconds(end);
+            console.log(date)
             end =   zeroPad(date.getFullYear(), 4)+
                     zeroPad(date.getMonth(), 2)+
                     zeroPad(date.getDay(), 2)+
