@@ -1,13 +1,11 @@
 package org.iidp.ostmap.rest_service;
 
-import com.google.common.collect.Sets;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
-import org.codehaus.jettison.json.JSONObject;
 import org.iidp.ostmap.commons.accumulo.AccumuloService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.time.Instant;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -79,6 +76,7 @@ public class TweetFrequencyController {
     }
 
     public String getResultsFromAccumulo(String startTime, String endTime) {
+        long st = System.nanoTime();
         AccumuloService accumuloService = new AccumuloService();
         String result = null;
         try {
@@ -92,67 +90,87 @@ public class TweetFrequencyController {
             }
             tweetFrequencyScanner.close();
 
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 String debugOut = "";
-                for(String l : languages) {
-                    debugOut += l;
+                for (String l : languages) {
+                    debugOut += l + ",";
                 }
                 log.debug("languages: " + debugOut);
             }
 
-            Map<String,List<Integer>> tweetFrequency = new HashMap<>();
+            LocalDateTime endLdt = LocalDateTime.parse(endTime, minuteFormatter);
+            Map<String, List<Integer>> tweetFrequency = new HashMap<>();
             // query each language
             for (String language : languages) {
                 List<Integer> frequencies = new ArrayList<>();
                 Scanner languageFrequencyScanner = accumuloService.getTweetFrequencyScanner(startTime, endTime, language);
-                ZonedDateTime currentZdt = ZonedDateTime.parse(startTime,minuteFormatter);
-                log.debug("query for: " + languageFrequencyScanner.toString());
+                LocalDateTime currentLdt = LocalDateTime.parse(startTime, minuteFormatter);
+                //String currentTime = startTime;
+                log.debug("query for: [" + startTime + ", " + endTime + ", " + language + "]");
                 for (Map.Entry<Key, Value> kv : languageFrequencyScanner) {
+
                     // get read timestamp and data
-                    String readTs = kv.getKey().getRow().toString();
-                    ZonedDateTime readZdt = ZonedDateTime.parse(readTs,minuteFormatter);
+                    String readTime = kv.getKey().getRow().toString();
+                    LocalDateTime readLdt = LocalDateTime.parse(readTime, minuteFormatter);
                     Integer readFrequency = Integer.parseInt(kv.getValue().toString());
                     // fill up until read value
-                    while(currentZdt.isBefore(readZdt)) {
+                    while (currentLdt.compareTo(readLdt) < 0) {
                         frequencies.add(0);
-                        currentZdt = currentZdt.plusMinutes(1);
+                        currentLdt = currentLdt.plusMinutes(1);
                     }
                     // insert read value
                     frequencies.add(readFrequency);
+                    currentLdt = readLdt.plusMinutes(1);
+                }
+                while (currentLdt.compareTo(endLdt) <= 0) {
+                    frequencies.add(0);
+                    currentLdt = currentLdt.plusMinutes(1);
                 }
                 languageFrequencyScanner.close();
                 // add the language to the map
-                tweetFrequency.put(language,frequencies);
+                tweetFrequency.put(language, frequencies);
             }
             result = buildJsonString(tweetFrequency);
 
-
+            long et = System.nanoTime();
+            log.debug("time: " + ((et - st) / 1000000000.0f) + "s");
         } catch (IOException | AccumuloSecurityException | TableNotFoundException | AccumuloException e) {
             throw new RuntimeException("There was a failure during Accumulo communication.", e);
         }
         return result;
     }
 
-    public String buildJsonString( Map<String,List<Integer>> tweetFrequency) {
+    /**
+     * {
+     * "data":	{
+     * "en":[34,44,32,45],
+     * "de":[10,11,0,12]
+     * }
+     * }
+     *
+     * @param tweetFrequency
+     * @return
+     */
+    public String buildJsonString(Map<String, List<Integer>> tweetFrequency) {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"data\":{");
         boolean isFirst = true;
-        for(Map.Entry<String,List<Integer>> kv : tweetFrequency.entrySet() ) {
-            if(!isFirst){
+        for (Map.Entry<String, List<Integer>> kv : tweetFrequency.entrySet()) {
+            if (!isFirst) {
                 sb.append(",");
-            }else{
-                isFirst=false;
+            } else {
+                isFirst = false;
             }
 
             sb.append("\"");
             sb.append(kv.getKey());
             sb.append("\":[");
             boolean innerFirst = true;
-            for(Integer frq : kv.getValue()) {
-                if(!innerFirst){
+            for (Integer frq : kv.getValue()) {
+                if (!innerFirst) {
                     sb.append(",");
-                }else{
-                    innerFirst=false;
+                } else {
+                    innerFirst = false;
                 }
                 sb.append(frq);
             }
