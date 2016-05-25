@@ -200,7 +200,7 @@
             var deferred = $q.defer();
 
             var url = "http://localhost:8082/api/tweetfrequency"
-                + "&tstart=" + times[0]
+                + "?tstart=" + times[0]
                 + "&tend=" + times[1];
             $http.get(url).success(function (data, status, headers, config) {
                 _tweetFrequency = _.clone(data);

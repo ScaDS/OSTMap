@@ -26,7 +26,7 @@
      */
     function AnalyticsCtrl($scope, httpService) {
 
-        $scope.timeFilter = 24;
+        $scope.timeFilter = 48;
         $scope.data = {
             "start": 0,
             "end": 0,
@@ -76,6 +76,8 @@
 
         $scope.populateMap = function () {
             console.log("Data: " + $scope.data);
+
+            $scope.data.tweetFrequency;
             //TODO: update map with data
 
 
@@ -91,24 +93,51 @@
             var start;
             var end;
             var date = new Date();
-            var currentTime = date.getTime()/1000; //milliseconds to seconds
+            var currentTime = new Date().getTime();
 
-            var offset = 60*60*hours;
+            // console.log("Current time: " + new Date().toDateString());
 
-            if (hours == 0) {
-                times[0] = 0;
-            } else {
-                start = Math.round(currentTime - offset);
-            }
-            end = Math.round(currentTime);
+            var offset = 1000*60*60*hours;
 
-            times[0] = start;
-            times[1] = end;
+            // console.log("offset: " + offset)
+
+            start = currentTime - offset;
+            end = currentTime;
 
             $scope.data.start = start;
             $scope.data.end = end;
 
+            date.setTime(start);
+            // console.log("start:\n" + date);
+            start = zeroPad(date.getFullYear()  , 4)+
+                    zeroPad(date.getMonth()+1   , 2)+
+                    zeroPad(date.getDate()      , 2)+
+                    zeroPad(date.getHours()     , 2)+
+                    zeroPad(date.getMinutes()   , 2);
+            // console.log("start:\n" + start);
+
+            date.setTime(end);
+            // console.log("end:\n" + date);
+            end =   zeroPad(date.getFullYear()  , 4)+
+                    zeroPad(date.getMonth()+1   , 2)+
+                    zeroPad(date.getDate()      , 2)+
+                    zeroPad(date.getHours()     , 2)+
+                    zeroPad(date.getMinutes()   , 2);
+            // console.log("end:\n" + end);
+
+            times[0] = start;
+            times[1] = end;
+
             return times;
+        }
+
+        function zeroPad(num, places) {
+            var padded = "0";
+            // console.log("pad before: " + num)
+            var zero = places - num.toString().length + 1;
+            padded = Array(+(zero > 0 && zero)).join("0").toString() + num;
+            // console.log("pad after: " + padded)
+            return padded;
         }
 
         $scope.options = {
