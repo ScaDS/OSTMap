@@ -35,7 +35,7 @@
         mapInit($scope);
 
         $scope.autoUpdate = false;
-        $scope.dataSource = "accumulo"; //default: "accumulo";
+        $scope.dataSource = "localhost"; //default: "accumulo";
         $scope.clusteringEnabled = true;
         $scope.usePruneCluster = true;
 
@@ -56,7 +56,7 @@
             // $scope.search.searchFilter = null;
             $scope.search.searchFilter = "DefaultSearchFilter";
             // $scope.timeFilter = null;
-            $scope.timeFilter = "0";
+            $scope.timeFilter = "0.25";
             $scope.search.hashtagFilter = "#";
             $scope.center ={
                 lat: 50,
@@ -105,6 +105,11 @@
                 } else if ($scope.dataSource == "restTest") {
                     //Get using test REST API
                     httpService.getTweetsFromServerTest().then(function (status) {
+                        doUpdate();
+                    });
+                } else if ($scope.dataSource == "localhost") {
+                    //Get using test REST API
+                    httpService.getTweetsFromServerTest2().then(function (status) {
                         doUpdate();
                     });
                 } else if ($scope.dataSource == "static") {

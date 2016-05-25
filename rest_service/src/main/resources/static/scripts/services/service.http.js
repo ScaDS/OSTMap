@@ -94,6 +94,7 @@
             getTweetsFromServerByToken: _getTweetsFromServerByToken,
             getTweetsFromServerByGeoTime: _getTweetsFromServerByGeoTime,
             getTweetsFromServerTest: _getTweetsFromServerTest,
+            getTweetsFromServerTest2: _getTweetsFromServerTest2,
             getTweetsFromLocal: _getTweetsFromLocal,
             queueAddGetTweetFrom: _queueAddGetTweetFrom,
             removeFromQueue: _removeFromQueue,
@@ -188,12 +189,37 @@
             var deferred = $q.defer();
 
             var url = "http://localhost:8080/api/testgeo"
-            + "?bbnorth=" + _boundingBox.bbnorth
-            + "&bbsouth=" +  _boundingBox.bbsouth
-            + "&bbeast=" +  _boundingBox.bbeast
-            + "&bbwest=" +  _boundingBox.bbwest
-            + "&tstart=" + _timePeriod.tstart
-            + "&tend=" + _timePeriod.tend;
+                + "?bbnorth=" + _boundingBox.bbnorth
+                + "&bbsouth=" +  _boundingBox.bbsouth
+                + "&bbeast=" +  _boundingBox.bbeast
+                + "&bbwest=" +  _boundingBox.bbwest
+                + "&tstart=" + _timePeriod.tstart
+                + "&tend=" + _timePeriod.tend;
+            $http.get(url).success(function (data, status, headers, config) {
+                //Copy result data to the private array
+                // angular.copy(data,_tweets);
+                _tweets = _.clone(data);
+                _setLoading(status);
+                deferred.resolve(status);
+            }).error(function (data, status, headers, config) {
+                //TODO: Log the errors
+                _setLoading(status);
+                deferred.resolve(status + "\n" + headers + "\n" + config);
+            });
+
+            return deferred.promise;
+        }
+        function _getTweetsFromServerTest2() {
+            _setLoading(true);
+            var deferred = $q.defer();
+
+            var url = "http://localhost:8082/api/geotemporalsearch"
+                + "?bbnorth=" + _boundingBox.bbnorth
+                + "&bbsouth=" +  _boundingBox.bbsouth
+                + "&bbeast=" +  _boundingBox.bbeast
+                + "&bbwest=" +  _boundingBox.bbwest
+                + "&tstart=" + _timePeriod.tstart
+                + "&tend=" + _timePeriod.tend;
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 // angular.copy(data,_tweets);
