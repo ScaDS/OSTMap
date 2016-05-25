@@ -6,6 +6,7 @@ import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
 import org.iidp.ostmap.accumuloiterators.ExtractIterator;
+import org.iidp.ostmap.accumuloiterators.GeosearchExtractIterator;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
 
 import java.io.FileInputStream;
@@ -137,6 +138,25 @@ public class AccumuloService {
     }
 
     /**
+     * Builds a batch scanner for table "RawTwitterData" by the given List of Ranges.
+     * Applies the GeosearchExtractIterator
+     *
+     * @param rangeFilter the list of ranges, applied to the Batch Scanner
+     * @return the batch scanner
+     * @throws AccumuloSecurityException
+     * @throws AccumuloException
+     * @throws TableNotFoundException
+     */
+    public BatchScanner getRawDataBatchScannerForMapView(List<Range> rangeFilter) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+        Connector conn = getConnector();
+        Authorizations auths = new Authorizations("standard");
+        BatchScanner scan = conn.createBatchScanner(TableIdentifier.RAW_TWITTER_DATA.get(), auths, numberOfThreadsForScan);
+        addGeoReduceIterator(scan);
+        scan.setRanges(rangeFilter);
+        return scan;
+    }
+
+    /**
      * Creates a scanner for the accumulo tweet frequency table.
      *
      * @param startTime the start time
@@ -175,6 +195,16 @@ public class AccumuloService {
      */
     private void addReduceIterator(BatchScanner scan) {
         IteratorSetting jsonExtractIteratorConfig = new IteratorSetting(20, "jsonExtractIterator", ExtractIterator.class);
+        scan.addScanIterator(jsonExtractIteratorConfig);
+    }
+
+    /**
+     * this method adds the geo reduce iterator to the scanner (removes unused parts from the json)
+     *
+     * @param scan the BatchScanner to modify
+     */
+    private void addGeoReduceIterator(BatchScanner scan) {
+        IteratorSetting jsonExtractIteratorConfig = new IteratorSetting(20, "jsonGeoExtractIterator", GeosearchExtractIterator.class);
         scan.addScanIterator(jsonExtractIteratorConfig);
     }
 

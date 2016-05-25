@@ -172,7 +172,7 @@ public class GeoTemporalTweetQuery {
             return;
         }
         //query on RawTwitterData
-        BatchScanner rawTwitterScan = ac.getRawDataBatchScanner(rawRangeList);
+        BatchScanner rawTwitterScan = ac.getRawDataBatchScannerForMapView(rawRangeList);
 
         for (Map.Entry<Key, Value> entry : rawTwitterScan) {
             tc.process(entry.getValue().toString());
