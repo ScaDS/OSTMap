@@ -26,7 +26,7 @@
      */
     function AnalyticsCtrl($scope, httpService) {
 
-        $scope.timeFilter = 48;
+        $scope.timeFilter = 12;
         $scope.data = {
             "start": 0,
             "end": 0,
@@ -59,7 +59,7 @@
                  */
                 httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter($scope.timeFilter)).then(function (status) {
                     $scope.$emit('updateStatus', status);
-                    // $scope.data.tweetFrequency = httpService.getTweetFrequency();
+                    $scope.data.tweetFrequency = httpService.getTweetFrequency();
                     $scope.populateMap();
                 });
             } else {
@@ -75,12 +75,28 @@
         });
 
         $scope.populateMap = function () {
-            console.log("Data: " + $scope.data);
+            $scope.data.tweetFrequency.data.forEach( function(lang) {
+                console.log("Data: " + lang);
+                var start = $scope.data.start
+                var end = $scope.data.end
 
-            $scope.data.tweetFrequency;
+                var range = end - start;
+                var points = []; //[{x: 0, y: 23}, {x: 1, y: 15}]
+                for(var i=0; i<=range;i++) {
+                    points.push({x: start+i, y: lang.data[i]});
+                }
+
+                var series = {
+                    name: lang,
+                    color: 'steelblue',
+                    data: points
+                }
+
+                // console.log("length: " + $scope.data.tweetFrequency.data.);
+                $scope.data.series.push(series);
+            });
+
             //TODO: update map with data
-
-
         };
 
 
@@ -97,7 +113,7 @@
 
             // console.log("Current time: " + new Date().toDateString());
 
-            var offset = 1000*60*60*hours;
+            var offset = 1000*60*60*hours; //milliseconds, seconds, minutes
 
             // console.log("offset: " + offset)
 
