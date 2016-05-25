@@ -108,23 +108,29 @@
             $scope.data.start = start;
             $scope.data.end = end;
 
+            date.setMilliseconds(start);
+            start = zeroPad(date.getFullYear(), 4)+
+                    zeroPad(date.getMonth(), 2)+
+                    zeroPad(date.getDay(), 2)+
+                    zeroPad(date.getHours(), 2)+
+                    zeroPad(date.getMinutes(), 2);
 
-            start = Date(start).getFullYear()+
-                    Date(start).getMonth()+
-                    Date(start).getDay()+
-                    Date(start).getHours()+
-                    Date(start).getMinutes();
-            
-            end =   Date(end).getFullYear()+
-                    Date(end).getMonth()+
-                    Date(end).getDay()+
-                    Date(end).getHours()+
-                    Date(end).getMinutes();
+            date.setMilliseconds(end);
+            end =   zeroPad(date.getFullYear(), 4)+
+                    zeroPad(date.getMonth(), 2)+
+                    zeroPad(date.getDay(), 2)+
+                    zeroPad(date.getHours(), 2)+
+                    zeroPad(date.getMinutes(), 2);
 
             times[0] = start;
             times[1] = end;
 
             return times;
+        }
+
+        function zeroPad(num, places) {
+            var zero = places - num.toString().length + 1;
+            return Array(+(zero > 0 && zero)).join("0") + num;
         }
 
         $scope.options = {
