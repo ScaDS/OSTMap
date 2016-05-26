@@ -354,16 +354,16 @@
         $scope.getBounds = function () {
             var north, west, south, east;
 
-            if ($scope.currentBounds._northEast.lat > 90) {north = 90}
+            if ($scope.currentBounds._northEast.lat >= 90) {north = 89.99}
             else {north = $scope.currentBounds._northEast.lat}
 
-            if ($scope.currentBounds._southWest.lng < -180) {west = -180}
+            if ($scope.currentBounds._southWest.lng <= -180) {west = -179.99}
             else {west = $scope.currentBounds._southWest.lng}
 
-            if ($scope.currentBounds._southWest.lat < -90) {south = -90}
+            if ($scope.currentBounds._southWest.lat <= -90) {south = -89.99}
             else {south = $scope.currentBounds._southWest.lat}
 
-            if ($scope.currentBounds._northEast.lng > 180) {east = 180}
+            if ($scope.currentBounds._northEast.lng >= 180) {east = 179.99}
             else {east = $scope.currentBounds._northEast.lng}
 
             return {

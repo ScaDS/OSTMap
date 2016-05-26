@@ -90,7 +90,7 @@
         };
 
         $rootScope.$on('alertControl', function(event, message){
-            console.log("alertControl triggered");
+            // console.log("alertControl triggered");
             if (message != 200) {
                 $scope.info = message;
             }
