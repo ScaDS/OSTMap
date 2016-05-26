@@ -21,29 +21,18 @@
         <label class="">Current Filters: {{timeFilter}}h</label>
 
         <br><br>
-
-        <code>
-            DEBUG
-            <br>
-            <br>
-            data.tweetFrequency: {{data.tweetFrequency}}
-        </code>
-
-        <br>    <br>
-
-
-
-        <!--<div id="chart"></div>-->
         <rickshaw
                 rickshaw-options="options"
                 rickshaw-features="features"
                 rickshaw-series="data.series">
         </rickshaw>
 
-        <br><br>
-        <code>Data: {{data.series[0]}}</code>
-        <br><br>
-        <code>Data: {{data.series[1]}}</code>
+        <div id="chart"></div>
+        <code>
+            DEBUG
+            <br>
+            <!--data.tweetFrequency: {{data.tweetFrequency}}-->
+        </code>
     </uib-tab>
 
 
