@@ -80,7 +80,7 @@
                     <caption>Top 10 Hashtags <br> of {{data.tweets.length}} Tweets</caption>
                     <tr ng-repeat="hashtag in data.top10|limitTo:10" ng-click="search.setHashtagFilter(hashtag)">
                         <td>
-                            <p>#{{hashtag}}</p>
+                            <p>{{hashtag}}</p>
                         </td>
                     </tr>
                 </table>

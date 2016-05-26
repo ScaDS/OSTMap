@@ -251,7 +251,8 @@
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
                 + "&tstart=" + _timePeriod.tstart
-                + "&tend=" + _timePeriod.tend;
+                + "&tend=" + _timePeriod.tend
+                + "&topten=true";
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 // angular.copy(data,_tweets);
@@ -276,11 +277,12 @@
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
                 + "&tstart=" + _timePeriod.tstart
-                + "&tend=" + _timePeriod.tend;
+                + "&tend=" + _timePeriod.tend
+                + "&topten=true";
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
-                // angular.copy(data,_tweets);
                 _tweetsGeo.tweets = _.clone(data);
+                _tweetsGeo.top10 = _.clone(data.topten);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -418,7 +420,8 @@
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
                 + "&tstart=" + _timePeriod.tstart
-                + "&tend=" + _timePeriod.tend;
+                + "&tend=" + _timePeriod.tend
+                + "&topten=true";
         }
 
         /**
