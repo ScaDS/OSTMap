@@ -57,7 +57,7 @@
             "#test9",
             "#test10"
         ]
-        // $scope.data.tweets = httpService.getTweetsGeo();
+        $scope.data = httpService.getTweetsGeo();
 
         /**
          * Reset all filter values to default or null
@@ -250,80 +250,80 @@
          * @param lat
          * @param lng
          */
-        $scope.search.goToTweet = function (index, id_str, lat, lng) {
-            console.log("selected tweet index: " + index + ", [" + lat + "," + lng + "]");
-
-            /**
-             * Check if latitude and longitude are available
-             */
-            if (lat == undefined || lng == undefined) {
-                alert("Missing Coordinates!");
-            } else {
-                /**
-                 * Move map center to the tweet
-                 * @type {{lat: *, lng: *, zoom: number}}
-                 */
-                // $scope.center ={
-                //     lat: lat,
-                //     lng: lng,
-                //     zoom: 10
-                // };
-
-                /**
-                 * Scroll document to the map element
-                 */
-                // document.getElementById("geoTemporalMap").scrollIntoView();
-                document.getElementById("navbar").scrollIntoView();
-
-                /**
-                 * Un-selects the old marker
-                 * Update currentMarkerID
-                 * Give focus to selected tweet
-                 * Makes the text label visible
-                 */
-                if($scope.usePruneCluster) {
-                    // $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
-                    //     leafletMarker.openPopup();
-                    // };
-
-                    if ($scope.currentMarkerID != 0) {
-                        // $scope.pruneMarkers[$scope.currentMarkerID].closePopup();
-                    }
-                    $scope.currentMarkerID = index;
-
-                    if ($scope.pruneMarkers[index] != null) {
-                        // $scope.pruneMarkers[index].openPopup();
-                        console.log($scope.pruneCluster.GetMarkers()[index]);
-                        $scope.pruneCluster.GetMarkers()[index].bindPopup("test");
-
-                        $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
-                            leafletMarker.setIcon(L.divIcon($scope.icons.red)); // See http://leafletjs.com/reference.html#icon
-                            //listeners can be applied to markers in this function
-                            // leafletMarker.on('popup' + data.id_str, function(){
-                                //do click event logic here
-                                // leafletMarker.openPopup();
-                            // });
-                            // A popup can already be attached to the marker
-                            // bindPopup can override it, but it's faster to update the content instead
-                            if (leafletMarker.getPopup()) {
-                                leafletMarker.setPopupContent(data.message);
-                            } else {
-                                leafletMarker.bindPopup(data.message);
-                            }
-                        };
-                    }
-                } else {
-                    if ($scope.currentMarkerID != 0) {
-                        $scope.markers[$scope.currentMarkerID].focus = false;
-                    }
-                    $scope.currentMarkerID = index;
-
-                    if ($scope.markers[index] != null) {
-                        $scope.markers[index].focus = true;
-                    }
-                }
-            }
-        };
+        // $scope.search.goToTweet = function (index, id_str, lat, lng) {
+        //     console.log("selected tweet index: " + index + ", [" + lat + "," + lng + "]");
+        //
+        //     /**
+        //      * Check if latitude and longitude are available
+        //      */
+        //     if (lat == undefined || lng == undefined) {
+        //         alert("Missing Coordinates!");
+        //     } else {
+        //         /**
+        //          * Move map center to the tweet
+        //          * @type {{lat: *, lng: *, zoom: number}}
+        //          */
+        //         // $scope.center ={
+        //         //     lat: lat,
+        //         //     lng: lng,
+        //         //     zoom: 10
+        //         // };
+        //
+        //         /**
+        //          * Scroll document to the map element
+        //          */
+        //         // document.getElementById("geoTemporalMap").scrollIntoView();
+        //         document.getElementById("navbar").scrollIntoView();
+        //
+        //         /**
+        //          * Un-selects the old marker
+        //          * Update currentMarkerID
+        //          * Give focus to selected tweet
+        //          * Makes the text label visible
+        //          */
+        //         if($scope.usePruneCluster) {
+        //             // $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
+        //             //     leafletMarker.openPopup();
+        //             // };
+        //
+        //             if ($scope.currentMarkerID != 0) {
+        //                 // $scope.pruneMarkers[$scope.currentMarkerID].closePopup();
+        //             }
+        //             $scope.currentMarkerID = index;
+        //
+        //             if ($scope.pruneMarkers[index] != null) {
+        //                 // $scope.pruneMarkers[index].openPopup();
+        //                 console.log($scope.pruneCluster.GetMarkers()[index]);
+        //                 $scope.pruneCluster.GetMarkers()[index].bindPopup("test");
+        //
+        //                 $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
+        //                     leafletMarker.setIcon(L.divIcon($scope.icons.red)); // See http://leafletjs.com/reference.html#icon
+        //                     //listeners can be applied to markers in this function
+        //                     // leafletMarker.on('popup' + data.id_str, function(){
+        //                         //do click event logic here
+        //                         // leafletMarker.openPopup();
+        //                     // });
+        //                     // A popup can already be attached to the marker
+        //                     // bindPopup can override it, but it's faster to update the content instead
+        //                     if (leafletMarker.getPopup()) {
+        //                         leafletMarker.setPopupContent(data.message);
+        //                     } else {
+        //                         leafletMarker.bindPopup(data.message);
+        //                     }
+        //                 };
+        //             }
+        //         } else {
+        //             if ($scope.currentMarkerID != 0) {
+        //                 $scope.markers[$scope.currentMarkerID].focus = false;
+        //             }
+        //             $scope.currentMarkerID = index;
+        //
+        //             if ($scope.markers[index] != null) {
+        //                 $scope.markers[index].focus = true;
+        //             }
+        //         }
+        //     }
+        // };
 
         $scope.currentBounds = null;
 
@@ -381,8 +381,8 @@
          * Run when page is loaded
          */
         $scope.$on('$viewContentLoaded', function() {
-            console.log("Page Loaded");
-            $scope.onStart()
+            // console.log("Page Loaded");
+            $scope.onStart();
         });
 
         /**
@@ -421,7 +421,7 @@
                         // console.log("Map watcher triggered, autoUpdateDisabled: no action taken");
                     }
                 });
-                console.log("Mapbounds watcher started");
+                // console.log("Mapbounds watcher started");
 
                 /**
                  * Workaround to trigger a filter update due to a mapbound change
@@ -432,6 +432,14 @@
                     lng: 12,
                     zoom: 5
                 };
+
+                /**
+                 * If data was already fetched previously, load it
+                 */
+                if ($scope.data.hasOwnProperty('tweets') && $scope.data.tweets.length > 0) {
+                    console.log("Existing Data: " + $scope.data.tweets.length)
+                    $scope.populateMarkers();
+                }
             });
         };
 

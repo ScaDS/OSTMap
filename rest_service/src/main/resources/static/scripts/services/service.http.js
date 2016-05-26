@@ -116,7 +116,6 @@
             setTimeWindow: _setTimeWindow,
             getLoading: _getLoading,
             setLoading: _setLoading
-
         };
 
         function _getTweetsFromServerByToken() {
