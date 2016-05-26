@@ -75,50 +75,50 @@
         </div>
     </div>
 
-    <div class="row alert alert-danger" uib-collapse="clickOnce" role="alert">
-        <strong>[DEBUG]</strong>
-        <button class="btn btn-danger btn-sm" ng-click="clickOnce = true;">Hide</button>
-        <br>
-        <code>
-            clustering: {{clusteringEnabled}}<br>
-            PruneCluster: {{usePruneCluster}}<br>
-            dataSource: {{dataSource}}<br>
-            autoUpdate: {{autoUpdate}}<br>
-            TweetID: {{currentMarkerID}}<br>
-            {{currentBounds}}<br>
-            Maxbounds:
-            NE(lat: {{maxBounds.northEast.lat}}, lng: {{maxBounds.northEast.lng}}) SW(lat: {{maxBounds.southWest.lat}}, lng: {{maxBounds.southWest.lng}})
-            <br>
-            <br>Current Center:<br>
-            Latitude: <input type="number" step="any" ng-model="center.lat" /> Longitude: <input type="number" step="any" ng-model="center.lng" />
-            Zoom: <input type="number" step="any" ng-model="center.zoom" />
-            <br>
-            <br>Current Bounds:
-            <br>NE(lat: {{bounds.northEast.lat}}, lng: {{bounds.northEast.lng}})
-            <br> SW(lat: {{bounds.southWest.lat}}, lng: {{bounds.southWest.lng}})
-            <!--<p class="result">NE(lat: {{currentBounds._northEast.lat}}, lng: {{currentBounds._northEast.lng}}) SW(lat: {{currentBounds._southWest.lat}}, lng: {{currentBounds._southWest.lng}})</p>-->
-            <!--<button class="btn btn-primary" ng-visible=true ng-click="getBounds()">getBounds</button>-->
-        </code>
-    </div>
+    <!--<div class="row alert alert-danger" uib-collapse="clickOnce" role="alert">-->
+        <!--<strong>[DEBUG]</strong>-->
+        <!--<button class="btn btn-danger btn-sm" ng-click="clickOnce = true;">Hide</button>-->
+        <!--<br>-->
+        <!--<code>-->
+            <!--clustering: {{clusteringEnabled}}<br>-->
+            <!--PruneCluster: {{usePruneCluster}}<br>-->
+            <!--dataSource: {{dataSource}}<br>-->
+            <!--autoUpdate: {{autoUpdate}}<br>-->
+            <!--TweetID: {{currentMarkerID}}<br>-->
+            <!--{{currentBounds}}<br>-->
+            <!--Maxbounds:-->
+            <!--NE(lat: {{maxBounds.northEast.lat}}, lng: {{maxBounds.northEast.lng}}) SW(lat: {{maxBounds.southWest.lat}}, lng: {{maxBounds.southWest.lng}})-->
+            <!--<br>-->
+            <!--<br>Current Center:<br>-->
+            <!--Latitude: <input type="number" step="any" ng-model="center.lat" /> Longitude: <input type="number" step="any" ng-model="center.lng" />-->
+            <!--Zoom: <input type="number" step="any" ng-model="center.zoom" />-->
+            <!--<br>-->
+            <!--<br>Current Bounds:-->
+            <!--<br>NE(lat: {{bounds.northEast.lat}}, lng: {{bounds.northEast.lng}})-->
+            <!--<br> SW(lat: {{bounds.southWest.lat}}, lng: {{bounds.southWest.lng}})-->
+            <!--&lt;!&ndash;<p class="result">NE(lat: {{currentBounds._northEast.lat}}, lng: {{currentBounds._northEast.lng}}) SW(lat: {{currentBounds._southWest.lat}}, lng: {{currentBounds._southWest.lng}})</p>&ndash;&gt;-->
+            <!--&lt;!&ndash;<button class="btn btn-primary" ng-visible=true ng-click="getBounds()">getBounds</button>&ndash;&gt;-->
+        <!--</code>-->
+    <!--</div>-->
 
-    <uib-pagination class="row pagination-sm" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" boundary-link-numbers="true"></uib-pagination>
+    <!--<uib-pagination class="row pagination-sm" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" boundary-link-numbers="true"></uib-pagination>-->
 
-    <div class="panel panel-default row">
-        <!-- Table -->
-        <table class="table table-hover tabled-striped table-condensed table-responsive">
-            <caption>{{data.tweets.length}} Tweets</caption>
-            <tr ng-repeat="tweet in data.tweets|limitTo:30 track by $index" ng-click="search.goToTweet($index, id_str, tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0])">
-                <td>
-                    <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">
-                </td>
-                <td>
-                    <p>{{tweet.user.name}}</p>
-                </td>
-                <td>
-                    <p style="word-wrap:break-word;">{{tweet.text}}</p>
-                    <code style="word-wrap:break-word;">{{tweet.coordinates.coordinates[1]}}, {{tweet.coordinates.coordinates[0]}}</code>
-                </td>
-            </tr>
-        </table>
-    </div>
+    <!--<div class="panel panel-default row">-->
+        <!--&lt;!&ndash; Table &ndash;&gt;-->
+        <!--<table class="table table-hover tabled-striped table-condensed table-responsive">-->
+            <!--<caption>{{data.tweets.length}} Tweets</caption>-->
+            <!--<tr ng-repeat="tweet in data.tweets|limitTo:30 track by $index" ng-click="search.goToTweet($index, id_str, tweet.coordinates.coordinates[1], tweet.coordinates.coordinates[0])">-->
+                <!--<td>-->
+                    <!--<img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_background_image_url}}">-->
+                <!--</td>-->
+                <!--<td>-->
+                    <!--<p>{{tweet.user.name}}</p>-->
+                <!--</td>-->
+                <!--<td>-->
+                    <!--<p style="word-wrap:break-word;">{{tweet.text}}</p>-->
+                    <!--<code style="word-wrap:break-word;">{{tweet.coordinates.coordinates[1]}}, {{tweet.coordinates.coordinates[0]}}</code>-->
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</div>-->
 </div>
