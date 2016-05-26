@@ -16,12 +16,12 @@
 .geoTemporal{
     z-index: 0;
     position: absolute;
-    margin-top: -10px;
+    margin-top: -5px;
     width: 100%;
     min-height: 300px;
-    height: -moz-calc(100% - 50px);
-    height: -webkit-calc(100% - 50px);
-    height: calc(100% - 50px);
+    height: -moz-calc(100% - 52px);
+    height: -webkit-calc(100% - 52px);
+    height: calc(100% - 52px);
     margin-bottom: 0px;
 }
 
@@ -29,8 +29,9 @@
     position: relative;
     width: 90%;
     z-index: 1000;
-    margin-top: -40px;
-    margin-bottom: -40px;
+    height: 100px;
+    margin-top: 33px;
+    margin-bottom: -133px;
 }
 
 .bottom-bar{
@@ -58,8 +59,8 @@
 }
 
 .leaflet-popup-content-wrapper{
-    height: 450px;
-    /*width: 450px;*/
+    height: 350px;
+    width: 450px;
 }
 
 .Tweet {

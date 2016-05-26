@@ -28,6 +28,13 @@
     var _tweets = [];
 
     /**
+     * Array to store all tweets for GeoTemporal Search
+     * @type {Array}
+     * @private
+     */
+    var _tweetsGeo = [];
+
+    /**
      * Array to store all tweet frequencies
      * @type {Array}
      * @private
@@ -99,6 +106,7 @@
     function httpService($rootScope, $http, $q) {
         return {
             getTweetsFromServerByToken: _getTweetsFromServerByToken,
+            getTweetsFromServerByToken2: _getTweetsFromServerByToken2,
             getTweetsFromServerByGeoTime: _getTweetsFromServerByGeoTime,
             getTweetsFromServerByTweetFrequency: _getTweetsFromServerByTweetFrequency,
             getTweetsFromServerTest: _getTweetsFromServerTest,
@@ -107,6 +115,7 @@
             queueAddGetTweetFrom: _queueAddGetTweetFrom,
             removeFromQueue: _removeFromQueue,
             getTweets: _getTweets,
+            getTweetsGeo: _getTweetsGeo,
             getTweetFrequency: _getTweetFrequency,
             getSearchToken: _getSearchToken,
             setSearchToken: _setSearchToken,
@@ -162,8 +171,27 @@
             var url = getTokenSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
-                //angular.copy(data,_tweets);
                 _tweets = _.clone(data);
+                _setLoading(status);
+                deferred.resolve(status);
+            }).error(function (data, status, headers, config) {
+                //TODO: Log the errors
+                _setLoading(status);
+                deferred.resolve(status + "\n" + headers + "\n" + config);
+            });
+
+            return deferred.promise;
+        }
+
+        function _getTweetsFromServerByToken2() {
+            _setLoading(true);
+            var deferred = $q.defer();
+
+            var url = getTokenSearchUrl2();
+            $http.get(url).success(function (data, status, headers, config) {
+                //Copy result data to the private array
+                // _tweets = _.clone(data);
+                angular.copy(data,_tweets);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -183,7 +211,7 @@
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 // angular.copy(data,_tweets);
-                _tweets = _.clone(data);
+                _tweetsGeo = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -227,7 +255,7 @@
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 // angular.copy(data,_tweets);
-                _tweets = _.clone(data);
+                _tweetsGeo = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -252,7 +280,7 @@
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 // angular.copy(data,_tweets);
-                _tweets = _.clone(data);
+                _tweetsGeo = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -280,7 +308,7 @@
                         //Copy result data to the private array
 
                         // angular.copy(data.data,_tweets); //1595ms very slow
-                        _tweets = _.clone(data.data);
+                        _tweetsGeo = _.clone(data.data);
                         // _tweets = result.data;
 
                         _setLoading(status);
@@ -303,6 +331,15 @@
          */
         function _getTweets() {
             return _tweets;
+        }
+
+        /**
+         * Getter method for _tweetsGeo to access from outside
+         * @returns {Array}
+         * @private
+         */
+        function _getTweetsGeo() {
+            return _tweetsGeo;
         }
 
         /**
@@ -360,6 +397,14 @@
             //replace # with %23
             urlEncodedSearchToken = urlEncodedSearchToken.replace(/#/g, '%23');
             return "/api/tokensearch?field=" + encodeURI(buildFieldString()) + "&token=" + urlEncodedSearchToken;
+        }
+
+        function getTokenSearchUrl2()
+        {
+            var urlEncodedSearchToken = encodeURI(_searchToken);
+            //replace # with %23
+            urlEncodedSearchToken = urlEncodedSearchToken.replace(/#/g, '%23');
+            return "http://localhost:8082/api/tokensearch?field=" + encodeURI(buildFieldString()) + "&token=" + urlEncodedSearchToken;
         }
 
         /**
@@ -442,6 +487,7 @@
             } else {
                 isLoading = false;
             }
+            $rootScope.$emit('alertControl', status);
         }
     }
 })();

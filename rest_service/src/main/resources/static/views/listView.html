@@ -6,14 +6,15 @@
         <ul class="dropdown-menu dropdown-menu-form" uib-dropdown-menu role="menu" aria-labelledby="single-button">
             <li role="menuitem" ng-click="dataSource = 'accumulo'"><a>Accumulo (Default)</a></li>
             <li role="menuitem" ng-click="dataSource = 'restTest'"><a>REST Test Data (::8080 w/ delay)</a></li>
+            <li role="menuitem" ng-click="dataSource = 'localhost'"><a>localhost:8082 (w/ rungTunnel)</a></li>
             <li role="menuitem" ng-click="dataSource = 'static'"><a>Static Test Data (example.json)</a></li>
         </ul>
     </div>
-    <p>&nbsp;</p>
-
+    <br>
+    <br>
     <div class="input-group">
         <input ng-model="search.inputValue" ng-model-options="{ getterSetter: true }" type="text" class="form-control" placeholder="Search for..."
-               ng-keyup="$event.keyCode == 13 && (search.searchFields.text.checked || search.searchFields.user.checked) && search.onClick('list')">
+               ng-keyup="$event.keyCode == 13 && (search.searchFields.text.checked || search.searchFields.user.checked) && search.updateFilters('list')">
         <div class="input-group-btn">
             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false" ng-disabled="!search.searchFields.text.checked && !search.searchFields.user.checked">
@@ -21,8 +22,8 @@
                     class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li ng-click="search.onClick('list')"><a href="#">Show results as list</a></li>
-                <li ng-click="search.onClick('map')"><a href="#/map">Show results as map</a></li>
+                <li ng-click="search.updateFilters('list')"><a href="#">Show results as list</a></li>
+                <li ng-click="search.updateFilters('map')"><a href="#/map">Show results as map</a></li>
             </ul>
         </div>
 
@@ -30,12 +31,16 @@
     <label class="checkbox-inline" ng-repeat="(boxKey, boxValue) in search.searchFields">
         <input type="checkbox" id="inlineCheckbox1" ng-model="boxValue.checked" ng-checked="boxValue.checked">{{ boxKey }}
     </label>
-    <p>&nbsp;</p>
+    <br>
+    <br>
+
+    <uib-pagination ng-show="data.tweets.length > 0" class="row pagination-sm" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" boundary-link-numbers="true"></uib-pagination>
+
     <div class="panel panel-default" ng-show="data.tweets.length > 0">
         <!-- Table -->
         <table class="table table-hover">
             <caption>{{data.tweets.length}} Tweets</caption>
-            <tr ng-repeat="tweet in data.tweets">
+            <tr ng-repeat="tweet in data.tweets|limitTo:100">
                 <td>
                     <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_image_url}}">
                 </td>

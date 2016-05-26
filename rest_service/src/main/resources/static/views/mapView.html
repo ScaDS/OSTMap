@@ -12,7 +12,7 @@
 
 <!--Bootstap Containers: https://getbootstrap.com/css/-->
 <div class="mapViewContainer container-fluid">
-    <div class="row">
+    <div class="row" style="opacity: 0.9;">
         <div class="btn-group">
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="0.25">15min</label>
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="0.5">30min</label>
@@ -51,7 +51,7 @@
         </div>
         <br>
         <br>
-        <label class="" style="margin-left: 10px">Current Filters: {{currentFilters}}</label>
+        <!--<label class="" style="margin-left: 10px">Current Filters: {{currentFilters}}</label>-->
         <br>
         <br>
     </div>
@@ -74,10 +74,10 @@
         </div>
 
         <div class="col-md-2 col-xs-4">
-            <div class="panel panel-default">
+            <div class="panel panel-default" style="opacity: 0.94;">
                 <!-- Table -->
                 <table class="table table-hover tabled-striped">
-                    <caption>Top 10 Hashtags</caption>
+                    <caption>Top 10 Hashtags <br> of {{data.tweets.length}} Tweets</caption>
                     <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.setHashtagFilter(tweet.user.screen_name)">
                         <td>
                             <p>#{{tweet.user.screen_name}}</p>
