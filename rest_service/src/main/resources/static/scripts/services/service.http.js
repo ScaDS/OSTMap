@@ -184,7 +184,7 @@
                 + "?tstart=" + times[0]
                 + "&tend=" + times[1];
             $http.get(url).success(function (data, status, headers, config) {
-                _tweetFrequency = _.clone(data);
+                _tweetFrequency = _.clone(data.data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {

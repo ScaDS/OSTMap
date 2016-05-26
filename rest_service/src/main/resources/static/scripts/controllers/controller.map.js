@@ -45,6 +45,7 @@
         $scope.search.hashtagFilter = "#";
 
         $scope.data = [];
+        $scope.data = httpService.getTweetsGeo();
         $scope.data.top10 = [
             "#test1",
             "#test2",
@@ -56,8 +57,8 @@
             "#test8",
             "#test9",
             "#test10"
-        ]
-        $scope.data = httpService.getTweetsGeo();
+        ];
+        // $scope.data = httpService.getTweetsGeo();
 
         /**
          * Reset all filter values to default or null
