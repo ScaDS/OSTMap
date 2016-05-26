@@ -76,6 +76,7 @@ public class TweetFrequencyController {
     }
 
     public String getResultsFromAccumulo(String startTime, String endTime) {
+        long st = System.nanoTime();
         AccumuloService accumuloService = new AccumuloService();
         String result = null;
         try {
@@ -103,24 +104,27 @@ public class TweetFrequencyController {
             for (String language : languages) {
                 List<Integer> frequencies = new ArrayList<>();
                 Scanner languageFrequencyScanner = accumuloService.getTweetFrequencyScanner(startTime, endTime, language);
-                LocalDateTime currentZdt = LocalDateTime.parse(startTime, minuteFormatter);
-                log.debug("query for: " + languageFrequencyScanner.toString());
+                LocalDateTime currentLdt = LocalDateTime.parse(startTime, minuteFormatter);
+                //String currentTime = startTime;
+                log.debug("query for: [" + startTime + ", " + endTime + ", " + language + "]");
                 for (Map.Entry<Key, Value> kv : languageFrequencyScanner) {
+
                     // get read timestamp and data
-                    String readTs = kv.getKey().getRow().toString();
-                    LocalDateTime readZdt = LocalDateTime.parse(readTs, minuteFormatter);
+                    String readTime = kv.getKey().getRow().toString();
+                    LocalDateTime readLdt = LocalDateTime.parse(readTime, minuteFormatter);
                     Integer readFrequency = Integer.parseInt(kv.getValue().toString());
                     // fill up until read value
-                    while (currentZdt.isBefore(readZdt)) {
+                    while (currentLdt.compareTo(readLdt) < 0) {
                         frequencies.add(0);
-                        currentZdt = currentZdt.plusMinutes(1);
+                        currentLdt = currentLdt.plusMinutes(1);
                     }
                     // insert read value
                     frequencies.add(readFrequency);
+                    currentLdt = readLdt.plusMinutes(1);
                 }
-                while (currentZdt.isBefore(endLdt)) {
+                while (currentLdt.compareTo(endLdt) <= 0) {
                     frequencies.add(0);
-                    currentZdt = currentZdt.plusMinutes(1);
+                    currentLdt = currentLdt.plusMinutes(1);
                 }
                 languageFrequencyScanner.close();
                 // add the language to the map
@@ -128,7 +132,8 @@ public class TweetFrequencyController {
             }
             result = buildJsonString(tweetFrequency);
 
-
+            long et = System.nanoTime();
+            log.debug("time: " + ((et - st) / 1000000000.0f) + "s");
         } catch (IOException | AccumuloSecurityException | TableNotFoundException | AccumuloException e) {
             throw new RuntimeException("There was a failure during Accumulo communication.", e);
         }
@@ -139,7 +144,7 @@ public class TweetFrequencyController {
      * {
      * "data":	{
      * "en":[34,44,32,45],
-     * "de":[10,11,12]
+     * "de":[10,11,0,12]
      * }
      * }
      *
