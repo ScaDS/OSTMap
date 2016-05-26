@@ -90,7 +90,11 @@
         };
 
         $rootScope.$on('alertControl', function(event, message){
-            // $scope.alerts.push({msg: 'Another alert!'});
+            console.log("alertControl triggered");
+            if (message != 200) {
+                $scope.info = message;
+            }
+            $scope.setLoadingDisplay(httpService.getLoading(), message);
         });
     }
 })();

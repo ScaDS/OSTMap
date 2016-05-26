@@ -47,7 +47,7 @@
         $scope.search.searchFilter = httpService.getSearchToken();
 
         $scope.data = [];
-        $scope.data.tweets = httpService.getTweets();
+        $scope.data.tweets = httpService.getTweetsGeo();
 
         /**
          * Reset all filter values to default or null
@@ -125,8 +125,8 @@
                 }
 
                 var doUpdate = function () {
-                    $scope.$emit('updateStatus', status);
-                    $scope.data.tweets = httpService.getTweets();
+                    // $scope.$emit('updateStatus', status);
+                    $scope.data.tweets = httpService.getTweetsGeo();
                     $scope.populateMarkers();
                 };
 
