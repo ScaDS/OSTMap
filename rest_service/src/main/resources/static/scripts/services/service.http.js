@@ -28,6 +28,13 @@
     var _tweets = [];
 
     /**
+     * Array to store all tweet frequencies
+     * @type {Array}
+     * @private
+     */
+    var _tweetFrequency = [];
+
+    /**
      * The bounding box to search in
      * @param bbnorth the northern latitude for the bounding box to search, e.g. 10.123
      * @param bbwest the western longitude for the bounding box to search, e.g. 30.123
@@ -93,12 +100,14 @@
         return {
             getTweetsFromServerByToken: _getTweetsFromServerByToken,
             getTweetsFromServerByGeoTime: _getTweetsFromServerByGeoTime,
+            getTweetsFromServerByTweetFrequency: _getTweetsFromServerByTweetFrequency,
             getTweetsFromServerTest: _getTweetsFromServerTest,
             getTweetsFromServerTest2: _getTweetsFromServerTest2,
             getTweetsFromLocal: _getTweetsFromLocal,
             queueAddGetTweetFrom: _queueAddGetTweetFrom,
             removeFromQueue: _removeFromQueue,
             getTweets: _getTweets,
+            getTweetFrequency: _getTweetFrequency,
             getSearchToken: _getSearchToken,
             setSearchToken: _setSearchToken,
             getSearchFields: _getSearchFields,
@@ -109,6 +118,7 @@
             setTimeWindow: _setTimeWindow,
             getLoading: _getLoading,
             setLoading: _setLoading
+
         };
 
         function _queueAddGetTweetFrom(api, filters) {
@@ -178,6 +188,25 @@
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
+                _setLoading(status);
+                deferred.resolve(status + "\n" + headers + "\n" + config);
+            });
+
+            return deferred.promise;
+        }
+
+        function _getTweetsFromServerByTweetFrequency(times) {
+            _setLoading(true);
+            var deferred = $q.defer();
+
+            var url = "http://localhost:8082/api/tweetfrequency"
+                + "?tstart=" + times[0]
+                + "&tend=" + times[1];
+            $http.get(url).success(function (data, status, headers, config) {
+                _tweetFrequency = _.clone(data);
+                _setLoading(status);
+                deferred.resolve(status);
+            }).error(function (data, status, headers, config) {
                 _setLoading(status);
                 deferred.resolve(status + "\n" + headers + "\n" + config);
             });
@@ -274,6 +303,15 @@
          */
         function _getTweets() {
             return _tweets;
+        }
+
+        /**
+         * Getter method for _tweetFrequency to access from the outside
+         * @returns {Array}
+         * @private
+         */
+        function _getTweetFrequency() {
+            return _tweetFrequency;
         }
 
         /**
