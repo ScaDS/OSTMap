@@ -27,23 +27,23 @@
     function AnalyticsCtrl($scope, httpService) {
 
         $scope.timeFilter = 48;
-        var testseries = [];
+        // var testseries = [];
         // for (var i=0; i<46; i++){
-            testseries.push(
-                {
-                    name: 'de',
-                    // name: 'Series ' + i,
-                    color: 'steelblue',
-                    data: []
-                }
-            )
+        //     testseries.push(
+        //         {
+        //             name: 'de',
+        //             // name: 'Series ' + i,
+        //             color: 'steelblue',
+        //             data: []
+        //         }
+        //     )
         // }
 
         $scope.data = {
             "start": 0,
             "end": 0,
             "series": [{
-                name: 'co',
+                name: 'workaround series',
                 color: 'steelblue',
                 data: []
             }]
@@ -92,16 +92,31 @@
         $scope.populateMap = function () {
             var data = $scope.data.tweetFrequency.data;
             console.log("Languages: " + Object.keys(data).length)
+            var range = (($scope.data.end - $scope.data.start)/1000/60) + 1;
+
+            var points = [];
+            for (var i = 0; i < range; i++) {
+                var point = {
+                    x: i,
+                    y: 0
+                };
+                points.push(point);
+            }
+            var test = {
+                name: 'workaround series',
+                color: 'steelblue',
+                data: points
+            }
+            $scope.data.series.push(test);
+
             for (var lang in data) {
                 if ($scope.data.tweetFrequency.data.hasOwnProperty(lang)) {
-                    var start = $scope.data.start;
-                    var end = $scope.data.end;
 
-                    var range = ((end - start)/1000/60) + 1;
                     // console.log("Range calculated and received: " + lang + "[" + range + "] " + lang + "[" + data[lang].length + "]");
 
                     var points = [];
-                    for (var i = 0; i < range; i++) {
+                    // for (var i = 0; i < range; i++) {
+                    for (var i = 0; i < data[lang].length; i++) {
                         var point = {
                             // x: start + i,
                             x: i,
