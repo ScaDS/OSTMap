@@ -272,7 +272,7 @@
                 /**
                  * Scroll document to the map element
                  */
-                // document.getElementById("geoTemporal").scrollIntoView();
+                // document.getElementById("geoTemporalMap").scrollIntoView();
                 document.getElementById("navbar").scrollIntoView();
 
                 /**
@@ -391,7 +391,7 @@
          * Adds PruneCluster
          */
         $scope.onStart = function () {
-            leafletData.getMap("geoTemporal").then(function(map) {
+            leafletData.getMap("geoTemporalMap").then(function(map) {
                 $scope.pruneCluster = new PruneClusterForLeaflet();
                 map.addLayer($scope.pruneCluster);
 

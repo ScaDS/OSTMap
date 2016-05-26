@@ -3,17 +3,30 @@
     padding-right: 15px !important;
     margin-top: -15px !important;
 }
+
+.listViewContainer{
+    padding-left: 2% !important;
+    padding-right: 2% !important;
+}
+
 .twitter-profile-pic-list{
     width: 50px;
     height: 50px;
 }
 
-.map{
-    height: 520px;
+.tokenMap{
+    z-index: 0;
+    position: absolute;
+    margin-top: -5px;
     width: 100%;
+    min-height: 300px;
+    height: -moz-calc(100% - 52px);
+    height: -webkit-calc(100% - 52px);
+    height: calc(100% - 52px);
+    margin-bottom: 0px;
 }
 
-.geoTemporal{
+.geoTemporalMap{
     z-index: 0;
     position: absolute;
     margin-top: -5px;

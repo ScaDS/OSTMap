@@ -28,7 +28,9 @@
      * @param httpService
      * @constructor
      */
-    function ListCtrl($scope,$location,httpService) {
+    function ListCtrl($scope, $location, httpService) {
+        mapInit($scope);
+        
         $scope.search = [];
         $scope.data = [];
 
@@ -94,5 +96,149 @@
         $scope.maxSize = 5;
         $scope.bigTotalItems = 175;
         $scope.bigCurrentPage = 1;
+    }
+    
+    /**
+     * Map Logic
+     * angular-ui / ui-leaflet
+     * https://github.com/angular-ui/ui-leaflet
+     *
+     * @param $scope
+     */
+    function mapInit($scope) {
+        /**
+         * default coordinates for ui-leaflet map
+         * @type {{lat: number, lng: number, zoom: number}}
+         */
+        $scope.center ={
+            lat: 50,
+            lng: 12,
+            zoom: 4
+        };
+        $scope.regions = {
+            europe: {
+                northEast: {
+                    lat: 70,
+                    lng: 40
+                },
+                southWest: {
+                    lat: 35,
+                    lng: -25
+                }
+            }
+        };
+        $scope.maxBounds = {
+            northEast: {
+                lat: 90,
+                lng: 180
+            },
+            southWest: {
+                lat: -90,
+                lng: -180
+            }
+        };
+        $scope.bounds = null;
+
+        /**
+         * Marker icon definition
+         * @type {{blue: {type: string, iconSize: number[], className: string, iconAnchor: number[]}, red: {type: string, iconSize: number[], className: string, iconAnchor: number[]}}}
+         */
+        $scope.icons = {
+            blue: {
+                type: 'div',
+                iconSize: [11, 11],
+                className: 'blue',
+                iconAnchor:  [6, 6]
+            },
+            red: {
+                type: 'div',
+                iconSize: [11, 11],
+                className: 'red',
+                iconAnchor:  [6, 6],
+            },
+            smallerDefault: {
+                iconUrl: 'bower_components/leaflet/dist/images/marker-icon.png',
+                // shadowUrl: 'bower_components/leaflet/dist/images/marker-shadow.png',
+                iconSize:     [12, 20], // size of the icon
+                // shadowSize:   [25, 41], // size of the shadow
+                iconAnchor:   [6, 20], // point of the icon which will correspond to marker's location
+                // shadowAnchor: [4, 62],  // the same for the shadow
+                popupAnchor:  [0, -18] // point from which the popup should open relative to the iconAnchor
+            }
+        };
+
+        /**
+         * Test markers
+         * @type {*[]}
+         */
+        $scope.markers = {};
+        /**
+         * Variable used to track the selected marker
+         * @type {number}
+         */
+        $scope.currentMarkerID = 0;
+
+        $scope.events = {
+            map: {
+                enable: ['moveend', 'popupopen'],
+                logic: 'emit'
+            },
+            marker: {
+                enable: [],
+                logic: 'emit'
+            }
+        };
+
+        $scope.layers = {
+            baselayers: {
+                osm: {
+                    name: "OpenStreetMap",
+                    type: "xyz",
+                    url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                },
+                gray: {
+                    name: "OpenStreetMap-Gray",
+                    type: "xyz",
+                    url: "http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                }
+            },
+            overlays: {
+                cluster: {
+                    name: "Clustered Markers",
+                    type: "markercluster",
+                    visible: true,
+                    layerOptions: {
+                        "chunkedLoading": true,
+                        "showCoverageOnHover": false,
+                        "removeOutsideVisibleBounds": true,
+                        "chunkProgress": updateProgressBar
+                    }
+                },
+                dots: {
+                    name: "Red Dots",
+                    type: "group",
+                    visible: true,
+                    layerOptions: {
+                        "chunkedLoading": true,
+                        "showCoverageOnHover": false,
+                        "removeOutsideVisibleBounds": true,
+                        "chunkProgress": updateProgressBar
+                    }
+                }
+            }
+        };
+
+        $scope.markersWatchOptions = {
+            doWatch: false,
+            isDeep: false,
+            individual: {
+                doWatch: false,
+                isDeep: false
+            }
+        };
+
+        function updateProgressBar(processed, total, elapsed, layersArray) {
+            console.log("Chunk loading: " + processed + "/" + total + " " + elapsed + "ms")
+        }
     }
 })();

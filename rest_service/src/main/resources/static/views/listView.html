@@ -1,57 +1,72 @@
-<div class="container">
-    <div class="btn-group" uib-dropdown is-open="status.isopen">
-        <button id="single-button" type="button" class="btn btn-danger btn-sm" uib-dropdown-toggle ng-disabled="disabled">
-            Data Source: {{dataSource}} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-form" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-            <li role="menuitem" ng-click="dataSource = 'accumulo'"><a>Accumulo (Default)</a></li>
-            <li role="menuitem" ng-click="dataSource = 'restTest'"><a>REST Test Data (::8080 w/ delay)</a></li>
-            <li role="menuitem" ng-click="dataSource = 'localhost'"><a>localhost:8082 (w/ rungTunnel)</a></li>
-            <li role="menuitem" ng-click="dataSource = 'static'"><a>Static Test Data (example.json)</a></li>
-        </ul>
-    </div>
-    <br>
-    <br>
-    <div class="input-group">
-        <input ng-model="search.inputValue" ng-model-options="{ getterSetter: true }" type="text" class="form-control" placeholder="Search for..."
-               ng-keyup="$event.keyCode == 13 && (search.searchFields.text.checked || search.searchFields.user.checked) && search.updateFilters('list')">
-        <div class="input-group-btn">
-            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" ng-disabled="!search.searchFields.text.checked && !search.searchFields.user.checked">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;Search&nbsp;<span
-                    class="caret"></span>
+<div class="listViewContainer container-fluid">
+    <div class="col-md-6 col-xs-6">
+        <div class="btn-group" uib-dropdown is-open="status.isopen">
+            <button id="single-button" type="button" class="btn btn-danger btn-sm" uib-dropdown-toggle ng-disabled="disabled">
+                Data Source: {{dataSource}} <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu">
-                <li ng-click="search.updateFilters('list')"><a href="#">Show results as list</a></li>
-                <li ng-click="search.updateFilters('map')"><a href="#/map">Show results as map</a></li>
+            <ul class="dropdown-menu dropdown-menu-form" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                <li role="menuitem" ng-click="dataSource = 'accumulo'"><a>Accumulo (Default)</a></li>
+                <li role="menuitem" ng-click="dataSource = 'localhost'"><a>localhost:8082 (w/ rungTunnel)</a></li>
+                <li role="menuitem" ng-click="dataSource = 'static'"><a>Static Test Data (example.json)</a></li>
             </ul>
         </div>
+        <br>
+        <br>
+        <div class="input-group">
+            <input ng-model="search.inputValue" ng-model-options="{ getterSetter: true }" type="text" class="form-control" placeholder="Search for..."
+                   ng-keyup="$event.keyCode == 13 && (search.searchFields.text.checked || search.searchFields.user.checked) && search.updateFilters('list')">
+            <div class="input-group-btn">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false" ng-disabled="!search.searchFields.text.checked && !search.searchFields.user.checked">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;Search&nbsp;<span
+                        class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li ng-click="search.updateFilters('list')"><a href="#">Show results as list</a></li>
+                    <li ng-click="search.updateFilters('map')"><a href="#/map">Show results as map</a></li>
+                </ul>
+            </div>
 
-    </div><!-- /input-group -->
-    <label class="checkbox-inline" ng-repeat="(boxKey, boxValue) in search.searchFields">
-        <input type="checkbox" id="inlineCheckbox1" ng-model="boxValue.checked" ng-checked="boxValue.checked">{{ boxKey }}
-    </label>
-    <br>
-    <br>
+        </div><!-- /input-group -->
+        <label class="checkbox-inline" ng-repeat="(boxKey, boxValue) in search.searchFields">
+            <input type="checkbox" id="inlineCheckbox1" ng-model="boxValue.checked" ng-checked="boxValue.checked">{{ boxKey }}
+        </label>
+        <br>
+        <br>
 
-    <uib-pagination ng-show="data.tweets.length > 0" class="row pagination-sm" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" boundary-link-numbers="true"></uib-pagination>
+        <uib-pagination ng-show="data.tweets.length > 0" class="row pagination-sm" total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" boundary-link-numbers="true"></uib-pagination>
 
-    <div class="panel panel-default" ng-show="data.tweets.length > 0">
-        <!-- Table -->
-        <table class="table table-hover">
-            <caption>{{data.tweets.length}} Tweets</caption>
-            <tr ng-repeat="tweet in data.tweets|limitTo:100">
-                <td>
-                    <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_image_url}}">
-                </td>
-                <td>
-                    <p>{{tweet.user.name}}</p>
-                </td>
-                <td>
-                    <p style="word-wrap:break-word;">{{tweet.text}}</p>
-                </td>
-            </tr>
-        </table>
+        <div class="panel panel-default" ng-show="data.tweets.length > 0">
+            <!-- Table -->
+            <table class="table table-hover">
+                <caption>{{data.tweets.length}} Tweets</caption>
+                <tr ng-repeat="tweet in data.tweets|limitTo:100">
+                    <td>
+                        <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_image_url}}">
+                    </td>
+                    <td>
+                        <p>{{tweet.user.name}}</p>
+                    </td>
+                    <td>
+                        <p style="word-wrap:break-word;">{{tweet.text}}</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6 col-xs-6">
+        <leaflet
+                id="tokenMap"
+                class="tokenMap"
+                lf-center="center"
+                bounds="bounds"
+                maxbounds="maxBounds"
+                markers="markers"
+
+                layers="layers"
+                event-broadcast="events">
+            <!--markers-watch-options="markersWatchOptions"-->
+        </leaflet>
     </div>
 </div>
 
