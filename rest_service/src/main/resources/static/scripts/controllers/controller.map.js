@@ -43,8 +43,6 @@
         $scope.timeFilter = 0.25;
         $scope.search = [];
         $scope.search.hashtagFilter = "#";
-        // $scope.search.searchFilter = "Default Search Filter";
-        $scope.search.searchFilter = httpService.getSearchToken();
 
         $scope.data = [];
         $scope.data.top10 = [
@@ -65,9 +63,6 @@
          * Reset all filter values to default or null
          */
         $scope.search.clearFilters = function () {
-            // $scope.search.searchFilter = null;
-            $scope.search.searchFilter = "DefaultSearchFilter";
-            // $scope.timeFilter = null;
             $scope.timeFilter = "0.25";
             $scope.search.hashtagFilter = "#";
             $scope.center ={
@@ -87,7 +82,6 @@
          */
         $scope.search.setHashtagFilter = function (hashtag) {
             $scope.search.hashtagFilter = "#" + hashtag;
-            $scope.search.searchFilter = hashtag;
             $scope.search.updateFilters();
         };
 
@@ -101,37 +95,25 @@
                 /**
                  * Pass the filters to the httpService
                  */
-                httpService.setSearchToken($scope.search.searchFilter);
                 httpService.setTimeWindow(parseTimeFilter());
                 httpService.setBoundingBox($scope.getBounds());
+                
                 /**
                  * get the tweets from the REST interface
                  */
-                httpService.queueAddGetTweetFrom($scope.dataSource, $scope.search);
-
                 if ($scope.dataSource == "accumulo") {
                     //Get by GeoTime
                     httpService.getTweetsFromServerByGeoTime().then(function (status) {
                         doUpdate();
                     });
-                } else if ($scope.dataSource == "restTest") {
-                    //Get using test REST API
-                    httpService.getTweetsFromServerTest().then(function (status) {
-                        doUpdate();
-                    });
                 } else if ($scope.dataSource == "localhost") {
                     //Get using test REST API
-                    httpService.getTweetsFromServerTest2().then(function (status) {
+                    httpService.getTweetsFromServerTest().then(function (status) {
                         doUpdate();
                     });
                 } else if ($scope.dataSource == "static") {
                     //Get from local (debug)
                     httpService.getTweetsFromLocal().then(function (status) {
-                        doUpdate();
-                    });
-                } else {
-                    //Get by Token
-                    httpService.getTweetsFromServerByToken().then(function (status) {
                         doUpdate();
                     });
                 }
@@ -148,8 +130,7 @@
                  *
                  * @type {string}
                  */
-                $scope.currentFilters = $scope.search.searchFilter + " | " +
-                    $scope.search.hashtagFilter + " | " +
+                $scope.currentFilters = $scope.search.hashtagFilter + " | " +
                     $scope.timeFilter + "h | " +
                     "[" + httpService.getBoundingBox().bbnorth.toFixed(2) +
                     ", " + httpService.getBoundingBox().bbwest.toFixed(2) +
@@ -465,22 +446,6 @@
         //     },
         //     true
         // );
-
-        /**
-         * Pagination
-         * https://angular-ui.github.io/bootstrap/#/pagination
-         */
-        $scope.totalItems = 64;
-        $scope.currentPage = 4;
-        $scope.setPage = function (pageNo) {
-            $scope.currentPage = pageNo;
-        };
-        $scope.pageChanged = function() {
-            $log.log('Page changed to: ' + $scope.currentPage);
-        };
-        $scope.maxSize = 5;
-        $scope.bigTotalItems = 175;
-        $scope.bigCurrentPage = 1;
     }
 
     /**

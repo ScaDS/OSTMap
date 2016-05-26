@@ -34,7 +34,6 @@
      * @constructor
      */
     function MainCtrl($rootScope, $scope, $interval, httpService) {
-        
         $scope.app = [];
         $scope.app.name = "OSTMap";
 
@@ -44,25 +43,11 @@
         $scope.info = "";
         var timestamp = 0;
 
-        $scope.alerts = [
-            // { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
-            // { type: 'success', msg: 'Well done! You successfully read this important alert message.' }
-        ];
-
-        $scope.addAlert = function() {
-            $scope.alerts.push({msg: 'Another alert!'});
-        };
-
-        $scope.closeAlert = function(index) {
-            $scope.alerts.splice(index, 1);
-        };
-
         $scope.ignoreLoading = function () {
             httpService.setLoading(false);
             $scope.$emit('updateStatus', status);
             // document.getElementById("loading").style.visibility = "hidden";
         }
-
         $scope.$on('updateStatus', function(event, message){
             if (message != 200) {
                 $scope.info = message;

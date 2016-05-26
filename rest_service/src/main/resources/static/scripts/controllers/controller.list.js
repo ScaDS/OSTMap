@@ -58,8 +58,6 @@
                     httpService.getTweetsFromServerByToken()
                 } else if ($scope.dataSource == "localhost") {
                     httpService.getTweetsFromServerByToken2()
-                } else if ($scope.dataSource == "restTest") {
-                    httpService.getTweetsFromServerTest()
                 } else if ($scope.dataSource == "static") {
                     httpService.getTweetsFromLocal()
                 }
@@ -80,5 +78,21 @@
                 updateQueued = false;
             }
         });
+
+        /**
+         * Pagination
+         * https://angular-ui.github.io/bootstrap/#/pagination
+         */
+        $scope.totalItems = 64;
+        $scope.currentPage = 4;
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
+        };
+        $scope.pageChanged = function() {
+            $log.log('Page changed to: ' + $scope.currentPage);
+        };
+        $scope.maxSize = 5;
+        $scope.bigTotalItems = 175;
+        $scope.bigCurrentPage = 1;
     }
 })();
