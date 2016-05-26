@@ -1,5 +1,5 @@
 <br>
-<uib-tabset active="active">
+<uib-tabset class="container" active="active">
     <uib-tab index="0" heading="Sliding Histogram">
         <br>
         <div class="btn-group ">
@@ -21,38 +21,53 @@
         <label class="">Current Filters: {{timeFilter}}h</label>
 
         <br><br>
-
-        <code>
-            DEBUG
-            <br>
-            <br>
-            data.tweetFrequency: {{data.tweetFrequency}}
-        </code>
-
-        <br>    <br>
-
-
-
-        <!--<div id="chart"></div>-->
         <rickshaw
                 rickshaw-options="options"
                 rickshaw-features="features"
                 rickshaw-series="data.series">
         </rickshaw>
 
-        <br><br>
-        <code>Data: {{data.series[0]}}</code>
-        <br><br>
-        <code>Data: {{data.series[1]}}</code>
+        <div id="chart"></div>
+        <code>
+            DEBUG
+            <br>
+            <!--data.tweetFrequency: {{data.tweetFrequency}}-->
+        </code>
     </uib-tab>
 
 
     <uib-tab index="1" heading="Scoreboard: Area">
-        Static content
+        <br>
+        <div class="col-xs-6 col-md-4">
+            <div class="panel panel-default">
+                <!-- Table -->
+                <table class="table table-hover tabled-striped">
+                    <caption>Top 10 Users: Area Covered</caption>
+                    <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.setHashtagFilter(tweet.user.screen_name)">
+                        <td>
+                            <p>#{{tweet.user.screen_name}}</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </uib-tab>
 
 
     <uib-tab index="2" heading="Scoreboard: Distance">
-        Static content
+        <br>
+        <div class="col-xs-6 col-md-4">
+            <div class="panel panel-default">
+                <!-- Table -->
+                <table class="table table-hover tabled-striped">
+                    <caption>Top 10 Users: Distance Covered</caption>
+                    <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.setHashtagFilter(tweet.user.screen_name)">
+                        <td>
+                            <p>#{{tweet.user.screen_name}}</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </uib-tab>
 </uib-tabset>

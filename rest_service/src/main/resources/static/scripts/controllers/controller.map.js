@@ -182,17 +182,21 @@
              */
             $scope.data.tweets.forEach( function(tweet) {
                 // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
-                if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
-                    console.log("JSON Error");
-                    return;
-                }
+                // if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){
+                //     console.log("JSON Error");
+                //     return;
+                // }
 
                 if($scope.markers[tweet.id_str] == undefined && tweet.coordinates != null) {
                     /**
                      * Create new marker then add to marker array
                      * @type {{id_str: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
-                    var tweetMessage = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>'
+                    var tweetMessage = "Missing  tweet.user.screen_name and/or tweet.id_str";
+                    // tweetMessage = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + 'statuses%2F' + tweet.id_str + '"></iframe>'
+                    if(tweet.hasOwnProperty('user.screen_name' && tweet.hasOwnProperty('id_str'))){
+                        tweetMessage = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>'
+                    }
 
                     var newMarker = {
                         id_str: tweet.id_str,
@@ -275,7 +279,7 @@
                 /**
                  * Scroll document to the map element
                  */
-                // document.getElementById("map").scrollIntoView();
+                // document.getElementById("geoTemporal").scrollIntoView();
                 document.getElementById("navbar").scrollIntoView();
 
                 /**
@@ -394,7 +398,7 @@
          * Adds PruneCluster
          */
         $scope.onStart = function () {
-            leafletData.getMap("map").then(function(map) {
+            leafletData.getMap("geoTemporal").then(function(map) {
                 $scope.pruneCluster = new PruneClusterForLeaflet();
                 map.addLayer($scope.pruneCluster);
 
@@ -433,7 +437,7 @@
                 $scope.center ={
                     lat: 50,
                     lng: 12,
-                    zoom: 3
+                    zoom: 5
                 };
             });
         };
@@ -560,15 +564,15 @@
 
         $scope.layers = {
             baselayers: {
-                gray: {
-                    name: "OpenStreetMap-Gray",
-                    type: "xyz",
-                    url: "http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
-                },
                 osm: {
                     name: "OpenStreetMap",
                     type: "xyz",
                     url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                },
+                gray: {
+                    name: "OpenStreetMap-Gray",
+                    type: "xyz",
+                    url: "http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
                 }
             },
             overlays: {
