@@ -78,9 +78,9 @@
                 <!-- Table -->
                 <table class="table table-hover tabled-striped">
                     <caption>Top 10 Hashtags <br> of {{data.tweets.length}} Tweets</caption>
-                    <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.setHashtagFilter(tweet.user.screen_name)">
+                    <tr ng-repeat="hashtag in data.top10|limitTo:10" ng-click="search.setHashtagFilter(hashtag)">
                         <td>
-                            <p>#{{tweet.user.screen_name}}</p>
+                            <p>#{{hashtag}}</p>
                         </td>
                     </tr>
                 </table>

@@ -47,7 +47,19 @@
         $scope.search.searchFilter = httpService.getSearchToken();
 
         $scope.data = [];
-        $scope.data.tweets = httpService.getTweetsGeo();
+        $scope.data.top10 = [
+            "test1",
+            "test2",
+            "test3",
+            "test4",
+            "test5",
+            "test6",
+            "test7",
+            "test8",
+            "test9",
+            "test10"
+        ]
+        // $scope.data.tweets = httpService.getTweetsGeo();
 
         /**
          * Reset all filter values to default or null
@@ -126,7 +138,7 @@
 
                 var doUpdate = function () {
                     // $scope.$emit('updateStatus', status);
-                    $scope.data.tweets = httpService.getTweetsGeo();
+                    $scope.data = httpService.getTweetsGeo();
                     $scope.populateMarkers();
                 };
 
@@ -302,7 +314,7 @@
                         // $scope.pruneMarkers[index].openPopup();
                         console.log($scope.pruneCluster.GetMarkers()[index]);
                         $scope.pruneCluster.GetMarkers()[index].bindPopup("test");
-                        
+
                         $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
                             leafletMarker.setIcon(L.divIcon($scope.icons.red)); // See http://leafletjs.com/reference.html#icon
                             //listeners can be applied to markers in this function

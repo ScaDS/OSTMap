@@ -280,7 +280,7 @@
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
                 // angular.copy(data,_tweets);
-                _tweetsGeo = _.clone(data);
+                _tweetsGeo.tweets = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
