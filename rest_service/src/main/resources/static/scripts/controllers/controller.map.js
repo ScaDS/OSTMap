@@ -187,9 +187,9 @@
                      * @type {{id_str: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
                     var tweetMessage = "Missing  tweet.user.screen_name and/or tweet.id_str";
-                    // tweetMessage = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + 'statuses%2F' + tweet.id_str + '"></iframe>'
-                    if(tweet.hasOwnProperty('user.screen_name' && tweet.hasOwnProperty('id_str'))){
-                        tweetMessage = '<iframe class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>'
+
+                    if(tweet.user.hasOwnProperty('screen_name') && tweet.hasOwnProperty('id_str')){
+                        tweetMessage = '<iframe id="tweet_' + tweet.id_str + '" class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>';
                     }
 
                     var newMarker = {
