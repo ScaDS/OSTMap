@@ -26,7 +26,7 @@
      * @constructor
      */
     function AnalyticsCtrl($scope, httpService, $interval) {
-        $scope.autoUpdateEnabled = true;
+        $scope.autoUpdateEnabled = false;
         $scope.timeFilter = 60;
         // var testseries = [];
         // for (var i=0; i<46; i++){
@@ -84,7 +84,7 @@
         var updateQueued = false;
         $scope.updateFilters = function () {
             if (!httpService.getLoading()) {
-                console.log("Filters updated: " + $scope.timeFilter + "h");
+                console.log("Filters updated: " + $scope.timeFilter/60 + "h");
                 httpService.setLoading(true);
                 /**
                  * get the tweets from the REST interface
@@ -156,28 +156,31 @@
              */
             for (var langIndex = 0; langIndex < $scope.data.series.length; langIndex++) {   //iterate all series
                 var lang = $scope.data.series[langIndex].name;                              //get series language
-                var data = $scope.data.raw[lang];                                           //set data source
+                var target = $scope.data.series[langIndex].data;
 
                 if ($scope.data.raw.hasOwnProperty(lang)) {                                     //check if the new data has the selected language
+                    var source = $scope.data.raw[lang];
+
                     for (var time = $scope.data.start; time <= $scope.data.end; time++) {       //iterate through entire time range, start to end
-                        if (typeof($scope.data.series[langIndex].data[time]) == "undefined") {  //check if point is defined
-                            if (time < $scope.data.startUnixMinutes) {                          //check if undefined point is before new data range
+                        if (target.filter(function(time){return time.x == time}) == "") {  //check if point is missing
+                            if (time < $scope.data.startUnixMinutes) {                          //check if undefined point is before new data range i.e. fill gaps in the data
                                 //fill with zeros
                                 $scope.data.series[langIndex].data.push({
                                     x: time,
                                     y: 0
                                 });
                             } else {
+                                //fill with new data
                                 $scope.data.series[langIndex].data.push({
                                     x: time,
-                                    y: data[time - $scope.data.startUnixMinutes]
+                                    y: source[time - $scope.data.startUnixMinutes]
                                 });
                             }
                         }
                     }
                 } else {
                     for (var time = $scope.data.start; time <= $scope.data.end; time++) {       //iterate through entire time range, start to end
-                        if (typeof($scope.data.series[langIndex].data[time]) == "undefined") {  //check if point is defined
+                        if (target.filter(function(time){return time.x == time}) == "") {  //check if point is missing
                             //fill with zeros
                             $scope.data.series[langIndex].data.push({
                                 x: time,
@@ -187,7 +190,6 @@
                     }
                 }
             }
-            $scope.data.oldSize += $scope.data.range;
         };
 
 
