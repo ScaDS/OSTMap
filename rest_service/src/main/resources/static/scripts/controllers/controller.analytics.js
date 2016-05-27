@@ -26,7 +26,7 @@
      * @constructor
      */
     function AnalyticsCtrl($scope, httpService, $interval) {
-        $scope.autoUpdateEnabled = false;
+        $scope.autoUpdateEnabled = true;
         $scope.timeFilter = 60;
         // var testseries = [];
         // for (var i=0; i<46; i++){
@@ -77,14 +77,18 @@
          */
         var palette = new Rickshaw.Color.Palette( { scheme: 'spectrum2000' } );
 
-
+        
         /**
          * Update filters
          */
         var updateQueued = false;
         $scope.updateFilters = function () {
             if (!httpService.getLoading()) {
+                var temp = $scope.autoUpdateEnabled;
+                $scope.autoUpdateEnabled = false;       //temporarily disable autoUpdate
+
                 console.log("Filters updated: " + $scope.timeFilter/60 + "h");
+                clearLocalData();
                 httpService.setLoading(true);
                 /**
                  * get the tweets from the REST interface
@@ -92,7 +96,10 @@
                 httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter($scope.timeFilter)).then(function (status) {
                     $scope.$emit('updateStatus', status);
                     $scope.data.raw = httpService.getTweetFrequency();
-                    $scope.populateChart();
+                    $scope.populateChart()
+
+                    $scope.autoUpdateEnabled = temp;
+                    $scope.autoUpdate();
                 });
 
                 $scope.$emit('updateStatus', "Loading Tweet Frequency: " + $scope.timeFilter + "min");
@@ -109,13 +116,10 @@
         });
 
         function clearLocalData() {
-            $scope.data.series = [];
-            $scope.data.series = [{
-                name: 'default',
-                color: 'steelblue',
-                data: []
-            }];
-            $scope.data.xSize = 0;
+            for (var langIndex = 0; langIndex < $scope.data.series.length; langIndex++) {
+                $scope.data.series[langIndex].data.splice(0,$scope.data.oldSize);
+            }
+            $scope.data.oldSize = 0;
         }
 
         $scope.populateChart = function () {
@@ -123,12 +127,12 @@
             console.log("Old data size: " + $scope.data.oldSize);
             console.log("Amount of new data: " + $scope.data.range);
 
-            if($scope.data.start == 0){
-                $scope.data.start = $scope.data.startUnixMinutes;
-                $scope.data.end = $scope.data.endUnixMinutes;
-            } else {
-                clearLocalData();
-            }
+            // if($scope.data.start == 0){
+            //     $scope.data.start = $scope.data.startUnixMinutes;
+            //     $scope.data.end = $scope.data.endUnixMinutes;
+            // } else {
+            //     clearLocalData();
+            // }
 
             // console.log("start: " + $scope.data.start);
             // console.log("end: " + $scope.data.end);
@@ -175,10 +179,21 @@
                         });
                     }
                 }
-
-                console.log(lang + ":" + Object.keys($scope.data.series[langIndex].data).length);
+                // console.log(lang + ":" + Object.keys($scope.data.series[langIndex].data).length);
             }
             $scope.data.oldSize += $scope.data.range;
+
+            //Why? Don't ask me why. It just works.
+            for (var langIndex = 0; langIndex < $scope.data.series.length; langIndex++) {
+                var name = $scope.data.series[langIndex].name;
+                var color = $scope.data.series[langIndex].color;
+                var data = $scope.data.series[langIndex].data;
+                $scope.data.series[langIndex] = {
+                    name: name,
+                    color: color,
+                    data: data
+                };
+            }
         };
 
 
