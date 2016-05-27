@@ -98,6 +98,8 @@
                     $scope.data.raw = httpService.getTweetFrequency();
                     $scope.populateChart();
                 });
+
+                $scope.$emit('updateStatus', "Loading Tweet Frequency: " + $scope.timeFilter + "min");
             } else {
                 updateQueued = true;
             }

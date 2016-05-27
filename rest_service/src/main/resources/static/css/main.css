@@ -5,8 +5,12 @@
 }
 
 .listViewContainer{
+    position: absolute;
     padding-left: 2% !important;
     padding-right: 2% !important;
+    height: -moz-calc(100% - 72px);
+    height: -webkit-calc(100% - 72px);
+    height: calc(100% - 72px);
 }
 
 .analyticsViewContainer{
@@ -21,13 +25,13 @@
 
 .tokenMap{
     z-index: 0;
-    position: absolute;
-    margin-top: -5px;
+    position: fixed;
+    margin-top: 0px;
     width: 100%;
     min-height: 300px;
-    height: -moz-calc(100% - 52px);
-    height: -webkit-calc(100% - 52px);
-    height: calc(100% - 52px);
+    height: -moz-calc(100% - 92px);
+    height: -webkit-calc(100% - 92px);
+    height: calc(100% - 92px);
     margin-bottom: 0px;
 }
 
