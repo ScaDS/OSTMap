@@ -208,7 +208,7 @@
                 + "&topten=true";
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
-                _tweetsGeo.tweets = _.clone(data);
+                _tweetsGeo.tweets = _.clone(data.tweets);
                 _tweetsGeo.top10 = _.clone(data.topten);
                 _setLoading(status);
                 deferred.resolve(status);

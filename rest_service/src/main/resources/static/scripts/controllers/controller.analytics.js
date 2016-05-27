@@ -233,7 +233,7 @@
                 if ($scope.autoUpdateEnabled) {
                     $scope.autoUpdate();
                 }
-            } else {
+            } else if ($scope.autoUpdateEnabled) {
                 httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter($scope.timeFilter)).then(function (status) {
                     $scope.$emit('updateStatus', status);
                     $scope.data.raw = httpService.getTweetFrequency();
