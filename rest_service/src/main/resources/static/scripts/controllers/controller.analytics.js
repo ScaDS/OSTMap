@@ -43,6 +43,8 @@
         $scope.data = {
             "start": 0,
             "end": 0,
+            "range": 0,
+            "oldSize": 0,
             "series": [{
                 name: 'default',
                 color: 'steelblue',
@@ -82,12 +84,6 @@
         var updateQueued = false;
         $scope.updateFilters = function () {
             if (!httpService.getLoading()) {
-                $scope.data.series = [{
-                    name: 'default',
-                    color: palette.color(),
-                    data: []
-                }];
-
                 console.log("Filters updated: " + $scope.timeFilter + "h");
                 httpService.setLoading(true);
                 /**
@@ -112,58 +108,86 @@
             }
         });
 
+        function clearLocalData() {
+            $scope.data.series = [{
+                name: 'default',
+                color: 'steelblue',
+                data: []
+            }];
+            $scope.data.xSize = 0;
+        }
+
         $scope.populateChart = function () {
-            var langIndex = 0;
             console.log("Languages: " + Object.keys($scope.data.raw).length);
 
-            var start = $scope.data.start/1000/60;
-            var end = $scope.data.end/1000/60;
-            var range = end - start + 1;
-            // if (data.hasOwnProperty("en")) {
-            //     console.log("has data")
-            //     range = data.en.length;
-            // }
+            if($scope.data.start == 0){
+                $scope.data.start = $scope.data.startUnixMinutes;
+                $scope.data.end = $scope.data.endUnixMinutes;
+            } else if ($scope.data.endUnixMinutes > $scope.data.end) {
+                $scope.data.end = $scope.data.endUnixMinutes;
+            } else if ($scope.data.startUnixMinutes < $scope.data.start) {
+                clearLocalData();
+            }
+
+            // console.log("start: " + $scope.data.start);
+            // console.log("end: " + $scope.data.end);
+            // console.log("range: " + $scope.data.range);
 
             /**
-             * Iterate over all languages, fill series
+             * Create a new empty series if the lang does not exist
              */
             for (var lang in $scope.data.raw) {
-                if ($scope.data.raw.hasOwnProperty(lang)) {
-                    // console.log("Range calculated and received: " + lang + "[" + range + "] " + lang + "[" + data[lang].length + "]");
-                    // if ($scope.data.series[langIndex].hasOwnProperty(lang)) {
-                    //     // $scope.data.series[langIndex]
-                    // }
-                    if ($scope.data.series[langIndex] == undefined) {
-                        $scope.data.series[langIndex] = (
-                            {
-                                name: lang,
-                                color: palette.color(),
-                                data: []
-                            }
-                        );
-                    } else {
-                        console.log("lang " + langIndex + " " + $scope.data.series[langIndex].name + " == " + lang)
-                    }
-
-                    var points = [];
-                    // for (var i = 0; i < range; i++) {
-                    for (var i = 0; i < range; i++) {
-                        var point = {
-                            x: i + start,
-                            y: $scope.data.raw[lang][i]
+                if($scope.data.range != Object.keys($scope.data.raw[lang]).length){
+                    console.log("Array length mismatch!!!")
+                } else {
+                    if($scope.data.series.filter(function(object){return object.name == lang;}).length == 0){
+                        var newSeries = {
+                            name: lang,
+                            color: palette.color(),
+                            data: []
                         };
-                        // points.push(point);
-                        $scope.data.series[langIndex].data.push(point);
+                        $scope.data.series.push(newSeries);
                     }
-
-                    // console.log(series);
-                    // $scope.data.series.push(series);
-
-                    // console.log(langIndex + ". points: " + Object.keys($scope.data.series[langIndex].data).length)
-
-                    langIndex++;
                 }
             }
+            /**
+             * Fill existing series (all should exist at this point) to match the number of points
+             * If no data for the specific series is available, fill with zeros
+             */
+            for (var langIndex = 0; langIndex < $scope.data.series.length; langIndex++) {   //iterate all series
+                var lang = $scope.data.series[langIndex].name;                              //get series language
+                var data = $scope.data.raw[lang];                                           //set data source
+
+                if ($scope.data.raw.hasOwnProperty(lang)) {                                     //check if the new data has the selected language
+                    for (var time = $scope.data.start; time <= $scope.data.end; time++) {       //iterate through entire time range, start to end
+                        if (typeof($scope.data.series[langIndex].data[time]) == "undefined") {  //check if point is defined
+                            if (time < $scope.data.startUnixMinutes) {                          //check if undefined point is before new data range
+                                //fill with zeros
+                                $scope.data.series[langIndex].data.push({
+                                    x: time,
+                                    y: 0
+                                });
+                            } else {
+                                $scope.data.series[langIndex].data.push({
+                                    x: time,
+                                    y: data[time - $scope.data.startUnixMinutes]
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    for (var time = $scope.data.start; time <= $scope.data.end; time++) {       //iterate through entire time range, start to end
+                        if (typeof($scope.data.series[langIndex].data[time]) == "undefined") {  //check if point is defined
+                            //fill with zeros
+                            $scope.data.series[langIndex].data.push({
+                                x: time,
+                                y: 0
+                            });
+                        }
+                    }
+                }
+            }
+            $scope.data.oldSize += $scope.data.range;
         };
 
 
@@ -177,7 +201,7 @@
             var end;
             var date = new Date();
             var currentTime = new Date().getTime();
-            var oneMinute = 1000*60;
+            var twoMinutes = 1000*60*2; //delay is needed. 1 minute so the minute can finish. another minute for the server to process
 
             // console.log("Current time: " + new Date().toDateString());
 
@@ -185,11 +209,14 @@
 
             // console.log("offset: " + offset)
 
-            start = currentTime - offset - oneMinute;
-            end = currentTime - oneMinute;
+            start = (currentTime - offset) - twoMinutes;
+            end = currentTime - twoMinutes;
 
-            $scope.data.start = start;
-            $scope.data.end = end;
+            $scope.data.startUnixMilliseconds = start;
+            $scope.data.startUnixMinutes = Math.floor((start/1000)/60);
+            $scope.data.endUnixMilliseconds = end;
+            $scope.data.endUnixMinutes = Math.floor((end/1000)/60);
+            $scope.data.range = ($scope.data.endUnixMinutes - $scope.data.startUnixMinutes) + 1; //+1 for inclusive range
 
             date.setTime(start);
             // console.log("start:\n" + date);
@@ -198,7 +225,7 @@
                     zeroPad(date.getUTCDate()    , 2)+
                     zeroPad(date.getUTCHours()   , 2)+
                     zeroPad(date.getUTCMinutes() , 2);
-            console.log("start:\n" + start);
+            // console.log("start:\n" + start);
 
             date.setTime(end);
             // console.log("end:\n" + date);
@@ -207,7 +234,7 @@
                     zeroPad(date.getUTCDate()    , 2)+
                     zeroPad(date.getUTCHours()   , 2)+
                     zeroPad(date.getUTCMinutes() , 2);
-            console.log("end:\n" + end);
+            // console.log("end:\n" + end);
 
             times[0] = start;
             times[1] = end;
