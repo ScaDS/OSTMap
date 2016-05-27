@@ -1,4 +1,4 @@
-package org.iidp.ostmap.commons.accumulo.geoTemp;
+package org.iidp.ostmap.commons.accumulo.keys;
 
 import com.github.davidmoten.geo.GeoHash;
 import com.google.common.hash.HashFunction;

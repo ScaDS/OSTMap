@@ -5,7 +5,7 @@ import com.google.common.hash.Hashing;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.util.Collector;
 import org.apache.commons.codec.Charsets;
-import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
+import org.iidp.ostmap.commons.accumulo.keys.RawTwitterDataKey;
 import scala.Tuple2;
 
 import java.io.Serializable;

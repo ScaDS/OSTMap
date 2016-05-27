@@ -4,8 +4,8 @@ import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.util.Collector;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
-import org.iidp.ostmap.stream_processing.types.TermIndexKey;
+import org.iidp.ostmap.commons.accumulo.keys.RawTwitterDataKey;
+import org.iidp.ostmap.commons.accumulo.keys.TermIndexKey;
 import scala.Tuple2;
 
 import java.io.Serializable;

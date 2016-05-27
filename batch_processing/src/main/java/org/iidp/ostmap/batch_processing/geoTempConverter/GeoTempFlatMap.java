@@ -7,7 +7,7 @@ import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
 import org.apache.hadoop.io.Text;
-import org.iidp.ostmap.commons.accumulo.geoTemp.GeoTemporalKey;
+import org.iidp.ostmap.commons.accumulo.keys.GeoTemporalKey;
 
 /**
  * maps RawTwitterData rows to GeoTimeIndex mutations

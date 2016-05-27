@@ -8,8 +8,8 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
-import org.iidp.ostmap.commons.accumulo.geoTemp.GeoTemporalKey;
-import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
+import org.iidp.ostmap.commons.accumulo.keys.GeoTemporalKey;
+import org.iidp.ostmap.commons.accumulo.keys.RawTwitterDataKey;
 import org.iidp.ostmap.stream_processing.types.SinkConfiguration;
 import scala.Tuple2;
 

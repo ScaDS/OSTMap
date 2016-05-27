@@ -7,11 +7,10 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.codec.Charsets;
 import org.apache.flink.util.Collector;
 import org.iidp.ostmap.stream_processing.functions.CalculateRawTwitterDataKey;
-import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
+import org.iidp.ostmap.commons.accumulo.keys.RawTwitterDataKey;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import scala.Tuple2;
-import scala.Tuple3;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

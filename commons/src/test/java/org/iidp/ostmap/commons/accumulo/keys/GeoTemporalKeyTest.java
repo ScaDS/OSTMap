@@ -1,4 +1,4 @@
-package org.iidp.ostmap.commons.accumulo.geoTemp;
+package org.iidp.ostmap.commons.accumulo.keys;
 
 import com.github.davidmoten.geo.GeoHash;
 import com.google.common.hash.HashFunction;
@@ -8,6 +8,7 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.commons.codec.Charsets;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.iidp.ostmap.commons.accumulo.keys.GeoTemporalKey;
 import org.iidp.ostmap.commons.extractor.Extractor;
 import org.junit.BeforeClass;
 import org.junit.Test;

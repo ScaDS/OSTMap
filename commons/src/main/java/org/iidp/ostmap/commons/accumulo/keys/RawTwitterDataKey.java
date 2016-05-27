@@ -1,4 +1,4 @@
-package org.iidp.ostmap.stream_processing.types;
+package org.iidp.ostmap.commons.accumulo.keys;
 
 import java.nio.ByteBuffer;
 

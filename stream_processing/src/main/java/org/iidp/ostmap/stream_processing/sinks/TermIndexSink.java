@@ -8,7 +8,7 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.log4j.Logger;
 import org.iidp.ostmap.stream_processing.types.SinkConfiguration;
-import org.iidp.ostmap.stream_processing.types.TermIndexKey;
+import org.iidp.ostmap.commons.accumulo.keys.TermIndexKey;
 import scala.Tuple2;
 import java.util.concurrent.TimeUnit;
 

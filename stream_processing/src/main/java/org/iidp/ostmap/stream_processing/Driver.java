@@ -1,7 +1,6 @@
 package org.iidp.ostmap.stream_processing;
 
 
-import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.iidp.ostmap.stream_processing.functions.*;
@@ -12,10 +11,9 @@ import org.iidp.ostmap.stream_processing.sinks.GeoTemporalIndexSink;
 import org.iidp.ostmap.stream_processing.sinks.LanguageFrequencySink;
 import org.iidp.ostmap.stream_processing.sinks.RawTwitterDataSink;
 import org.iidp.ostmap.stream_processing.sinks.TermIndexSink;
-import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
+import org.iidp.ostmap.commons.accumulo.keys.RawTwitterDataKey;
 import org.iidp.ostmap.stream_processing.types.SinkConfiguration;
 import scala.Tuple2;
-import scala.Tuple3;
 
 import java.util.ArrayList;
 
