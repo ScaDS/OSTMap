@@ -164,20 +164,20 @@
 
             date.setTime(start);
             // console.log("start:\n" + date);
-            start = zeroPad(date.getFullYear()  , 4)+
-                    zeroPad(date.getMonth()+1   , 2)+
-                    zeroPad(date.getDate()      , 2)+
-                    zeroPad(date.getHours()     , 2)+
-                    zeroPad(date.getMinutes()   , 2);
+            start = zeroPad(date.getUTCFullYear(), 4)+
+                    zeroPad(date.getUTCMonth()+1 , 2)+
+                    zeroPad(date.getUTCDate()    , 2)+
+                    zeroPad(date.getUTCHours()   , 2)+
+                    zeroPad(date.getUTCMinutes() , 2);
             console.log("start:\n" + start);
 
             date.setTime(end);
             // console.log("end:\n" + date);
-            end =   zeroPad(date.getFullYear()  , 4)+
-                    zeroPad(date.getMonth()+1   , 2)+
-                    zeroPad(date.getDate()      , 2)+
-                    zeroPad(date.getHours()     , 2)+
-                    zeroPad(date.getMinutes()   , 2);
+            end =   zeroPad(date.getUTCFullYear(), 4)+
+                    zeroPad(date.getUTCMonth()+1 , 2)+
+                    zeroPad(date.getUTCDate()    , 2)+
+                    zeroPad(date.getUTCHours()   , 2)+
+                    zeroPad(date.getUTCMinutes() , 2);
             console.log("end:\n" + end);
 
             times[0] = start;
