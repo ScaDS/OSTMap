@@ -43,19 +43,27 @@
         $scope.timeFilter = 0.25;
         $scope.search = [];
         $scope.search.hashtagFilter = "#";
-        // $scope.search.searchFilter = "Default Search Filter";
-        $scope.search.searchFilter = httpService.getSearchToken();
 
         $scope.data = [];
-        $scope.data.tweets = httpService.getTweetsGeo();
+        $scope.data = httpService.getTweetsGeo();
+        $scope.data.top10 = [
+            "#test1",
+            "#test2",
+            "#test3",
+            "#test4",
+            "#test5",
+            "#test6",
+            "#test7",
+            "#test8",
+            "#test9",
+            "#test10"
+        ];
+        // $scope.data = httpService.getTweetsGeo();
 
         /**
          * Reset all filter values to default or null
          */
         $scope.search.clearFilters = function () {
-            // $scope.search.searchFilter = null;
-            $scope.search.searchFilter = "DefaultSearchFilter";
-            // $scope.timeFilter = null;
             $scope.timeFilter = "0.25";
             $scope.search.hashtagFilter = "#";
             $scope.center ={
@@ -75,7 +83,6 @@
          */
         $scope.search.setHashtagFilter = function (hashtag) {
             $scope.search.hashtagFilter = "#" + hashtag;
-            $scope.search.searchFilter = hashtag;
             $scope.search.updateFilters();
         };
 
@@ -89,27 +96,20 @@
                 /**
                  * Pass the filters to the httpService
                  */
-                httpService.setSearchToken($scope.search.searchFilter);
                 httpService.setTimeWindow(parseTimeFilter());
                 httpService.setBoundingBox($scope.getBounds());
+                
                 /**
                  * get the tweets from the REST interface
                  */
-                httpService.queueAddGetTweetFrom($scope.dataSource, $scope.search);
-
                 if ($scope.dataSource == "accumulo") {
                     //Get by GeoTime
                     httpService.getTweetsFromServerByGeoTime().then(function (status) {
                         doUpdate();
                     });
-                } else if ($scope.dataSource == "restTest") {
-                    //Get using test REST API
-                    httpService.getTweetsFromServerTest().then(function (status) {
-                        doUpdate();
-                    });
                 } else if ($scope.dataSource == "localhost") {
                     //Get using test REST API
-                    httpService.getTweetsFromServerTest2().then(function (status) {
+                    httpService.getTweetsFromServerTest().then(function (status) {
                         doUpdate();
                     });
                 } else if ($scope.dataSource == "static") {
@@ -117,16 +117,11 @@
                     httpService.getTweetsFromLocal().then(function (status) {
                         doUpdate();
                     });
-                } else {
-                    //Get by Token
-                    httpService.getTweetsFromServerByToken().then(function (status) {
-                        doUpdate();
-                    });
                 }
 
                 var doUpdate = function () {
                     // $scope.$emit('updateStatus', status);
-                    $scope.data.tweets = httpService.getTweetsGeo();
+                    $scope.data = httpService.getTweetsGeo();
                     $scope.populateMarkers();
                 };
 
@@ -136,8 +131,7 @@
                  *
                  * @type {string}
                  */
-                $scope.currentFilters = $scope.search.searchFilter + " | " +
-                    $scope.search.hashtagFilter + " | " +
+                $scope.currentFilters = $scope.search.hashtagFilter + " | " +
                     $scope.timeFilter + "h | " +
                     "[" + httpService.getBoundingBox().bbnorth.toFixed(2) +
                     ", " + httpService.getBoundingBox().bbwest.toFixed(2) +
@@ -257,80 +251,80 @@
          * @param lat
          * @param lng
          */
-        $scope.search.goToTweet = function (index, id_str, lat, lng) {
-            console.log("selected tweet index: " + index + ", [" + lat + "," + lng + "]");
-
-            /**
-             * Check if latitude and longitude are available
-             */
-            if (lat == undefined || lng == undefined) {
-                alert("Missing Coordinates!");
-            } else {
-                /**
-                 * Move map center to the tweet
-                 * @type {{lat: *, lng: *, zoom: number}}
-                 */
-                // $scope.center ={
-                //     lat: lat,
-                //     lng: lng,
-                //     zoom: 10
-                // };
-
-                /**
-                 * Scroll document to the map element
-                 */
-                // document.getElementById("geoTemporal").scrollIntoView();
-                document.getElementById("navbar").scrollIntoView();
-
-                /**
-                 * Un-selects the old marker
-                 * Update currentMarkerID
-                 * Give focus to selected tweet
-                 * Makes the text label visible
-                 */
-                if($scope.usePruneCluster) {
-                    // $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
-                    //     leafletMarker.openPopup();
-                    // };
-
-                    if ($scope.currentMarkerID != 0) {
-                        // $scope.pruneMarkers[$scope.currentMarkerID].closePopup();
-                    }
-                    $scope.currentMarkerID = index;
-
-                    if ($scope.pruneMarkers[index] != null) {
-                        // $scope.pruneMarkers[index].openPopup();
-                        console.log($scope.pruneCluster.GetMarkers()[index]);
-                        $scope.pruneCluster.GetMarkers()[index].bindPopup("test");
-                        
-                        $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
-                            leafletMarker.setIcon(L.divIcon($scope.icons.red)); // See http://leafletjs.com/reference.html#icon
-                            //listeners can be applied to markers in this function
-                            // leafletMarker.on('popup' + data.id_str, function(){
-                                //do click event logic here
-                                // leafletMarker.openPopup();
-                            // });
-                            // A popup can already be attached to the marker
-                            // bindPopup can override it, but it's faster to update the content instead
-                            if (leafletMarker.getPopup()) {
-                                leafletMarker.setPopupContent(data.message);
-                            } else {
-                                leafletMarker.bindPopup(data.message);
-                            }
-                        };
-                    }
-                } else {
-                    if ($scope.currentMarkerID != 0) {
-                        $scope.markers[$scope.currentMarkerID].focus = false;
-                    }
-                    $scope.currentMarkerID = index;
-
-                    if ($scope.markers[index] != null) {
-                        $scope.markers[index].focus = true;
-                    }
-                }
-            }
-        };
+        // $scope.search.goToTweet = function (index, id_str, lat, lng) {
+        //     console.log("selected tweet index: " + index + ", [" + lat + "," + lng + "]");
+        //
+        //     /**
+        //      * Check if latitude and longitude are available
+        //      */
+        //     if (lat == undefined || lng == undefined) {
+        //         alert("Missing Coordinates!");
+        //     } else {
+        //         /**
+        //          * Move map center to the tweet
+        //          * @type {{lat: *, lng: *, zoom: number}}
+        //          */
+        //         // $scope.center ={
+        //         //     lat: lat,
+        //         //     lng: lng,
+        //         //     zoom: 10
+        //         // };
+        //
+        //         /**
+        //          * Scroll document to the map element
+        //          */
+        //         // document.getElementById("geoTemporalMap").scrollIntoView();
+        //         document.getElementById("navbar").scrollIntoView();
+        //
+        //         /**
+        //          * Un-selects the old marker
+        //          * Update currentMarkerID
+        //          * Give focus to selected tweet
+        //          * Makes the text label visible
+        //          */
+        //         if($scope.usePruneCluster) {
+        //             // $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
+        //             //     leafletMarker.openPopup();
+        //             // };
+        //
+        //             if ($scope.currentMarkerID != 0) {
+        //                 // $scope.pruneMarkers[$scope.currentMarkerID].closePopup();
+        //             }
+        //             $scope.currentMarkerID = index;
+        //
+        //             if ($scope.pruneMarkers[index] != null) {
+        //                 // $scope.pruneMarkers[index].openPopup();
+        //                 console.log($scope.pruneCluster.GetMarkers()[index]);
+        //                 $scope.pruneCluster.GetMarkers()[index].bindPopup("test");
+        //
+        //                 $scope.pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
+        //                     leafletMarker.setIcon(L.divIcon($scope.icons.red)); // See http://leafletjs.com/reference.html#icon
+        //                     //listeners can be applied to markers in this function
+        //                     // leafletMarker.on('popup' + data.id_str, function(){
+        //                         //do click event logic here
+        //                         // leafletMarker.openPopup();
+        //                     // });
+        //                     // A popup can already be attached to the marker
+        //                     // bindPopup can override it, but it's faster to update the content instead
+        //                     if (leafletMarker.getPopup()) {
+        //                         leafletMarker.setPopupContent(data.message);
+        //                     } else {
+        //                         leafletMarker.bindPopup(data.message);
+        //                     }
+        //                 };
+        //             }
+        //         } else {
+        //             if ($scope.currentMarkerID != 0) {
+        //                 $scope.markers[$scope.currentMarkerID].focus = false;
+        //             }
+        //             $scope.currentMarkerID = index;
+        //
+        //             if ($scope.markers[index] != null) {
+        //                 $scope.markers[index].focus = true;
+        //             }
+        //         }
+        //     }
+        // };
 
         $scope.currentBounds = null;
 
@@ -342,16 +336,16 @@
         $scope.getBounds = function () {
             var north, west, south, east;
 
-            if ($scope.currentBounds._northEast.lat > 90) {north = 90}
+            if ($scope.currentBounds._northEast.lat >= 90) {north = 89.99}
             else {north = $scope.currentBounds._northEast.lat}
 
-            if ($scope.currentBounds._southWest.lng < -180) {west = -180}
+            if ($scope.currentBounds._southWest.lng <= -180) {west = -179.99}
             else {west = $scope.currentBounds._southWest.lng}
 
-            if ($scope.currentBounds._southWest.lat < -90) {south = -90}
+            if ($scope.currentBounds._southWest.lat <= -90) {south = -89.99}
             else {south = $scope.currentBounds._southWest.lat}
 
-            if ($scope.currentBounds._northEast.lng > 180) {east = 180}
+            if ($scope.currentBounds._northEast.lng >= 180) {east = 179.99}
             else {east = $scope.currentBounds._northEast.lng}
 
             return {
@@ -388,8 +382,8 @@
          * Run when page is loaded
          */
         $scope.$on('$viewContentLoaded', function() {
-            console.log("Page Loaded");
-            $scope.onStart()
+            // console.log("Page Loaded");
+            $scope.onStart();
         });
 
         /**
@@ -398,7 +392,7 @@
          * Adds PruneCluster
          */
         $scope.onStart = function () {
-            leafletData.getMap("geoTemporal").then(function(map) {
+            leafletData.getMap("geoTemporalMap").then(function(map) {
                 $scope.pruneCluster = new PruneClusterForLeaflet();
                 map.addLayer($scope.pruneCluster);
 
@@ -428,7 +422,7 @@
                         // console.log("Map watcher triggered, autoUpdateDisabled: no action taken");
                     }
                 });
-                console.log("Mapbounds watcher started");
+                // console.log("Mapbounds watcher started");
 
                 /**
                  * Workaround to trigger a filter update due to a mapbound change
@@ -439,6 +433,14 @@
                     lng: 12,
                     zoom: 5
                 };
+
+                /**
+                 * If data was already fetched previously, load it
+                 */
+                if ($scope.data.hasOwnProperty('tweets') && $scope.data.tweets.length > 0) {
+                    console.log("Existing Data: " + $scope.data.tweets.length)
+                    $scope.populateMarkers();
+                }
             });
         };
 
@@ -453,22 +455,6 @@
         //     },
         //     true
         // );
-
-        /**
-         * Pagination
-         * https://angular-ui.github.io/bootstrap/#/pagination
-         */
-        $scope.totalItems = 64;
-        $scope.currentPage = 4;
-        $scope.setPage = function (pageNo) {
-            $scope.currentPage = pageNo;
-        };
-        $scope.pageChanged = function() {
-            $log.log('Page changed to: ' + $scope.currentPage);
-        };
-        $scope.maxSize = 5;
-        $scope.bigTotalItems = 175;
-        $scope.bigCurrentPage = 1;
     }
 
     /**

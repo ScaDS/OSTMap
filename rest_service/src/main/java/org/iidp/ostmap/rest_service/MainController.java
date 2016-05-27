@@ -50,38 +50,4 @@ public class MainController {
             }
         };
     }
-
-    /**
-     * A temporary method providing tweets. Can be deleted if the connection to accumulo was established.
-     *
-     * @return String a json array of tweets as string
-     */
-    public static String getTestTweets() {
-        String result = "";
-
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(classloader.getResourceAsStream("example-response.json")))) {
-            for (String line; (line = br.readLine()) != null; ) {
-                result += line;
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        /**
-         * Artificial response delay to simulate accumulo backend worst-case
-         */
-        try {
-            Thread.sleep(1000);                 //1000 milliseconds is one second.
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-
-        return result;
-    }
-
-
 }

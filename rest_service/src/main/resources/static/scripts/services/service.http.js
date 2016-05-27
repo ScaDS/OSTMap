@@ -95,14 +95,6 @@
      */
     var isLoading = false;
 
-    var maxQueueSize = 2;
-
-    var maxSimultaneous = 1;
-
-    var queue = [];
-
-    var processing = [];
-
     function httpService($rootScope, $http, $q) {
         return {
             getTweetsFromServerByToken: _getTweetsFromServerByToken,
@@ -110,10 +102,7 @@
             getTweetsFromServerByGeoTime: _getTweetsFromServerByGeoTime,
             getTweetsFromServerByTweetFrequency: _getTweetsFromServerByTweetFrequency,
             getTweetsFromServerTest: _getTweetsFromServerTest,
-            getTweetsFromServerTest2: _getTweetsFromServerTest2,
             getTweetsFromLocal: _getTweetsFromLocal,
-            queueAddGetTweetFrom: _queueAddGetTweetFrom,
-            removeFromQueue: _removeFromQueue,
             getTweets: _getTweets,
             getTweetsGeo: _getTweetsGeo,
             getTweetFrequency: _getTweetFrequency,
@@ -127,42 +116,7 @@
             setTimeWindow: _setTimeWindow,
             getLoading: _getLoading,
             setLoading: _setLoading
-
         };
-
-        function _queueAddGetTweetFrom(api, filters) {
-            if (queue.size < maxQueueSize) {
-                
-            }
-
-            switch(api) {
-                case "accumulo":
-                    $rootScope.$emit('alertControl', api);
-                    break;
-                case "restTest":
-                    $rootScope.$emit('alertControl', api);
-                    break;
-                case "static":
-                    $rootScope.$emit('alertControl', api);
-                    break;
-                default:
-                    $rootScope.$emit('alertControl', api);
-            }
-
-            processQueue();
-        }
-
-        function _removeFromQueue(index) {
-            queue.splice(index, 1);
-        }
-
-        function processQueue() {
-            if (processing.size < maxSimultaneous) {
-                processQueue();
-            } else {
-
-            }
-        }
 
         function _getTweetsFromServerByToken() {
             _setLoading(true);
@@ -171,6 +125,7 @@
             var url = getTokenSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
+                // angular.copy(data,_tweets);
                 _tweets = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
@@ -190,7 +145,6 @@
             var url = getTokenSearchUrl2();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
-                // _tweets = _.clone(data);
                 angular.copy(data,_tweets);
                 _setLoading(status);
                 deferred.resolve(status);
@@ -210,7 +164,6 @@
             var url = getGeoTemporalSearchUrl();
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
-                // angular.copy(data,_tweets);
                 _tweetsGeo = _.clone(data);
                 _setLoading(status);
                 deferred.resolve(status);
@@ -231,7 +184,7 @@
                 + "?tstart=" + times[0]
                 + "&tend=" + times[1];
             $http.get(url).success(function (data, status, headers, config) {
-                _tweetFrequency = _.clone(data);
+                _tweetFrequency = _.clone(data.data);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -245,42 +198,18 @@
             _setLoading(true);
             var deferred = $q.defer();
 
-            var url = "http://localhost:8080/api/testgeo"
-                + "?bbnorth=" + _boundingBox.bbnorth
-                + "&bbsouth=" +  _boundingBox.bbsouth
-                + "&bbeast=" +  _boundingBox.bbeast
-                + "&bbwest=" +  _boundingBox.bbwest
-                + "&tstart=" + _timePeriod.tstart
-                + "&tend=" + _timePeriod.tend;
-            $http.get(url).success(function (data, status, headers, config) {
-                //Copy result data to the private array
-                // angular.copy(data,_tweets);
-                _tweetsGeo = _.clone(data);
-                _setLoading(status);
-                deferred.resolve(status);
-            }).error(function (data, status, headers, config) {
-                //TODO: Log the errors
-                _setLoading(status);
-                deferred.resolve(status + "\n" + headers + "\n" + config);
-            });
-
-            return deferred.promise;
-        }
-        function _getTweetsFromServerTest2() {
-            _setLoading(true);
-            var deferred = $q.defer();
-
             var url = "http://localhost:8082/api/geotemporalsearch"
                 + "?bbnorth=" + _boundingBox.bbnorth
                 + "&bbsouth=" +  _boundingBox.bbsouth
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
                 + "&tstart=" + _timePeriod.tstart
-                + "&tend=" + _timePeriod.tend;
+                + "&tend=" + _timePeriod.tend
+                + "&topten=true";
             $http.get(url).success(function (data, status, headers, config) {
                 //Copy result data to the private array
-                // angular.copy(data,_tweets);
-                _tweetsGeo = _.clone(data);
+                _tweetsGeo.tweets = _.clone(data);
+                _tweetsGeo.top10 = _.clone(data.topten);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
@@ -418,7 +347,8 @@
                 + "&bbeast=" +  _boundingBox.bbeast
                 + "&bbwest=" +  _boundingBox.bbwest
                 + "&tstart=" + _timePeriod.tstart
-                + "&tend=" + _timePeriod.tend;
+                + "&tend=" + _timePeriod.tend
+                + "&topten=true";
         }
 
         /**

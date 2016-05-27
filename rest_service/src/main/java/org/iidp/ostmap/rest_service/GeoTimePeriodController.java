@@ -68,43 +68,6 @@ public class GeoTimePeriodController {
 
         // submit query and return result
         return geoTempQuery.getResult();
-
-    }
-
-    /**
-     * Mapping method for path /testgeo
-     *
-     * @param paramNorthCoordinate
-     * @param paramEastCoordinate
-     * @param paramSouthCoordinate
-     * @param paramWestCoordinate
-     * @param paramStartTime
-     * @param paramEndTime
-     * @return a json response
-     */
-    @RequestMapping(
-            value = "/testgeo",
-            method = RequestMethod.GET,
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE}
-    )
-    @ResponseBody
-    String getTweetsByGeoAndTimeToTest(
-            @RequestParam(name = "bbnorth") String paramNorthCoordinate,
-            @RequestParam(name = "bbeast") String paramEastCoordinate,
-            @RequestParam(name = "bbsouth") String paramSouthCoordinate,
-            @RequestParam(name = "bbwest") String paramWestCoordinate,
-            @RequestParam(name = "tstart") String paramStartTime,
-            @RequestParam(name = "tend") String paramEndTime
-    ) {
-        validateQueryParams(
-                paramNorthCoordinate,
-                paramEastCoordinate,
-                paramSouthCoordinate,
-                paramWestCoordinate,
-                paramStartTime,
-                paramEndTime);
-
-        return MainController.getTestTweets();
     }
 
     /**
