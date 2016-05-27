@@ -3,6 +3,7 @@ package org.iidp.ostmap.rest_service;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
+import org.iidp.ostmap.rest_service.helper.JsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -66,8 +67,16 @@ public class GeoTimePeriodController {
                 endTime,
                 MainController.configFilePath);
 
-        // submit query and return result
-        return geoTempQuery.getResult();
+
+        // submit query and get result
+        String result = geoTempQuery.getResult();
+        // get top hashtags
+        if (topten) {
+            result = JsonHelper.createTweetsWithHashtagRanking(result);
+        } else {
+            result = JsonHelper.createTweetsWithoutHashtagRanking(result);
+        }
+        return result;
     }
 
     /**
