@@ -109,6 +109,7 @@
         });
 
         function clearLocalData() {
+            $scope.data.series = [];
             $scope.data.series = [{
                 name: 'default',
                 color: 'steelblue',
@@ -119,13 +120,13 @@
 
         $scope.populateChart = function () {
             console.log("Languages: " + Object.keys($scope.data.raw).length);
+            console.log("Old data size: " + $scope.data.oldSize);
+            console.log("Amount of new data: " + $scope.data.range);
 
             if($scope.data.start == 0){
                 $scope.data.start = $scope.data.startUnixMinutes;
                 $scope.data.end = $scope.data.endUnixMinutes;
-            } else if ($scope.data.endUnixMinutes > $scope.data.end) {
-                $scope.data.end = $scope.data.endUnixMinutes;
-            } else if ($scope.data.startUnixMinutes < $scope.data.start) {
+            } else {
                 clearLocalData();
             }
 
@@ -134,62 +135,50 @@
             // console.log("range: " + $scope.data.range);
 
             /**
-             * Create a new empty series if the lang does not exist
+             * Create a new series filled with 0s if the lang does not exist
              */
             for (var lang in $scope.data.raw) {
-                if($scope.data.range != Object.keys($scope.data.raw[lang]).length){
-                    console.log("Array length mismatch!!!")
-                } else {
-                    if($scope.data.series.filter(function(object){return object.name == lang;}).length == 0){
-                        var newSeries = {
-                            name: lang,
-                            color: palette.color(),
-                            data: []
-                        };
-                        $scope.data.series.push(newSeries);
+                if($scope.data.series.filter(function(object){return object.name == lang;}).length == 0){
+                    var newSeries = {
+                        name: lang,
+                        color: palette.color(),
+                        data: []
+                    };
+                    for (var i = 0; i < $scope.data.oldSize; i++) {
+                        newSeries.data.push({
+                            x: i,
+                            y: 0
+                        });
                     }
+                    $scope.data.series.push(newSeries);
                 }
             }
             /**
-             * Fill existing series (all should exist at this point) to match the number of points
+             * Fill existing series' (all should exist at this point) to match the number of points
              * If no data for the specific series is available, fill with zeros
              */
             for (var langIndex = 0; langIndex < $scope.data.series.length; langIndex++) {   //iterate all series
                 var lang = $scope.data.series[langIndex].name;                              //get series language
-                var target = $scope.data.series[langIndex].data;
 
-                if ($scope.data.raw.hasOwnProperty(lang)) {                                     //check if the new data has the selected language
-                    var source = $scope.data.raw[lang];
-
-                    for (var time = $scope.data.start; time <= $scope.data.end; time++) {       //iterate through entire time range, start to end
-                        if (target.filter(function(time){return time.x == time}) == "") {  //check if point is missing
-                            if (time < $scope.data.startUnixMinutes) {                          //check if undefined point is before new data range i.e. fill gaps in the data
-                                //fill with zeros
-                                $scope.data.series[langIndex].data.push({
-                                    x: time,
-                                    y: 0
-                                });
-                            } else {
-                                //fill with new data
-                                $scope.data.series[langIndex].data.push({
-                                    x: time,
-                                    y: source[time - $scope.data.startUnixMinutes]
-                                });
-                            }
-                        }
+                if ($scope.data.raw.hasOwnProperty(lang)) {                                 //check if the new data has the selected language
+                    for (var time = 0; time < $scope.data.range; time++) {
+                        $scope.data.series[langIndex].data.push({
+                            x: time + $scope.data.oldSize,
+                            y: $scope.data.raw[lang][time]
+                        });
                     }
                 } else {
-                    for (var time = $scope.data.start; time <= $scope.data.end; time++) {       //iterate through entire time range, start to end
-                        if (target.filter(function(time){return time.x == time}) == "") {  //check if point is missing
-                            //fill with zeros
-                            $scope.data.series[langIndex].data.push({
-                                x: time,
-                                y: 0
-                            });
-                        }
+                    for (var time = 0; time < $scope.data.range; time++) {
+                        $scope.data.series[langIndex].data.push({
+                            x: time + $scope.data.oldSize,
+                            y: 0
+                        });
                     }
                 }
+
+                console.log(lang + ":" + Object.keys($scope.data.series[langIndex].data).length);
             }
+            $scope.data.oldSize += $scope.data.range;
         };
 
 
@@ -306,7 +295,7 @@
         $scope.autoUpdate = function () {
             console.log("autoUpdate: " + $scope.autoUpdateEnabled);
 
-            var updateFrequency = 1; //in minutes
+            var updateFrequency = 60; //in seconds
             var count = 0;
             var intervalPromise = $interval(function () {
                 if(!$scope.autoUpdateEnabled) {
@@ -315,14 +304,14 @@
                     count++;
                     console.log("Doing AutoUpdate: " + count);
 
-                    httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter(updateFrequency)).then(function (status) {
+                    httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter(0)).then(function (status) {
 
                         $scope.$emit('updateStatus', status);
                         $scope.data.raw = httpService.getTweetFrequency();
                         $scope.populateChart();
                     });
                 }
-            }, 1000*60*updateFrequency);
+            }, 1000*updateFrequency);
         };
     }
 })();
