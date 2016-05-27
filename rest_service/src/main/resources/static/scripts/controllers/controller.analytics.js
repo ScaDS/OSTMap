@@ -26,8 +26,8 @@
      * @constructor
      */
     function AnalyticsCtrl($scope, httpService, $interval) {
-        $scope.autoUpdateEnabled = false;
-        $scope.timeFilter = 4;
+        $scope.autoUpdateEnabled = true;
+        $scope.timeFilter = 1;
         // var testseries = [];
         // for (var i=0; i<46; i++){
         //     testseries.push(
@@ -65,6 +65,12 @@
         var updateQueued = false;
         $scope.updateFilters = function () {
             if (!httpService.getLoading()) {
+                $scope.data.series = [{
+                    name: 'default',
+                    color: 'steelblue',
+                    data: []
+                }];
+
                 console.log("Filters updated: " + $scope.timeFilter + "h");
                 httpService.setLoading(true);
                 /**
@@ -124,7 +130,7 @@
                     for (var i = 0; i < range; i++) {
                         var point = {
                             // x: start + i,
-                            x: i+start,
+                            x: i,
                             y: $scope.data.raw[lang][i]
                         };
                         // points.push(point);
@@ -253,7 +259,7 @@
                 } else {
                     console.log("Doing AutoUpdate: " + $scope.autoUpdateEnabled);
 
-                    httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter(updateFrequency)).then(function (status) {
+                    httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter(updateFrequency/60)).then(function (status) {
 
                         $scope.$emit('updateStatus', status);
                         $scope.data.raw = httpService.getTweetFrequency();
