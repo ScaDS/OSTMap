@@ -27,7 +27,7 @@
      */
     function AnalyticsCtrl($scope, httpService, $interval) {
         $scope.autoUpdateEnabled = true;
-        $scope.timeFilter = 1;
+        $scope.timeFilter = 60;
         // var testseries = [];
         // for (var i=0; i<46; i++){
         //     testseries.push(
@@ -60,6 +60,23 @@
         // $scope.graph.render();
 
         /**
+         * Rickshaw color palette
+         *
+         * COLOR SCHEMES
+         * - classic9
+         * - colorwheel
+         * - cool
+         * - munin
+         * - spectrum14
+         * - spectrum2000
+         * - spectrum2001
+         *
+         * @type {Rickshaw.Color.Palette}
+         */
+        var palette = new Rickshaw.Color.Palette( { scheme: 'spectrum2000' } );
+
+
+        /**
          * Update filters
          */
         var updateQueued = false;
@@ -67,7 +84,7 @@
             if (!httpService.getLoading()) {
                 $scope.data.series = [{
                     name: 'default',
-                    color: 'steelblue',
+                    color: palette.color(),
                     data: []
                 }];
 
@@ -118,19 +135,19 @@
                         $scope.data.series[langIndex] = (
                             {
                                 name: lang,
-                                color: 'steelblue',
+                                color: palette.color(),
                                 data: []
                             }
                         );
                     } else {
-                        console.log("already exists " + langIndex + " " + $scope.data.series[langIndex].name + " == " + lang)
+                        console.log("lang " + langIndex + " " + $scope.data.series[langIndex].name + " == " + lang)
                     }
+
                     var points = [];
                     // for (var i = 0; i < range; i++) {
                     for (var i = 0; i < range; i++) {
                         var point = {
-                            // x: start + i,
-                            x: i,
+                            x: i + start,
                             y: $scope.data.raw[lang][i]
                         };
                         // points.push(point);
@@ -139,6 +156,9 @@
 
                     // console.log(series);
                     // $scope.data.series.push(series);
+
+                    // console.log(langIndex + ". points: " + Object.keys($scope.data.series[langIndex].data).length)
+
                     langIndex++;
                 }
             }
@@ -149,21 +169,22 @@
          * Interpret the time filter and return a time window
          * @returns {number[]}
          */
-        function parseTimeFilter(hours){
+        function parseTimeFilter(minutes){
             var times = [0, 0];
             var start;
             var end;
             var date = new Date();
             var currentTime = new Date().getTime();
+            var oneMinute = 1000*60;
 
             // console.log("Current time: " + new Date().toDateString());
 
-            var offset = 1000*60*60*hours; //milliseconds, seconds, minutes
+            var offset = 1000*60*minutes; //milliseconds, seconds, minutes
 
             // console.log("offset: " + offset)
 
-            start = currentTime - offset;
-            end = currentTime;
+            start = currentTime - offset - oneMinute;
+            end = currentTime - oneMinute;
 
             $scope.data.start = start;
             $scope.data.end = end;
@@ -252,12 +273,16 @@
         });
 
         $scope.autoUpdate = function () {
-            var updateFrequency = 1/60; //in hours
+            console.log("autoUpdate: " + $scope.autoUpdateEnabled);
+
+            var updateFrequency = 1; //in minutes
+            var count = 0;
             var intervalPromise = $interval(function () {
                 if(!$scope.autoUpdateEnabled) {
                     $interval.cancel(intervalPromise);
                 } else {
-                    console.log("Doing AutoUpdate: " + $scope.autoUpdateEnabled);
+                    count++;
+                    console.log("Doing AutoUpdate: " + count);
 
                     httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter(updateFrequency)).then(function (status) {
 
@@ -266,7 +291,7 @@
                         $scope.populateChart();
                     });
                 }
-            }, 1000*60*60*updateFrequency);
+            }, 1000*60*updateFrequency);
         };
     }
 })();
