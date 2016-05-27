@@ -4,6 +4,7 @@
         <!--<uib-tab index="0" heading="Tweet Frequency">-->
             <br>
             <div class="btn-group ">
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="0">Live</label>
                 <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="60">1h</label>
                 <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="120">2h</label>
                 <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="240">4h</label>
@@ -12,8 +13,6 @@
                 <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="1440">1d</label>
                 <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="2880">2d</label>
                 <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="5760">4d</label>
-                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="8640">6d</label>
-                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="11520">8d</label>
             </div>
             <div class="btn-group">
                 <label class="btn btn-danger btn-lg" ng-click="autoUpdate()" ng-model="autoUpdateEnabled" uib-btn-checkbox>AutoUpdate</label>
