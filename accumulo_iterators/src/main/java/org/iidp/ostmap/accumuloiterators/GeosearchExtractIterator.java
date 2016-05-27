@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * this iterator extracts the following fields and assembles them into a new json:
- * - coordinates, id_str, user.screen_name
+ * - coordinates, id_str, user.screen_name, text
  * The original json structure will be untouched.
  */
 public class GeosearchExtractIterator extends WrappingIterator {
@@ -60,10 +60,14 @@ public class GeosearchExtractIterator extends WrappingIterator {
         // extract id_str
         reducedJson.put("id_str", originalJson.get("id_str"));
 
+        // extract text
+        reducedJson.put("text", originalJson.get("text"));
+
         // extract user.screen_name
         JSONObject originalUser = originalJson.getJSONObject("user");
         JSONObject reducedUser = new JSONObject();
         reducedUser.put("screen_name", originalUser.get("screen_name"));
+        reducedJson.put("user", reducedUser);
 
         // extract coordinates
         if (!originalJson.isNull("coordinates")
