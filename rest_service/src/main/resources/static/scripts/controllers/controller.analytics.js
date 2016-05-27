@@ -259,7 +259,7 @@
                 } else {
                     console.log("Doing AutoUpdate: " + $scope.autoUpdateEnabled);
 
-                    httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter(updateFrequency/60)).then(function (status) {
+                    httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter(updateFrequency)).then(function (status) {
 
                         $scope.$emit('updateStatus', status);
                         $scope.data.raw = httpService.getTweetFrequency();
