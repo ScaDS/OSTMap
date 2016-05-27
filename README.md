@@ -1,7 +1,7 @@
 # OSTMap
 
 ## Overview
-OSTMap (Open Source Twitter Map)
+OSTMap (Open Source Tweet Map)
 
 OSTMap development started as a project at the [IT-Ringvorlesung 2016](https://www.informatik.uni-leipzig.de/ifi/kooperation/it-ringvorlesung/sommersemester-2016/). A team of six students (and some help of two big data experts from [mgm tp](http://www.mgm-tp.com/)) implements OSTMap over a period of 6 weeks.
 
