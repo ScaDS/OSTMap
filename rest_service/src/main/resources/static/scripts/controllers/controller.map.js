@@ -46,19 +46,12 @@
 
         $scope.data = [];
         $scope.data = httpService.getTweetsGeo();
-        $scope.data.top10 = [
-            "#test1",
-            "#test2",
-            "#test3",
-            "#test4",
-            "#test5",
-            "#test6",
-            "#test7",
-            "#test8",
-            "#test9",
-            "#test10"
-        ];
-        // $scope.data = httpService.getTweetsGeo();
+        if (!$scope.data.hasOwnProperty('tweets')) {
+            $scope.data.tweets = [];
+        }
+        if (!$scope.data.hasOwnProperty('top10')) {
+            $scope.data.top10 = [];
+        }
 
         /**
          * Reset all filter values to default or null
@@ -83,7 +76,9 @@
          */
         $scope.search.setHashtagFilter = function (hashtag) {
             $scope.search.hashtagFilter = "#" + hashtag;
-            $scope.search.updateFilters();
+            // $scope.search.updateFilters();
+
+            //TODO: Filter Data
         };
 
         /**
@@ -174,6 +169,7 @@
              * Filter bad data
              * Add coordinate pairs to marker array
              */
+            // angular.forEach($scope.data.tweets, function(tweet) {
             $scope.data.tweets.forEach( function(tweet) {
                 // Check if tweet has the property 'coordinates' and 'id_str'... if not, leave the forEach function
                 // if(!tweet.hasOwnProperty('coordinates') || !tweet.hasOwnProperty('id_str')){

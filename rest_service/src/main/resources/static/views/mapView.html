@@ -64,8 +64,8 @@
             <div class="panel panel-default" style="opacity: 0.94;">
                 <!-- Table -->
                 <table class="table table-hover tabled-striped">
-                    <caption>Top 10 Hashtags <br> of {{data.tweets.length}} Tweets</caption>
-                    <tr ng-repeat="hashtag in data.top10|limitTo:10" ng-click="search.setHashtagFilter(hashtag)">
+                    <caption>Top {{data.top10.length}} Hashtags <br> of {{data.tweets.length}} Tweets</caption>
+                    <tr ng-repeat="hashtag in data.top10" ng-click="search.setHashtagFilter(hashtag)">
                         <td>
                             <p>{{hashtag}}</p>
                         </td>
