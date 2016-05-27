@@ -26,7 +26,7 @@
      * @constructor
      */
     function AnalyticsCtrl($scope, httpService, $interval) {
-        $scope.autoUpdateEnabled = true;
+        $scope.autoUpdateEnabled = false;
         $scope.timeFilter = 60;
         // var testseries = [];
         // for (var i=0; i<46; i++){
@@ -43,7 +43,7 @@
         $scope.data = {
             "start": 0,
             "end": 0,
-            "range": 0,
+            "newSize": 0,
             "oldSize": 0,
             "series": [{
                 name: 'default',
@@ -77,7 +77,7 @@
          */
         var palette = new Rickshaw.Color.Palette( { scheme: 'spectrum2000' } );
 
-        
+
         /**
          * Update filters
          */
@@ -124,8 +124,7 @@
 
         $scope.populateChart = function () {
             console.log("Languages: " + Object.keys($scope.data.raw).length);
-            console.log("Old data size: " + $scope.data.oldSize);
-            console.log("Amount of new data: " + $scope.data.range);
+            console.log("Amount of old|new data: " + $scope.data.oldSize + "|" + $scope.data.newDataSize);
 
             // if($scope.data.start == 0){
             //     $scope.data.start = $scope.data.startUnixMinutes;
@@ -136,7 +135,7 @@
 
             // console.log("start: " + $scope.data.start);
             // console.log("end: " + $scope.data.end);
-            // console.log("range: " + $scope.data.range);
+            // console.log("range: " + $scope.data.newDataSize);
 
             /**
              * Create a new series filled with 0s if the lang does not exist
@@ -165,14 +164,14 @@
                 var lang = $scope.data.series[langIndex].name;                              //get series language
 
                 if ($scope.data.raw.hasOwnProperty(lang)) {                                 //check if the new data has the selected language
-                    for (var time = 0; time < $scope.data.range; time++) {
+                    for (var time = 0; time < $scope.data.newDataSize; time++) {
                         $scope.data.series[langIndex].data.push({
                             x: time + $scope.data.oldSize,
                             y: $scope.data.raw[lang][time]
                         });
                     }
                 } else {
-                    for (var time = 0; time < $scope.data.range; time++) {
+                    for (var time = 0; time < $scope.data.newDataSize; time++) {
                         $scope.data.series[langIndex].data.push({
                             x: time + $scope.data.oldSize,
                             y: 0
@@ -181,7 +180,7 @@
                 }
                 // console.log(lang + ":" + Object.keys($scope.data.series[langIndex].data).length);
             }
-            $scope.data.oldSize += $scope.data.range;
+            $scope.data.oldSize += $scope.data.newDataSize;
 
             //Why? Don't ask me why. It just works.
             for (var langIndex = 0; langIndex < $scope.data.series.length; langIndex++) {
@@ -222,7 +221,7 @@
             $scope.data.startUnixMinutes = Math.floor((start/1000)/60);
             $scope.data.endUnixMilliseconds = end;
             $scope.data.endUnixMinutes = Math.floor((end/1000)/60);
-            $scope.data.range = ($scope.data.endUnixMinutes - $scope.data.startUnixMinutes) + 1; //+1 for inclusive range
+            $scope.data.newDataSize = ($scope.data.endUnixMinutes - $scope.data.startUnixMinutes) + 1; //+1 for inclusive range
 
             date.setTime(start);
             // console.log("start:\n" + date);
@@ -282,31 +281,6 @@
             }
         };
 
-        /**
-         * Run when page is loaded
-         */
-        $scope.$on('$viewContentLoaded', function() {
-            $scope.data.raw = httpService.getTweetFrequency();
-            if (Object.keys($scope.data.raw).length > 0) {
-                console.log("Existing Data: " + Object.keys($scope.data.raw).length);
-                $scope.populateChart();
-
-                //TODO: catchup function in autoUpdate (missing between last update and now)
-                if ($scope.autoUpdateEnabled) {
-                    $scope.autoUpdate();
-                }
-            } else if ($scope.autoUpdateEnabled) {
-                httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter($scope.timeFilter)).then(function (status) {
-                    $scope.$emit('updateStatus', status);
-                    $scope.data.raw = httpService.getTweetFrequency();
-                    $scope.populateChart();
-                    if ($scope.autoUpdateEnabled) {
-                        $scope.autoUpdate();
-                    }
-                });
-            }
-        });
-
         $scope.autoUpdate = function () {
             console.log("autoUpdate: " + $scope.autoUpdateEnabled);
 
@@ -320,7 +294,6 @@
                     console.log("Doing AutoUpdate: " + count);
 
                     httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter(0)).then(function (status) {
-
                         $scope.$emit('updateStatus', status);
                         $scope.data.raw = httpService.getTweetFrequency();
                         $scope.populateChart();
@@ -328,5 +301,25 @@
                 }
             }, 1000*updateFrequency);
         };
+
+
+        /**
+         * Run when page is loaded
+         */
+        $scope.data.raw = httpService.getTweetFrequency();
+        if (Object.keys($scope.data.raw).length > 0) {
+            $scope.data.newDataSize = $scope.data.raw[Object.keys($scope.data.raw)[0]].length;
+            $scope.populateChart();
+
+            $scope.autoUpdate();
+        } else if ($scope.autoUpdateEnabled) {
+            httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter($scope.timeFilter)).then(function (status) {
+                $scope.$emit('updateStatus', status);
+                $scope.data.raw = httpService.getTweetFrequency();
+                $scope.populateChart();
+
+                $scope.autoUpdate();
+            });
+        }
     }
 })();
