@@ -26,8 +26,8 @@
      * @constructor
      */
     function AnalyticsCtrl($scope, httpService, $interval) {
-        $scope.autoUpdateEnabled = false;
-        $scope.timeFilter = 4;
+        $scope.autoUpdateEnabled = true;
+        $scope.timeFilter = 60;
         // var testseries = [];
         // for (var i=0; i<46; i++){
         //     testseries.push(
@@ -60,11 +60,34 @@
         // $scope.graph.render();
 
         /**
+         * Rickshaw color palette
+         *
+         * COLOR SCHEMES
+         * - classic9
+         * - colorwheel
+         * - cool
+         * - munin
+         * - spectrum14
+         * - spectrum2000
+         * - spectrum2001
+         *
+         * @type {Rickshaw.Color.Palette}
+         */
+        var palette = new Rickshaw.Color.Palette( { scheme: 'spectrum2000' } );
+
+
+        /**
          * Update filters
          */
         var updateQueued = false;
         $scope.updateFilters = function () {
             if (!httpService.getLoading()) {
+                $scope.data.series = [{
+                    name: 'default',
+                    color: palette.color(),
+                    data: []
+                }];
+
                 console.log("Filters updated: " + $scope.timeFilter + "h");
                 httpService.setLoading(true);
                 /**
@@ -75,6 +98,8 @@
                     $scope.data.raw = httpService.getTweetFrequency();
                     $scope.populateChart();
                 });
+
+                $scope.$emit('updateStatus', "Loading Tweet Frequency: " + $scope.timeFilter + "min");
             } else {
                 updateQueued = true;
             }
@@ -112,19 +137,19 @@
                         $scope.data.series[langIndex] = (
                             {
                                 name: lang,
-                                color: 'steelblue',
+                                color: palette.color(),
                                 data: []
                             }
                         );
                     } else {
-                        console.log("already exists " + langIndex + " " + $scope.data.series[langIndex].name + " == " + lang)
+                        console.log("lang " + langIndex + " " + $scope.data.series[langIndex].name + " == " + lang)
                     }
+
                     var points = [];
                     // for (var i = 0; i < range; i++) {
                     for (var i = 0; i < range; i++) {
                         var point = {
-                            // x: start + i,
-                            x: i+start,
+                            x: i + start,
                             y: $scope.data.raw[lang][i]
                         };
                         // points.push(point);
@@ -133,6 +158,9 @@
 
                     // console.log(series);
                     // $scope.data.series.push(series);
+
+                    // console.log(langIndex + ". points: " + Object.keys($scope.data.series[langIndex].data).length)
+
                     langIndex++;
                 }
             }
@@ -143,41 +171,42 @@
          * Interpret the time filter and return a time window
          * @returns {number[]}
          */
-        function parseTimeFilter(hours){
+        function parseTimeFilter(minutes){
             var times = [0, 0];
             var start;
             var end;
             var date = new Date();
             var currentTime = new Date().getTime();
+            var oneMinute = 1000*60;
 
             // console.log("Current time: " + new Date().toDateString());
 
-            var offset = 1000*60*60*hours; //milliseconds, seconds, minutes
+            var offset = 1000*60*minutes; //milliseconds, seconds, minutes
 
             // console.log("offset: " + offset)
 
-            start = currentTime - offset;
-            end = currentTime;
+            start = currentTime - offset - oneMinute;
+            end = currentTime - oneMinute;
 
             $scope.data.start = start;
             $scope.data.end = end;
 
             date.setTime(start);
             // console.log("start:\n" + date);
-            start = zeroPad(date.getFullYear()  , 4)+
-                    zeroPad(date.getMonth()+1   , 2)+
-                    zeroPad(date.getDate()      , 2)+
-                    zeroPad(date.getHours()     , 2)+
-                    zeroPad(date.getMinutes()   , 2);
+            start = zeroPad(date.getUTCFullYear(), 4)+
+                    zeroPad(date.getUTCMonth()+1 , 2)+
+                    zeroPad(date.getUTCDate()    , 2)+
+                    zeroPad(date.getUTCHours()   , 2)+
+                    zeroPad(date.getUTCMinutes() , 2);
             console.log("start:\n" + start);
 
             date.setTime(end);
             // console.log("end:\n" + date);
-            end =   zeroPad(date.getFullYear()  , 4)+
-                    zeroPad(date.getMonth()+1   , 2)+
-                    zeroPad(date.getDate()      , 2)+
-                    zeroPad(date.getHours()     , 2)+
-                    zeroPad(date.getMinutes()   , 2);
+            end =   zeroPad(date.getUTCFullYear(), 4)+
+                    zeroPad(date.getUTCMonth()+1 , 2)+
+                    zeroPad(date.getUTCDate()    , 2)+
+                    zeroPad(date.getUTCHours()   , 2)+
+                    zeroPad(date.getUTCMinutes() , 2);
             console.log("end:\n" + end);
 
             times[0] = start;
@@ -246,12 +275,16 @@
         });
 
         $scope.autoUpdate = function () {
-            var updateFrequency = 1/60; //in hours
+            console.log("autoUpdate: " + $scope.autoUpdateEnabled);
+
+            var updateFrequency = 1; //in minutes
+            var count = 0;
             var intervalPromise = $interval(function () {
                 if(!$scope.autoUpdateEnabled) {
                     $interval.cancel(intervalPromise);
                 } else {
-                    console.log("Doing AutoUpdate: " + $scope.autoUpdateEnabled);
+                    count++;
+                    console.log("Doing AutoUpdate: " + count);
 
                     httpService.getTweetsFromServerByTweetFrequency(parseTimeFilter(updateFrequency)).then(function (status) {
 
@@ -260,7 +293,7 @@
                         $scope.populateChart();
                     });
                 }
-            }, 1000*60*60*updateFrequency);
+            }, 1000*60*updateFrequency);
         };
     }
 })();

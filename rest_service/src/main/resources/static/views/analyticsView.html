@@ -1,74 +1,76 @@
 <br>
-<uib-tabset class="analyticsViewContainer" active="active">
-    <uib-tab index="0" heading="Tweet Frequency">
-        <br>
-        <div class="btn-group ">
-            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="1">1h</label>
-            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="2">2h</label>
-            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="4">4h</label>
-            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="6">6h</label>
-            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="12">12h</label>
-            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="24">1d</label>
-            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="48">2d</label>
-            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="96">4d</label>
-            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="144">6d</label>
-            <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="192">8d</label>
-        </div>
-        <div class="btn-group">
-            <label class="btn btn-danger btn-lg" ng-click="autoUpdate()" ng-model="autoUpdateEnabled" uib-btn-checkbox>AutoUpdate</label>
-            <label class="btn btn-danger btn-lg" ng-click="updateFilters()">Manual Update</label>
-        </div>
-        <br>
-        <br>
-
-        <rickshaw
-                rickshaw-options="options"
-                rickshaw-features="features"
-                rickshaw-series="data.series">
-        </rickshaw>
-
-        <div id="chart"></div>
-        <code>
-            DEBUG<br>
-            <!--data.tweetFrequency: {{data.tweetFrequency}}<br>-->
-            autoUpdateEnabled: {{autoUpdateEnabled}}<br>
-            Current Filters: {{timeFilter}}h<br>
-        </code>
-    </uib-tab>
-
-
-    <uib-tab index="1" heading="Scoreboard: Area">
-        <br>
-        <div class="col-xs-6 col-md-4">
-            <div class="panel panel-default">
-                <!-- Table -->
-                <table class="table table-hover tabled-striped">
-                    <caption>Top 10 Users: Area Covered</caption>
-                    <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.setHashtagFilter(tweet.user.screen_name)">
-                        <td>
-                            <p>#{{tweet.user.screen_name}}</p>
-                        </td>
-                    </tr>
-                </table>
+<div class="analyticsViewContainer" >
+    <!--<uib-tabset active="active">-->
+        <!--<uib-tab index="0" heading="Tweet Frequency">-->
+            <br>
+            <div class="btn-group ">
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="60">1h</label>
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="120">2h</label>
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="240">4h</label>
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="360">6h</label>
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="720">12h</label>
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="1440">1d</label>
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="2880">2d</label>
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="5760">4d</label>
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="8640">6d</label>
+                <label class="btn btn-success btn-lg" ng-model="timeFilter" uib-btn-radio="11520">8d</label>
             </div>
-        </div>
-    </uib-tab>
-
-
-    <uib-tab index="2" heading="Scoreboard: Distance">
-        <br>
-        <div class="col-xs-6 col-md-4">
-            <div class="panel panel-default">
-                <!-- Table -->
-                <table class="table table-hover tabled-striped">
-                    <caption>Top 10 Users: Distance Covered</caption>
-                    <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.setHashtagFilter(tweet.user.screen_name)">
-                        <td>
-                            <p>#{{tweet.user.screen_name}}</p>
-                        </td>
-                    </tr>
-                </table>
+            <div class="btn-group">
+                <label class="btn btn-danger btn-lg" ng-click="autoUpdate()" ng-model="autoUpdateEnabled" uib-btn-checkbox>AutoUpdate</label>
+                <label class="btn btn-danger btn-lg" ng-click="updateFilters()">Manual Update</label>
             </div>
-        </div>
-    </uib-tab>
-</uib-tabset>
+            <br>
+            <br>
+
+            <rickshaw
+                    rickshaw-options="options"
+                    rickshaw-features="features"
+                    rickshaw-series="data.series">
+            </rickshaw>
+
+            <div id="chart"></div>
+            <code>
+                DEBUG<br>
+                <!--data.tweetFrequency: {{data.tweetFrequency}}<br>-->
+                autoUpdateEnabled: {{autoUpdateEnabled}}<br>
+                Current Filters: {{timeFilter/60}}h<br>
+            </code>
+        <!--</uib-tab>-->
+
+
+        <!--<uib-tab index="1" heading="Scoreboard: Area">-->
+            <br>
+            <div class="col-xs-6 col-md-4">
+                <div class="panel panel-default">
+                    <!-- Table -->
+                    <table class="table table-hover tabled-striped">
+                        <caption>Top 10 Users: Area Covered</caption>
+                        <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.setHashtagFilter(tweet.user.screen_name)">
+                            <td>
+                                <p>#{{tweet.user.screen_name}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        <!--</uib-tab>-->
+
+
+        <!--<uib-tab index="2" heading="Scoreboard: Distance">-->
+            <br>
+            <div class="col-xs-6 col-md-4">
+                <div class="panel panel-default">
+                    <!-- Table -->
+                    <table class="table table-hover tabled-striped">
+                        <caption>Top 10 Users: Distance Covered</caption>
+                        <tr ng-repeat="tweet in data.tweets|limitTo:10" ng-click="search.setHashtagFilter(tweet.user.screen_name)">
+                            <td>
+                                <p>#{{tweet.user.screen_name}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        <!--</uib-tab>-->
+    <!--</uib-tabset>-->
+</div>
