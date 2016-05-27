@@ -9,6 +9,11 @@
     padding-right: 2% !important;
 }
 
+.analyticsViewContainer{
+    padding-left: 2% !important;
+    padding-right: 2% !important;
+}
+
 .twitter-profile-pic-list{
     width: 50px;
     height: 50px;
@@ -62,18 +67,9 @@
     background-color: #0000FF;
 }
 
-#tweet {
-    width: 400px !important;
-}
-
-#tweet iframe {
-    border: none !important;
-    box-shadow: none !important;
-}
-
 .leaflet-popup-content-wrapper{
-    height: 350px;
-    width: 450px;
+    /*height: 350px;*/
+    /*width: 600px;*/
 }
 
 .Tweet {
@@ -81,7 +77,7 @@
     display: block;
     margin-left: -10px;
     /*margin-right: -10px;*/
-    height: 420px;
+    height: 330px;
     /*width: 95%;*/
     border: 0;
 }
