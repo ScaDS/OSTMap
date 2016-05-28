@@ -17,7 +17,8 @@
         'httpService',
         '$log',
         'nemSimpleLogger',
-        'leafletData'
+        'leafletData',
+        '$interval'
     ];
 
     /**
@@ -31,7 +32,7 @@
      * @param leafletData
      * @constructor
      */
-    function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData, $q) {
+    function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData, $interval) {
         mapInit($scope);
 
         $scope.autoUpdate = false;
@@ -42,7 +43,7 @@
         $scope.currentFilters = "";
         $scope.timeFilter = 0.25;
         $scope.search = [];
-        $scope.search.hashtagFilter = "#";
+        $scope.hashtagFilter = "";
 
         $scope.data = [];
         $scope.data = httpService.getTweetsGeo();
@@ -58,7 +59,6 @@
          */
         $scope.search.clearFilters = function () {
             $scope.timeFilter = "0.25";
-            $scope.search.hashtagFilter = "#";
             $scope.center ={
                 lat: 50,
                 lng: 12,
@@ -74,11 +74,25 @@
          * Set the hashtag filter by clicking on a top10 hashtag then call a filter update
          * @param hashtag
          */
-        $scope.search.setHashtagFilter = function (hashtag) {
-            $scope.search.hashtagFilter = "#" + hashtag;
-            // $scope.search.updateFilters();
+        $scope.filterBy = function (hashtag) {
+            if ($scope.hashtagFilter == hashtag) {
+                $scope.hashtagFilter = "";
+                $scope.populateMarkers();
+            } else {
+                $scope.hashtagFilter = hashtag;
 
-            //TODO: Filter Data
+                $scope.filteredData = [];
+
+                for (var i = 0; i < $scope.data.tweets.length; i++) {
+                    if ($scope.data.tweets[i].text.indexOf(hashtag) !== -1) {
+                        $scope.filteredData.push($scope.data.tweets[i]);
+                    }
+                }
+
+                console.log($scope.filteredData.length + " Tweets with Hashtag: " + hashtag)
+
+                $scope.populateMarkers($scope.filteredData);
+            }
         };
 
         /**
@@ -126,8 +140,7 @@
                  *
                  * @type {string}
                  */
-                $scope.currentFilters = $scope.search.hashtagFilter + " | " +
-                    $scope.timeFilter + "h | " +
+                $scope.currentFilters = $scope.timeFilter + "h | " +
                     "[" + httpService.getBoundingBox().bbnorth.toFixed(2) +
                     ", " + httpService.getBoundingBox().bbwest.toFixed(2) +
                     ", " + httpService.getBoundingBox().bbsouth.toFixed(2) +
@@ -151,7 +164,11 @@
          * Populate the map with markers using coordinates from each tweet
          * Ignore tweets without coordinates
          */
-        $scope.populateMarkers = function () {
+        $scope.populateMarkers = function (sourceData) {
+            if (sourceData === undefined) {
+                sourceData = $scope.data.tweets;
+            }
+
             /**
              * Reset all markers
              */
@@ -166,7 +183,7 @@
              * Filter bad data
              * Add coordinate pairs to marker array
              */
-            $scope.data.tweets.forEach( function(tweet) {
+            sourceData.forEach( function(tweet) {
                 if($scope.markers[tweet.id_str] == undefined && tweet.coordinates != null) {
                     /**
                      * Create new marker then add to marker array
@@ -276,6 +293,33 @@
 
             return times;
         }
+
+        $scope.liveUpdates = function() {
+            console.log("live: " + $scope.timeFilter);
+            var updateInterval = _.clone($scope.timeFilter);
+
+            var count = 0;
+            var intervalPromise = $interval(function () {
+                if($scope.timeFilter != updateInterval) {
+                    $interval.cancel(intervalPromise);
+                } else {
+                    count++;
+                    console.log("Doing AutoUpdate: " + count);
+                    httpService.setTimeWindow(parseTimeFilter());
+
+                    httpService.getTweetsFromServerTest().then(function () {
+                        //Variant A: New Tweets get added to current Tweets
+                        $scope.data.tweets.push.apply(httpService.getTweetsGeo().tweets);
+                        $scope.data.top10.push.apply(httpService.getTweetsGeo().top10);
+
+                        //Variant B: Old Tweets deleted, new ones shown instead
+                        // $scope.data = httpService.getTweetsGeo();
+
+                        $scope.populateMarkers();
+                    });
+                }
+            }, 1000*60*60*updateInterval);
+        };
 
         /**
          * Run when page is loaded

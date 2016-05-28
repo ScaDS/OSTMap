@@ -13,8 +13,9 @@
 
 <!--Bootstap Containers: https://getbootstrap.com/css/-->
 <div class="mapViewContainer container-fluid">
-    <div class="row" style="opacity: 0.9;">
+    <div class="row" style="opacity: 0.9; width: 90%;">
         <div class="btn-group">
+            <!--<label class="btn btn-success btn-lg" ng-click="search.updateFilters(); liveUpdates();" ng-model="timeFilter" uib-btn-radio="1/600">Live</label>-->
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="0.25">15min</label>
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="0.5">30min</label>
             <label class="btn btn-success btn-lg" ng-click="search.updateFilters()" ng-model="timeFilter" uib-btn-radio="1">1h</label>
@@ -65,7 +66,9 @@
                 <!-- Table -->
                 <table class="table table-hover tabled-striped">
                     <caption>Top {{data.top10.length}} Hashtags <br> of {{data.tweets.length}} Tweets</caption>
-                    <tr ng-repeat="hashtag in data.top10" ng-click="search.setHashtagFilter(hashtag)">
+                    <caption ng-show="hashtagFilter == ''">Click on a hashtag <br> to set a filter</caption>
+                    <caption ng-show="hashtagFilter != ''">{{filteredData.length}} Tweets with hashtag <br>{{hashtagFilter}}</caption>
+                    <tr class="clickable-row" ng-repeat="hashtag in data.top10" ng-click="filterBy(hashtag)">
                         <td>
                             <p>{{hashtag}}</p>
                         </td>

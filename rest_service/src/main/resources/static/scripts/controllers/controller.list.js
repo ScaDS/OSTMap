@@ -274,7 +274,6 @@
                     $scope.populateMarkers();
                 }
             });
-            $scope.search.updateFilters();
         });
     }
 

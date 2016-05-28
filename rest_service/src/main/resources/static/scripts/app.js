@@ -60,7 +60,7 @@
                 controller: 'RankingsCtrl',
                 name: 'Rankings',
                 align: 'left',
-                glyphicon: 'glyphicon glyphicon-stats'
+                glyphicon: 'glyphicon glyphicon-arrow-up'
             })
             .when('/about', {
                 templateUrl: 'views/aboutView.html',
