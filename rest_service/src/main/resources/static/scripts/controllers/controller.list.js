@@ -45,7 +45,6 @@
         $scope.data.tweets = httpService.getTweets();
 
         $scope.search.inputValue = httpService.getSearchToken();
-        $scope.search.inputValue = "ostmap";
         $scope.search.searchFields = httpService.getSearchFields();
 
 
@@ -253,12 +252,9 @@
         };
         $scope.pageChanged = function() {
             $scope.currentSlice = $scope.data.tweets.slice(($scope.currentPage-1) * $scope.itemsPerPage,($scope.currentPage * $scope.itemsPerPage));
-
         };
         $scope.maxSize = 5;
         $scope.itemsPerPage = 10;
-        $scope.bigTotalItems = 175;
-        $scope.bigCurrentPage = 1;
 
         /**
          * Run-once
