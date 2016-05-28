@@ -9,6 +9,8 @@
                 <tr ng-repeat="score in data.highScore.area" ng-click="goToHighScoreArea()">
                     <td>
                         <p>{{score.user}}</p>
+                        <p>{{score.area}}</p>
+                        <p>{{score.coordinates}}</p>
                     </td>
                 </tr>
             </table>
@@ -25,6 +27,8 @@
                 <tr ng-repeat="score in data.highScore.path" ng-click="goToHighScoreDistance()">
                     <td>
                         <p>{{score.user}}</p>
+                        <p>{{score.area}}</p>
+                        <p>{{score.distance}}</p>
                     </td>
                 </tr>
             </table>
