@@ -72,12 +72,4 @@ public class HighscoreController {
 
         return toReturn.toString();
     }
-    public static void main(String[] args){
-        HighscoreController daController = new HighscoreController();
-        try{
-            System.out.println(daController.getHighscore());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
 }
