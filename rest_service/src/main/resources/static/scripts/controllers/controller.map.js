@@ -167,6 +167,7 @@
         $scope.populateMarkers = function (sourceData) {
             if (sourceData === undefined) {
                 sourceData = $scope.data.tweets;
+                $scope.hashtagFilter = "";
             }
 
             /**

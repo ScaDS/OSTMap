@@ -64,11 +64,11 @@
         <div class="col-md-2 col-xs-4">
             <div class="panel panel-default" style="opacity: 0.94;">
                 <!-- Table -->
-                <table class="table table-hover tabled-striped">
+                <table ng-show="data.top10.length > 0" class="table table-hover tabled-striped">
                     <caption>Top {{data.top10.length}} Hashtags <br> of {{data.tweets.length}} Tweets</caption>
                     <caption ng-show="hashtagFilter == ''">Click on a hashtag <br> to set a filter</caption>
                     <caption ng-show="hashtagFilter != ''">{{filteredData.length}} Tweets with hashtag <br>{{hashtagFilter}}</caption>
-                    <tr class="clickable-row" ng-repeat="hashtag in data.top10" ng-click="filterBy(hashtag)">
+                    <tr ng-class="{selected: hashtag === hashtagFilter}" ng-repeat="hashtag in data.top10" ng-click="filterBy(hashtag)">
                         <td>
                             <p>{{hashtag}}</p>
                         </td>

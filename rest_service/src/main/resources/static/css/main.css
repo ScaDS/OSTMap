@@ -86,3 +86,7 @@
     /*width: 95%;*/
     border: 0;
 }
+
+.selected {
+    background-color: #f3f1f2;
+}
