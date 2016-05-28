@@ -1,8 +1,4 @@
 /**
- * Created by Christopher on 24.04.2016.
- */
-
-/**
  * A service to publish all routes for the navigation directive.
  */
 (function () {
@@ -10,7 +6,7 @@
 
     angular
         .module('ostMapApp')
-        .factory('routeNavigation',routeNavigation);
+        .factory('routeNavigation', routeNavigation);
 
     /**
      * Inject dependencies for the service
@@ -43,7 +39,7 @@
                     align: route.align,
                     glyphicon: route.glyphicon
                 });
-            }else if (route.name && route.align === 'left') {
+            } else if (route.name && route.align === 'left') {
                 routesLeft.push({
                     path: path,
                     name: route.name,
