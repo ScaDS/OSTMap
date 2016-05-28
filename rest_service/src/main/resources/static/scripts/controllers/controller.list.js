@@ -45,11 +45,12 @@
         $scope.data.tweets = httpService.getTweets();
 
         $scope.search.inputValue = httpService.getSearchToken();
+        $scope.search.inputValue = "ostmap";
         $scope.search.searchFields = httpService.getSearchFields();
 
 
         var updateQueued = false;
-        $scope.search.updateFilters = function (mode) {
+        $scope.search.updateFilters = function () {
             if (!httpService.getLoading()) {
                 httpService.setLoading(true);
                 /**
@@ -153,6 +154,8 @@
             });
             $scope.pruneCluster.ProcessView();
             $scope.markers = newMarkers;
+            $scope.totalItems = $scope.data.tweets.length;
+            $scope.setPage(1);
         };
 
         /**
@@ -242,15 +245,18 @@
          * Pagination
          * https://angular-ui.github.io/bootstrap/#/pagination
          */
-        $scope.totalItems = 64;
-        $scope.currentPage = 4;
+
+        $scope.currentPage = 1;
         $scope.setPage = function (pageNo) {
             $scope.currentPage = pageNo;
+            $scope.currentSlice = $scope.data.tweets.slice(($scope.currentPage-1) * $scope.itemsPerPage,($scope.currentPage * $scope.itemsPerPage));
         };
         $scope.pageChanged = function() {
-            $log.log('Page changed to: ' + $scope.currentPage);
+            $scope.currentSlice = $scope.data.tweets.slice(($scope.currentPage-1) * $scope.itemsPerPage,($scope.currentPage * $scope.itemsPerPage));
+
         };
         $scope.maxSize = 5;
+        $scope.itemsPerPage = 10;
         $scope.bigTotalItems = 175;
         $scope.bigCurrentPage = 1;
 
@@ -272,6 +278,7 @@
                     $scope.populateMarkers();
                 }
             });
+            $scope.search.updateFilters();
         });
     }
 

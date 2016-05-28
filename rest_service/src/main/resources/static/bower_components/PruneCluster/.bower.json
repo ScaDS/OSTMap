@@ -1,0 +1,18 @@
+{
+  "name": "PruneCluster",
+  "version": "1.1.0",
+  "devDependencies": {
+    "DefinitelyTyped": "*",
+    "leaflet-dist": "~0.7.2"
+  },
+  "homepage": "https://github.com/SINTEF-9012/PruneCluster",
+  "_release": "1.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.1.0",
+    "commit": "4560efba282616bd4246f28898047488aed887d5"
+  },
+  "_source": "https://github.com/SINTEF-9012/PruneCluster.git",
+  "_target": "^1.1.0",
+  "_originalSource": "PruneCluster"
+}
