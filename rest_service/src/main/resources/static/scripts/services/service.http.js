@@ -189,9 +189,9 @@
             _setLoading(true);
             var deferred = $q.defer();
 
-            var url = "http://localhost:8082/api/highscore"
+            var url = "http://localhost:8080/api/highscore";
             $http.get(url).success(function (data, status, headers, config) {
-                _highScore = _.clone(data);
+                angular.copy(data,_highScore);
                 _setLoading(status);
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
