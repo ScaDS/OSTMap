@@ -55,6 +55,13 @@
                 align: 'left',
                 glyphicon: 'glyphicon glyphicon-stats'
             })
+            .when('/rankings', {
+                templateUrl: 'views/rankingsView.html',
+                controller: 'RankingsCtrl',
+                name: 'Rankings',
+                align: 'left',
+                glyphicon: 'glyphicon glyphicon-stats'
+            })
             .when('/about', {
                 templateUrl: 'views/aboutView.html',
                 controller: 'AboutCtrl',

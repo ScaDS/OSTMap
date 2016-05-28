@@ -42,6 +42,13 @@
     var _tweetFrequency = [];
 
     /**
+     * Array to store all user rankings, aka high scores
+     * @type {Array}
+     * @private
+     */
+    var _highScore = [];
+
+    /**
      * The bounding box to search in
      * @param bbnorth the northern latitude for the bounding box to search, e.g. 10.123
      * @param bbwest the western longitude for the bounding box to search, e.g. 30.123
@@ -101,11 +108,13 @@
             getTweetsFromServerByToken2: _getTweetsFromServerByToken2,
             getTweetsFromServerByGeoTime: _getTweetsFromServerByGeoTime,
             getTweetsFromServerByTweetFrequency: _getTweetsFromServerByTweetFrequency,
+            getHighScoreFromServer: _getHighScoreFromServer,
             getTweetsFromServerTest: _getTweetsFromServerTest,
             getTweetsFromLocal: _getTweetsFromLocal,
             getTweets: _getTweets,
             getTweetsGeo: _getTweetsGeo,
             getTweetFrequency: _getTweetFrequency,
+            getHighScore: _getHighScore,
             getSearchToken: _getSearchToken,
             setSearchToken: _setSearchToken,
             getSearchFields: _getSearchFields,
@@ -169,6 +178,23 @@
                 deferred.resolve(status);
             }).error(function (data, status, headers, config) {
                 //TODO: Log the errors
+                _setLoading(status);
+                deferred.resolve(status + "\n" + headers + "\n" + config);
+            });
+
+            return deferred.promise;
+        }
+
+        function _getHighScoreFromServer() {
+            _setLoading(true);
+            var deferred = $q.defer();
+
+            var url = "http://localhost:8082/api/highscore"
+            $http.get(url).success(function (data, status, headers, config) {
+                _highScore = _.clone(data);
+                _setLoading(status);
+                deferred.resolve(status);
+            }).error(function (data, status, headers, config) {
                 _setLoading(status);
                 deferred.resolve(status + "\n" + headers + "\n" + config);
             });
@@ -278,6 +304,15 @@
          */
         function _getTweetFrequency() {
             return _tweetFrequency;
+        }
+
+        /**
+         * Getter method for _highScore to access from the outside
+         * @returns {Array}
+         * @private
+         */
+        function _getHighScore() {
+            return _highScore;
         }
 
         /**
