@@ -68,8 +68,8 @@ public class PathGeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>
 
         JSONObject data = new JSONObject();
         try {
-            data.append("user",userName);
-            data.append("distance",distance);
+            data.put("user",userName);
+            data.put("distance",distance);
             JSONArray coordsJSON = new JSONArray();
             while(!path2.isEmpty()){
                 Map.Entry<Long,Double[]> entry = path2.pollFirstEntry();
@@ -78,7 +78,7 @@ public class PathGeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>
                 newCoords.put(entry.getValue()[1]);
                 coordsJSON.put(newCoords);
             }
-            data.append("coordinates",coordsJSON);
+            data.put("coordinates",coordsJSON);
         } catch (JSONException e) {
             e.printStackTrace();
         }
