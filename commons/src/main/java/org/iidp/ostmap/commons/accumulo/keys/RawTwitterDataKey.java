@@ -20,6 +20,27 @@ public class RawTwitterDataKey {
     public RawTwitterDataKey() {}
 
     /**
+     *
+     * @param timestamp seconds since 1970
+     * @return RawTwitterDataKey row prefix for given timestamp
+     */
+    public static byte[] buildPrefix(String timestamp){
+        return buildPrefix(Long.parseLong(timestamp));
+    }
+
+    /**
+     *
+     * @param timestamp seconds since 1970
+     * @return RawTwitterDataKey row prefix for given timestamp
+     */
+    public static byte[] buildPrefix(Long timestamp){
+        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+        bb.putLong(timestamp);
+
+        return bb.array();
+    }
+
+    /**
      * builds a rawTwitterDataKey for the given parameter
      * @param timestamp of the tweet
      * @param hash      int hash of the tweet
