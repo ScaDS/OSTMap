@@ -1,0 +1,38 @@
+<br>
+<div class="analyticsViewContainer" >
+    <br>
+    <div class="col-xs-6 col-md-4">
+        <div class="panel panel-default">
+            <!-- Table -->
+            <table class="table table-hover tabled-striped">
+                <caption>Top 10 Users: Area Covered</caption>
+                <tr ng-repeat="score in data.highScore.area" ng-click="goToHighScoreArea()">
+                    <td>
+                        <p>{{score.user}}</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <br>
+    <div class="col-xs-6 col-md-4">
+        <div class="panel panel-default">
+            <!-- Table -->
+            <table class="table table-hover tabled-striped">
+                <caption>Top 10 Users: Distance Covered</caption>
+                <tr ng-repeat="score in data.highScore.path" ng-click="goToHighScoreDistance()">
+                    <td>
+                        <p>{{score.user}}</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <code>
+        DEBUG<br>
+        High Score Data: {{highScore}}<br>
+    </code>
+</div>
