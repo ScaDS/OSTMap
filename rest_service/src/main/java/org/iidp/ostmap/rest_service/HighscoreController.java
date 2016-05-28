@@ -24,16 +24,6 @@ import java.util.Vector;
 @Controller
 @RequestMapping("/api")
 public class HighscoreController {
-    public class HighscoreReturn{
-        Vector<JSONObject> areaHighscore;
-        Vector<JSONObject> pathHighscore;
-        public void setAreaHighscore(Vector<JSONObject> areaHighscore){
-            this.areaHighscore = areaHighscore;
-        }
-        public void setPathHighscore(Vector<JSONObject> pathHighscore){
-            this.pathHighscore = pathHighscore;
-        }
-    };
 
     static Logger log = LoggerFactory.getLogger(HighscoreController.class);
 
