@@ -96,6 +96,7 @@ public class JsonHelper {
 
         while (m.find()) {
             String tag = m.group();
+            tag = tag.toLowerCase();
             if (!hm.containsKey(tag)) {
                 hm.put(tag, 1);
             } else {

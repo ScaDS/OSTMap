@@ -49,9 +49,9 @@ public class JsonHelperTest {
         assertTrue(hashtags.length() == 10);
 
         assertTrue(Objects.equals(hashtags.getString(0), "#yolo"));
-        assertTrue(Objects.equals(hashtags.getString(1), "#Dirili"));
-        System.out.println(hashtags.getString(2) + " <<-->> " + "#CosmoBlogAwards");
-        assertTrue(Objects.equals(hashtags.getString(2), "#CosmoBlogAwards"));
+        assertTrue(Objects.equals(hashtags.getString(1), "#dirili"));
+        System.out.println(hashtags.getString(2) + " <<-->> " + "#cosmoblogawards");
+        assertTrue(Objects.equals(hashtags.getString(2), "#cosmoblogawards"));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class JsonHelperTest {
 
         assertTrue(resultJsonObj.getJSONArray(JsonHelper.KEY_TOPTEN).length() == 10);
         assertTrue(Objects.equals(resultJsonObj.getJSONArray(JsonHelper.KEY_TOPTEN).getString(0), "#yolo"));
-        assertTrue(Objects.equals(resultJsonObj.getJSONArray(JsonHelper.KEY_TOPTEN).getString(1), "#Dirili"));
+        assertTrue(Objects.equals(resultJsonObj.getJSONArray(JsonHelper.KEY_TOPTEN).getString(1), "#dirili"));
 
         assertTrue(resultJsonObj.getJSONArray(JsonHelper.KEY_TWEETS).length() == 34);
 
