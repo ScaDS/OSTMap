@@ -11,6 +11,7 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.iidp.ostmap.batch_processing.areacalc.Calculator;
 import org.iidp.ostmap.batch_processing.areacalc.CoordGroupReduce;
 import org.iidp.ostmap.batch_processing.areacalc.GeoCalcFlatMap;
@@ -414,7 +415,7 @@ public class PathFlatMapsAndReduceTest {
         System.out.println("Reduced Data: -----------------------------------------------------");
         reducedGroup.print();
 
-        DataSet<Tuple2<String, Double>> ranking = reducedGroup.flatMap(new PathGeoCalcFlatMap());
+        DataSet<Tuple3<String, Double,Integer>> ranking = reducedGroup.flatMap(new PathGeoCalcFlatMap());
         System.out.println("Ranking: -----------------------------------------------------");
         ranking.print();
     }

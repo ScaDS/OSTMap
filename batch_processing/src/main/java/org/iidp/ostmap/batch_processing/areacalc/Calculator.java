@@ -6,19 +6,22 @@ import org.apache.accumulo.core.client.ClientConfiguration;
 import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
-import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.TextOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.util.Collector;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.iidp.ostmap.batch_processing.pathcalc.TopTenGroupReduce;
+import org.iidp.ostmap.commons.accumulo.FlinkEnvManager;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
 
 import java.io.FileInputStream;
@@ -89,9 +92,11 @@ public class Calculator {
 
         readConfig(path);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        FlinkEnvManager fem = new FlinkEnvManager(path, "areaJob",
+                TableIdentifier.RAW_TWITTER_DATA.get(),
+                "HighScore");
 
-        DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
+        DataSet<Tuple2<Key,Value>> rawTwitterDataRows = fem.getDataFromAccumulo();
 
         DataSet<Tuple2<String,String>> geoList = rawTwitterDataRows.flatMap(new GeoExtrationFlatMap());
 
@@ -99,9 +104,16 @@ public class Calculator {
                                                         .groupBy(0)
                                                         .reduceGroup(new CoordGroupReduce());
 
-        DataSet<Tuple2<String,Double>> userRanking = reducedGroup.flatMap(new GeoCalcFlatMap())
+        DataSet<Tuple3<String,Double,Integer>> userRanking = reducedGroup.flatMap(new GeoCalcFlatMap())
                 .sortPartition(1, Order.DESCENDING).setParallelism(1);
 
+        DataSet<Tuple2<Text,Mutation>> topTen = userRanking
+                .groupBy(2)
+                .reduceGroup(new TopTenGroupReduce("ac"));
+
+        topTen.output(fem.getHadoopOF());
+
+        fem.getExecutionEnvironment().execute("AreaProcess");
 
         TextOutputFormat<String> tof = new TextOutputFormat<>(new Path("file:///tmp/areauserranking"));
         tof.setWriteMode(FileSystem.WriteMode.OVERWRITE);
@@ -110,7 +122,7 @@ public class Calculator {
 
 
 
-        env.execute("AreaCalculationProcess");
+        fem.getExecutionEnvironment().execute("AreaCalculationProcess");
 
     }
     /**

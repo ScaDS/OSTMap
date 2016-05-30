@@ -18,7 +18,10 @@ import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
+import org.iidp.ostmap.commons.accumulo.FlinkEnvManager;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
+import org.apache.accumulo.core.data.Mutation;
+import org.apache.hadoop.io.Text;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -88,9 +91,12 @@ public class PathCalculator {
 
         readConfig(path);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        FlinkEnvManager fem = new FlinkEnvManager(path, "pathJob",
+                TableIdentifier.RAW_TWITTER_DATA.get(),
+                "HighScore");
 
-        DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
+
+        DataSet<Tuple2<Key,Value>> rawTwitterDataRows = fem.getDataFromAccumulo();
 
         DataSet<Tuple2<String,String>> geoList = rawTwitterDataRows.flatMap(new PathGeoExtrationFlatMap());
 
@@ -98,9 +104,16 @@ public class PathCalculator {
                                                         .groupBy(0)
                                                         .reduceGroup(new PathCoordGroupReduce());
 
-        DataSet<Tuple2<String,Double>> userRanking = reducedGroup.flatMap(new PathGeoCalcFlatMap())
+        DataSet<Tuple3<String,Double,Integer>> userRanking = reducedGroup.flatMap(new PathGeoCalcFlatMap())
                 .sortPartition(1, Order.DESCENDING).setParallelism(1);
 
+        DataSet<Tuple2<Text,Mutation>> topTen = userRanking
+                                                        .groupBy(2)
+                                                        .reduceGroup(new TopTenGroupReduce("td"));
+
+        topTen.output(fem.getHadoopOF());
+
+        fem.getExecutionEnvironment().execute("PathProcess");
 
         TextOutputFormat<String> tof = new TextOutputFormat<>(new Path("file:///tmp/pathuserranking"));
         tof.setWriteMode(FileSystem.WriteMode.OVERWRITE);
@@ -109,7 +122,7 @@ public class PathCalculator {
 
 
 
-        env.execute("PathCalculationProcess");
+        fem.getExecutionEnvironment().execute("PathCalculationProcess");
 
     }
     /**
