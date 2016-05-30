@@ -2,10 +2,22 @@ package org.iidp.ostmap.rest_service;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.ClientConfiguration;
 import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.security.Authorizations;
+import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Job;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.iidp.ostmap.commons.enums.TableIdentifier;
 import org.iidp.ostmap.rest_service.helper.JsonHelper;
 import org.mortbay.util.ajax.JSON;
 import org.slf4j.Logger;
@@ -26,6 +38,28 @@ import java.util.Vector;
 public class HighscoreController {
 
     static Logger log = LoggerFactory.getLogger(HighscoreController.class);
+    public static final String PROPERTY_INSTANCE = "accumulo.instance";
+    private String accumuloInstanceName;
+    public static final String PROPERTY_USER = "accumulo.user";
+    private String accumuloUser;
+    public static final String PROPERTY_PASSWORD = "accumulo.password";
+    private String accumuloPassword;
+    public static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
+    private String accumuloZookeeper;
+    public static final String inTable = "HighScore";
+    private Job job;
+
+    public DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
+        job = Job.getInstance(new Configuration(), "HighScoreJob");
+        AccumuloInputFormat.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword));
+        AccumuloInputFormat.setScanAuthorizations(job, new Authorizations("standard"));
+        ClientConfiguration clientConfig = new ClientConfiguration();
+        clientConfig.withInstance(accumuloInstanceName);
+        clientConfig.withZkHosts(accumuloZookeeper);
+        AccumuloInputFormat.setZooKeeperInstance(job, clientConfig);
+        AccumuloInputFormat.setInputTableName(job, inTable);
+        return env.createHadoopInput(new AccumuloInputFormat(),Key.class,Value.class, job);
+    }
 
     /**
      * Mapping method for path /highscore
@@ -40,6 +74,8 @@ public class HighscoreController {
     @ResponseBody
     String getHighscore(
     ) throws AccumuloException, TableNotFoundException, AccumuloSecurityException, IOException, JSONException {
+        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
         //TODO remove
         //path
         String us1 = "{\"user\":\"Zorne\",\"distance\":7589.900654023497,\"coordinates\":[[49,26.546974],[27.2147884,38.4614716],[-0.2147884,-0.4614716]]}";
