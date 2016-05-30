@@ -3,6 +3,7 @@ package org.iidp.ostmap.batch_processing.areacalc;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.util.Collector;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -14,7 +15,7 @@ import java.math.RoundingMode;
 import java.util.Vector;
 
 
-public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tuple2<String,Double>> {
+public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tuple3<String,Double,Integer>> {
 
 
     double equatorialEarthRadius = 6378.1370;
@@ -30,7 +31,7 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
      * @param out User with biggest area defined by tweets
      */
     @Override
-    public void flatMap(Tuple2<String, String> in, Collector<Tuple2<String, Double>> out) {
+    public void flatMap(Tuple2<String, String> in, Collector<Tuple3<String, Double,Integer>> out) {
 
         String userName = in.f0;
         String[] coords;
@@ -97,7 +98,7 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
             e.printStackTrace();
         }
 
-        out.collect(new Tuple2<>(data.toString(),area));
+        out.collect(new Tuple3<>(data.toString(),area,1));
 
 
     }

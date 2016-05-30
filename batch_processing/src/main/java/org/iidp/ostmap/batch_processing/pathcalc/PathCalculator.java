@@ -109,7 +109,7 @@ public class PathCalculator {
 
         DataSet<Tuple2<Text,Mutation>> topTen = userRanking
                                                         .groupBy(2)
-                                                        .reduceGroup(new TopTenGroupReduce());
+                                                        .reduceGroup(new TopTenGroupReduce("td"));
 
         topTen.output(fem.getHadoopOF());
 

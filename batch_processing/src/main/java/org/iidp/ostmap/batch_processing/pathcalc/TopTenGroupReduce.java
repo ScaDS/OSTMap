@@ -16,6 +16,11 @@ public class TopTenGroupReduce implements GroupReduceFunction<Tuple3<String, Dou
 
     int i = 0;
     String toReturn = "";
+    String rowkey = "";
+    public TopTenGroupReduce(String rowkey){
+        this.rowkey = rowkey;
+
+    }
         @Override
         public void reduce(Iterable<Tuple3<String, Double, Integer>> values, Collector<Tuple2<Text, Mutation>> out) throws Exception {
             for (Tuple3<String,Double,Integer> entry: values) {
@@ -32,8 +37,8 @@ public class TopTenGroupReduce implements GroupReduceFunction<Tuple3<String, Dou
             }
             toReturn += "]";
 
-            Mutation m = new Mutation("td");
-            m.put("td", "", new Value(toReturn.getBytes()));
+            Mutation m = new Mutation(rowkey);
+            m.put(rowkey, "", new Value(toReturn.getBytes()));
             out.collect(new Tuple2<>(new Text("HighScore"), m));
 
 
