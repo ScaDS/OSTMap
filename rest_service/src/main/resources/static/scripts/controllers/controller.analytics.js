@@ -27,7 +27,7 @@
      */
     function AnalyticsCtrl($scope, httpService, $interval) {
         $scope.autoUpdateEnabled = false;
-        $scope.timeFilter = 60;
+        $scope.timeFilter = 720;
         // var testseries = [];
         // for (var i=0; i<46; i++){
         //     testseries.push(
@@ -257,7 +257,7 @@
         }
 
         $scope.options = {
-            renderer: 'area'
+            renderer: 'bar'
         };
 
         $scope.features = {

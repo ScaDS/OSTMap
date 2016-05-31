@@ -38,7 +38,10 @@
                         <img class="twitter-profile-pic-list" ng-src="{{tweet.user.profile_image_url}}">
                     </td>
                     <td>
-                        <p>{{tweet.user.name}}</p>
+                        {{tweet.user.name}}
+                        <br>
+                        <!--<a href="http://twitter.com" onclick="window.open('twitter.com%2F' + tweet.user.screen_name)" target="_blank">@{{tweet.user.screen_name}}</a>-->
+                        <a ng-click="stalkUser(tweet.user.screen_name)">@{{tweet.user.screen_name}}</a>
                     </td>
                     <td>
                         <p style="word-wrap:break-word;">{{tweet.text}}</p>

@@ -35,10 +35,10 @@
             <label class="btn btn-danger btn-lg" ng-model="autoUpdate" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false>AutoUpdate</label>
             <label class="btn btn-danger btn-lg" ng-disabled="autoUpdate" ng-click="search.updateFilters()">Manual Update</label>
         </div>
-        <div class="btn-group">
-            <label class="btn btn-danger btn-lg" ng-model="clusteringEnabled" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false ng-click="usePruneCluster=false; populateMarkers();">Clustering</label>
-            <label class="btn btn-danger btn-lg" ng-model="usePruneCluster" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false ng-click="clusteringEnabled=true; populateMarkers();">PruneCluster</label><br>
-        </div>
+        <!--<div class="btn-group">-->
+            <!--<label class="btn btn-danger btn-lg" ng-model="clusteringEnabled" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false ng-click="usePruneCluster=false; populateMarkers();">Clustering</label>-->
+            <!--<label class="btn btn-danger btn-lg" ng-model="usePruneCluster" uib-btn-checkbox btn-checkbox-true=true btn-checkbox-false=false ng-click="clusteringEnabled=true; populateMarkers();">PruneCluster</label><br>-->
+        <!--</div>-->
 
         <div class="btn-group" uib-dropdown is-open="status.isopen">
             <button id="single-button" type="button" class="btn btn-danger btn-lg" uib-dropdown-toggle ng-disabled="disabled">
@@ -56,10 +56,10 @@
         <div class="col-md-10 col-xs-8">
         </div>
 
-        <div class="col-md-2 col-xs-4">
+        <div class="col-md-2 col-xs-4" ng-show="data.top10.length > 0">
             <div class="panel panel-default" style="opacity: 0.94;">
                 <!-- Table -->
-                <table ng-show="data.top10.length > 0" class="table table-hover tabled-striped">
+                <table class="table table-hover tabled-striped">
                     <caption>Top {{data.top10.length}} Hashtags <br> of {{data.tweets.length}} Tweets</caption>
                     <caption ng-show="hashtagFilter == ''">Click on a hashtag <br> to set a filter</caption>
                     <caption ng-show="hashtagFilter != ''">{{filteredData.length}} Tweets with hashtag <br>{{hashtagFilter}}</caption>

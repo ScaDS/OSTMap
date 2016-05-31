@@ -51,6 +51,17 @@
         var updateQueued = false;
         $scope.search.updateFilters = function () {
             if (!httpService.getLoading()) {
+                /**
+                 * Reset the map center
+                 * @type {{lat: number, lng: number, zoom: number}}
+                 */
+                $scope.center ={
+                    lat: 50,
+                    lng: 12,
+                    zoom: 4
+                };
+
+
                 httpService.setLoading(true);
                 /**
                  * Pass the filters to the httpService
@@ -239,6 +250,15 @@
             }
         };
 
+        $scope.stalkUser = function (username) {
+            console.log("Stalking: " + username);
+            $scope.search.inputValue = username;
+            $scope.search.searchFields.text.checked = false;
+            $scope.search.searchFields.user.checked = true;
+
+            $scope.search.updateFilters();
+
+        };
 
         /**
          * Pagination
