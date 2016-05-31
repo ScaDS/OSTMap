@@ -173,7 +173,7 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
                         return this.round(this.heronForm(ab,bd,ad) + this.heronForm(ac,cd,ad),decimalPlaces);
                     }else{
                         // ab is the diagonal
-                        return this.round(this.heronForm(ac,bc,ab) + this.heronForm(ad,cd,ab),decimalPlaces);
+                        return this.round(this.heronForm(ac,bc,ab) + this.heronForm(ad,bd,ab),decimalPlaces);
                     }
                 }
             }
