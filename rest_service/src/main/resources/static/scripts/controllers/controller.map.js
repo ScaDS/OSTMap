@@ -18,7 +18,8 @@
         '$log',
         'nemSimpleLogger',
         'leafletData',
-        '$interval'
+        '$interval',
+        '$window',
     ];
 
     /**
@@ -32,7 +33,7 @@
      * @param leafletData
      * @constructor
      */
-    function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData, $interval) {
+    function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData, $interval, $window) {
         mapInit($scope);
 
         $scope.autoUpdate = false;
@@ -190,10 +191,21 @@
                      * Create new marker then add to marker array
                      * @type {{id_str: *, lat: *, lng: *, focus: boolean, draggable: boolean, message: *, icon: {}}}
                      */
-                    var tweetMessage = "Missing  tweet.user.screen_name and/or tweet.id_str";
+                    var tweetMessage = "Missing tweet.user.screen_name and/or tweet.id_str";
 
                     if(tweet.user.hasOwnProperty('screen_name') && tweet.hasOwnProperty('id_str')){
-                        tweetMessage = '<iframe id="tweet_' + tweet.id_str + '" class="Tweet" frameborder=0 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' + tweet.user.screen_name +  '%2Fstatus%2F' + tweet.id_str + '"></iframe>';
+                        tweetMessage =
+                            '<iframe ' +
+                                'id="tweet_' + tweet.id_str + '" ' +
+                                'onLoad="alertIFrame(this.id);" ' +
+                                'class="Tweet" ' +
+                                'frameborder=0 ' +
+                                'src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' +
+                                tweet.user.screen_name +
+                                '%2Fstatus%2F' +
+                                tweet.id_str +
+                            '">' +
+                            '</iframe>';
                     }
 
                     var newMarker = {
@@ -329,6 +341,46 @@
             // console.log("Page Loaded");
             $scope.onStart();
         });
+
+        window.alertIFrame = function(tweetID){
+            console.log("posting Message: " + tweetID);
+            window.postMessage({element: tweetID, query: "height"}, "http://twitframe.com");
+        };
+
+        $(window).on("message", function(e){
+            console.log("Message Received from iFrame 1 " + e);
+
+            var oe = e.originalEvent;
+            if (oe.origin != "http://twitframe.com" && oe.origin != "https://twitframe.com") {
+                return;
+            }
+
+            if (oe.data.height && oe.data.element.match(/^tweet_/)) {
+                $("#" + oe.data.element).css("height", parseInt(oe.data.height) + "px");
+            }
+        });
+
+
+        // $(document).ready(function() {
+        //     /* find all iframes with ids starting with "tweet_" */
+        //     $("iframe[id^='tweet_']").load(function() {
+        //         console.log("posting Message: " + this.id);
+        //         this.contentWindow.postMessage({ element: this.id, query: "height" },
+        //             "http://twitframe.com");
+        //     });
+        // });
+        //
+        // /* listen for the return message once the tweet has been loaded */
+        // $(window).bind("message", function(e) {
+        //     console.log("Message Received from iFrame 2" + e);
+        //
+        //     var oe = e.originalEvent;
+        //     if (oe.origin != "http://twitframe.com" && oe.origin != "https://twitframe.com")
+        //         return;
+        //
+        //     if (oe.data.height && oe.data.element.match(/^tweet_/))
+        //         $("#" + oe.data.element).css("height", parseInt(oe.data.height) + "px");
+        // });
 
         /**
          * Run-once
