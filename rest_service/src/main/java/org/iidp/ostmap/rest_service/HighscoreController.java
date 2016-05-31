@@ -1,9 +1,6 @@
 package org.iidp.ostmap.rest_service;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.ClientConfiguration;
-import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.client.mapreduce.AccumuloInputFormat;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
@@ -30,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Vector;
 
@@ -74,8 +72,38 @@ public class HighscoreController {
     @ResponseBody
     String getHighscore(
     ) throws AccumuloException, TableNotFoundException, AccumuloSecurityException, IOException, JSONException {
+        JSONObject toReturn = new JSONObject();
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
+
+        Instance instance = new ZooKeeperInstance(PROPERTY_INSTANCE,PROPERTY_ZOOKEEPER);
+        Connector conn = null;
+
+        try {
+            conn = instance.getConnector("root", new PasswordToken("password"));
+        } catch (AccumuloException|AccumuloSecurityException e) {
+            e.printStackTrace();
+        }
+
+        Authorizations auth = new Authorizations("standard");
+
+        try {
+            conn.securityOperations().changeUserAuthorizations("root", auth);
+        } catch (AccumuloException|AccumuloSecurityException e) {
+            e.printStackTrace();
+        }
+
+        Scanner s = conn.createScanner("HighScore", new Authorizations("standard"));
+        for(Map.Entry<Key, Value> entry: s){
+            if(entry.getKey().getRow().toString().equals("td")){
+                toReturn.put("path",new JSONArray(entry.getValue().toString()));
+            }else{
+                toReturn.put("area",new JSONArray(entry.getValue().toString()));
+            }
+        }
+        s.close();
+
+        /**
         //TODO remove
         //path
         String us1 = "{\"user\":\"Zorne\",\"distance\":7589.900654023497,\"coordinates\":[[49,26.546974],[27.2147884,38.4614716],[-0.2147884,-0.4614716]]}";
@@ -99,7 +127,7 @@ public class HighscoreController {
         pathHighscore.put(new JSONObject(us4));
         toReturn.put("area",areaHighscore);
         toReturn.put("path",pathHighscore);
-        log.debug("HighscoreQuery #################################");
+        log.debug("HighscoreQuery #################################");*/
 
         // build query
 //        GeoTempQuery geoTempQuery = new GeoTempQuery(
