@@ -220,9 +220,14 @@ public class GeoCalcFlatMap implements FlatMapFunction<Tuple2<String,String>, Tu
      */
     private double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        BigDecimal bd = null;
+        try{
+            bd = new BigDecimal(value);
+            bd = bd.setScale(places, RoundingMode.HALF_UP);
+        }catch(Exception e){
+            e.printStackTrace();
+            return 0.;
+        }
         return bd.doubleValue();
     }
 }
