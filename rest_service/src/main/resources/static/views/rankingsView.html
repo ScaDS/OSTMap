@@ -1,12 +1,24 @@
-<br>
-<div class="analyticsViewContainer" >
-    <br>
-    <div class="col-xs-6 col-md-4">
+<div class="listViewContainer" >
+    <div class="col-md-4 col-xs-4">
+
+        <div class="panel panel-default">
+            <!-- Table -->
+            <table class="table table-hover tabled-striped">
+                <caption>Top 10 Users: Distance Covered</caption>
+                <tr ng-repeat="score in data.path" ng-click="goToHighScoreDistance(score)">
+                    <td>
+                        <p>{{score.user}}</p>
+                        <p>{{score.distance}} km</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <div class="panel panel-default">
             <!-- Table -->
             <table class="table table-hover tabled-striped">
                 <caption>Top 10 Users: Area Covered</caption>
-                <tr ng-repeat="score in data.highScore.area" ng-click="goToHighScoreArea()">
+                <tr ng-repeat="score in data.area" ng-click="goToHighScoreArea(score)">
                     <td>
                         <p>{{score.user}}</p>
                         <p>{{score.area}} km²</p>
@@ -16,18 +28,19 @@
         </div>
     </div>
 
-    <div class="col-xs-6 col-md-4">
-        <div class="panel panel-default">
-            <!-- Table -->
-            <table class="table table-hover tabled-striped">
-                <caption>Top 10 Users: Distance Covered</caption>
-                <tr ng-repeat="score in data.highScore.path" ng-click="goToHighScoreDistance()">
-                    <td>
-                        <p>{{score.user}}</p>
-                        <p>{{score.distance}} km</p>
-                    </td>
-                </tr>
-            </table>
-        </div>
+    <div class="col-md-4 col-xs-4">
+        <leaflet
+                id="rankingsMap"
+                class="rankingsMap"
+                lf-center="center"
+                bounds="bounds"
+                maxbounds="maxBounds"
+                markers="markers"
+                paths="data.paths"
+
+                layers="layers"
+                event-broadcast="events">
+            <!--markers-watch-options="markersWatchOptions"-->
+        </leaflet>
     </div>
 </div>
