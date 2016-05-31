@@ -85,7 +85,7 @@
                 $scope.filteredData = [];
 
                 for (var i = 0; i < $scope.data.tweets.length; i++) {
-                    if ($scope.data.tweets[i].text.indexOf(hashtag) !== -1) {
+                    if ($scope.data.tweets[i].text.toLowerCase().indexOf(hashtag) !== -1) {
                         $scope.filteredData.push($scope.data.tweets[i]);
                     }
                 }
@@ -345,10 +345,12 @@
         window.alertIFrame = function(tweetID){
             console.log("posting Message: " + tweetID);
             window.postMessage({element: tweetID, query: "height"}, "http://twitframe.com");
+            // window.postMessage({element: tweetID, query: "height"}, "*");
         };
 
         $(window).on("message", function(e){
             console.log("Message Received from iFrame 1 " + e);
+            $scope.debug = e;
 
             var oe = e.originalEvent;
             if (oe.origin != "http://twitframe.com" && oe.origin != "https://twitframe.com") {
@@ -369,10 +371,9 @@
         //             "http://twitframe.com");
         //     });
         // });
-        //
-        // /* listen for the return message once the tweet has been loaded */
+        /* listen for the return message once the tweet has been loaded */
         // $(window).bind("message", function(e) {
-        //     console.log("Message Received from iFrame 2" + e);
+        //     console.log("Message Received from iFrame 2 " + e);
         //
         //     var oe = e.originalEvent;
         //     if (oe.origin != "http://twitframe.com" && oe.origin != "https://twitframe.com")
@@ -528,30 +529,30 @@
                     url: "http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
                 }
             },
-            overlays: {
-                cluster: {
-                    name: "Clustered Markers",
-                    type: "markercluster",
-                    visible: true,
-                    layerOptions: {
-                        "chunkedLoading": true,
-                        "showCoverageOnHover": false,
-                        "removeOutsideVisibleBounds": true,
-                        "chunkProgress": updateProgressBar
-                    }
-                },
-                dots: {
-                    name: "Red Dots",
-                    type: "group",
-                    visible: true,
-                    layerOptions: {
-                        "chunkedLoading": true,
-                        "showCoverageOnHover": false,
-                        "removeOutsideVisibleBounds": true,
-                        "chunkProgress": updateProgressBar
-                    }
-                }
-            }
+            // overlays: {
+            //     cluster: {
+            //         name: "Clustered Markers",
+            //         type: "markercluster",
+            //         visible: true,
+            //         layerOptions: {
+            //             "chunkedLoading": true,
+            //             "showCoverageOnHover": false,
+            //             "removeOutsideVisibleBounds": true,
+            //             "chunkProgress": updateProgressBar
+            //         }
+            //     },
+            //     dots: {
+            //         name: "Red Dots",
+            //         type: "group",
+            //         visible: true,
+            //         layerOptions: {
+            //             "chunkedLoading": true,
+            //             "showCoverageOnHover": false,
+            //             "removeOutsideVisibleBounds": true,
+            //             "chunkProgress": updateProgressBar
+            //         }
+            //     }
+            // }
         };
 
         $scope.markersWatchOptions = {
