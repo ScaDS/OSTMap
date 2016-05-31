@@ -171,12 +171,13 @@
         /**
          * Move the map center to the coordinates of the clicked tweet
          *
+         * @param index
          * @param id_str
          * @param lat
          * @param lng
          */
         $scope.search.goToTweet = function (index, id_str, lat, lng) {
-            console.log("selected tweet index: " + index + ", [" + lat + "," + lng + "]");
+            console.log("selected tweet index: " + index + ", [" + lat + "," + lng + "] | " + id_str);
 
             /**
              * Check if latitude and longitude are available

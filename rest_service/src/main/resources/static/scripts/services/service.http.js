@@ -42,11 +42,14 @@
     var _tweetFrequency = [];
 
     /**
-     * Array to store all user rankings, aka high scores
+     * Arrays to store all user rankings, aka high scores
      * @type {Array}
      * @private
      */
-    var _highScore = [];
+    var _highScore = {
+        area: [],
+        path: []
+    };
 
     /**
      * The bounding box to search in
@@ -189,7 +192,7 @@
             _setLoading(true);
             var deferred = $q.defer();
 
-            var url = "http://localhost:8080/api/highscore";
+            var url = "http://localhost:8082/api/highscore";
             $http.get(url).success(function (data, status, headers, config) {
                 angular.copy(data,_highScore);
                 _setLoading(status);
