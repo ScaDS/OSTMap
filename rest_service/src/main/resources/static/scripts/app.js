@@ -37,7 +37,7 @@
             .when('/list', {
                 templateUrl: 'views/listView.html',
                 controller: 'ListCtrl',
-                name: 'List',
+                name: 'Term',
                 align: 'left',
                 glyphicon: 'glyphicon glyphicon-list'
             })
