@@ -72,7 +72,6 @@ public class HighscoreController {
     @ResponseBody
     String getHighscore(
     ) throws AccumuloException, TableNotFoundException, AccumuloSecurityException, IOException, JSONException {
-        String path = MainController.configFilePath;
         AccumuloService accSer = new AccumuloService();
         accSer.readConfig(MainController.configFilePath);
         JSONObject toReturn = new JSONObject();
