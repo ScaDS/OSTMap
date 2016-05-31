@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.iidp.ostmap.commons.enums.TableIdentifier;
+import org.iidp.ostmap.commons.accumulo.AccumuloService;
 import org.iidp.ostmap.rest_service.helper.JsonHelper;
 import org.mortbay.util.ajax.JSON;
 import org.slf4j.Logger;
@@ -72,26 +72,27 @@ public class HighscoreController {
     @ResponseBody
     String getHighscore(
     ) throws AccumuloException, TableNotFoundException, AccumuloSecurityException, IOException, JSONException {
+        String path = MainController.configFilePath;
+        AccumuloService accSer = new AccumuloService();
+        accSer.readConfig(MainController.configFilePath);
         JSONObject toReturn = new JSONObject();
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
+//        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+//        DataSet<Tuple2<Key,Value>> rawTwitterDataRows = getDataFromAccumulo(env);
+        Connector conn = accSer.getConnector();
 
-        Instance instance = new ZooKeeperInstance(PROPERTY_INSTANCE,PROPERTY_ZOOKEEPER);
-        Connector conn = null;
-
-        try {
-            conn = instance.getConnector("root", new PasswordToken("password"));
-        } catch (AccumuloException|AccumuloSecurityException e) {
-            e.printStackTrace();
-        }
-
-        Authorizations auth = new Authorizations("standard");
-
-        try {
-            conn.securityOperations().changeUserAuthorizations("root", auth);
-        } catch (AccumuloException|AccumuloSecurityException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            conn = instance.getConnector("root", new PasswordToken("password"));
+//        } catch (AccumuloException|AccumuloSecurityException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Authorizations auth = new Authorizations("standard");
+//
+//        try {
+//            conn.securityOperations().changeUserAuthorizations("root", auth);
+//        } catch (AccumuloException|AccumuloSecurityException e) {
+//            e.printStackTrace();
+//        }
 
         Scanner s = conn.createScanner("HighScore", new Authorizations("standard"));
         for(Map.Entry<Key, Value> entry: s){
