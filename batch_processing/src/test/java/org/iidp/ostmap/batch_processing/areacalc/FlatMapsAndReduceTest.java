@@ -8,6 +8,7 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
 import org.junit.AfterClass;
@@ -392,7 +393,7 @@ public class FlatMapsAndReduceTest {
         System.out.println("Reduced Data: -----------------------------------------------------");
         reducedGroup.print();
 
-        DataSet<Tuple2<String, Double>> ranking = reducedGroup.flatMap(new GeoCalcFlatMap());
+        DataSet<Tuple3<String, Double,Integer>> ranking = reducedGroup.flatMap(new GeoCalcFlatMap());
         System.out.println("Ranking: -----------------------------------------------------");
         ranking.print();
     }

@@ -21,6 +21,8 @@ import org.junit.rules.TemporaryFolder;
 import java.io.*;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+
 
 public class PathCalcTest {
 
@@ -51,6 +53,8 @@ public class PathCalcTest {
 
                 Connector conn = amc.getConnector();
                 System.out.println("I am connected as: " + conn.whoami());
+
+                conn.tableOperations().create("HighScore");
 
                 conn.tableOperations().create(TableIdentifier.RAW_TWITTER_DATA.get());
                 BatchWriter bw = conn.createBatchWriter(TableIdentifier.RAW_TWITTER_DATA.get(), new BatchWriterConfig());
@@ -396,6 +400,13 @@ public class PathCalcTest {
                 PathCalculator calc = new PathCalculator();
                 System.out.println("settings file path: "+settings.getAbsolutePath());
                 calc.run(settings.getAbsolutePath());
+
+                System.out.println("TopTen: -----------------------------------------------------");
+                s = conn.createScanner("HighScore", new Authorizations("standard"));
+                for(Map.Entry<Key, Value> entry: s){
+                        System.out.println(entry.getKey() + " | " + entry.getValue());
+                }
+                s.close();
 
 
         }
