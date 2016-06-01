@@ -49,8 +49,9 @@ mainClassName = "org.iidp.ostmap.rest_service.MainController"
 
 
 dependencies {
-    compile project(':commons')
+    testCompile project(':batch_processing') //use converter for geoTempIndex for tests 
 
+    compile project(':commons')
     compile project(':accumulo_iterators')
 
     // tag::jetty[]

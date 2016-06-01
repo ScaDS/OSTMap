@@ -9,8 +9,10 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.iidp.ostmap.batch_processing.geoTempConverter.GeoTempConverter;
 import org.iidp.ostmap.commons.accumulo.AccumuloService;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
+import org.iidp.ostmap.commons.enums.TableIdentifier;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 
@@ -40,7 +42,7 @@ public class AccumuloServiceTest {
 
 
     @BeforeClass
-    public static void setUpCluster() throws IOException, AccumuloException, TableNotFoundException, TableExistsException, AccumuloSecurityException {
+    public static void setUpCluster() throws Exception {
         amc = new AmcHelper();
 
         amc.startMiniCluster(tmpDir.getRoot().getAbsolutePath());
@@ -51,11 +53,14 @@ public class AccumuloServiceTest {
         Connector conn = amc.getConnector();
         System.out.println("I am connected as: " + conn.whoami());
 
-        if(!conn.tableOperations().exists("RawTwitterData")){
-            conn.tableOperations().create("RawTwitterData");
+        if(!conn.tableOperations().exists(TableIdentifier.RAW_TWITTER_DATA.get())){
+            conn.tableOperations().create(TableIdentifier.RAW_TWITTER_DATA.get());
         }
-        if(!conn.tableOperations().exists("TermIndex")){
-            conn.tableOperations().create("TermIndex");
+        if(!conn.tableOperations().exists(TableIdentifier.TERM_INDEX.get())){
+            conn.tableOperations().create(TableIdentifier.TERM_INDEX.get());
+        }
+        if(!conn.tableOperations().exists(TableIdentifier.GEO_TEMPORAL_INDEX.get())){
+            conn.tableOperations().create(TableIdentifier.GEO_TEMPORAL_INDEX.get());
         }
 
         //write example entry to RawTwitterData
@@ -84,7 +89,7 @@ public class AccumuloServiceTest {
 
         System.out.println("keyFormat: " + new String(bb3.array()));
 
-        BatchWriter bw = conn.createBatchWriter("RawTwitterData", new BatchWriterConfig());
+        BatchWriter bw = conn.createBatchWriter(TableIdentifier.RAW_TWITTER_DATA.get(), new BatchWriterConfig());
         bw.addMutation(m1);
         bw.addMutation(m2);
         bw.addMutation(m11);
@@ -112,7 +117,7 @@ public class AccumuloServiceTest {
 
         System.out.println(Arrays.toString("text".getBytes()));
 
-        BatchWriter bwti = conn.createBatchWriter("TermIndex", new BatchWriterConfig());
+        BatchWriter bwti = conn.createBatchWriter(TableIdentifier.TERM_INDEX.get(), new BatchWriterConfig());
         bwti.addMutation(m3);
         bwti.addMutation(m4);
         bwti.addMutation(m5);
@@ -141,7 +146,7 @@ public class AccumuloServiceTest {
 
 
         System.out.println("RawTwitterData: -----------------------------------------------------");
-        Scanner s = conn.createScanner("RawTwitterData", new Authorizations("standard"));
+        Scanner s = conn.createScanner(TableIdentifier.RAW_TWITTER_DATA.get(), new Authorizations("standard"));
         for (Map.Entry<Key, Value> entry : s) {
             System.out.println(entry.getKey() + " | " + entry.getValue());
             //assertEquals(entry.getValue().toString(), testString);
@@ -149,6 +154,18 @@ public class AccumuloServiceTest {
         s.close();
         System.out.println("---------------------------------------------");
 
+
+        GeoTempConverter gtc = new GeoTempConverter();
+        gtc.run(settings.getAbsolutePath());
+
+        System.out.println("GEO_TEMPORAL_INDEX: -----------------------------------------------------");
+        s = conn.createScanner(TableIdentifier.GEO_TEMPORAL_INDEX.get(), new Authorizations("standard"));
+        for (Map.Entry<Key, Value> entry : s) {
+            System.out.println(entry.getKey() + " | " + entry.getValue());
+            //assertEquals(entry.getValue().toString(), testString);
+        }
+        s.close();
+        System.out.println("---------------------------------------------");
     }
 
     @AfterClass
@@ -241,8 +258,6 @@ public class AccumuloServiceTest {
         assertEquals("[" + tweetHund + ',' + tweetKatze + "]", result);
     }
 
-    // TODO: remove ignore and prepare input data for this test
-     @Ignore
      @Test
      public void testGeoTime() throws Exception{
          System.out.println("settings file path: " + settings.getAbsolutePath());
@@ -291,6 +306,4 @@ public class AccumuloServiceTest {
          assertTrue(result.length() == 2);
 
      }
-
-
 }
