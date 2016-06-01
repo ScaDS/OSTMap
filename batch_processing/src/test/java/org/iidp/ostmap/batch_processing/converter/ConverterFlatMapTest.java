@@ -30,7 +30,7 @@ public class ConverterFlatMapTest {
 
 
         output.print();
-        assertEquals(output.count(), 4);
+        assertEquals(4, output.count());
 
     }
 }

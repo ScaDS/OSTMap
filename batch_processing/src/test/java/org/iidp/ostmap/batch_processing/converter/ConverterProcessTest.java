@@ -133,7 +133,7 @@ public class ConverterProcessTest {
             i++;
             if(entry.getKey().getRow().toString().equals("for")){
                 //token "for" should appear 3 times
-                assertEquals(entry.getValue().toString(),"3");
+                assertEquals("3",entry.getValue().toString());
             }
         }
         s.close();
@@ -163,7 +163,7 @@ public class ConverterProcessTest {
             i++;
             if(entry.getKey().getRow().toString().equals("for")){
                 //token "for" should appear 3 times
-                assertEquals(entry.getValue().toString(),"3");
+                assertEquals("3",entry.getValue().toString());
             }
         }
         s.close();

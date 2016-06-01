@@ -53,7 +53,7 @@ public class AmcHelperTest {
         for(Map.Entry<Key, Value> entry: s){
             System.out.println(entry.getKey());
             System.out.println(entry.getValue());
-            assertEquals(entry.getValue().toString(), testString);
+            assertEquals(testString,entry.getValue().toString());
         }
 
         s.close();

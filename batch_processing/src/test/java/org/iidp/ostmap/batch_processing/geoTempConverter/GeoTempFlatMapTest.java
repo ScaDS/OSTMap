@@ -87,7 +87,7 @@ public class GeoTempFlatMapTest {
 
 
         output.print();
-        assertEquals(output.count(), 1);
+        assertEquals(1,output.count());
 
     }
 }
