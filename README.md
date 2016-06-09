@@ -8,8 +8,10 @@ OSTMap development started as a project at the [IT-Ringvorlesung 2016](https://w
 OSTMap reads geotagged data from the twitter stream. We save it to an small hadoop cluster (1 master, 4 worker nodes) running HDP 2.4 with Apache Accumulo and Apache Flink. In addition we have a user interface to search for tweets by a term search and a map search. The results are presented as a list or on the map. In addition we run analysis batch jobs on this data.
 
 ## Screenshots
-![listview](https://raw.githubusercontent.com/IIDP/OSTMap/screenshots/screenshots/results_for_swimming_list.jpg)
-![mapview](https://raw.githubusercontent.com/IIDP/OSTMap/screenshots/screenshots/results_for_swimming_map.jpg)
+![term search](https://raw.githubusercontent.com/IIDP/OSTMap/screenshots/screenshots/term-search.JPG)
+![map view 1](https://raw.githubusercontent.com/IIDP/OSTMap/screenshots/screenshots/map-search.JPG)
+![map view 2](https://raw.githubusercontent.com/IIDP/OSTMap/screenshots/screenshots/map-search-with-tweet.JPG)
+![map view 2](https://raw.githubusercontent.com/IIDP/OSTMap/screenshots/screenshots/language-frequency.JPG)
 
 ## Demo
 Currently we don't run a public accessible instance. Is there someone who wants to sponsor one?
