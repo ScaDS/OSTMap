@@ -9,9 +9,6 @@ apply plugin: 'idea'
 repositories {
     mavenCentral()
     maven {
-        url "http://repo.hortonworks.com/content/groups/public"
-    }
-    maven {
         url "http://repo.hortonworks.com/content/repositories/releases/"
     }
 }
@@ -33,6 +30,7 @@ dependencies {
 
     compile 'com.google.guava:guava:19.0' // for murmurhash
     compile 'org.apache.flink:flink-clients_2.10:1.1.1'
+    compile 'org.apache.flink:flink-gelly_2.10:1.1.1'
     compile 'org.apache.flink:flink-java:1.1.1' // for twitter stream source
     compile 'org.apache.httpcomponents:httpclient:4.5.2' // for twitter stream source
 
