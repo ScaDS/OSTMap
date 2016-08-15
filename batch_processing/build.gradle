@@ -9,14 +9,15 @@ apply plugin: 'idea'
 repositories {
     mavenCentral()
     maven {
+        url "http://repo.hortonworks.com/content/groups/public"
+    }
+    maven {
         url "http://repo.hortonworks.com/content/repositories/releases/"
     }
 }
 
 group 'org.iidp.ostmap'
 version '0.2.0-SNAPSHOT'
-sourceCompatibility = 1.8
-
 
 dependencies {
     compile project(':commons')

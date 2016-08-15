@@ -1,8 +1,8 @@
-package org.iidp.ostmap.batch_processing.graphalgorithms;
+package org.iidp.ostmap.batch_processing.graphprocessing;
 
 import org.apache.flink.graph.Graph;
-import org.iidp.ostmap.batch_processing.graphalgorithms.datastructures.UserEdgeValues;
-import org.iidp.ostmap.batch_processing.graphalgorithms.datastructures.UserNodeValues;
+import org.iidp.ostmap.batch_processing.graphprocessing.datastructures.UserEdgeValues;
+import org.iidp.ostmap.batch_processing.graphprocessing.datastructures.UserNodeValues;
 
 public class GraphLoader {
 
