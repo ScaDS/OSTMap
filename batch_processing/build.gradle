@@ -32,9 +32,8 @@ dependencies {
     }
 
     compile 'com.google.guava:guava:19.0' // for murmurhash
-    compile 'org.apache.flink:flink-streaming-java_2.10:1.0.0'
-    compile 'org.apache.flink:flink-clients_2.10:1.0.0'
-    compile 'org.apache.flink:flink-connector-twitter_2.10:1.0.0' // for twitter stream source
+    compile 'org.apache.flink:flink-clients_2.10:1.1.1'
+    compile 'org.apache.flink:flink-java:1.1.1' // for twitter stream source
     compile 'org.apache.httpcomponents:httpclient:4.5.2' // for twitter stream source
 
 
