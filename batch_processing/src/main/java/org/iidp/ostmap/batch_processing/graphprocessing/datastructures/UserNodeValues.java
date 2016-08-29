@@ -7,10 +7,10 @@ import javax.annotation.Nonnull;
  */
 public class UserNodeValues implements Comparable<UserNodeValues>{
 
-    public final Long userId;
+    public final String userId;
     public final String userName;
 
-    public UserNodeValues(@Nonnull Long userId, String userName) {
+    public UserNodeValues(@Nonnull String userId, String userName) {
         this.userId = userId;
         this.userName = userName;
     }
@@ -18,5 +18,14 @@ public class UserNodeValues implements Comparable<UserNodeValues>{
     @Override
     public int compareTo(@Nonnull final UserNodeValues o) {
         return this.userId.compareTo(o.userId);
+    }
+
+
+    @Override
+    public String toString() {
+        return "UserNodeValues{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                '}';
     }
 }

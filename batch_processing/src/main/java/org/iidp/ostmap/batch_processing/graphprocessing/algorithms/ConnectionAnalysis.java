@@ -4,7 +4,7 @@ import org.apache.commons.cli.MissingArgumentException;
 import org.apache.flink.api.common.functions.GroupCombineFunction;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
-
+import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.GroupCombineOperator;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.graph.Graph;
@@ -80,11 +80,12 @@ public class ConnectionAnalysis {
     public static void main(String[] args) throws Exception {
         GraphLoader gl = new GraphLoader();
         Graph<String, UserNodeValues, UserEdgeValues> graph;
+        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         if(args.length == 0) {
             // read graph from accumulo
             graph = null; // TODO : adapt to gl.getUserGraph();
         } else if (args.length == 1) {
-            graph = gl.getUserGraphFromFiles(args[0]);
+            graph = gl.getUserGraphFromFiles(args[0],env);
         } else {
             throw new MissingArgumentException("Either use no arguments for graph import from accumulo or the path " +
                     "to file where the graph is stored.");
