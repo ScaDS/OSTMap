@@ -2,6 +2,7 @@ package org.iidp.ostmap.batch_processing.graphprocessing.algorithms;
 
 import org.apache.commons.cli.MissingArgumentException;
 import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.graph.Graph;
 import org.apache.flink.graph.Vertex;
 import org.apache.flink.graph.library.ConnectedComponents;
@@ -33,11 +34,12 @@ public class ConnectionAnalysis {
     public static void main(String[] args) throws Exception {
         GraphLoader gl = new GraphLoader();
         Graph<String, UserNodeValues, UserEdgeValues> graph;
+        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         if(args.length == 0) {
             // read graph from accumulo
             graph = null; // TODO : adapt to gl.getUserGraph();
         } else if (args.length == 1) {
-            graph = gl.getUserGraphFromFiles(args[0]);
+            graph = gl.getUserGraphFromFiles(args[0],env);
         } else {
             throw new MissingArgumentException("Either use no arguments for graph import from accumulo or the path " +
                     "to file where the graph is stored.");

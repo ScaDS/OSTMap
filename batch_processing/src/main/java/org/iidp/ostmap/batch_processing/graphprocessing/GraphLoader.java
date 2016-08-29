@@ -23,10 +23,10 @@ public class GraphLoader {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         //Graph<String, UserNodeValues, UserEdgeValues> graph = gl.getUserGraphFromFiles("/data/tweets/sample.txt", env);
-        Graph<String, UserNodeValues, UserEdgeValues> graph = gl.getUserGraphFromFiles("/data/tweets/24", env);
+        Graph<String, UserNodeValues, UserEdgeValues> graph = gl.getUserGraphFromFiles("/data/tweets/sample.txt", env);
 
-        //graph.getVertices().print();
-        //graph.getEdges().print();
+        graph.getVertices().print();
+        graph.getEdges().print();
     }
 
 
