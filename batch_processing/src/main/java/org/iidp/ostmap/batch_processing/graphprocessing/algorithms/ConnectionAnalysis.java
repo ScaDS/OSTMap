@@ -2,6 +2,7 @@ package org.iidp.ostmap.batch_processing.graphprocessing.algorithms;
 
 import org.apache.commons.cli.MissingArgumentException;
 import org.apache.flink.api.common.functions.GroupCombineFunction;
+import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -10,6 +11,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.graph.Graph;
 import org.apache.flink.graph.Vertex;
 import org.apache.flink.graph.library.ConnectedComponents;
+import org.apache.flink.types.NullValue;
 import org.apache.flink.util.Collector;
 import org.iidp.ostmap.batch_processing.graphprocessing.GraphLoader;
 import org.iidp.ostmap.batch_processing.graphprocessing.datastructures.UserEdgeValues;
@@ -33,30 +35,28 @@ public class ConnectionAnalysis {
      */
     public void analyze(Graph<String, UserNodeValues, UserEdgeValues> graph) throws Exception {
         ConnectedComponents<String, UserNodeValues, UserEdgeValues> cc = new ConnectedComponents<>(MAX_ITERATIONS);
+
         DataSet<Vertex<String, UserNodeValues>> ccResult = cc.run(graph);
 
         //***************************************************************************************
         // count number of weakly connected components
         //***************************************************************************************
         logger.info("Number of weakly connected components: ");
-        ccResult.groupBy("V").combineGroup(new GroupCombineFunction<Vertex<String,UserNodeValues>, Long>() {
+        ccResult.groupBy("f1").reduceGroup(new GroupReduceFunction<Vertex<String,UserNodeValues>, Tuple2<Long,NullValue>>() {
             @Override
-            public void combine(Iterable<Vertex<String, UserNodeValues>> values, Collector<Long> out) throws Exception {
-                out.collect(1L);
+            public void reduce(Iterable<Vertex<String, UserNodeValues>> values, Collector<Tuple2<Long,NullValue>> out) throws Exception {
+                out.collect(new Tuple2<>(1L,null));
             }
         }).sum(0).print();
-
-
-
 
         //***************************************************************************************
         // print sizes of weakly connected components, sort desc
         //***************************************************************************************
         logger.info("Size of weakly connected components (sorted, desc): ");
-        DataSet<Tuple2<UserNodeValues, Long>> countMap = ccResult.groupBy("V")
-                .combineGroup(new GroupCombineFunction<Vertex<String, UserNodeValues>, Tuple2<UserNodeValues, Long>>() {
+        DataSet<Tuple2<UserNodeValues, Long>> countMap = ccResult.groupBy("f1")
+                .reduceGroup(new GroupReduceFunction<Vertex<String, UserNodeValues>, Tuple2<UserNodeValues, Long>>() {
             @Override
-            public void combine(Iterable<Vertex<String, UserNodeValues>> values, Collector<Tuple2<UserNodeValues, Long>> out) throws Exception {
+            public void reduce(Iterable<Vertex<String, UserNodeValues>> values, Collector<Tuple2<UserNodeValues, Long>> out) throws Exception {
                 long componentSize = 0;
                 UserNodeValues compIdentifier = null;
                 for (Vertex<String, UserNodeValues> vertex : values) {
@@ -71,7 +71,7 @@ public class ConnectionAnalysis {
                 out.collect(new Tuple2<>(compIdentifier, componentSize));
             }
         });
-        countMap.sortPartition("T1", Order.DESCENDING).first(10).print();
+        countMap.sortPartition("f1", Order.DESCENDING).setParallelism(1).first(10).print();
 
 
     }

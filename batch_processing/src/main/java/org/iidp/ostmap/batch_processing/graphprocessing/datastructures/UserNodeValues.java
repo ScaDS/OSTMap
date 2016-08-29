@@ -20,6 +20,21 @@ public class UserNodeValues implements Comparable<UserNodeValues>{
         return this.userId.compareTo(o.userId);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserNodeValues that = (UserNodeValues) o;
+
+        return userId.equals(that.userId);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return userId.hashCode();
+    }
 
     @Override
     public String toString() {

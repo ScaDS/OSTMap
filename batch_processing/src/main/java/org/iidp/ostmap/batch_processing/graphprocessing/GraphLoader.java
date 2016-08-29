@@ -82,17 +82,30 @@ public class GraphLoader {
 
 
     private DataSet<Tuple2<String, UserNodeValues>> getUserNodes(DataSet<JSONObject> jsonData) {
-        DataSet<Tuple2<String, UserNodeValues>> userNodes = jsonData.map(new MapFunction<JSONObject, Tuple2<String, UserNodeValues>>() {
+        DataSet<Tuple2<String, UserNodeValues>> userNodes = jsonData.flatMap(new FlatMapFunction<JSONObject, Tuple2<String, UserNodeValues>>() {
             @Override
-            public Tuple2<String, UserNodeValues> map(JSONObject jsonObject) throws Exception {
+            public void flatMap(JSONObject jsonObject, Collector<Tuple2<String, UserNodeValues>> out) throws Exception {
                 JSONObject user = jsonObject.getJSONObject("user");
                 String userId = user.getString("id_str");
                 String userName = user.getString("name");
-                return new Tuple2<String, UserNodeValues>(userId, new UserNodeValues(userId,userName));
+                out.collect(new Tuple2<String, UserNodeValues>(userId, new UserNodeValues(userId,userName)));
+
+                // other mentioned users
+                JSONObject entities = jsonObject.getJSONObject("entities");
+                JSONArray userMentions = entities.getJSONArray("user_mentions");
+                for (int i = 0; i < userMentions.length(); i++) {
+                    JSONObject current = userMentions.getJSONObject(i);
+                    String oUserId = current.getString("id_str");
+                    String oUserName = current.getString("name");
+                    out.collect(new Tuple2<String, UserNodeValues>(oUserId, new UserNodeValues(oUserId,oUserName)));
+                }
             }
-        });
+        }).distinct(0);
         return userNodes;
     }
+
+
+
 
     private DataSet<Tuple3<String, String, UserEdgeValues>> getUserEdges(DataSet<JSONObject> jsonData) {
 
