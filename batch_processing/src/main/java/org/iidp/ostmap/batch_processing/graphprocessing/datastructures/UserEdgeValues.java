@@ -1,4 +1,4 @@
-package org.iidp.ostmap.batch_processing.graphalgorithms.datastructures;
+package org.iidp.ostmap.batch_processing.graphprocessing.datastructures;
 
 /**
  *

@@ -1,4 +1,4 @@
-package org.iidp.ostmap.batch_processing.graphalgorithms;
+package org.iidp.ostmap.batch_processing.graphprocessing;
 
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
@@ -10,10 +10,10 @@ import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.graph.Graph;
 import org.apache.flink.util.Collector;
 import org.codehaus.jettison.json.JSONArray;
+import org.iidp.ostmap.batch_processing.graphprocessing.datastructures.UserEdgeValues;
+import org.iidp.ostmap.batch_processing.graphprocessing.datastructures.UserNodeValues;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.iidp.ostmap.batch_processing.graphalgorithms.datastructures.UserEdgeValues;
-import org.iidp.ostmap.batch_processing.graphalgorithms.datastructures.UserNodeValues;
 
 public class GraphLoader {
 
@@ -88,7 +88,7 @@ public class GraphLoader {
                 JSONObject user = jsonObject.getJSONObject("user");
                 String userId = user.getString("id_str");
                 String userName = user.getString("name");
-                return new Tuple2<String, UserNodeValues>(userId, new UserNodeValues(userName));
+                return new Tuple2<String, UserNodeValues>(userId, new UserNodeValues(userId,userName));
             }
         });
         return userNodes;
