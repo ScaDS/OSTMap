@@ -7,6 +7,7 @@ import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.GroupCombineOperator;
+import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.graph.Graph;
 import org.apache.flink.graph.Vertex;
@@ -42,10 +43,10 @@ public class ConnectionAnalysis {
         // count number of weakly connected components
         //***************************************************************************************
         logger.info("Number of weakly connected components: ");
-        ccResult.groupBy("f1").reduceGroup(new GroupReduceFunction<Vertex<String,UserNodeValues>, Tuple2<Long,NullValue>>() {
+        ccResult.groupBy("f1").reduceGroup(new GroupReduceFunction<Vertex<String,UserNodeValues>, Tuple1<Long>>() {
             @Override
-            public void reduce(Iterable<Vertex<String, UserNodeValues>> values, Collector<Tuple2<Long,NullValue>> out) throws Exception {
-                out.collect(new Tuple2<>(1L,null));
+            public void reduce(Iterable<Vertex<String, UserNodeValues>> values, Collector<Tuple1<Long>> out) throws Exception {
+                out.collect(new Tuple1<>(1L));
             }
         }).sum(0).print();
 

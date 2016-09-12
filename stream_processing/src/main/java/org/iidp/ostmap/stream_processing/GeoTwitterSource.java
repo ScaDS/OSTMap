@@ -32,11 +32,11 @@ public class GeoTwitterSource extends TwitterSource {
                                 new Location(
                                         // europa: -32.0 34.0 40.0 75.0
                                         new Location.Coordinate(-32.0, 34.0), // south west
-                                        new Location.Coordinate(40.0, 75.0)),
-                                new Location(
-                                        // north america: -168.48633, 13.23995 -50.36133, 72.76406
-                                        new Location.Coordinate(-168.48633, 13.23995), // south west
-                                        new Location.Coordinate(-50.36133, 72.76406))
+                                        new Location.Coordinate(40.0, 75.0))
+                         //       new Location(
+                         //               // north america: -168.48633, 13.23995 -50.36133, 72.76406
+                         //               new Location.Coordinate(-168.48633, 13.23995), // south west
+                         //               new Location.Coordinate(-50.36133, 72.76406))
                         )
                 );
         endpoint.stallWarnings(false);

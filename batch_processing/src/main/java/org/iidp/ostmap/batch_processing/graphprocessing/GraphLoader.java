@@ -44,6 +44,7 @@ public class GraphLoader {
         DataSet<String> rawData = readRawData(path, env);
         DataSet<JSONObject> jsonData = getJsonData(rawData);
 
+
         DataSet<Tuple2<String, UserNodeValues>> vertices = getUserNodes(jsonData);
         DataSet<Tuple3<String, String, UserEdgeValues>> edges = getUserEdges(jsonData);
 
