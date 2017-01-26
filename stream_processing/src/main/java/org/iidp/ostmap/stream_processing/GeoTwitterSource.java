@@ -41,6 +41,7 @@ public class GeoTwitterSource extends TwitterSource {
                 );
         endpoint.stallWarnings(false);
         OAuth1 auth = this.authenticate();
+
         this.initializeClient(endpoint, auth);
         if (LOG.isInfoEnabled()) {
             LOG.info("Twitter Streaming API connection established successfully");

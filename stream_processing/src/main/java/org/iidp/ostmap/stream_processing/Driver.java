@@ -55,6 +55,7 @@ public class Driver {
 
     public void run(String pathToTwitterProperties, String pathToAccumuloProperties, ArrayList<String> tweet) throws Exception
     {
+
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         // one watermark each ten second

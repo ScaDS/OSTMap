@@ -12,6 +12,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.iidp.ostmap.commons.accumulo.AccumuloService;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
+import org.iidp.ostmap.commons.enums.TableIdentifier;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 
@@ -46,7 +47,7 @@ public class AccumuloServiceTest {
 
 
     @BeforeClass
-    public static void setUpCluster() throws IOException, AccumuloException, TableNotFoundException, TableExistsException, AccumuloSecurityException, JSONException {
+    public static void setUpCluster() throws IOException, AccumuloException, TableNotFoundException, TableExistsException, AccumuloSecurityException, JSONException, NamespaceExistsException {
         amc = new AmcHelper();
 
         amc.startMiniCluster(tmpDir.getRoot().getAbsolutePath());
@@ -57,11 +58,15 @@ public class AccumuloServiceTest {
         Connector conn = amc.getConnector();
         System.out.println("I am connected as: " + conn.whoami());
 
-        if(!conn.tableOperations().exists("RawTwitterData")){
-            conn.tableOperations().create("RawTwitterData");
+        if(!conn.namespaceOperations().exists(TableIdentifier.NAMESPACE.get())) {
+            conn.namespaceOperations().create(TableIdentifier.NAMESPACE.get());
         }
-        if(!conn.tableOperations().exists("TermIndex")){
-            conn.tableOperations().create("TermIndex");
+
+        if(!conn.tableOperations().exists(TableIdentifier.RAW_TWITTER_DATA.get())){
+            conn.tableOperations().create(TableIdentifier.RAW_TWITTER_DATA.get());
+        }
+        if(!conn.tableOperations().exists(TableIdentifier.TERM_INDEX.get())){
+            conn.tableOperations().create(TableIdentifier.TERM_INDEX.get());
         }
 
         //write example entry to RawTwitterData
@@ -98,7 +103,7 @@ public class AccumuloServiceTest {
 
         System.out.println("keyFormat: " + new String(bb3.array()));
 
-        BatchWriter bw = conn.createBatchWriter("RawTwitterData", new BatchWriterConfig());
+        BatchWriter bw = conn.createBatchWriter(TableIdentifier.RAW_TWITTER_DATA.get(), new BatchWriterConfig());
         bw.addMutation(rawMut1);
         bw.addMutation(rawMut2);
         bw.addMutation(rawMut3);
@@ -130,7 +135,7 @@ public class AccumuloServiceTest {
 
         System.out.println(Arrays.toString("text".getBytes()));
 
-        BatchWriter bwti = conn.createBatchWriter("TermIndex", new BatchWriterConfig());
+        BatchWriter bwti = conn.createBatchWriter(TableIdentifier.TERM_INDEX.get(), new BatchWriterConfig());
         bwti.addMutation(m1);
         bwti.addMutation(m2);
         bwti.addMutation(m3);
@@ -160,8 +165,8 @@ public class AccumuloServiceTest {
         fos.close();
 
 
-        System.out.println("RawTwitterData: -----------------------------------------------------");
-        Scanner s = conn.createScanner("RawTwitterData", new Authorizations("standard"));
+        System.out.println(TableIdentifier.RAW_TWITTER_DATA.get() + ": -----------------------------------------------------");
+        Scanner s = conn.createScanner(TableIdentifier.RAW_TWITTER_DATA.get(), new Authorizations("standard"));
         for (Map.Entry<Key, Value> entry : s) {
             System.out.println(entry.getKey() + " | " + entry.getValue());
             //assertEquals(entry.getValue().toString(), testString);

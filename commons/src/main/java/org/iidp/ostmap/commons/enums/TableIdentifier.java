@@ -2,10 +2,11 @@ package org.iidp.ostmap.commons.enums;
 
 
 public enum TableIdentifier {
-    RAW_TWITTER_DATA("RawTwitterData"),
-    TERM_INDEX("TermIndex"),
-    GEO_TEMPORAL_INDEX("GeoTemporalIndex"),
-    TWEET_FREQUENCY("TweetFrequency");
+    RAW_TWITTER_DATA("ostmap.RawTwitterData"),
+    TERM_INDEX("ostmap.TermIndex"),
+    GEO_TEMPORAL_INDEX("ostmap.GeoTemporalIndex"),
+    TWEET_FREQUENCY("ostmap.TweetFrequency"),
+    NAMESPACE("ostmap");
 
     String identifier = "";
 
