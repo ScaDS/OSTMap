@@ -60,8 +60,8 @@ public class GeoTemporalIndexSink extends RichSinkFunction<Tuple2<RawTwitterData
         // build the accumulo connector
         Instance inst = new ZooKeeperInstance(cfg.accumuloInstanceName, cfg.accumuloZookeeper);
         conn = inst.getConnector(cfg.accumuloUser, new PasswordToken(cfg.accumuloPassword));
-        Authorizations auths = new Authorizations("standard");
-        conn.securityOperations().changeUserAuthorizations("root", auths);
+        Authorizations auths = new Authorizations("ostmap");
+        //conn.securityOperations().changeUserAuthorizations("root", auths);
 
         // create the table if not already existent
         TableOperations tableOpts = conn.tableOperations();

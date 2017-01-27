@@ -4,6 +4,7 @@ package org.iidp.ostmap.stream_processing;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.iidp.ostmap.commons.enums.TableIdentifier;
 import org.iidp.ostmap.stream_processing.functions.*;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -25,11 +26,7 @@ import java.util.ArrayList;
  */
 public class Driver {
 
-    // names of the target accumulo tables
-    private final String tableNameTerms = "TermIndex";
-    private final String tableNameRawData = "RawTwitterData";
-    private final String tableNameFrequencies = "TweetFrequency";
-    private final String tableNameGeoTemporal = "GeoTemporalIndex";
+
     // configuration values for accumulo
     private String accumuloInstanceName;
     private String accumuloZookeeper;
@@ -82,10 +79,10 @@ public class Driver {
         else {
             sc = SinkConfiguration.createConfigFromFile(pathToAccumuloProperties);
         }
-        rtdSink.configure(sc, tableNameRawData);
-        tiSink.configure(sc, tableNameTerms);
-        frqSink.configure(sc, tableNameFrequencies);
-        gtiSink.configure(sc, tableNameGeoTemporal);
+        rtdSink.configure(sc, TableIdentifier.RAW_TWITTER_DATA.get());
+        tiSink.configure(sc, TableIdentifier.TERM_INDEX.get());
+        frqSink.configure(sc, TableIdentifier.TWEET_FREQUENCY.get());
+        gtiSink.configure(sc, TableIdentifier.GEO_TEMPORAL_INDEX.get());
 
 
         // stream of tuples containing timestamp and tweet's json-String
