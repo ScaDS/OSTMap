@@ -21,5 +21,10 @@ public enum AccumuloIdentifiers {
         public String toString(){
             return "accumulo.zookeeper";
         }
+    },
+    AUTHORIZATION{
+        public String toString (){
+            return "ostmap";
+        }
     }
 }

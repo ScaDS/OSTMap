@@ -7,6 +7,7 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
 import org.iidp.ostmap.accumuloiterators.ExtractIterator;
 import org.iidp.ostmap.accumuloiterators.GeosearchExtractIterator;
+import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
 
 import java.io.FileInputStream;
@@ -17,14 +18,11 @@ import java.util.List;
 import java.util.Properties;
 
 public class AccumuloService {
-    private static final String PROPERTY_INSTANCE = "accumulo.instance";
     private String accumuloInstanceName;
-    private static final String PROPERTY_USER = "accumulo.user";
     private String accumuloUser;
-    private static final String PROPERTY_PASSWORD = "accumulo.password";
     private String accumuloPassword;
-    private static final String PROPERTY_ZOOKEEPER = "accumulo.zookeeper";
     private String accumuloZookeeper;
+
 
 
     // defines the number of threads a BatchScanner may use
@@ -43,10 +41,10 @@ public class AccumuloService {
         Properties props = new Properties();
         FileInputStream fis = new FileInputStream(path);
         props.load(fis);
-        accumuloInstanceName = props.getProperty(PROPERTY_INSTANCE);
-        accumuloUser = props.getProperty(PROPERTY_USER);
-        accumuloPassword = props.getProperty(PROPERTY_PASSWORD);
-        accumuloZookeeper = props.getProperty(PROPERTY_ZOOKEEPER);
+        accumuloInstanceName = props.getProperty(AccumuloIdentifiers.PROPERTY_INSTANCE.toString());
+        accumuloUser = props.getProperty(AccumuloIdentifiers.PROPERTY_USER.toString());
+        accumuloPassword = props.getProperty(AccumuloIdentifiers.PROPERTY_PASSWORD.toString());
+        accumuloZookeeper = props.getProperty(AccumuloIdentifiers.PROPERTY_ZOOKEEPER.toString());
     }
 
     /**
@@ -60,8 +58,7 @@ public class AccumuloService {
         // build the accumulo connector
         Instance inst = new ZooKeeperInstance(accumuloInstanceName, accumuloZookeeper);
         Connector conn = inst.getConnector(accumuloUser, new PasswordToken(accumuloPassword));
-        Authorizations auths = new Authorizations("standard");
-        conn.securityOperations().changeUserAuthorizations("root", auths);
+        Authorizations auths = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
         return conn;
     }
 
@@ -77,7 +74,7 @@ public class AccumuloService {
      */
     public Scanner getTermIndexScanner(String token, String field) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
-        Authorizations auths = new Authorizations("standard");
+        Authorizations auths = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
         Scanner scan = conn.createScanner(TableIdentifier.TERM_INDEX.get(), auths);
         scan.fetchColumnFamily(new Text(field.getBytes()));
         //Check if the token has a wildcard as last character
@@ -102,7 +99,7 @@ public class AccumuloService {
      */
     public BatchScanner getRawDataScannerByTimeSpan(String startTime, String endTime) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
-        Authorizations auths = new Authorizations("standard");
+        Authorizations auths = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
         BatchScanner scan = conn.createBatchScanner(TableIdentifier.RAW_TWITTER_DATA.get(), auths, numberOfThreadsForScan);
         addReduceIterator(scan);
 
@@ -130,7 +127,7 @@ public class AccumuloService {
      */
     public BatchScanner getRawDataBatchScanner(List<Range> rangeFilter) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
-        Authorizations auths = new Authorizations("standard");
+        Authorizations auths = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
         BatchScanner scan = conn.createBatchScanner(TableIdentifier.RAW_TWITTER_DATA.get(), auths, numberOfThreadsForScan);
         addReduceIterator(scan);
         scan.setRanges(rangeFilter);
@@ -149,7 +146,7 @@ public class AccumuloService {
      */
     public BatchScanner getRawDataBatchScannerForMapView(List<Range> rangeFilter) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
-        Authorizations auths = new Authorizations("standard");
+        Authorizations auths = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
         BatchScanner scan = conn.createBatchScanner(TableIdentifier.RAW_TWITTER_DATA.get(), auths, numberOfThreadsForScan);
         addGeoReduceIterator(scan);
         scan.setRanges(rangeFilter);
@@ -169,7 +166,7 @@ public class AccumuloService {
      */
     public Scanner getTweetFrequencyScanner(String startTime, String endTime, String language) throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
         Connector conn = getConnector();
-        Authorizations auths = new Authorizations("standard");
+        Authorizations auths = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
         Scanner scan = conn.createScanner(TableIdentifier.TWEET_FREQUENCY.get(), auths);
         scan.setRange(new Range(startTime, true, endTime, true));
         if(language != null) {

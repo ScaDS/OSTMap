@@ -12,6 +12,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.iidp.ostmap.commons.accumulo.AccumuloService;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
+import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
@@ -166,10 +167,9 @@ public class AccumuloServiceTest {
 
 
         System.out.println(TableIdentifier.RAW_TWITTER_DATA.get() + ": -----------------------------------------------------");
-        Scanner s = conn.createScanner(TableIdentifier.RAW_TWITTER_DATA.get(), new Authorizations("standard"));
+        Scanner s = conn.createScanner(TableIdentifier.RAW_TWITTER_DATA.get(), new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString()));
         for (Map.Entry<Key, Value> entry : s) {
             System.out.println(entry.getKey() + " | " + entry.getValue());
-            //assertEquals(entry.getValue().toString(), testString);
         }
         s.close();
         System.out.println("---------------------------------------------");

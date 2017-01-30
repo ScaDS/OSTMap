@@ -36,8 +36,8 @@
     function MapCtrl($scope, httpService, $log, nemSimpleLogger, leafletData, $interval, $window) {
         mapInit($scope);
 
-        $scope.autoUpdate = false;
-        $scope.dataSource = "localhost"; //default: "accumulo";
+        $scope.autoUpdate = true;
+        $scope.dataSource = "accumulo"; //default: "accumulo";
         $scope.clusteringEnabled = true;
         $scope.usePruneCluster = true;
 
@@ -61,9 +61,10 @@
         $scope.search.clearFilters = function () {
             $scope.timeFilter = "0.25";
             $scope.center ={
-                lat: 50,
-                lng: 12,
-                zoom: 4
+                lat: 51.338,
+                lng: 12.377,
+                zoom: 12,
+                minZoom: 8
             };
 
             setTimeout(function(){
@@ -409,9 +410,10 @@
                  * @type {{lat: number, lng: number, zoom: number}}
                  */
                 $scope.center ={
-                    lat: 50,
-                    lng: 12,
-                    zoom: 5
+                    lat: 51.338,
+                    lng: 12.377,
+                    zoom: 12,
+                    minZoom: 8
                 };
 
                 /**
@@ -438,9 +440,10 @@
          * @type {{lat: number, lng: number, zoom: number}}
          */
         $scope.center ={
-            lat: 50,
-            lng: 12,
-            zoom: 4
+            lat: 51.338,
+            lng: 12.377,
+            zoom: 12,
+            minZoom: 8
         };
         $scope.regions = {
             europe: {
@@ -456,13 +459,21 @@
         };
         $scope.maxBounds = {
             northEast: {
-                lat: 90,
-                lng: 180
+                lat: 70,
+                lng: 40
             },
             southWest: {
-                lat: -90,
-                lng: -180
+                lat: 35,
+                lng: -25
             }
+          //  northEast: {
+           //     lat: 90,
+           //     lng: 180
+          //  },
+           // southWest: {
+           //     lat: -90,
+           //     lng: -180
+           // }
         };
         $scope.bounds = null;
 

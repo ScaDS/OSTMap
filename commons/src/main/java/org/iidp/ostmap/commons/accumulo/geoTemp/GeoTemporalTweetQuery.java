@@ -10,6 +10,7 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
 import org.iidp.ostmap.accumuloiterators.GeoTempFilter;
 import org.iidp.ostmap.commons.accumulo.AccumuloService;
+import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 import org.iidp.ostmap.commons.enums.TableIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +123,7 @@ public class GeoTemporalTweetQuery {
         }
 
 
-        Authorizations auths = new Authorizations("standard");
+        Authorizations auths = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
         BatchScanner geoTempScan = ac.getConnector().createBatchScanner(TableIdentifier.GEO_TEMPORAL_INDEX.get(), auths, 32);
 
 

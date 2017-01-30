@@ -7,6 +7,7 @@ import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.log4j.Logger;
+import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 import org.iidp.ostmap.stream_processing.types.RawTwitterDataKey;
 import org.iidp.ostmap.stream_processing.types.SinkConfiguration;
 import scala.Tuple2;
@@ -55,8 +56,7 @@ public class RawTwitterDataSink extends RichSinkFunction<Tuple2<RawTwitterDataKe
         // build the accumulo connector
         Instance inst = new ZooKeeperInstance(cfg.accumuloInstanceName, cfg.accumuloZookeeper);
         conn = inst.getConnector(cfg.accumuloUser, new PasswordToken(cfg.accumuloPassword));
-        Authorizations auths = new Authorizations("ostmap");
-        //conn.securityOperations().changeUserAuthorizations("root", auths);
+        Authorizations auths = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
 
         // create the table if not already existent
         TableOperations tableOpts = conn.tableOperations();

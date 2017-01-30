@@ -7,6 +7,7 @@ import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
+import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class AmcHelper {
             e.printStackTrace();
         }
 
-        Authorizations auth = new Authorizations("standard");
+        Authorizations auth = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
 
         try {
             conn.securityOperations().changeUserAuthorizations("root", auth);

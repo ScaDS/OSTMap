@@ -120,8 +120,7 @@ public class FlinkEnvManager {
         // build the accumulo connector
         Instance inst = new ZooKeeperInstance(accumuloInstanceName, accumuloZookeeper);
         Connector conn = inst.getConnector(accumuloUser, new PasswordToken(accumuloPassword));
-        Authorizations auths = new Authorizations("standard");
-        conn.securityOperations().changeUserAuthorizations("root", auths);
+        Authorizations auths = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
         return conn;
     }
 
@@ -135,7 +134,7 @@ public class FlinkEnvManager {
     public DataSet<Tuple2<Key,Value>> getDataFromAccumulo(ExecutionEnvironment env) throws IOException, AccumuloSecurityException {
         job = Job.getInstance(new Configuration(), jobName);
         AccumuloInputFormat.setConnectorInfo(job, accumuloUser, new PasswordToken(accumuloPassword));
-        AccumuloInputFormat.setScanAuthorizations(job, new Authorizations("standard"));
+        AccumuloInputFormat.setScanAuthorizations(job, new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString()));
         ClientConfiguration clientConfig = new ClientConfiguration();
         clientConfig.withInstance(accumuloInstanceName);
         clientConfig.withZkHosts(accumuloZookeeper);

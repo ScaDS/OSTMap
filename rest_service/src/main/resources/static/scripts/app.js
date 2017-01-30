@@ -34,6 +34,7 @@
      */
     function defineRoutes($routeProvider) {
         $routeProvider
+/*
             .when('/list', {
                 templateUrl: 'views/listView.html',
                 controller: 'ListCtrl',
@@ -41,6 +42,7 @@
                 align: 'left',
                 glyphicon: 'glyphicon glyphicon-list'
             })
+*/
             .when('/map', {
                 templateUrl: 'views/mapView.html',
                 controller: 'MapCtrl',
@@ -48,6 +50,7 @@
                 align: 'left',
                 glyphicon: 'glyphicon glyphicon-globe'
             })
+/*
             .when('/analytics', {
                 templateUrl: 'views/analyticsView.html',
                 controller: 'AnalyticsCtrl',
@@ -62,6 +65,7 @@
                 align: 'left',
                 glyphicon: 'glyphicon glyphicon-arrow-up'
             })
+*/
             .when('/about', {
                 templateUrl: 'views/aboutView.html',
                 controller: 'AboutCtrl',
@@ -69,6 +73,6 @@
                 align: 'right',
                 glyphicon: 'glyphicon glyphicon-info-sign'
             })
-            .otherwise({redirectTo: '/list'});
+            .otherwise({redirectTo: '/map'});
     }
 })();

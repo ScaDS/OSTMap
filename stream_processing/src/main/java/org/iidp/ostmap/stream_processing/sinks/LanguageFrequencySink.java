@@ -7,6 +7,7 @@ import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.log4j.Logger;
+import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 import org.iidp.ostmap.stream_processing.types.SinkConfiguration;
 import scala.Tuple3;
 
@@ -56,8 +57,7 @@ public class LanguageFrequencySink extends RichSinkFunction<Tuple3<String, Strin
         // build the accumulo connector
         Instance inst = new ZooKeeperInstance(cfg.accumuloInstanceName, cfg.accumuloZookeeper);
         conn = inst.getConnector(cfg.accumuloUser, new PasswordToken(cfg.accumuloPassword));
-        Authorizations auths = new Authorizations("ostmap");
-        //conn.securityOperations().changeUserAuthorizations("root", auths);
+        Authorizations auths = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
 
         // create the table if not already existent
         TableOperations tableOpts = conn.tableOperations();
