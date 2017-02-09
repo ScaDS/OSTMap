@@ -14,7 +14,7 @@ OSTMap reads geotagged data from the twitter stream. We save it to an small hado
 ![map view 2](https://raw.githubusercontent.com/IIDP/OSTMap/screenshots/screenshots/language-frequency.JPG)
 
 ## Demo
-Currently we don't run a public accessible instance. Is there someone who wants to sponsor one?
+Demo of the map mode: http://ostmap.scads.uni-leipzig.de/#/map
 
 ## Technologies
 * we use Apache Flink as computation framework for stream and batch processing
