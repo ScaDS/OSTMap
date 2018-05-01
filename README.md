@@ -34,6 +34,11 @@ Demo of the map mode: http://ostmap.scads.uni-leipzig.de/#/map
 * rest_service
  * a spring boot application serving the ui and the rest services used by the ui
 
+## Services (tba.)
+* Sentiment Analysis
+    * Sentiment analysis aims to determine the attitude of a tweet with respect to some topic. It should detects a positive, negative or neutral attitude of a tweet.
+    * supports stream as well as batch processing
+
 ## Links
 * [IT-Ringvorlesung 2016](https://www.informatik.uni-leipzig.de/ifi/kooperation/it-ringvorlesung/sommersemester-2016/) at university of Leipzig
 * industry partner for this project: [mgm tp](http://www.mgm-tp.com/)
