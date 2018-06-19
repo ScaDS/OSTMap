@@ -1,5 +1,7 @@
 package org.iidp.ostmap.analytics.sentiment_analysis;
 import org.apache.accumulo.core.client.Connector;
+import org.iidp.ostmap.analytics.sentiment_analysis.stanford.StanfordSentimentAnalyzer;
+import org.iidp.ostmap.analytics.sentiment_analysis.util.PropertiesLoader;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
 
 import org.junit.AfterClass;
@@ -7,10 +9,14 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import twitter4j.*;
+import twitter4j.conf.ConfigurationBuilder;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * tbd...
@@ -59,30 +65,48 @@ public class SentimentAnalysisTest {
      * tbd...
      */
     @Test
-    public void testFetchRawTwitterData() throws IOException {
+    public void testFetchRawTwitterData() throws IOException, TwitterException {
         Connector conn = amc.getConnector();
         System.out.println("I am connected as: " + conn.whoami());
-        List<String> sentenceList = this.getTwitterData();
 
-        for (String sentence : sentenceList) {
-            System.out.println("sentence = " + sentence);
-        }
+        List<Status> statusList = this.getScadsTweets();
+
+        StanfordSentimentAnalyzer stanfordSentimentAnalyzer = new StanfordSentimentAnalyzer();
+        Map<Long, HashMap> predictedTweetSentiments = stanfordSentimentAnalyzer.predictTweetSentiments(statusList);
+        System.out.println();
     }
 
     /**
-     * Reads Twitter data from a previously create text file, which contains twitter sentences.
-     * @return List of sentences.
+     * Connects to Twitter using twitter4j to retrieve all tweets from ScaDS (BigData Center).
+     * It returns a list of statuses.
+     * @return list of statuses
+     * @throws TwitterException
      */
-    private List<String> getTwitterData() throws IOException {
-        List<String> sentenceList = new ArrayList<>();
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("/home/alex/coreNLPExample/data/results/stanford")));
+    private List<Status> getScadsTweets() throws TwitterException {
+        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
-        String currentLine;
+        // Loads authentication data for twitter access from ./resources/application.conf (not in the Git repo)
+        PropertiesLoader propertiesLoader = new PropertiesLoader();
 
-        while ((currentLine = bufferedReader.readLine()) != null) {
-		    sentenceList.add(currentLine);
+        configurationBuilder.setOAuthConsumerKey(propertiesLoader.oAuthConsumerKey)
+                .setOAuthConsumerSecret(propertiesLoader.oAuthConsumerSecret)
+                .setOAuthAccessToken(propertiesLoader.oAuthAccessToken)
+                .setOAuthAccessTokenSecret(propertiesLoader.oAuthAccessTokenSecret);
+
+        Twitter twitter = new TwitterFactory(configurationBuilder.build()).getInstance();
+        Paging paging = new Paging(1, 300);
+        List<Status> statusList = twitter.getUserTimeline("Sca_DS", paging);
+
+        return statusList;
+    }
+
+    /**
+     * Prints out tweet-id and tweet itself of each status from the given list.
+     * @param statusList list of twitter statuses
+     */
+    private void printStatusList(List<Status> statusList){
+        for (Status status: statusList) {
+            System.out.println(String.format("[TWEET-ID] %s [TWEET] %s", status.getId(), status.getText()));
         }
-
-        return sentenceList;
     }
 }
