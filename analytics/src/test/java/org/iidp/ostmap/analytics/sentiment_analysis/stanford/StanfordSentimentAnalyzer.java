@@ -96,14 +96,21 @@ public class StanfordSentimentAnalyzer {
     }
 
     private String removeHttp(String tweetText) {
-        Pattern MY_PATTERN = Pattern.compile("(?:https?|http?)://[\\w/%.-]+");
-        Matcher m = MY_PATTERN.matcher(tweetText);
+        Pattern HTTP = Pattern.compile(
+                "http.?\\s"
+        );
+
+
+        Matcher m = HTTP.matcher(tweetText);
         String t = "";
+        StringBuilder sb = new StringBuilder(tweetText);
+
         while (m.find()) {
-            String s = m.group(1);
-            t = tweetText.replace(s, "");
-            // s now contains "BAR"
+            sb.delete(m.start(), m.end());
         }
+
+        System.out.println("Before: " + tweetText);
+        System.out.println("After: " + sb);
         return t;
     }
 

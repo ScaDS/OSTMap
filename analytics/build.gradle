@@ -25,6 +25,11 @@ dependencies {
     testCompile(group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.9.1')
     testCompile(group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.9.1', classifier: 'models')
     testCompile(group: 'edu.stanford.nlp', name: 'stanford-parser', version: '3.9.1')
+    testCompile(group: 'org.apache.flink', name: 'flink-core', version: '1.5.0')
+    testCompile(group: 'org.apache.flink', name: 'flink-clients_2.11', version: '1.5.0')
+    testCompile(group: 'org.apache.flink', name: 'flink-java', version: '1.5.0')
+    testCompile(group: 'org.apache.flink', name: 'flink-connector-twitter_2.11', version: '1.5.0')
+    testCompile(group: 'org.apache.flink', name: 'flink-connector-kafka-0.10_2.11', version: '1.5.0')
 
     compile project(':commons')
 
