@@ -1,5 +1,6 @@
 package org.iidp.ostmap.analytics.sentiment_analysis;
-import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.data.Mutation;
 import org.iidp.ostmap.analytics.sentiment_analysis.stanford.StanfordSentimentAnalyzer;
 import org.iidp.ostmap.analytics.sentiment_analysis.util.PropertiesLoader;
 import org.iidp.ostmap.analytics.sentiment_analysis.util.TwitterConnector;
@@ -14,10 +15,9 @@ import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * tbd...
@@ -66,11 +66,35 @@ public class SentimentAnalysisTest {
      * tbd...
      */
     @Test
-    public void testFetchRawTwitterData() throws IOException, TwitterException {
+    public void testFetchRawTwitterData() throws TableExistsException, AccumuloSecurityException, AccumuloException, TwitterException, TableNotFoundException {
         Connector conn = amc.getConnector();
         System.out.println("I am connected as: " + conn.whoami());
 
+        // setup accumulo tables
+        conn.tableOperations().create("Sentiment");
+
+        // retrieve tweets from ScaDS
         List<Status> statusList = TwitterConnector.getScadsTweets();
+
+        //
+        List<Mutation> mutations = new ArrayList<>();
+        Mutation mutation = null;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+
+        for (Status status : statusList) {
+            String stamp = sdf.format(new Timestamp(status.getCreatedAt().getTime()));
+
+            // todo: geolocation --> rowKey
+            String rowKey = String.format("%s:%s", stamp, status.getId());
+            mutation = new Mutation(rowKey);
+            mutation.put("CF", "CQ", status.getText());
+            mutations.add(mutation);
+        }
+
+        BatchWriter batchWriter = conn.createBatchWriter("Sentiment", new BatchWriterConfig());
+        batchWriter.addMutations(mutations);
+
 
         StanfordSentimentAnalyzer stanfordSentimentAnalyzer = new StanfordSentimentAnalyzer();
         Map<Long, HashMap> predictedTweetSentiments = stanfordSentimentAnalyzer.predictTweetSentiments(statusList);
