@@ -20,7 +20,7 @@ public class TwitterConnector {
      * @return list of statuses
      * @throws TwitterException
      */
-    public static List<Status> getScadsTweets() throws TwitterException {
+    public static List<Status> getTweetsFromUser(String user) throws TwitterException {
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
         // Loads authentication data for twitter access from ./resources/application.conf (not in the Git repo)
@@ -33,7 +33,7 @@ public class TwitterConnector {
 
         Twitter twitter = new TwitterFactory(configurationBuilder.build()).getInstance();
         Paging paging = new Paging(1, 300);
-        List<Status> statusList = twitter.getUserTimeline("Sca_DS", paging);
+        List<Status> statusList = twitter.getUserTimeline(user, paging);
 
         return statusList;
     }

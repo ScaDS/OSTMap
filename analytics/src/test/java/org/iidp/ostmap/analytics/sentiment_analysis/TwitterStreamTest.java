@@ -32,6 +32,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import twitter4j.GeoLocation;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
@@ -70,14 +71,14 @@ public class TwitterStreamTest {
         amc.startMiniCluster(tmpDir.getRoot().getAbsolutePath());
 
         Connector conn = amc.getConnector();
-        System.out.println("[WHOAMI]" + conn.whoami());
+        System.out.println("[WHOAMI] " + conn.whoami());
 
         if(!conn.tableOperations().exists("SentimentData")){
             conn.tableOperations().create("SentimentData");
         }
 
         // retrieve tweets from ScaDS
-        List<Status> statusList = TwitterConnector.getScadsTweets();
+        List<Status> statusList = TwitterConnector.getTweetsFromUser("Sca_DS");
 
         List<Mutation> mutations = new ArrayList<>();
         Mutation mutation;
@@ -86,8 +87,8 @@ public class TwitterStreamTest {
         Random random = new Random();
         int spreadingByte = 0;
 
-        Double longitude = 0.0;
-        Double latitude = 0.0;
+        // longitude, latitude
+        Double tweetCoordinates[] = {0.0, 0.0};
         String rowKey;
         String columnFamily;
 
@@ -95,16 +96,15 @@ public class TwitterStreamTest {
             String stamp = sdf.format(new Timestamp(status.getCreatedAt().getTime()));
             spreadingByte = random.nextInt(256);
 
-            if (status.getGeoLocation() != null){
-                longitude = status.getGeoLocation().getLongitude();
-                latitude = status.getGeoLocation().getLatitude();
-                columnFamily = "geo";
+            if (status.getPlace() != null){
+                columnFamily = "place";
+                tweetCoordinates = TwitterStreamTest.getCoordinates(status);
 
             } else {
-                columnFamily = "no_geo";
+                columnFamily = "no_place";
             }
 
-            rowKey = String.format("%d:%s:%f:%f", spreadingByte, stamp, longitude, latitude);
+            rowKey = String.format("%d:%s:%f:%f", spreadingByte, stamp, tweetCoordinates[0], tweetCoordinates[1]);
             mutation = new Mutation(rowKey);
             mutation.put(columnFamily, "CQ", status.getText());
 
@@ -135,7 +135,7 @@ public class TwitterStreamTest {
         Authorizations authorizations = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
         System.out.println(String.format("[AUTHORIZATIONS] %s", authorizations.toString()));
         Scanner scanner = connector.createScanner("SentimentData", authorizations);
-        scanner.fetchColumn(new Text("geo"), new Text("CQ"));
+        scanner.fetchColumn(new Text("place"), new Text("CQ"));
         for (Map.Entry<Key, Value> entry : scanner) {
             System.out.printf("Key : %-50s  Value : %s\n", entry.getKey(), entry.getValue());
         }
@@ -226,5 +226,36 @@ public class TwitterStreamTest {
                 }
             }
         }
+    }
+
+    /**
+     * Returns the coordinates of a geo-tagged tweet from a bounding box.
+     * Since the bounding box has four pairs of coordinates,
+     * the average of the longitude and latitude is calculated from each of
+     * these to obtain the coordinates of the center of the box.
+     * @param status This should be a Twitter4J.Status object.
+     * @return Double[], with first element longitude and second latitude of the tweet.
+     */
+    private static Double[] getCoordinates(Status status){
+        Double tweetCoordinates[] = {0.0, 0.0};
+        GeoLocation boundingBox[][];
+
+        if (status.getPlace() != null) {
+            boundingBox = status.getPlace().getBoundingBoxCoordinates();
+
+            // longitude
+            tweetCoordinates[0] = (boundingBox[0][0].getLongitude() +
+                    boundingBox[0][1].getLongitude() +
+                    boundingBox[0][2].getLongitude() +
+                    boundingBox[0][3].getLongitude()) / 4;
+
+            // latitude
+            tweetCoordinates[1] = (boundingBox[0][0].getLatitude() +
+                    boundingBox[0][1].getLatitude() +
+                    boundingBox[0][2].getLatitude() +
+                    boundingBox[0][3].getLatitude()) / 4;
+        }
+
+        return tweetCoordinates;
     }
 }
