@@ -74,6 +74,7 @@ public class SentimentAnalysisTest {
         conn.tableOperations().create("Sentiment");
 
         // retrieve tweets from ScaDS
+        // todo --> rawTweet tab
         List<Status> statusList = TwitterConnector.getScadsTweets();
 
         //
@@ -85,7 +86,7 @@ public class SentimentAnalysisTest {
         for (Status status : statusList) {
             String stamp = sdf.format(new Timestamp(status.getCreatedAt().getTime()));
 
-            // todo: geolocation --> rowKey
+            // rowKey --> spreadingByte,day,geohash
             String rowKey = String.format("%s:%s", stamp, status.getId());
             mutation = new Mutation(rowKey);
             mutation.put("CF", "CQ", status.getText());
