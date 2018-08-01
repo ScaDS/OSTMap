@@ -6,6 +6,7 @@ public enum TableIdentifier {
     TERM_INDEX("ostmap.TermIndex"),
     GEO_TEMPORAL_INDEX("ostmap.GeoTemporalIndex"),
     TWEET_FREQUENCY("ostmap.TweetFrequency"),
+    SENTIMENT_DATA("ostmap.SentimentData"),
     NAMESPACE("ostmap");
 
     String identifier = "";

@@ -1,7 +1,5 @@
 package org.iidp.ostmap.analytics.sentiment_analysis;
 
-import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
-import com.twitter.hbc.core.endpoint.StreamingEndpoint;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -12,7 +10,11 @@ import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.CoreMap;
 import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
+import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
@@ -21,9 +23,10 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.twitter.TwitterSource;
 import org.apache.flink.util.Collector;
-import org.iidp.ostmap.analytics.sentiment_analysis.util.PropertiesLoader;
+import org.apache.hadoop.io.Text;
 import org.iidp.ostmap.analytics.sentiment_analysis.util.TwitterConnector;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
+import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -32,8 +35,6 @@ import org.junit.rules.TemporaryFolder;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -51,14 +52,9 @@ public class TwitterStreamTest {
     public static TemporaryFolder tmpDir = new TemporaryFolder();
 
     /**
-     * Directory for MiniAccumuloCluster settings.
-     */
-    public static TemporaryFolder tmpSettingsDir = new TemporaryFolder();
-
-    /**
      * Helper class which provides a MiniAccumuloCluster as well as a Connector.
      */
-    public static AmcHelper amc = new AmcHelper();
+    private static AmcHelper amc = new AmcHelper();
 
     /**
      * Empty Constructor
@@ -74,47 +70,50 @@ public class TwitterStreamTest {
         amc.startMiniCluster(tmpDir.getRoot().getAbsolutePath());
 
         Connector conn = amc.getConnector();
-        System.out.println("I am connected as: " + conn.whoami());
+        System.out.println("[WHOAMI]" + conn.whoami());
 
-        // setup accumulo tables
-        conn.tableOperations().create("Sentiment");
+        if(!conn.tableOperations().exists("SentimentData")){
+            conn.tableOperations().create("SentimentData");
+        }
 
-//        // retrieve tweets from ScaDS
-//        // todo --> rawTweet tab
+        // retrieve tweets from ScaDS
         List<Status> statusList = TwitterConnector.getScadsTweets();
 
-        //
         List<Mutation> mutations = new ArrayList<>();
-        Mutation mutation = null;
+        Mutation mutation;
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
         Random random = new Random();
         int spreadingByte = 0;
-        ObjectMapper jsonParser = new ObjectMapper();
+
+        Double longitude = 0.0;
+        Double latitude = 0.0;
+        String rowKey;
+        String columnFamily;
 
         for (Status status : statusList) {
             String stamp = sdf.format(new Timestamp(status.getCreatedAt().getTime()));
-
-//            JsonNode jsonNode = (JsonNode) status;
-
-//            boolean hasGeo = jsonNode.has("geo");
-
-
-            // rowKey --> spreadingByte,day,geohash
-            // example: rowKey = 57:15:GeoLocation{latitude=51.33902167, longitude=12.37988333}
             spreadingByte = random.nextInt(256);
-            String rowKey = String.format("%d:%s:%s", spreadingByte, stamp, status.getGeoLocation());
-            System.out.println("rowKey = " + rowKey);
+
+            if (status.getGeoLocation() != null){
+                longitude = status.getGeoLocation().getLongitude();
+                latitude = status.getGeoLocation().getLatitude();
+                columnFamily = "geo";
+
+            } else {
+                columnFamily = "no_geo";
+            }
+
+            rowKey = String.format("%d:%s:%f:%f", spreadingByte, stamp, longitude, latitude);
             mutation = new Mutation(rowKey);
-            mutation.put("CF", "CQ", status.getText());
+            mutation.put(columnFamily, "CQ", status.getText());
+
             mutations.add(mutation);
-
-
         }
-
-        BatchWriter batchWriter = conn.createBatchWriter("Sentiment", new BatchWriterConfig());
+//        System.out.println(String.format("[SENTIMENT_DATA] added %d lines to table: SENTIMENT_DATA.", mutations.size()));
+        BatchWriter batchWriter = conn.createBatchWriter("SentimentData", new BatchWriterConfig());
         batchWriter.addMutations(mutations);
-
+        batchWriter.close();
     }
 
     /**
@@ -125,7 +124,26 @@ public class TwitterStreamTest {
         amc.stopMiniCluster();
     }
 
+    /**
+     * This test simulates an analysis batch job from a possible user input form at the OSTMap web application.
+     * @throws TableNotFoundException Exception thrown if Table not found.
+     */
     @Test
+    public void testTweetsLastNDays() throws TableNotFoundException {
+        int days = 5;
+        Connector connector = amc.getConnector();
+        Authorizations authorizations = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
+        System.out.println(String.format("[AUTHORIZATIONS] %s", authorizations.toString()));
+        Scanner scanner = connector.createScanner("SentimentData", authorizations);
+        scanner.fetchColumn(new Text("geo"), new Text("CQ"));
+        for (Map.Entry<Key, Value> entry : scanner) {
+            System.out.printf("Key : %-50s  Value : %s\n", entry.getKey(), entry.getValue());
+        }
+        // tbd ...
+    }
+
+
+//    @Test
     public void testTwitterStreaming() throws Exception {
 
         // create streaming environment
