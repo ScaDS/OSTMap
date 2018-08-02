@@ -1,5 +1,10 @@
+/*
+ * This test file, bla bla --> tbd...
+ */
+
 package org.iidp.ostmap.analytics.sentiment_analysis;
 
+import com.github.davidmoten.geo.GeoHash;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -42,7 +47,7 @@ import java.util.*;
 
 //import org.apache.flink.streaming.examples.twitter.util.TwitterExampleData;
 
-public class TwitterStreamTest {
+public class BatchTest {
 
     private static final Config config = ConfigFactory.load("application.conf");
 
@@ -60,7 +65,7 @@ public class TwitterStreamTest {
     /**
      * Empty Constructor
      */
-    public TwitterStreamTest() {
+    public BatchTest() {
     }
 
     /**
@@ -70,50 +75,15 @@ public class TwitterStreamTest {
     public static void setUpCluster() throws TableExistsException, AccumuloSecurityException, AccumuloException, TableNotFoundException, TwitterException {
         amc.startMiniCluster(tmpDir.getRoot().getAbsolutePath());
 
-        Connector conn = amc.getConnector();
-        System.out.println("[WHOAMI] " + conn.whoami());
-
-        if(!conn.tableOperations().exists("SentimentData")){
-            conn.tableOperations().create("SentimentData");
-        }
+        Connector connector = amc.getConnector();
+        System.out.println(String.format("[CONNECTOR] I am \'%s\'.", connector.whoami()));
 
         // retrieve tweets from ScaDS
         List<Status> statusList = TwitterConnector.getTweetsFromUser("Sca_DS");
 
-        List<Mutation> mutations = new ArrayList<>();
-        Mutation mutation;
+        // create sentiment table
+        BatchTest.createTableGeoTemporalIndex(connector, statusList);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd");
-        Random random = new Random();
-        int spreadingByte = 0;
-
-        // longitude, latitude
-        Double tweetCoordinates[] = {0.0, 0.0};
-        String rowKey;
-        String columnFamily;
-
-        for (Status status : statusList) {
-            String stamp = sdf.format(new Timestamp(status.getCreatedAt().getTime()));
-            spreadingByte = random.nextInt(256);
-
-            if (status.getPlace() != null){
-                columnFamily = "place";
-                tweetCoordinates = TwitterStreamTest.getCoordinates(status);
-
-            } else {
-                columnFamily = "no_place";
-            }
-
-            rowKey = String.format("%d:%s:%f:%f", spreadingByte, stamp, tweetCoordinates[0], tweetCoordinates[1]);
-            mutation = new Mutation(rowKey);
-            mutation.put(columnFamily, "CQ", status.getText());
-
-            mutations.add(mutation);
-        }
-//        System.out.println(String.format("[SENTIMENT_DATA] added %d lines to table: SENTIMENT_DATA.", mutations.size()));
-        BatchWriter batchWriter = conn.createBatchWriter("SentimentData", new BatchWriterConfig());
-        batchWriter.addMutations(mutations);
-        batchWriter.close();
     }
 
     /**
@@ -133,9 +103,10 @@ public class TwitterStreamTest {
         int days = 5;
         Connector connector = amc.getConnector();
         Authorizations authorizations = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
-        System.out.println(String.format("[AUTHORIZATIONS] %s", authorizations.toString()));
-        Scanner scanner = connector.createScanner("SentimentData", authorizations);
-        scanner.fetchColumn(new Text("place"), new Text("CQ"));
+//        System.out.println(String.format("[AUTHORIZATIONS] %s", authorizations.toString()));
+        Scanner scanner = connector.createScanner("GeoTemporalIndex", authorizations);
+//        scanner.fetchColumn(new Text("no_place"), new Text("CQ"));
+
         for (Map.Entry<Key, Value> entry : scanner) {
             System.out.printf("Key : %-50s  Value : %s\n", entry.getKey(), entry.getValue());
         }
@@ -143,6 +114,10 @@ public class TwitterStreamTest {
     }
 
 
+    /**
+     *
+     * @throws Exception
+     */
 //    @Test
     public void testTwitterStreaming() throws Exception {
 
@@ -162,9 +137,12 @@ public class TwitterStreamTest {
                 .keyBy(0);
         tweets.print();
         streamSource.print();
-        env.execute("twitter stream connection test");
+        env.execute("Sentiment Analysis Batch Processing Test");
     }
 
+    /**
+     *
+     */
     public static class StanfordSentimentFlatMap implements FlatMapFunction<String, Tuple2<String, Integer>> {
         private static final long serialVersionUID = 1L;
         private transient ObjectMapper jsonParser;
@@ -208,7 +186,7 @@ public class TwitterStreamTest {
                     // this is the parse tree of the current sentence
                     Tree tree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
 
-                    /**
+                    /*
                      * RNNCoreAnnotations.getPredictedClass
                      * 0 = very negative
                      * 1 = negative
@@ -218,7 +196,7 @@ public class TwitterStreamTest {
                      */
                     Integer sentiment = RNNCoreAnnotations.getPredictedClass(tree);
                     sentenceMap.put((Annotation) sentence, sentiment);
-                    System.out.println(String.format("[SENTIMENT] %s - [SENTENCE] %s", sentiment.toString(), sentence));
+//                    System.out.println(String.format("[SENTIMENT] %s - [SENTENCE] %s", sentiment.toString(), sentence));
 
                     if (!sentence.toString().equals("")) {
                         out.collect(new Tuple2<>(sentence.toString(), sentiment));
@@ -257,5 +235,104 @@ public class TwitterStreamTest {
         }
 
         return tweetCoordinates;
+    }
+
+    /**
+     * Represents the GeoTemporalIndex.
+     * +----------------+----------+---------+-----------------------------+
+     * |       ROW      |    CF    |    CQ   |        VALUE                |
+     * +----------------+----------+---------+-----------------------------+
+     * | sb,day,geohash | Tweet-ID | lat/lon | Twitter4J.Status.toString() |
+     * +----------------+----------+---------+-----------------------------+
+     *
+     * @param connector Connector connects to an Accumulo instance to perform table operations.
+     * @param statusList List of multiple Twitter4J.Status instances.
+     * @throws TableExistsException Thrown when the table specified already exists,
+     * and it was expected that it didn't.
+     * @throws AccumuloSecurityException An Accumulo Exception for security violations,
+     * authentication failures, authorization failures, etc.
+     * @throws AccumuloException A generic Accumulo Exception for general accumulo failures.
+     * @throws TableNotFoundException Thrown when the table specified doesn't exist when it was expected to.
+     */
+    private static void createTableGeoTemporalIndex(Connector connector, List<Status> statusList)
+            throws TableExistsException, AccumuloSecurityException, AccumuloException, TableNotFoundException {
+
+        if(!connector.tableOperations().exists("GeoTemporalIndex")){
+            connector.tableOperations().create("GeoTemporalIndex");
+        }
+
+        List<Mutation> mutations = new ArrayList<>();
+        Mutation mutation;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
+        Random random = new Random();
+        int spreadingByte = 0;
+
+        // longitude, latitude
+        Double tweetCoordinates[] = {0.0, 0.0};
+        String rowKey;
+        String columnFamily = "";
+        String columnQualifier = "";
+        String day;
+        String geohash;
+
+        for (Status status : statusList) {
+            // reset tweet coordinates before each iteration step
+            tweetCoordinates[0] = 0.0;
+            tweetCoordinates[1] = 0.0;
+
+            day = sdf.format(new Timestamp(status.getCreatedAt().getTime()));
+            spreadingByte = random.nextInt(256);
+
+            if (status.getPlace() != null){
+                // Pseudo-RawTweetKey
+                columnFamily = String.valueOf(status.getId());
+                tweetCoordinates = BatchTest.getCoordinates(status);
+                geohash = BatchTest.getGeoHash(tweetCoordinates);
+                rowKey = String.format("%d:%s:%s", spreadingByte, day, geohash);
+                columnQualifier = String.format("%s/%s", tweetCoordinates[1], tweetCoordinates[0]);
+
+                mutation = new Mutation(rowKey);
+                mutation.put(columnFamily, columnQualifier, status.toString());
+                mutations.add(mutation);
+            }
+        }
+        BatchWriter batchWriter = connector.createBatchWriter("GeoTemporalIndex", new BatchWriterConfig());
+        batchWriter.addMutations(mutations);
+        batchWriter.close();
+    }
+
+    /**
+     * Creates the table for tweet sentiments.
+     * +----------------+----------+---------+-----------+
+     * |       ROW      |    CF    |    CQ   |   VALUE   |
+     * +----------------+----------+---------+-----------+
+     * | sb,day,geohash |          |         | Sentiment |
+     * +----------------+----------+---------+-----------+
+     *
+     * @param connector Connector connects to an Accumulo instance to perform table operations.
+     * @param statusList List of multiple Twitter4J.Status instances.
+     * @throws TableExistsException Thrown when the table specified already exists,
+     * and it was expected that it didn't.
+     * @throws AccumuloSecurityException An Accumulo Exception for security violations,
+     * authentication failures, authorization failures, etc.
+     * @throws AccumuloException A generic Accumulo Exception for general accumulo failures.
+     */
+    private static void createTableSentimentData(Connector connector, List<Status> statusList)
+            throws TableExistsException, AccumuloSecurityException, AccumuloException, TableNotFoundException {
+
+        if(!connector.tableOperations().exists("SentimentData")){
+            connector.tableOperations().create("SentimentData");
+        }
+
+    }
+
+    /**
+     * Computes a geo-hash by given longitude and latitude.
+     * @param coordinates Array of two doubles representing latitude and longitude.
+     * @return Geo-Hash String
+     */
+    public static String getGeoHash(Double[] coordinates){
+        return GeoHash.encodeHash(coordinates[1], coordinates[0]);
     }
 }
