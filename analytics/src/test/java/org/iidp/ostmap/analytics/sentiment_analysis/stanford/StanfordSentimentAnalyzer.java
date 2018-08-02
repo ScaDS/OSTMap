@@ -9,10 +9,7 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.CoreMap;
 import twitter4j.Status;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,22 +93,37 @@ public class StanfordSentimentAnalyzer {
     }
 
     private String removeHttp(String tweetText) {
-        Pattern HTTP = Pattern.compile(
-                "http.?\\s"
-        );
+        String regEX = "^[a-zA-Z]+$";
+        Pattern p = Pattern.compile(regEX);
+        Matcher m = p.matcher(tweetText);
+        String endtweet = m.replaceAll("")
+                .replaceAll("(?:https?|http?)://[\\w/%.-]+", "")
+                .replaceAll("(?:https?|http?)://[\\w/%.-]+\\s+", "")
+                .replaceAll("(?:https?|http?)//[\\w/%.-]+\\s+", "")
+                .replaceAll("(?:https?|http?)//[\\w/%.-]+", "")
+                .trim();
+        return endtweet;
+    }
 
-
-        Matcher m = HTTP.matcher(tweetText);
-        String t = "";
-        StringBuilder sb = new StringBuilder(tweetText);
-
-        while (m.find()) {
-            sb.delete(m.start(), m.end());
+    private String removeStopwords(String tweetText) {
+        StopwordsLoader stopwordsLoader = new StopwordsLoader();
+        ArrayList<String> stopwordslist = stopwordsLoader.loadstopwords("NLTK_English_Stopwords_Corpus.txt");
+        String[] tweetList = tweetText.toLowerCase().split("\\s+");
+        for (int i = 0; i < tweetList.length; i++) {
+            if (stopwordslist.contains(tweetList[i])) {
+                tweetList[i] = null;
+            }
         }
+        StringBuffer newText = new StringBuffer();
+        for (int i = 0; i < tweetList.length; i++) {
+            if (tweetList[i] != null) {
+                newText = newText.append(tweetList[i] + " ");
+            }
 
-        System.out.println("Before: " + tweetText);
-        System.out.println("After: " + sb);
-        return t;
+        }
+//        System.out.println("before: " + tweetText);
+//        System.out.println("after: " + newText);
+        return newText.toString();
     }
 
 }
