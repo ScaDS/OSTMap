@@ -21,6 +21,7 @@ import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,9 +29,9 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.twitter.TwitterSource;
 import org.apache.flink.util.Collector;
-import org.apache.hadoop.io.Text;
 import org.iidp.ostmap.analytics.sentiment_analysis.util.TwitterConnector;
 import org.iidp.ostmap.commons.accumulo.AmcHelper;
+import org.iidp.ostmap.commons.accumulo.FlinkEnvManager;
 import org.iidp.ostmap.commons.enums.AccumuloIdentifiers;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -41,6 +42,7 @@ import twitter4j.GeoLocation;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
+import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -57,6 +59,8 @@ public class BatchTest {
     @ClassRule
     public static TemporaryFolder tmpDir = new TemporaryFolder();
 
+    private static TemporaryFolder tmpSettingsDir = new TemporaryFolder();
+
     /**
      * Helper class which provides a MiniAccumuloCluster as well as a Connector.
      */
@@ -72,17 +76,25 @@ public class BatchTest {
      * Starts the MiniAccumuloCluster. Required before running tests.
      */
     @BeforeClass
-    public static void setUpCluster() throws TableExistsException, AccumuloSecurityException, AccumuloException, TableNotFoundException, TwitterException {
+    public static void setUpCluster() throws TableExistsException, AccumuloSecurityException, AccumuloException, TableNotFoundException, TwitterException, IOException {
         amc.startMiniCluster(tmpDir.getRoot().getAbsolutePath());
 
         Connector connector = amc.getConnector();
         System.out.println(String.format("[CONNECTOR] I am \'%s\'.", connector.whoami()));
 
+        Authorizations authorizations = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
+
         // retrieve tweets from ScaDS
         List<Status> statusList = TwitterConnector.getTweetsFromUser("Sca_DS");
 
-        // create sentiment table
+        // create GeoTemporalIndex
         BatchTest.createTableGeoTemporalIndex(connector, statusList);
+
+        // compute sentiments
+        BatchTest.computeSentiments(connector, authorizations);
+
+        // create sentiment table
+        BatchTest.createTableSentimentData(connector);
 
     }
 
@@ -115,7 +127,7 @@ public class BatchTest {
 
 
     /**
-     *
+     * tbd ...
      * @throws Exception
      */
 //    @Test
@@ -141,7 +153,7 @@ public class BatchTest {
     }
 
     /**
-     *
+     * tbd ...
      */
     public static class StanfordSentimentFlatMap implements FlatMapFunction<String, Tuple2<String, Integer>> {
         private static final long serialVersionUID = 1L;
@@ -196,7 +208,6 @@ public class BatchTest {
                      */
                     Integer sentiment = RNNCoreAnnotations.getPredictedClass(tree);
                     sentenceMap.put((Annotation) sentence, sentiment);
-//                    System.out.println(String.format("[SENTIMENT] %s - [SENTENCE] %s", sentiment.toString(), sentence));
 
                     if (!sentence.toString().equals("")) {
                         out.collect(new Tuple2<>(sentence.toString(), sentiment));
@@ -311,14 +322,13 @@ public class BatchTest {
      * +----------------+----------+---------+-----------+
      *
      * @param connector Connector connects to an Accumulo instance to perform table operations.
-     * @param statusList List of multiple Twitter4J.Status instances.
      * @throws TableExistsException Thrown when the table specified already exists,
      * and it was expected that it didn't.
      * @throws AccumuloSecurityException An Accumulo Exception for security violations,
      * authentication failures, authorization failures, etc.
      * @throws AccumuloException A generic Accumulo Exception for general accumulo failures.
      */
-    private static void createTableSentimentData(Connector connector, List<Status> statusList)
+    private static void createTableSentimentData(Connector connector)
             throws TableExistsException, AccumuloSecurityException, AccumuloException, TableNotFoundException {
 
         if(!connector.tableOperations().exists("SentimentData")){
@@ -332,7 +342,58 @@ public class BatchTest {
      * @param coordinates Array of two doubles representing latitude and longitude.
      * @return Geo-Hash String
      */
-    public static String getGeoHash(Double[] coordinates){
+    private static String getGeoHash(Double[] coordinates){
         return GeoHash.encodeHash(coordinates[1], coordinates[0]);
+    }
+
+    /**
+     * tbd ...
+     * @param connector Connector connects to an Accumulo instance to perform table operations.
+     * @param authorizations A collection of authorization strings.
+     * @throws TableNotFoundException Thrown when the table specified doesn't exist when it was expected to.
+     */
+    private static void computeSentiments(Connector connector, Authorizations authorizations)
+            throws TableNotFoundException, IOException, AccumuloSecurityException {
+
+        File settings = BatchTest.createSettingsFile(connector);
+
+        FlinkEnvManager fem = new FlinkEnvManager(
+                settings.getAbsolutePath(),
+                "JOB:computeSentiments",
+                "GeoTemporalIndex",
+                null
+        );
+
+        DataSet<Tuple2<Key, Value>> rawTwitterDataRows = fem.getDataFromAccumulo();
+
+//        BatchScanner scanner = connector.createBatchScanner("GeoTemporalIndex", authorizations, 20);
+        Scanner scanner = connector.createScanner("GeoTemporalIndex", authorizations);
+
+        for (Map.Entry<Key, Value> entry : scanner) {
+            System.out.printf("Key : %-50s  Value : %s\n", entry.getKey(), entry.getValue());
+        }
+    }
+
+    /**
+     * Creates a settings file with data of Mini Accumulo Cluster.
+     * @param connector Connector connects to an Accumulo instance to perform table operations.
+     * @return A settings file for MiniAccumuloCluster
+     * @throws IOException Gerneral exception thrown by input/output errors.
+     */
+    private static File createSettingsFile(Connector connector) throws IOException {
+        tmpSettingsDir.create();
+        File file = tmpSettingsDir.newFile("settings");
+        FileOutputStream fos = new FileOutputStream(file, false);
+        BufferedWriter br = new BufferedWriter(new OutputStreamWriter(fos));
+        String parameters = "accumulo.instance=" + connector.getInstance().getInstanceName() + "\n"+
+                "accumulo.user=" + connector.whoami() +"\n"+
+                "accumulo.password=password\n"+
+                "accumulo.zookeeper=" + connector.getInstance().getZooKeepers();
+        br.write(parameters);
+        br.flush();
+        br.close();
+        fos.flush();
+        fos.close();
+        return file;
     }
 }
