@@ -23,6 +23,7 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -76,7 +77,7 @@ public class BatchTest {
      * Starts the MiniAccumuloCluster. Required before running tests.
      */
     @BeforeClass
-    public static void setUpCluster() throws TableExistsException, AccumuloSecurityException, AccumuloException, TableNotFoundException, TwitterException, IOException {
+    public static void setUpCluster() throws Exception {
         amc.startMiniCluster(tmpDir.getRoot().getAbsolutePath());
 
         Connector connector = amc.getConnector();
@@ -125,46 +126,19 @@ public class BatchTest {
         // tbd ...
     }
 
-
-    /**
-     * tbd ...
-     * @throws Exception
-     */
-//    @Test
-    public void testTwitterStreaming() throws Exception {
-
-        // create streaming environment
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
-        Properties props = new Properties();
-
-        props.setProperty(TwitterSource.CONSUMER_KEY, config.getString("CONSUMER_KEY"));
-        props.setProperty(TwitterSource.CONSUMER_SECRET, config.getString("CONSUMER_SECRET"));
-        props.setProperty(TwitterSource.TOKEN, config.getString("ACCESS_TOKEN"));
-        props.setProperty(TwitterSource.TOKEN_SECRET, config.getString("ACCESS_TOKEN_SECRET"));
-
-        DataStream<String> streamSource = env.addSource(new TwitterSource(props));
-        DataStream<Tuple2<String, Integer>> tweets = streamSource
-                .flatMap(new StanfordSentimentFlatMap())
-                .keyBy(0);
-        tweets.print();
-        streamSource.print();
-        env.execute("Sentiment Analysis Batch Processing Test");
-    }
-
     /**
      * tbd ...
      */
-    public static class StanfordSentimentFlatMap implements FlatMapFunction<String, Tuple2<String, Integer>> {
+    public static class StanfordSentimentFlatMap implements FlatMapFunction<Tuple2<Key, Value>, Tuple3<String, Integer, String>> {
         private static final long serialVersionUID = 1L;
         private transient ObjectMapper jsonParser;
 
         @Override
-        public void flatMap(String value, Collector<Tuple2<String, Integer>> out) throws Exception {
+        public void flatMap(Tuple2<Key, Value> in, Collector<Tuple3<String, Integer, String>> out) throws Exception {
             if (jsonParser == null) {
                 jsonParser = new ObjectMapper();
             }
-            JsonNode jsonNode = jsonParser.readValue(value, JsonNode.class);
+            JsonNode jsonNode = jsonParser.readValue(in.f1.toString(), JsonNode.class);
 
             boolean hasText = jsonNode.has("text");
 
@@ -191,28 +165,24 @@ public class BatchTest {
                 // a CoreMap is essentially a Map that uses class objects as keys and has values with custom types
                 List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
 
-                Map<Annotation, Integer> sentenceMap = new HashMap<>();
+//                Map<Annotation, Integer> sentenceMap = new HashMap<>();
+
+                int sumOfSentiments = 0;
+                int sentiment;
+                String sentimentPolarity = "";
 
                 for (CoreMap sentence : sentences) {
-
                     // this is the parse tree of the current sentence
                     Tree tree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
+                    sentiment = RNNCoreAnnotations.getPredictedClass(tree);
+                    sumOfSentiments += sentiment;
 
-                    /*
-                     * RNNCoreAnnotations.getPredictedClass
-                     * 0 = very negative
-                     * 1 = negative
-                     * 2 = neutral
-                     * 3 = positive
-                     * 4 = very positive
-                     */
-                    Integer sentiment = RNNCoreAnnotations.getPredictedClass(tree);
-                    sentenceMap.put((Annotation) sentence, sentiment);
-
-                    if (!sentence.toString().equals("")) {
-                        out.collect(new Tuple2<>(sentence.toString(), sentiment));
-                    }
                 }
+                int avgSentiment = sumOfSentiments / sentences.size();
+                System.out.println("avgSentiment = " + avgSentiment);
+                sentimentPolarity = BatchTest.getSentimentPolarity(avgSentiment);
+                out.collect(new Tuple3<>(jsonNode.get("id").asText(), avgSentiment, sentimentPolarity));
+
             }
         }
     }
@@ -292,7 +262,8 @@ public class BatchTest {
             tweetCoordinates[0] = 0.0;
             tweetCoordinates[1] = 0.0;
 
-            day = sdf.format(new Timestamp(status.getCreatedAt().getTime()));
+//            day = sdf.format(new Timestamp(status.getCreatedAt().getTime()));
+            day = status.getCreatedAt().toString();
             spreadingByte = random.nextInt(256);
 
             if (status.getPlace() != null){
@@ -353,7 +324,7 @@ public class BatchTest {
      * @throws TableNotFoundException Thrown when the table specified doesn't exist when it was expected to.
      */
     private static void computeSentiments(Connector connector, Authorizations authorizations)
-            throws TableNotFoundException, IOException, AccumuloSecurityException {
+            throws Exception {
 
         File settings = BatchTest.createSettingsFile(connector);
 
@@ -365,6 +336,8 @@ public class BatchTest {
         );
 
         DataSet<Tuple2<Key, Value>> rawTwitterDataRows = fem.getDataFromAccumulo();
+        DataSet<Tuple3<String, Integer, String>> predictedSentiments = rawTwitterDataRows
+                .flatMap(new StanfordSentimentFlatMap());
 
 //        BatchScanner scanner = connector.createBatchScanner("GeoTemporalIndex", authorizations, 20);
         Scanner scanner = connector.createScanner("GeoTemporalIndex", authorizations);
@@ -395,5 +368,36 @@ public class BatchTest {
         fos.flush();
         fos.close();
         return file;
+    }
+
+    /**
+     * Returns a textual sentiment of a single tweet.
+     * @param avgSentiment Average of each sentiment for each sentence within a tweet.
+     * @return Textual sentiment of the tweet.
+     */
+    private static String getSentimentPolarity(int avgSentiment){
+        String polarity = "";
+        switch (avgSentiment) {
+            case 0:
+                polarity = "very negative";
+                break;
+            case 1:
+                polarity = "negative";
+                break;
+            case 2:
+                polarity = "neutral";
+                break;
+            case 3:
+                polarity = "positive";
+                break;
+            case 4:
+                polarity = "very positive";
+                break;
+            default:
+                polarity = "error";
+                break;
+        }
+        return polarity;
+
     }
 }
