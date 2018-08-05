@@ -37,12 +37,41 @@ dependencies {
     compile project(':commons')
 
     compile 'org.slf4j:slf4j-api:1.4.3'
-    compile 'org.slf4j:slf4j-log4j12:1.4.3'
+    compile 'org.slf4j:slf4j-api:1.4.3'
+    compile 'org.slf4j:slf4j-log4j12:1.7.7'
+
+//    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+//    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+//
+//    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+//    testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+
     compile('org.apache.accumulo:accumulo-core:1.7.0.2.4.0.0-169')
+
+    // SPARK
+
+    // https://mvnrepository.com/artifact/org.apache.spark/spark-core
+    testCompile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.3.1'
+
+    // https://mvnrepository.com/artifact/org.apache.spark/spark-streaming
+    testCompile group: 'org.apache.spark', name: 'spark-streaming_2.11', version: '2.3.1'
+
+    // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
+    testCompile group: 'org.apache.spark', name: 'spark-sql_2.11', version: '2.3.1'
+
+    // https://mvnrepository.com/artifact/org.apache.spark/spark-mllib
+    testCompile group: 'org.apache.spark', name: 'spark-mllib_2.11', version: '2.3.1'
+
+    // https://mvnrepository.com/artifact/org.apache.spark/spark-streaming-twitter
+    testCompile group: 'org.apache.spark', name: 'spark-streaming-twitter_2.11', version: '1.6.3'
+
+    // https://mvnrepository.com/artifact/org.scala-lang/scala-library
+    testCompile group: 'org.scala-lang', name: 'scala-library', version: '2.10.5'
+
 }
 
-jar {
-    manifest {
-        attributes("Main-Class": "org.iidp.ostmap.analytics.AnalyticsMain")
-    }
-}
+//jar {
+//    manifest {
+//        attributes("Main-Class": "org.iidp.ostmap.analytics.AnalyticsMain")
+//    }
+//}

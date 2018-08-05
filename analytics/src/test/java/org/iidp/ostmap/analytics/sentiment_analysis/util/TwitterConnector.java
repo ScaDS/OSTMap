@@ -24,7 +24,7 @@ public class TwitterConnector {
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 
         // Loads authentication data for twitter access from ./resources/application.conf (not in the Git repo)
-        PropertiesLoader propertiesLoader = new PropertiesLoader();
+        PropertiesLoaderJ propertiesLoader = new PropertiesLoaderJ();
 
         configurationBuilder.setOAuthConsumerKey(propertiesLoader.oAuthConsumerKey)
                 .setOAuthConsumerSecret(propertiesLoader.oAuthConsumerSecret)

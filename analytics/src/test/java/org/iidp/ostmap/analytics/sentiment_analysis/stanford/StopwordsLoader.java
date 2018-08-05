@@ -1,11 +1,9 @@
 package org.iidp.ostmap.analytics.sentiment_analysis.stanford;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class StopwordsLoader {
     public ArrayList<String> loadstopwords(String stopWordsFileName){
@@ -31,5 +29,21 @@ public class StopwordsLoader {
 //            System.out.println(list);
         return list;
 
+    }
+
+    /**
+     * Reads a file which represents a list of stopwords.
+     * @param pathToFile Path to file
+     * @return List of Strings ("stopwords")
+     * @throws IOException General exception for input-/ output-errors.
+     */
+    public static List<String> loadStopwordsFromFile(String pathToFile) throws IOException {
+        List<String> stopwords = new ArrayList<>();
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(pathToFile)));
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            stopwords.add(line);
+        }
+        return stopwords;
     }
 }

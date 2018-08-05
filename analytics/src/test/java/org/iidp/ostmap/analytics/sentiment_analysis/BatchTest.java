@@ -16,6 +16,8 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.CoreMap;
 import org.apache.accumulo.core.client.*;
 import org.apache.accumulo.core.client.Scanner;
+import org.apache.accumulo.core.client.mapreduce.AccumuloOutputFormat;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
@@ -91,11 +93,11 @@ public class BatchTest {
         // create GeoTemporalIndex
         BatchTest.createTableGeoTemporalIndex(connector, statusList);
 
-        // compute sentiments
-        BatchTest.computeSentiments(connector, authorizations);
-
         // create sentiment table
         BatchTest.createTableSentimentData(connector);
+
+        // compute sentiments
+        BatchTest.computeSentiments(connector, authorizations);
 
     }
 
@@ -111,14 +113,13 @@ public class BatchTest {
      * This test simulates an analysis batch job from a possible user input form at the OSTMap web application.
      * @throws TableNotFoundException Exception thrown if Table not found.
      */
-    @Test
+//    @Test
     public void testTweetsLastNDays() throws TableNotFoundException {
         int days = 5;
         Connector connector = amc.getConnector();
         Authorizations authorizations = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
-//        System.out.println(String.format("[AUTHORIZATIONS] %s", authorizations.toString()));
+        System.out.println(String.format("[AUTHORIZATIONS] %s", authorizations.toString()));
         Scanner scanner = connector.createScanner("GeoTemporalIndex", authorizations);
-//        scanner.fetchColumn(new Text("no_place"), new Text("CQ"));
 
         for (Map.Entry<Key, Value> entry : scanner) {
             System.out.printf("Key : %-50s  Value : %s\n", entry.getKey(), entry.getValue());
@@ -132,6 +133,16 @@ public class BatchTest {
     public static class StanfordSentimentFlatMap implements FlatMapFunction<Tuple2<Key, Value>, Tuple3<String, Integer, String>> {
         private static final long serialVersionUID = 1L;
         private transient ObjectMapper jsonParser;
+
+        Connector connector = amc.getConnector();
+        Authorizations authorizations = new Authorizations(AccumuloIdentifiers.AUTHORIZATION.toString());
+        Scanner scanner = connector.createScanner("GeoTemporalIndex", authorizations);
+
+        List<Mutation> mutations = new ArrayList<>();
+        Mutation mutation;
+
+        public StanfordSentimentFlatMap() throws TableNotFoundException {
+        }
 
         @Override
         public void flatMap(Tuple2<Key, Value> in, Collector<Tuple3<String, Integer, String>> out) throws Exception {
@@ -182,6 +193,8 @@ public class BatchTest {
                 System.out.println("avgSentiment = " + avgSentiment);
                 sentimentPolarity = BatchTest.getSentimentPolarity(avgSentiment);
                 out.collect(new Tuple3<>(jsonNode.get("id").asText(), avgSentiment, sentimentPolarity));
+
+
 
             }
         }
@@ -245,7 +258,6 @@ public class BatchTest {
         List<Mutation> mutations = new ArrayList<>();
         Mutation mutation;
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd");
         Random random = new Random();
         int spreadingByte = 0;
 
@@ -262,7 +274,6 @@ public class BatchTest {
             tweetCoordinates[0] = 0.0;
             tweetCoordinates[1] = 0.0;
 
-//            day = sdf.format(new Timestamp(status.getCreatedAt().getTime()));
             day = status.getCreatedAt().toString();
             spreadingByte = random.nextInt(256);
 
@@ -289,7 +300,7 @@ public class BatchTest {
      * +----------------+----------+---------+-----------+
      * |       ROW      |    CF    |    CQ   |   VALUE   |
      * +----------------+----------+---------+-----------+
-     * | sb,day,geohash |          |         | Sentiment |
+     * | sb,day,geohash | polarity |         | Sentiment |
      * +----------------+----------+---------+-----------+
      *
      * @param connector Connector connects to an Accumulo instance to perform table operations.
@@ -332,15 +343,30 @@ public class BatchTest {
                 settings.getAbsolutePath(),
                 "JOB:computeSentiments",
                 "GeoTemporalIndex",
-                null
+                "SentimentData"
         );
 
         DataSet<Tuple2<Key, Value>> rawTwitterDataRows = fem.getDataFromAccumulo();
         DataSet<Tuple3<String, Integer, String>> predictedSentiments = rawTwitterDataRows
-                .flatMap(new StanfordSentimentFlatMap());
+                .flatMap(new StanfordSentimentFlatMap())
+                ;
+
+        // predictedSentiments --> sentiment table
+        AccumuloOutputFormat accumuloOutputFormat = new AccumuloOutputFormat();
+//        AccumuloOutputFormat.setConnectorInfo(
+//                "JOB:computeSentiments",
+//                "accumulo.user",
+//                new PasswordToken("password")
+//        );
+//        accumuloOutputFormat
+
+//        predictedSentiments.output();
+//        predictedSentiments.writeAsCsv("file:///tmp/file", "\n", "|");
+//        predictedSentiments.output(fem.getHadoopOF());
+//        fem.getExecutionEnvironment().execute("JOB:computeSentiments");
 
 //        BatchScanner scanner = connector.createBatchScanner("GeoTemporalIndex", authorizations, 20);
-        Scanner scanner = connector.createScanner("GeoTemporalIndex", authorizations);
+        Scanner scanner = connector.createScanner("SentimentData", authorizations);
 
         for (Map.Entry<Key, Value> entry : scanner) {
             System.out.printf("Key : %-50s  Value : %s\n", entry.getKey(), entry.getValue());
