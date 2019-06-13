@@ -201,7 +201,7 @@
                                 'onLoad="alertIFrame(this.id);" ' +
                                 'class="Tweet" ' +
                                 'frameborder=0 ' +
-                                'src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' +
+                                'src="https://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2F' +
                                 tweet.user.screen_name +
                                 '%2Fstatus%2F' +
                                 tweet.id_str +
